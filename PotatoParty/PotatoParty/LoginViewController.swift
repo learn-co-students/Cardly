@@ -28,3 +28,27 @@ class LoginViewController: UIViewController {
 
 }
 
+
+// MARK: - Create user account
+
+extension LoginViewController {
+    
+    func createAccountButtonTapped() {
+        let alertController = UIAlertController(title: "Create Account", message: "Create User Account", preferredStyle: .alert)
+        let submitAction = UIAlertAction(title: "Submit", style: .default, handler: nil)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default) { (action) in
+            self.dismiss(animated: true, completion: nil)
+        }
+        
+        alertController.addAction(submitAction)
+        alertController.addAction(cancelAction)
+        alertController.addTextField { (textfield) in
+            textfield.placeholder = "Enter e-mail"
+        }
+        alertController.addTextField { (textfield) in
+            textfield.placeholder = "Enter password"
+        }
+        self.present(alertController, animated: true, completion: nil)
+    }
+}
+

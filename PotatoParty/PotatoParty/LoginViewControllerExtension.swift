@@ -51,6 +51,7 @@ extension LoginViewController {
         }
         createAccountButton.setTitle("Create account", for: .normal)
         createAccountButton.backgroundColor = UIColor.blue
+        createAccountButton.addTarget(self, action: #selector(self.createAccountButtonTapped), for: .touchUpInside)
         
         view.addSubview(forgotPasswordButton)
         forgotPasswordButton.snp.makeConstraints { (make) in
