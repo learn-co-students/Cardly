@@ -30,7 +30,7 @@ class LoginViewController: UIViewController {
 }
 
 
-// MARK: - Create user account
+// MARK: - Firebase account methods
 
 extension LoginViewController {
     
@@ -62,6 +62,10 @@ extension LoginViewController {
             textfield.placeholder = "Enter password"
         }
         self.present(alertController, animated: true, completion: nil)
+    }
+    
+    func loginButtonTapped() {
+        FIRAuth.auth()!.signIn(withEmail: userTextfield.text!, password: passwordTextfield.text!)
     }
 }
 
