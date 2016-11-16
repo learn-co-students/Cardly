@@ -7,29 +7,43 @@
 //
 
 import UIKit
+import Firebase
+import SnapKit
 
 class ContactsViewController: UIViewController {
-
+    
+    var contactsVCView: ContactsVCView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        print("STUFF")
+      setupViews()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    func setupViews() {
+        
+        let bottomView = BottomView(frame: CGRect(x: 0, y: 0, width: 374, height: 100))
+        bottomView.displayType = .contacts
+        
+        
+        
+        self.view.addSubview(bottomView)
+        
+        bottomView.translatesAutoresizingMaskIntoConstraints = false
+        
+        bottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        bottomView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        bottomView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        
+        
+//        self.contactsVCView.snp.makeConstraints { (make) in
+//            make.size.equalToSuperview()
+//        }
+        
     }
-    */
-
 }

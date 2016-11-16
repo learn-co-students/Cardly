@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		312DC8151DDCF0BD00FD8DF9 /* ContactsVCView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312DC8141DDCF0BD00FD8DF9 /* ContactsVCView.swift */; };
+		312DC8171DDD016F00FD8DF9 /* BottomView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 312DC8161DDD016F00FD8DF9 /* BottomView.xib */; };
+		312DC8191DDD024D00FD8DF9 /* BottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312DC8181DDD024D00FD8DF9 /* BottomView.swift */; };
 		3F0BE6871DDCB1F5007E4FD0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0BE6861DDCB1F5007E4FD0 /* AppDelegate.swift */; };
 		3F0BE6891DDCB1F5007E4FD0 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0BE6881DDCB1F5007E4FD0 /* LoginViewController.swift */; };
 		3F0BE68C1DDCB1F5007E4FD0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F0BE68A1DDCB1F5007E4FD0 /* Main.storyboard */; };
@@ -22,6 +25,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		312DC8141DDCF0BD00FD8DF9 /* ContactsVCView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsVCView.swift; sourceTree = "<group>"; };
+		312DC8161DDD016F00FD8DF9 /* BottomView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BottomView.xib; sourceTree = "<group>"; };
+		312DC8181DDD024D00FD8DF9 /* BottomView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomView.swift; sourceTree = "<group>"; };
 		3F0BE6831DDCB1F5007E4FD0 /* PotatoParty.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PotatoParty.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F0BE6861DDCB1F5007E4FD0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3F0BE6881DDCB1F5007E4FD0 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -101,6 +107,9 @@
 		3F0BE69D1DDCB7C1007E4FD0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				312DC8141DDCF0BD00FD8DF9 /* ContactsVCView.swift */,
+				312DC8161DDD016F00FD8DF9 /* BottomView.xib */,
+				312DC8181DDD024D00FD8DF9 /* BottomView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -212,6 +221,7 @@
 				3F0BE6911DDCB1F5007E4FD0 /* LaunchScreen.storyboard in Resources */,
 				3F0BE68E1DDCB1F5007E4FD0 /* Assets.xcassets in Resources */,
 				3F0BE68C1DDCB1F5007E4FD0 /* Main.storyboard in Resources */,
+				312DC8171DDD016F00FD8DF9 /* BottomView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,6 +288,8 @@
 				3F0BE6A61DDCB913007E4FD0 /* EditCardViewController.swift in Sources */,
 				3F0BE69C1DDCB78E007E4FD0 /* SettingsViewController.swift in Sources */,
 				3F0BE6A41DDCB8F4007E4FD0 /* RecordCardViewController.swift in Sources */,
+				312DC8151DDCF0BD00FD8DF9 /* ContactsVCView.swift in Sources */,
+				312DC8191DDD024D00FD8DF9 /* BottomView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
