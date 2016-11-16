@@ -27,10 +27,10 @@
             </objects>
             <point key="canvasLocation" x="-481" y="170"/>
         </scene>
-        <!--View Controller-->
+        <!--Contacts View Controller-->
         <scene sceneID="WyG-9S-osV">
             <objects>
-                <viewController id="JSL-dm-JFg" sceneMemberID="viewController">
+                <viewController id="JSL-dm-JFg" customClass="ContactsViewController" customModule="PotatoParty" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ulj-1L-Cfx"/>
                         <viewControllerLayoutGuide type="bottom" id="pAR-HN-RtT"/>
@@ -45,10 +45,10 @@
             </objects>
             <point key="canvasLocation" x="479" y="170"/>
         </scene>
-        <!--View Controller-->
+        <!--Record Card View Controller-->
         <scene sceneID="4m4-Xc-clu">
             <objects>
-                <viewController id="21l-iJ-NLZ" sceneMemberID="viewController">
+                <viewController id="21l-iJ-NLZ" customClass="RecordCardViewController" customModule="PotatoParty" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="0rF-fd-L7n"/>
                         <viewControllerLayoutGuide type="bottom" id="42z-2v-u8t"/>
@@ -63,10 +63,10 @@
             </objects>
             <point key="canvasLocation" x="1361" y="170"/>
         </scene>
-        <!--View Controller-->
+        <!--Edit Card View Controller-->
         <scene sceneID="a1d-HF-NMR">
             <objects>
-                <viewController id="hno-W2-HTP" sceneMemberID="viewController">
+                <viewController id="hno-W2-HTP" customClass="EditCardViewController" customModule="PotatoParty" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="yJk-sr-k2f"/>
                         <viewControllerLayoutGuide type="bottom" id="mOh-ER-og1"/>
@@ -81,10 +81,10 @@
             </objects>
             <point key="canvasLocation" x="2266" y="170"/>
         </scene>
-        <!--View Controller-->
+        <!--Send Card View Controller-->
         <scene sceneID="YCe-vh-TYT">
             <objects>
-                <viewController id="5Zp-Kz-goN" sceneMemberID="viewController">
+                <viewController id="5Zp-Kz-goN" customClass="SendCardViewController" customModule="PotatoParty" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="LqV-rv-Ywo"/>
                         <viewControllerLayoutGuide type="bottom" id="Jtt-vP-U7c"/>
@@ -99,10 +99,10 @@
             </objects>
             <point key="canvasLocation" x="3105" y="170"/>
         </scene>
-        <!--View Controller-->
+        <!--Settings View Controller-->
         <scene sceneID="zhM-RA-R6b">
             <objects>
-                <viewController id="Ija-Pv-K9l" sceneMemberID="viewController">
+                <viewController id="Ija-Pv-K9l" customClass="SettingsViewController" customModule="PotatoParty" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="wUq-5x-wGe"/>
                         <viewControllerLayoutGuide type="bottom" id="E5q-Ay-veb"/>
@@ -117,10 +117,10 @@
             </objects>
             <point key="canvasLocation" x="478" y="-565"/>
         </scene>
-        <!--View Controller-->
+        <!--Add Contact View Controller-->
         <scene sceneID="6J5-WB-c2D">
             <objects>
-                <viewController id="dLn-he-Dab" sceneMemberID="viewController">
+                <viewController id="dLn-he-Dab" customClass="AddContactViewController" customModule="PotatoParty" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="aAv-ro-qGA"/>
                         <viewControllerLayoutGuide type="bottom" id="4Vf-9a-ahL"/>
