@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import FirebaseAuth
 
 class LoginViewController: UIViewController {
 
@@ -35,7 +36,19 @@ extension LoginViewController {
     
     func createAccountButtonTapped() {
         let alertController = UIAlertController(title: "Create Account", message: "Create User Account", preferredStyle: .alert)
-        let submitAction = UIAlertAction(title: "Submit", style: .default, handler: nil)
+
+        let submitAction = UIAlertAction(title: "Submit", style: .default) { (action) in
+            let emailField = alertController.textFields![0]
+            let passwordField = alertController.textFields![1]
+            if let unwrappedEmail = emailField.text, let unwrappedPassword = passwordField.text {
+                FIRAuth.auth()!.createUser(withEmail: unwrappedEmail, password: unwrappedPassword, completion: { (user, error) in
+                    if error == nil {
+                        FIRAuth.auth()!.signIn(withEmail: self.userTextfield.text!, password: self.passwordTextfield.text!)
+                    }
+                })
+            }
+        }
+        
         let cancelAction = UIAlertAction(title: "Cancel", style: .default) { (action) in
             self.dismiss(animated: true, completion: nil)
         }
