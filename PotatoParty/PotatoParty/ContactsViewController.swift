@@ -21,7 +21,20 @@ class ContactsViewController: UIViewController {
         super.viewDidLoad()
         self.restorationIdentifier = "contactsVC"
         // Do any additional setup after loading the view.
-        navigationController?.navigationBar.isHidden = true
+        
+        var dropDownMenu = DropDownMenu(
+        
+        
+        
+        self.view.backgroundColor = UIColor.red
+        
+        
+        
+        let rightBtn = UIBarButtonItem(title: "Hey", style: .plain, target: self, action: nil)
+        self.navigationItem.rightBarButtonItem = rightBtn
+        
+        
+        
         
         FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
             guard let user = user else { return }

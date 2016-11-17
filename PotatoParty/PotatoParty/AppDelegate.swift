@@ -22,6 +22,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        window = UIWindow(frame: frame)
 //        window!.rootViewController = initialVC
 //        window!.makeKeyAndVisible()
+        
+        
+        
+        
+        
+        var contacts = ContactsViewController()
+        
+        let navigationBarController = UINavigationController(rootViewController: contacts)
+        navigationBarController.navigationBar.isHidden = false
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window!.rootViewController = navigationBarController
+        window!.makeKeyAndVisible()
+        window?.backgroundColor = UIColor.white
+        
+        
+        
+        
+        
+        
+        
         return true
     }
     
