@@ -11,6 +11,8 @@ extension LoginViewController {
     
     func layoutViewAndContraints() {
         
+        view.backgroundColor = UIColor.white
+        
         view.addSubview(userTextfield)
         userTextfield.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()

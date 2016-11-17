@@ -12,6 +12,8 @@ import FirebaseAuth
 
 class LoginViewController: UIViewController {
     
+    // MARK: - Constraint constants
+    
     let textFieldToSuperviewWidthMultiplier = 0.6
     let textFieldToSuperviewHeightMultiplier = 0.25
     let passwordTextFieldTopOffset = 40
@@ -32,7 +34,24 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         self.restorationIdentifier = "loginVC"
         layoutViewAndContraints()
+        
+        FIRAuth.auth()!.addStateDidChangeListener({ (auth, user) in
+            if user != nil {
+                self.performSegue(withIdentifier: "loginToContacts", sender: nil)
+            }
+        })
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == userTextfield {
+            userTextfield.becomeFirstResponder()
+        }
+        if textField == passwordTextfield {
+            textField.resignFirstResponder()
+        }
+        return true
+    }
+
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
