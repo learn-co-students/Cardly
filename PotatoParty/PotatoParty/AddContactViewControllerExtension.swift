@@ -15,7 +15,7 @@ extension AddContactViewController {
     
     func layoutElements() {
         
-       view.backgroundColor = UIColor.white
+       view.backgroundColor = UIColor.orange
         
         view.addSubview(nameTextField)
         nameTextField.snp.makeConstraints { (make) in
@@ -49,7 +49,43 @@ extension AddContactViewController {
         }
         
         groupDropDown.backgroundColor = UIColor.blue
-       
+        
+        view.addSubview(addButton)
+        addButton.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(groupDropDown.snp.bottomMargin).offset(40)
+            make.width.equalTo(nameTextField.snp.width).multipliedBy(0.5)
+            make.height.equalTo(nameTextField.snp.height).multipliedBy(0.5)
+        }
+        
+        addButton.backgroundColor = UIColor.blue
+        addButton.setTitle("Add", for: .normal)
+        addButton.addTarget(self, action: #selector(self.addButtonTapped), for: .touchUpInside)
+        
+        
+        view.addSubview(importContactsButton)
+        importContactsButton.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(addButton).offset(120)
+            make.width.equalTo(nameTextField.snp.width).multipliedBy(0.75)
+            make.height.equalTo(addButton.snp.height)
+        }
+        
+        importContactsButton.backgroundColor = UIColor.blue
+        importContactsButton.setTitle("Import from Contacts", for: .normal)
+        importContactsButton.addTarget(self, action: #selector(self.importContactButtonTapped), for: .touchUpInside)
+        
+        view.addSubview(cancelButton)
+        cancelButton.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(importContactsButton).offset(40)
+            make.width.equalTo(addButton.snp.width)
+            make.height.equalTo(addButton.snp.height)
+        }
+        
+        cancelButton.backgroundColor = UIColor.blue
+        cancelButton.setTitle("Cancel", for: .normal)
+        cancelButton.addTarget(self, action: #selector(self.cancelButtonTapped), for: .touchUpInside)
     }
     
 }
