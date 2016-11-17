@@ -19,6 +19,8 @@
 		3F0BE6A61DDCB913007E4FD0 /* EditCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0BE6A51DDCB913007E4FD0 /* EditCardViewController.swift */; };
 		3F0BE6A81DDCB92D007E4FD0 /* SendCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0BE6A71DDCB92D007E4FD0 /* SendCardViewController.swift */; };
 		920F301338A9FC2B9FE55804 /* Pods_PotatoParty.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9928D9D1244326D898295D /* Pods_PotatoParty.framework */; };
+		E4ED56171DDD3C6700EB97D4 /* ContactsBottomNavBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4ED56161DDD3C6700EB97D4 /* ContactsBottomNavBarView.swift */; };
+		E4ED56191DDD45DF00EB97D4 /* ContactsViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4ED56181DDD45DF00EB97D4 /* ContactsViewControllerExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +40,8 @@
 		5E9928D9D1244326D898295D /* Pods_PotatoParty.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PotatoParty.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D97A54290B19A4EFAF3ACD4 /* Pods-PotatoParty.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PotatoParty.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PotatoParty/Pods-PotatoParty.debug.xcconfig"; sourceTree = "<group>"; };
 		7E3660AC3B4B277712493117 /* Pods-PotatoParty.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PotatoParty.release.xcconfig"; path = "Pods/Target Support Files/Pods-PotatoParty/Pods-PotatoParty.release.xcconfig"; sourceTree = "<group>"; };
+		E4ED56161DDD3C6700EB97D4 /* ContactsBottomNavBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsBottomNavBarView.swift; sourceTree = "<group>"; };
+		E4ED56181DDD45DF00EB97D4 /* ContactsViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsViewControllerExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +105,8 @@
 		3F0BE69D1DDCB7C1007E4FD0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E4ED56161DDD3C6700EB97D4 /* ContactsBottomNavBarView.swift */,
+				E4ED56181DDD45DF00EB97D4 /* ContactsViewControllerExtension.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -270,8 +276,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4ED56171DDD3C6700EB97D4 /* ContactsBottomNavBarView.swift in Sources */,
 				3F0BE6A21DDCB879007E4FD0 /* AddContactViewController.swift in Sources */,
 				3F0BE6891DDCB1F5007E4FD0 /* LoginViewController.swift in Sources */,
+				E4ED56191DDD45DF00EB97D4 /* ContactsViewControllerExtension.swift in Sources */,
 				3F0BE6A81DDCB92D007E4FD0 /* SendCardViewController.swift in Sources */,
 				3F0BE6871DDCB1F5007E4FD0 /* AppDelegate.swift in Sources */,
 				3F0BE6991DDCB30F007E4FD0 /* ContactsViewController.swift in Sources */,
