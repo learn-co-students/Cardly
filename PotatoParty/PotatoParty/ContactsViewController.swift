@@ -15,6 +15,7 @@ class ContactsViewController: UIViewController {
     let ref = FIRDatabase.database().reference(withPath: "contacts")
     var user: User?
     var userUid: String?
+    var contacts: [Contact] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,11 +28,15 @@ class ContactsViewController: UIViewController {
             self.user = User(authData: user)
             self.userUid = user.uid
             print("Current logged in user email - \(self.user?.email)")
-            
         })
         
         ref.observe(.value, with: { (snapshot) in
-            print("new updates from firebase")
+            if snapshot.exists() {
+                for item in snapshot.children.allObjects {
+                    self.contacts.append(Contact(snapshot: item as! FIRDataSnapshot))
+                }
+                print("Current contacts list contains \(self.contacts)")
+            }
         })
     }
 
