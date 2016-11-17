@@ -14,6 +14,7 @@ import SnapKit
 
 class ContactsBottomNavBarView: UIView {
     
+    // Views
     var leftIconView = BottomNavBarLeftView()
     var middleIconView = BottomNavBarMiddleView()
     var rightIconView = BottomNavBarRightView()
@@ -34,7 +35,6 @@ class ContactsBottomNavBarView: UIView {
 // MARK: - Nav Bar Individual Views
 
 class BottomNavBarLeftView: UIView {
-    
     var addContactBtn = UIButton()
     
     override init(frame: CGRect) {
@@ -47,18 +47,17 @@ class BottomNavBarLeftView: UIView {
     }
     
     func setupView() {
-        
+        // Add button
         addContactBtn.setTitle("+", for: .normal)
         addContactBtn.setTitleColor(UIColor.black, for: .normal)
-        addContactBtn.frame = CGRect(x: 0, y: 0, width: 30, height: 70)
+        addContactBtn.frame = CGRect()
         addSubview(addContactBtn)
         addContactBtn.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
         }
-        
+        // Change background
         self.backgroundColor = UIColor.green
     }
-    
 }
 
 class BottomNavBarMiddleView: UIView {
@@ -79,7 +78,8 @@ class BottomNavBarMiddleView: UIView {
 }
 
 class BottomNavBarRightView: UIView {
-    
+    var sendToContactBtn = UIButton()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -90,15 +90,27 @@ class BottomNavBarRightView: UIView {
     }
     
     func setupView() {
+        // Add button
+        self.addSubview(sendToContactBtn)
+        sendToContactBtn.setTitle("Send", for: .normal)
+        sendToContactBtn.setTitleColor(UIColor.black, for: .normal)
+        sendToContactBtn.frame = CGRect()
+        sendToContactBtn.snp.makeConstraints { (make) in
+            make.center.equalToSuperview()
+        }
+        
         self.backgroundColor = UIColor.red
     }
     
 }
 
 
+// MARK: - Extensions
 
 extension ContactsBottomNavBarView {
+    
     func setupView() {
+        // Create stack view
         let stackView = UIStackView()
         self.addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -111,6 +123,7 @@ extension ContactsBottomNavBarView {
             make.edges.equalToSuperview()
         }
         
+        // Create background
         self.backgroundColor = UIColor.black
     }
     

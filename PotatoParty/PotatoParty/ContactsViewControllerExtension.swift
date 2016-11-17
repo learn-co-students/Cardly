@@ -12,6 +12,7 @@ import SnapKit
 
 extension ContactsViewController {
     
+    // Setup all
     func setupViews() {
         setupBottomNavBarView()
     }
@@ -21,17 +22,17 @@ extension ContactsViewController {
         
         bottomNavBar.snp.makeConstraints { (make) in
             make.width.equalToSuperview()
-            make.height.equalTo(100)
+            make.height.equalToSuperview().multipliedBy(0.125)
             make.bottom.equalToSuperview()
         }
     }
     
     func setupCollectionView() {
-        
+        // Do this
     }
     
     func setupTopNavBarView() {
-        
+        // Do this
     }
     
 }
