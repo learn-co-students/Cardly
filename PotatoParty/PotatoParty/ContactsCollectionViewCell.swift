@@ -15,7 +15,6 @@ class ContactsCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -23,7 +22,6 @@ class ContactsCollectionViewCell: UICollectionViewCell {
     }
     
     func setupView() {
-        self.backgroundColor = UIColor.yellow
+        self.backgroundColor = UIColor.cyan
     }
-    
 }

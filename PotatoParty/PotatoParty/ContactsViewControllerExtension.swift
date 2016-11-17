@@ -18,6 +18,7 @@ extension ContactsViewController {
         setupCollectionView()
     }
     
+    // Setup individual views
     func setupBottomNavBarView() {
         self.view.addSubview(bottomNavBar)
         bottomNavBar.snp.makeConstraints { (make) in

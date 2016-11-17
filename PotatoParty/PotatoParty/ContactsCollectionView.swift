@@ -10,43 +10,48 @@ import Foundation
 import UIKit
 import SnapKit
 
-class ContactsCollectionView: UICollectionView {
+class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UICollectionViewDataSource {
+    // Properties
     let reuseIdentifier = "cell"
     let layout = UICollectionViewFlowLayout()
     
+    // Init
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: self.layout)
-        
         setupView()
-        
-        print("UICollectionView frame init called")
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        print("UICollectionView decoder init called")
     }
     
     
-    
-    override func numberOfItems(inSection section: Int) -> Int {
-        return 4
+    // Cell Data Source methods
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
     }
     
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 5
+    }
     
-    override func cellForItem(at indexPath: IndexPath) -> UICollectionViewCell? {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
-        
-        cell.backgroundColor = UIColor.blue
         
         return cell
     }
     
     func setupView() {
+        delegate = self
+        dataSource = self
+
         register(ContactsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         
-        backgroundColor = UIColor.brown
+        layout.itemSize = CGSize(width: 50, height: 50)
+        layout.scrollDirection = .vertical
         
+        backgroundColor = UIColor.brown
+    
     }
 
     
