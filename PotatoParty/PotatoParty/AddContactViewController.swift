@@ -9,9 +9,19 @@
 import UIKit
 
 class AddContactViewController: UIViewController {
+    
+    var nameTextField = UITextField()
+    var emailTextField = UITextField()
+    var addButton = UIButton()
+    var groupDropDown = UIPickerView()
+    var importContactsButton = UIButton()
+    var cancelButton = UIButton()
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        layoutElements()
 
         // Do any additional setup after loading the view.
     }
