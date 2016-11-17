@@ -9,9 +9,19 @@
 import UIKit
 
 class AddContactViewController: UIViewController {
+    
+    var nameTextField = UITextField()
+    var emailTextField = UITextField()
+    var addButton = UIButton()
+    var groupDropDown = UIPickerView()
+    var importContactsButton = UIButton()
+    var cancelButton = UIButton()
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        layoutElements()
 
         // Do any additional setup after loading the view.
     }
@@ -31,5 +41,17 @@ class AddContactViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    func cancelButtonTapped () {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func importContactButtonTapped () {
+        print ("import Contact Button Tapped")
+    }
+    
+    func addButtonTapped () {
+        print ("add Button tapped")
+    }
 
 }
