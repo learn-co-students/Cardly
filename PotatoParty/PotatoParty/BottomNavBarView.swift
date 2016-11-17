@@ -13,8 +13,6 @@ import SnapKit
 // MARK: - Bottom Nav Bar
 
 class BottomNavBarView: UIView {
-    
-    // Views
     var leftIconView = BottomNavBarLeftView()
     var middleIconView = BottomNavBarMiddleView()
     var rightIconView = BottomNavBarRightView()
@@ -22,12 +20,10 @@ class BottomNavBarView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        print("frame init called")
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        print("decoder init called")
     }
     
 }

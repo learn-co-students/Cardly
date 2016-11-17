@@ -11,7 +11,8 @@ import UIKit
 import SnapKit
 
 class ContactsCollectionViewCell: UICollectionViewCell {
-
+    
+    // Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -21,7 +22,9 @@ class ContactsCollectionViewCell: UICollectionViewCell {
         super.init(coder: aDecoder)
     }
     
+    // Setup view
     func setupView() {
-        self.backgroundColor = UIColor.cyan
+        backgroundColor = UIColor.cyan
     }
+    
 }

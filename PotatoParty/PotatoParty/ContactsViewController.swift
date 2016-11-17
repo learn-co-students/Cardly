@@ -16,7 +16,6 @@ class ContactsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-        
     }
     
     override func didReceiveMemoryWarning() {
