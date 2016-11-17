@@ -35,7 +35,8 @@ class ContactsViewController: UIViewController {
                 for item in snapshot.children.allObjects {
                     self.contacts.append(Contact(snapshot: item as! FIRDataSnapshot))
                 }
-                print("Current contacts list contains \(self.contacts)")
+                print("Current contacts list contains:")
+                dump(self.contacts)
             }
         })
     }
