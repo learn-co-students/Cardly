@@ -12,7 +12,7 @@ import SnapKit
 
 // MARK: - Bottom Nav Bar
 
-class ContactsBottomNavBarView: UIView {
+class BottomNavBarView: UIView {
     
     // Views
     var leftIconView = BottomNavBarLeftView()
@@ -101,13 +101,12 @@ class BottomNavBarRightView: UIView {
         
         self.backgroundColor = UIColor.red
     }
-    
 }
 
 
 // MARK: - Extensions
 
-extension ContactsBottomNavBarView {
+extension BottomNavBarView {
     
     func setupView() {
         // Create stack view

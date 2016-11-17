@@ -15,11 +15,11 @@ extension ContactsViewController {
     // Setup all
     func setupViews() {
         setupBottomNavBarView()
+        setupCollectionView()
     }
     
     func setupBottomNavBarView() {
         self.view.addSubview(bottomNavBar)
-        
         bottomNavBar.snp.makeConstraints { (make) in
             make.width.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(0.125)
@@ -28,7 +28,12 @@ extension ContactsViewController {
     }
     
     func setupCollectionView() {
-        // Do this
+        self.view.addSubview(collectionView)
+        collectionView.snp.makeConstraints { (make) in
+            make.width.equalToSuperview()
+            make.bottom.equalTo(bottomNavBar.snp.top)
+            make.height.equalToSuperview().multipliedBy(0.75)
+        }
     }
     
     func setupTopNavBarView() {
