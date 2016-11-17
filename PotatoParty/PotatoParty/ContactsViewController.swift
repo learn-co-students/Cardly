@@ -19,9 +19,7 @@ class ContactsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.restorationIdentifier = "contactsVC"
-        // Do any additional setup after loading the view.
-        navigationController?.navigationBar.isHidden = true
+        navigationController?.navigationBar.isHidden = false
         
         FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
             guard let user = user else { return }

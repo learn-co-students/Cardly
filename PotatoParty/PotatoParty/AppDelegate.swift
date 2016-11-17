@@ -13,21 +13,37 @@ import Firebase
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var initialVC: UIViewController?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-//
-//        initialVC = AddContactViewController()
-//        let frame = UIScreen.main.bounds
-//        window = UIWindow(frame: frame)
-//        window!.rootViewController = initialVC
-//        window!.makeKeyAndVisible()
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        FIRAuth.auth()!.addStateDidChangeListener({ (auth, user) in
+            
+            if user != nil {
+                self.initialVC = storyboard.instantiateViewController(withIdentifier: "navVC")
+            }
+            else {
+                self.initialVC = storyboard.instantiateViewController(withIdentifier: "loginVC")
+            }
+            
+            let frame = UIScreen.main.bounds
+            self.window = UIWindow(frame: frame)
+            self.window!.rootViewController = self.initialVC
+            self.window!.makeKeyAndVisible()
+            
+        })
+        
         return true
+        
     }
     
     override init() {
+        
         super.init()
         FIRApp.configure()
+        
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

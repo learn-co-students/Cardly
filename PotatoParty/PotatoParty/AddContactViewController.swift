@@ -24,7 +24,6 @@ class AddContactViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        addContact(fullName: "Forrest Zhao", email: "forrest@gmail.com", phone: "8582231234")
         layoutElements()
         // Do any additional setup after loading the view.
     }
@@ -56,8 +55,6 @@ class AddContactViewController: UIViewController {
         
         nameTextField.text = namePlaceholder
         emailTextField.text = emailPlaceholder
-        
-        print ("add Button tapped")
     }
 
 }

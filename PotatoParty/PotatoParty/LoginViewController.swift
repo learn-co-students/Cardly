@@ -32,14 +32,7 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.restorationIdentifier = "loginVC"
         layoutViewAndContraints()
-        
-        FIRAuth.auth()!.addStateDidChangeListener({ (auth, user) in
-            if user != nil {
-                self.performSegue(withIdentifier: "loginToContacts", sender: nil)
-            }
-        })
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
