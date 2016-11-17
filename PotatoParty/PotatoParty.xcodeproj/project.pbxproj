@@ -18,6 +18,8 @@
 		3F0BE6A41DDCB8F4007E4FD0 /* RecordCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0BE6A31DDCB8F4007E4FD0 /* RecordCardViewController.swift */; };
 		3F0BE6A61DDCB913007E4FD0 /* EditCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0BE6A51DDCB913007E4FD0 /* EditCardViewController.swift */; };
 		3F0BE6A81DDCB92D007E4FD0 /* SendCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0BE6A71DDCB92D007E4FD0 /* SendCardViewController.swift */; };
+		3F196C4E1DDE147100497BDD /* ContactModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F196C4D1DDE147100497BDD /* ContactModels.swift */; };
+		3F196C501DDE154000497BDD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F196C4F1DDE154000497BDD /* User.swift */; };
 		3FD6DB2D1DDCEA5F0078CA45 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3FD6DB2C1DDCEA5F0078CA45 /* GoogleService-Info.plist */; };
 		3FD6DB301DDCFD7A0078CA45 /* LoginViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD6DB2F1DDCFD7A0078CA45 /* LoginViewControllerExtension.swift */; };
 		920F301338A9FC2B9FE55804 /* Pods_PotatoParty.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9928D9D1244326D898295D /* Pods_PotatoParty.framework */; };
@@ -37,6 +39,8 @@
 		3F0BE6A31DDCB8F4007E4FD0 /* RecordCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordCardViewController.swift; sourceTree = "<group>"; };
 		3F0BE6A51DDCB913007E4FD0 /* EditCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditCardViewController.swift; sourceTree = "<group>"; };
 		3F0BE6A71DDCB92D007E4FD0 /* SendCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendCardViewController.swift; sourceTree = "<group>"; };
+		3F196C4D1DDE147100497BDD /* ContactModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactModels.swift; sourceTree = "<group>"; };
+		3F196C4F1DDE154000497BDD /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		3FD6DB2C1DDCEA5F0078CA45 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3FD6DB2E1DDCEB760078CA45 /* PotatoParty.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PotatoParty.entitlements; sourceTree = "<group>"; };
 		3FD6DB2F1DDCFD7A0078CA45 /* LoginViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewControllerExtension.swift; sourceTree = "<group>"; };
@@ -96,8 +100,8 @@
 			children = (
 				3F0BE6881DDCB1F5007E4FD0 /* LoginViewController.swift */,
 				3F0BE6981DDCB30F007E4FD0 /* ContactsViewController.swift */,
-				3F0BE69B1DDCB78E007E4FD0 /* SettingsViewController.swift */,
 				3F0BE6A11DDCB879007E4FD0 /* AddContactViewController.swift */,
+				3F0BE69B1DDCB78E007E4FD0 /* SettingsViewController.swift */,
 				3F0BE6A31DDCB8F4007E4FD0 /* RecordCardViewController.swift */,
 				3F0BE6A51DDCB913007E4FD0 /* EditCardViewController.swift */,
 				3F0BE6A71DDCB92D007E4FD0 /* SendCardViewController.swift */,
@@ -116,6 +120,8 @@
 		3F0BE69E1DDCB7FE007E4FD0 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				3F196C4D1DDE147100497BDD /* ContactModels.swift */,
+				3F196C4F1DDE154000497BDD /* User.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -292,7 +298,9 @@
 				3F0BE6A61DDCB913007E4FD0 /* EditCardViewController.swift in Sources */,
 				3FD6DB301DDCFD7A0078CA45 /* LoginViewControllerExtension.swift in Sources */,
 				3F0BE69C1DDCB78E007E4FD0 /* SettingsViewController.swift in Sources */,
+				3F196C4E1DDE147100497BDD /* ContactModels.swift in Sources */,
 				3F0BE6A41DDCB8F4007E4FD0 /* RecordCardViewController.swift in Sources */,
+				3F196C501DDE154000497BDD /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

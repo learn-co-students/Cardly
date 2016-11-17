@@ -7,12 +7,15 @@
 //
 
 import UIKit
+import FirebaseDatabase
 
 class AddContactViewController: UIViewController {
 
+    let contactRef = FIRDatabase.database().reference(withPath: "contacts")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        addContact(fullName: "Forrest Zhao", email: "forrest@gmail.com", phone: "8582231234")
         // Do any additional setup after loading the view.
     }
 
@@ -21,15 +24,10 @@ class AddContactViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func addContact(fullName: String, email: String, phone: String) {
+        let contact = Contact(fullName: fullName, email: email, phone: phone)
+        let contactItemRef = contactRef.childByAutoId()
+        contactItemRef.setValue(contact.toAny())
     }
-    */
 
 }

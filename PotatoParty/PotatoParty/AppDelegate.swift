@@ -16,14 +16,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        FIRApp.configure()
-//        initialViewController  = LoginViewController()
-//        
+//
+//        initialVC = AddContactViewController()
 //        let frame = UIScreen.main.bounds
 //        window = UIWindow(frame: frame)
-//        window!.rootViewController = initialViewController
+//        window!.rootViewController = initialVC
 //        window!.makeKeyAndVisible()
         return true
+    }
+    
+    override init() {
+        super.init()
+        FIRApp.configure()
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

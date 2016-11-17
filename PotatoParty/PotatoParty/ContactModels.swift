@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import FirebaseDatabase
 
-struct Contacts {
+struct Contact {
     
     let key: String
     let fullName: String
@@ -43,5 +43,16 @@ struct Contacts {
         group_key = snapshotValue["group_key"] as! String
         photoUrl = snapshotValue["photoUrl"] as! String
         ref = snapshot.ref
+    }
+    
+    func toAny() -> Any {
+        return [
+            "fullName": fullName,
+            "email" : email,
+            "phone" : phone,
+            "photoUrl": photoUrl,
+            "is_sent": is_sent,
+            "group_key": group_key
+        ]
     }
 }
