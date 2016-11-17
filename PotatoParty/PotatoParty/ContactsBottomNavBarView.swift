@@ -10,11 +10,13 @@ import Foundation
 import UIKit
 import SnapKit
 
-class ContactsBottomNavBar: UIView {
+// MARK: - Bottom Nav Bar
+
+class ContactsBottomNavBarView: UIView {
     
-//    var leftIconView: BottomNavBarLeftIcon!
-//    var middleIconView: BottomNavBarMiddleIcon!
-//    var rightIconView: BottomNavBarRightIcon!
+    var leftIconView = BottomNavBarLeftView()
+    var middleIconView = BottomNavBarMiddleView()
+    var rightIconView = BottomNavBarRightView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -24,15 +26,16 @@ class ContactsBottomNavBar: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        setupView()
         print("decoder init called")
     }
     
 }
 
+// MARK: - Nav Bar Individual Views
 
-/*
-class BottomNavBarLeftIcon: UIView {
+class BottomNavBarLeftView: UIView {
+    
+    var addContactBtn = UIButton()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -44,12 +47,21 @@ class BottomNavBarLeftIcon: UIView {
     }
     
     func setupView() {
+        
+        addContactBtn.setTitle("+", for: .normal)
+        addContactBtn.setTitleColor(UIColor.black, for: .normal)
+        addContactBtn.frame = CGRect(x: 0, y: 0, width: 30, height: 70)
+        addSubview(addContactBtn)
+        addContactBtn.snp.makeConstraints { (make) in
+            make.center.equalToSuperview()
+        }
+        
         self.backgroundColor = UIColor.green
     }
     
 }
 
-class BottomNavBarMiddleIcon: UIView {
+class BottomNavBarMiddleView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -66,7 +78,7 @@ class BottomNavBarMiddleIcon: UIView {
     
 }
 
-class BottomNavBarRightIcon: UIView {
+class BottomNavBarRightView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -83,21 +95,21 @@ class BottomNavBarRightIcon: UIView {
     
 }
 
-*/
 
 
-extension ContactsBottomNavBar {
-    
+extension ContactsBottomNavBarView {
     func setupView() {
-        
-//        let stackView = UIStackView()
-//        self.addSubview(stackView)
-//        stackView.translatesAutoresizingMaskIntoConstraints = false
-//        stackView.axis = .horizontal
-//        stackView.addArrangedSubview(leftIconView)
-//        stackView.addArrangedSubview(middleIconView)
-//        stackView.addArrangedSubview(rightIconView)
-        
+        let stackView = UIStackView()
+        self.addSubview(stackView)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .horizontal
+        stackView.distribution = .fillProportionally
+        stackView.addArrangedSubview(leftIconView)
+        stackView.addArrangedSubview(middleIconView)
+        stackView.addArrangedSubview(rightIconView)
+        stackView.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
         
         self.backgroundColor = UIColor.black
     }

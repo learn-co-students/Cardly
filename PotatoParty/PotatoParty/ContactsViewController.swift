@@ -11,7 +11,7 @@ import UIKit
 
 class ContactsViewController: UIViewController {
     
-    var bottomNavBar = ContactsBottomNavBar()
+    var bottomNavBar = ContactsBottomNavBarView()
     
     override func viewDidLoad() {
         super.viewDidLoad()

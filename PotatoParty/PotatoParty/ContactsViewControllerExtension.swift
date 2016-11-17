@@ -13,13 +13,24 @@ import SnapKit
 extension ContactsViewController {
     
     func setupViews() {
+        setupBottomNavBarView()
+    }
+    
+    func setupBottomNavBarView() {
         self.view.addSubview(bottomNavBar)
         
         bottomNavBar.snp.makeConstraints { (make) in
             make.width.equalToSuperview()
-            make.height.equalTo(150)
+            make.height.equalTo(100)
             make.bottom.equalToSuperview()
         }
+    }
+    
+    func setupCollectionView() {
+        
+    }
+    
+    func setupTopNavBarView() {
         
     }
     
