@@ -11,6 +11,16 @@ import SnapKit
 import FirebaseAuth
 
 class LoginViewController: UIViewController {
+    
+    let textFieldToSuperviewWidthMultiplier = 0.6
+    let textFieldToSuperviewHeightMultiplier = 0.25
+    let passwordTextFieldTopOffset = 40
+    let loginButtonToTextFieldWidthMultipier = 1.0/3.0
+    let loginButtonToTextFieldHeightMultiplier = 0.5
+    let loginButtonTopOffset = 30
+    let createAccountButtonTopOffset = 100
+    let createAccountButtonWidthMultiplier = 0.8
+    let forgotPasswordButtonTopOffset = 30
 
     var userTextfield = UITextField()
     var passwordTextfield = UITextField()
@@ -20,6 +30,7 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.restorationIdentifier = "loginVC"
         layoutViewAndContraints()
     }
 
