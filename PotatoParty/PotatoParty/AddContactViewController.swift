@@ -17,12 +17,13 @@ class AddContactViewController: UIViewController {
     var groupDropDown = UIPickerView()
     var importContactsButton = UIButton()
     var cancelButton = UIButton()
+    let namePlaceholder = "Name"
+    let emailPlaceholder = "example@serviceprovider"
     
     let contactRef = FIRDatabase.database().reference(withPath: "contacts")
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        addContact(fullName: "Forrest Zhao", email: "forrest@gmail.com", phone: "8582231234")
         layoutElements()
         // Do any additional setup after loading the view.
     }
@@ -47,7 +48,13 @@ class AddContactViewController: UIViewController {
     }
 
     func addButtonTapped () {
-        print ("add Button tapped")
+        guard let email = emailTextField.text, let name = nameTextField.text else { return }
+        let contact = Contact(fullName: name, email: email, phone: "7322225678")
+        let contactItemRef = contactRef.childByAutoId()
+        contactItemRef.setValue(contact.toAny())
+        
+        nameTextField.text = namePlaceholder
+        emailTextField.text = emailPlaceholder
     }
 
 }
