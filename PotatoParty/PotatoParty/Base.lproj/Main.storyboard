@@ -25,116 +25,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-471" y="170"/>
-        </scene>
-        <!--Contacts View Controller-->
-        <scene sceneID="WyG-9S-osV">
-            <objects>
-                <viewController id="JSL-dm-JFg" customClass="ContactsViewController" customModule="PotatoParty" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="ulj-1L-Cfx"/>
-                        <viewControllerLayoutGuide type="bottom" id="pAR-HN-RtT"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="V6U-HS-jY5">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="wYo-Wt-Vvc"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="69Q-l0-cwB" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1416.8" y="169.56521739130437"/>
-        </scene>
-        <!--Record Card View Controller-->
-        <scene sceneID="4m4-Xc-clu">
-            <objects>
-                <viewController id="21l-iJ-NLZ" customClass="RecordCardViewController" customModule="PotatoParty" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="0rF-fd-L7n"/>
-                        <viewControllerLayoutGuide type="bottom" id="42z-2v-u8t"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Vqe-ex-9xG">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="gYa-wm-Fax" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2300" y="169.56521739130437"/>
-        </scene>
-        <!--Edit Card View Controller-->
-        <scene sceneID="a1d-HF-NMR">
-            <objects>
-                <viewController id="hno-W2-HTP" customClass="EditCardViewController" customModule="PotatoParty" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="yJk-sr-k2f"/>
-                        <viewControllerLayoutGuide type="bottom" id="mOh-ER-og1"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="RPh-80-l8Y">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Ywq-L1-2GO" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3204" y="169.56521739130437"/>
-        </scene>
-        <!--Send Card View Controller-->
-        <scene sceneID="YCe-vh-TYT">
-            <objects>
-                <viewController id="5Zp-Kz-goN" customClass="SendCardViewController" customModule="PotatoParty" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="LqV-rv-Ywo"/>
-                        <viewControllerLayoutGuide type="bottom" id="Jtt-vP-U7c"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="xnt-Gx-RDs">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="7xe-ZP-TjX" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="4044" y="169.56521739130437"/>
-        </scene>
-        <!--Settings View Controller-->
-        <scene sceneID="zhM-RA-R6b">
-            <objects>
-                <viewController id="Ija-Pv-K9l" customClass="SettingsViewController" customModule="PotatoParty" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="wUq-5x-wGe"/>
-                        <viewControllerLayoutGuide type="bottom" id="E5q-Ay-veb"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="pNR-r0-aRE">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="TH1-gA-Sr9" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="478" y="-565"/>
-        </scene>
-        <!--Add Contact View Controller-->
-        <scene sceneID="6J5-WB-c2D">
-            <objects>
-                <viewController id="dLn-he-Dab" customClass="AddContactViewController" customModule="PotatoParty" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="aAv-ro-qGA"/>
-                        <viewControllerLayoutGuide type="bottom" id="4Vf-9a-ahL"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="gtK-aG-P2J">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="k4S-ja-l3K" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="478" y="900"/>
+            <point key="canvasLocation" x="-390" y="170"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="zgs-0v-LLM">
@@ -146,9 +37,6 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="JSL-dm-JFg" kind="relationship" relationship="rootViewController" id="mHj-z7-vu7"/>
-                    </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HOc-nV-M8s" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

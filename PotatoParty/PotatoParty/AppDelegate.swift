@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FIRAuth.auth()!.addStateDidChangeListener({ (auth, user) in
             
             if user != nil {
-                self.initialVC = storyboard.instantiateViewController(withIdentifier: "navVC")
+            self.initialVC = storyboard.instantiateViewController(withIdentifier: "navVC")
             }
             else {
                 self.initialVC = storyboard.instantiateViewController(withIdentifier: "loginVC")
