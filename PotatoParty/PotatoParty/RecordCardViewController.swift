@@ -86,6 +86,18 @@ class RecordCardViewController: UIViewController {
         
         previewView.backgroundColor = UIColor.blue
         print("preview view frame: \(previewView.frame)")
+        
+        view.addSubview(toggleCameraViewButton)
+        toggleCameraViewButton.snp.makeConstraints { (make) in
+            make.width.equalTo(100)
+            make.height.equalTo(25)
+            make.rightMargin.equalTo(self.view.snp.rightMargin).offset(-40)
+            make.topMargin.equalTo(self.view.snp.topMargin).offset(50)
+        }
+        
+        toggleCameraViewButton.setTitle("Toggle", for: .normal)
+        toggleCameraViewButton.backgroundColor = UIColor.black
+        toggleCameraViewButton.addTarget(self, action: #selector(self.toggleCameraButtonPressed), for: .touchUpInside)
             }
     
     
@@ -95,7 +107,14 @@ class RecordCardViewController: UIViewController {
         print("record button pressed")
     }
     
+    func toggleCameraButtonPressed() {
+        print("toggle Camera Button Pressed")
+    self.switchCameraInput()
+    }
+    
     //MARK: HELPER METHODS
+    
+    // Orientation Methods
     
     func videoOrientation() -> AVCaptureVideoOrientation {
         print("video orientation function called")
@@ -136,6 +155,57 @@ class RecordCardViewController: UIViewController {
         }
     }
     
+    //toggling camera methods 
+    
+    func switchCameraInput() {
+        self.captureSession.beginConfiguration()
+        var existingConnection: AVCaptureDeviceInput!
+        
+        for connection in self.captureSession.inputs {
+            let input = connection as! AVCaptureDeviceInput
+            if input.device.hasMediaType(AVMediaTypeVideo) {
+                existingConnection = input
+            }
+        }
+        
+        self.captureSession.removeInput(existingConnection)
+        
+        var newCamera: AVCaptureDevice!
+        
+        if let oldCamera = existingConnection {
+            if oldCamera.device.position == .back {
+                newCamera = self.cameraWithPostion(position: .front)
+            } else {
+                newCamera = self.cameraWithPostion(position: .back)
+            }
+        }
+        var newInput: AVCaptureDeviceInput!
+        
+        do {
+            newInput = try AVCaptureDeviceInput(device: newCamera)
+            self.captureSession.addInput(newInput)
+        } catch {
+            print(error)
+        }
+        self.captureSession.commitConfiguration()
+    }
+    
+    
+    
+    func cameraWithPostion(position: AVCaptureDevicePosition) -> AVCaptureDevice? {
+        let discovery = AVCaptureDeviceDiscoverySession(deviceTypes: [AVCaptureDeviceType.builtInWideAngleCamera], mediaType: AVMediaTypeVideo, position: .unspecified) as AVCaptureDeviceDiscoverySession
+        
+        for device in discovery.devices as [AVCaptureDevice] {
+            if device.position == position {
+            return device
+            }
+        }
+        
+        return nil
+    }
+    
+    //Initializing Camera
+    
     func initializeCamera() {
         print("initialize camera called")
         self.captureSession.sessionPreset = AVCaptureSessionPresetHigh
@@ -173,4 +243,6 @@ class RecordCardViewController: UIViewController {
             }
         }
     }
+    
+    
 }
