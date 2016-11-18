@@ -18,10 +18,17 @@
 		3F0BE6A41DDCB8F4007E4FD0 /* RecordCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0BE6A31DDCB8F4007E4FD0 /* RecordCardViewController.swift */; };
 		3F0BE6A61DDCB913007E4FD0 /* EditCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0BE6A51DDCB913007E4FD0 /* EditCardViewController.swift */; };
 		3F0BE6A81DDCB92D007E4FD0 /* SendCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0BE6A71DDCB92D007E4FD0 /* SendCardViewController.swift */; };
+		3F196C4E1DDE147100497BDD /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F196C4D1DDE147100497BDD /* Contact.swift */; };
+		3F196C501DDE154000497BDD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F196C4F1DDE154000497BDD /* User.swift */; };
+		3F196C521DDE30CA00497BDD /* ThankYou.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F196C511DDE30CA00497BDD /* ThankYou.swift */; };
+		3F196C541DDE3AFE00497BDD /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F196C531DDE3AFE00497BDD /* Group.swift */; };
+		3FD6DB2D1DDCEA5F0078CA45 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3FD6DB2C1DDCEA5F0078CA45 /* GoogleService-Info.plist */; };
+		3FD6DB301DDCFD7A0078CA45 /* LoginViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD6DB2F1DDCFD7A0078CA45 /* LoginViewControllerExtension.swift */; };
 		920F301338A9FC2B9FE55804 /* Pods_PotatoParty.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9928D9D1244326D898295D /* Pods_PotatoParty.framework */; };
 		E4974AEE1DDE0FE100698B81 /* ContactsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4974AED1DDE0FE100698B81 /* ContactsCollectionView.swift */; };
 		E4974AF01DDE1C3700698B81 /* ContactsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4974AEF1DDE1C3700698B81 /* ContactsCollectionViewCell.swift */; };
 		E4ED56171DDD3C6700EB97D4 /* BottomNavBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4ED56161DDD3C6700EB97D4 /* BottomNavBarView.swift */; };
+		F30919EC1DDE147800479633 /* AddContactViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30919EB1DDE147800479633 /* AddContactViewControllerExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,12 +45,20 @@
 		3F0BE6A31DDCB8F4007E4FD0 /* RecordCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordCardViewController.swift; sourceTree = "<group>"; };
 		3F0BE6A51DDCB913007E4FD0 /* EditCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditCardViewController.swift; sourceTree = "<group>"; };
 		3F0BE6A71DDCB92D007E4FD0 /* SendCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendCardViewController.swift; sourceTree = "<group>"; };
+		3F196C4D1DDE147100497BDD /* Contact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
+		3F196C4F1DDE154000497BDD /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		3F196C511DDE30CA00497BDD /* ThankYou.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThankYou.swift; sourceTree = "<group>"; };
+		3F196C531DDE3AFE00497BDD /* Group.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
+		3FD6DB2C1DDCEA5F0078CA45 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3FD6DB2E1DDCEB760078CA45 /* PotatoParty.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PotatoParty.entitlements; sourceTree = "<group>"; };
+		3FD6DB2F1DDCFD7A0078CA45 /* LoginViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewControllerExtension.swift; sourceTree = "<group>"; };
 		5E9928D9D1244326D898295D /* Pods_PotatoParty.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PotatoParty.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D97A54290B19A4EFAF3ACD4 /* Pods-PotatoParty.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PotatoParty.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PotatoParty/Pods-PotatoParty.debug.xcconfig"; sourceTree = "<group>"; };
 		7E3660AC3B4B277712493117 /* Pods-PotatoParty.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PotatoParty.release.xcconfig"; path = "Pods/Target Support Files/Pods-PotatoParty/Pods-PotatoParty.release.xcconfig"; sourceTree = "<group>"; };
 		E4974AED1DDE0FE100698B81 /* ContactsCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsCollectionView.swift; sourceTree = "<group>"; };
 		E4974AEF1DDE1C3700698B81 /* ContactsCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsCollectionViewCell.swift; sourceTree = "<group>"; };
 		E4ED56161DDD3C6700EB97D4 /* BottomNavBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomNavBarView.swift; sourceTree = "<group>"; };
+		F30919EB1DDE147800479633 /* AddContactViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddContactViewControllerExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,12 +94,14 @@
 		3F0BE6851DDCB1F5007E4FD0 /* PotatoParty */ = {
 			isa = PBXGroup;
 			children = (
+				3FD6DB2E1DDCEB760078CA45 /* PotatoParty.entitlements */,
 				3F0BE6A01DDCB82D007E4FD0 /* Storyboard */,
 				3F0BE69F1DDCB80D007E4FD0 /* Others */,
 				3F0BE69E1DDCB7FE007E4FD0 /* Models */,
 				3F0BE69D1DDCB7C1007E4FD0 /* Views */,
 				3F0BE69A1DDCB323007E4FD0 /* ViewControllers */,
 				3F0BE68D1DDCB1F5007E4FD0 /* Assets.xcassets */,
+				3FD6DB2C1DDCEA5F0078CA45 /* GoogleService-Info.plist */,
 				3F0BE6921DDCB1F5007E4FD0 /* Info.plist */,
 			);
 			path = PotatoParty;
@@ -95,8 +112,8 @@
 			children = (
 				3F0BE6881DDCB1F5007E4FD0 /* LoginViewController.swift */,
 				3F0BE6981DDCB30F007E4FD0 /* ContactsViewController.swift */,
-				3F0BE69B1DDCB78E007E4FD0 /* SettingsViewController.swift */,
 				3F0BE6A11DDCB879007E4FD0 /* AddContactViewController.swift */,
+				3F0BE69B1DDCB78E007E4FD0 /* SettingsViewController.swift */,
 				3F0BE6A31DDCB8F4007E4FD0 /* RecordCardViewController.swift */,
 				3F0BE6A51DDCB913007E4FD0 /* EditCardViewController.swift */,
 				3F0BE6A71DDCB92D007E4FD0 /* SendCardViewController.swift */,
@@ -110,6 +127,8 @@
 				E4ED56161DDD3C6700EB97D4 /* BottomNavBarView.swift */,
 				E4974AED1DDE0FE100698B81 /* ContactsCollectionView.swift */,
 				E4974AEF1DDE1C3700698B81 /* ContactsCollectionViewCell.swift */,
+				3FD6DB2F1DDCFD7A0078CA45 /* LoginViewControllerExtension.swift */,
+				F30919EB1DDE147800479633 /* AddContactViewControllerExtension.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -117,6 +136,10 @@
 		3F0BE69E1DDCB7FE007E4FD0 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				3F196C4D1DDE147100497BDD /* Contact.swift */,
+				3F196C4F1DDE154000497BDD /* User.swift */,
+				3F196C511DDE30CA00497BDD /* ThankYou.swift */,
+				3F196C531DDE3AFE00497BDD /* Group.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -190,8 +213,13 @@
 				TargetAttributes = {
 					3F0BE6821DDCB1F5007E4FD0 = {
 						CreatedOnToolsVersion = 8.1;
-						DevelopmentTeam = H2562XJSGY;
+						DevelopmentTeam = HD7J783WQX;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -219,6 +247,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F0BE6911DDCB1F5007E4FD0 /* LaunchScreen.storyboard in Resources */,
+				3FD6DB2D1DDCEA5F0078CA45 /* GoogleService-Info.plist in Resources */,
 				3F0BE68E1DDCB1F5007E4FD0 /* Assets.xcassets in Resources */,
 				3F0BE68C1DDCB1F5007E4FD0 /* Main.storyboard in Resources */,
 			);
@@ -280,16 +309,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4ED56171DDD3C6700EB97D4 /* BottomNavBarView.swift in Sources */,
+				3F196C521DDE30CA00497BDD /* ThankYou.swift in Sources */,
 				3F0BE6A21DDCB879007E4FD0 /* AddContactViewController.swift in Sources */,
 				E4974AF01DDE1C3700698B81 /* ContactsCollectionViewCell.swift in Sources */,
 				3F0BE6891DDCB1F5007E4FD0 /* LoginViewController.swift in Sources */,
 				3F0BE6A81DDCB92D007E4FD0 /* SendCardViewController.swift in Sources */,
 				3F0BE6871DDCB1F5007E4FD0 /* AppDelegate.swift in Sources */,
 				3F0BE6991DDCB30F007E4FD0 /* ContactsViewController.swift in Sources */,
+				3F196C541DDE3AFE00497BDD /* Group.swift in Sources */,
 				3F0BE6A61DDCB913007E4FD0 /* EditCardViewController.swift in Sources */,
 				E4974AEE1DDE0FE100698B81 /* ContactsCollectionView.swift in Sources */,
+				3FD6DB301DDCFD7A0078CA45 /* LoginViewControllerExtension.swift in Sources */,
+				F30919EC1DDE147800479633 /* AddContactViewControllerExtension.swift in Sources */,
 				3F0BE69C1DDCB78E007E4FD0 /* SettingsViewController.swift in Sources */,
+				3F196C4E1DDE147100497BDD /* Contact.swift in Sources */,
 				3F0BE6A41DDCB8F4007E4FD0 /* RecordCardViewController.swift in Sources */,
+				3F196C501DDE154000497BDD /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,8 +448,10 @@
 			baseConfigurationReference = 7D97A54290B19A4EFAF3ACD4 /* Pods-PotatoParty.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = H2562XJSGY;
+				CODE_SIGN_ENTITLEMENTS = PotatoParty/PotatoParty.entitlements;
+				DEVELOPMENT_TEAM = HD7J783WQX;
 				INFOPLIST_FILE = PotatoParty/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ForrestApps.PotatoParty;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -427,8 +464,10 @@
 			baseConfigurationReference = 7E3660AC3B4B277712493117 /* Pods-PotatoParty.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = H2562XJSGY;
+				CODE_SIGN_ENTITLEMENTS = PotatoParty/PotatoParty.entitlements;
+				DEVELOPMENT_TEAM = HD7J783WQX;
 				INFOPLIST_FILE = PotatoParty/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ForrestApps.PotatoParty;
 				PRODUCT_NAME = "$(TARGET_NAME)";

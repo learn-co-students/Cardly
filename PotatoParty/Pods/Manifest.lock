@@ -51,6 +51,7 @@ PODS:
 DEPENDENCIES:
   - Firebase
   - Firebase/Auth
+  - Firebase/Core
   - Firebase/Database
   - Firebase/Storage
   - SnapKit (~> 3.0)
@@ -69,6 +70,6 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: a1f8ed39e4fe21c68957daed472c7afbcdf29166
   SnapKit: 2e456761aa92d4d4067a7a5594c18769d451a8ad
 
-PODFILE CHECKSUM: 1cc67a476f8405747e7780b5447acebed344da15
+PODFILE CHECKSUM: 03c21dd2fc1148dcf76cf61f58f103b1d9f8ef3e
 
 COCOAPODS: 1.2.0.beta.1

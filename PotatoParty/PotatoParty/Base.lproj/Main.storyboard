@@ -22,10 +22,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
+                    <connections>
+                        <segue destination="bEh-QA-Efq" kind="show" identifier="loginToContacts" id="Hac-JE-mQa"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-481" y="170"/>
+            <point key="canvasLocation" x="-471" y="170"/>
         </scene>
         <!--Contacts View Controller-->
         <scene sceneID="WyG-9S-osV">
@@ -40,10 +43,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="wYo-Wt-Vvc"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="69Q-l0-cwB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="479" y="170"/>
+            <point key="canvasLocation" x="1416.8" y="169.56521739130437"/>
         </scene>
         <!--Record Card View Controller-->
         <scene sceneID="4m4-Xc-clu">
@@ -61,7 +65,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gYa-wm-Fax" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1361" y="170"/>
+            <point key="canvasLocation" x="2300" y="169.56521739130437"/>
         </scene>
         <!--Edit Card View Controller-->
         <scene sceneID="a1d-HF-NMR">
@@ -79,7 +83,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ywq-L1-2GO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2266" y="170"/>
+            <point key="canvasLocation" x="3204" y="169.56521739130437"/>
         </scene>
         <!--Send Card View Controller-->
         <scene sceneID="YCe-vh-TYT">
@@ -97,7 +101,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7xe-ZP-TjX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3105" y="170"/>
+            <point key="canvasLocation" x="4044" y="169.56521739130437"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="zhM-RA-R6b">
@@ -133,7 +137,25 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="k4S-ja-l3K" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="478" y="944"/>
+            <point key="canvasLocation" x="478" y="900"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="zgs-0v-LLM">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="bEh-QA-Efq" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="d95-Ia-Jg1">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="JSL-dm-JFg" kind="relationship" relationship="rootViewController" id="mHj-z7-vu7"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HOc-nV-M8s" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="477.60000000000002" y="169.56521739130437"/>
         </scene>
     </scenes>
 </document>

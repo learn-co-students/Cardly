@@ -8,31 +8,63 @@
 
 import UIKit
 import SnapKit
+import FirebaseDatabase
+import FirebaseAuth
+
 
 class ContactsViewController: UIViewController {
+    // Views
     var bottomNavBar = BottomNavBarView()
     var collectionView = ContactsCollectionView()
     
+    // Firebase
+    let ref = FIRDatabase.database().reference(withPath: "contacts")
+    var user: User?
+    var userUid: String?
+    var contacts: [Contact] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Setup views
         setupViews()
+        
+        // Firebase methods
+        self.restorationIdentifier = "contactsVC"
+        navigationController?.navigationBar.isHidden = true
+        
+        FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
+            guard let user = user else { return }
+            self.user = User(authData: user)
+            self.userUid = user.uid
+            print("Current logged in user email - \(self.user?.email)")
+        })
+        
+        ref.observe(.value, with: { (snapshot) in
+            if snapshot.exists() {
+                for item in snapshot.children.allObjects {
+                    self.contacts.append(Contact(snapshot: item as! FIRDataSnapshot))
+                }
+                print("Current contacts list contains:")
+                dump(self.contacts)
+            }
+        })
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
 }
 
 extension ContactsViewController {
-    // Setup all
+    // Setup all views
     func setupViews() {
         setupCollectionView()
         setupTopNavBarView()
         setupBottomNavBarView()
     }
     
-    // Setup individual view
+    // Setup individual views
     func setupCollectionView() {
         self.view.addSubview(collectionView)
         collectionView.snp.makeConstraints { (make) in
@@ -56,5 +88,4 @@ extension ContactsViewController {
     func setupTopNavBarView() {
         // Do this
     }
-    
 }

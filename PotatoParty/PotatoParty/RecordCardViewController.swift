@@ -7,11 +7,30 @@
 //
 
 import UIKit
+import SnapKit
+import AVFoundation
+import CoreMedia
 
 class RecordCardViewController: UIViewController {
 
+    var toggleCameraViewButton = UIButton()
+    var recordButton = UIButton()
+    var previewView = UIView()
+    
+    
+    //video control properties
+    
+    let captureSession = AVCaptureSession()
+    var videoCaptureDevice: AVCaptureDevice?
+    var previewLayer: AVCaptureVideoPreviewLayer?
+    var movieFileOutput = AVCaptureMovieFileOutput()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        layoutElements()
+        self.initializeCamera()
+        
 
         // Do any additional setup after loading the view.
     }
@@ -19,6 +38,12 @@ class RecordCardViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewWillLayoutSubviews() {
+        layoutElements()
+        self.setVideoOrientation()
+        print("VIEW WILL LAYOUT SUBVIEWS: previewLayerFrame: \(previewLayer?.frame). previewViewFrame: \(previewView.frame)")
     }
     
 
@@ -31,5 +56,121 @@ class RecordCardViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-
+    
+    //MARK: - UI Elements
+    
+    func layoutElements() {
+        print("layout elements called")
+        view.backgroundColor = UIColor.orange
+        
+//        view.addSubview(recordButton)
+//        recordButton.snp.makeConstraints { (make) in
+//            make.centerX.equalToSuperview()
+//            make.bottomMargin.equalToSuperview().offset(-60)
+//            make.width.equalTo(40)
+//            make.height.equalTo(40)
+//           
+//        }
+//        recordButton.addTarget(self, action: #selector(recordButtonPressed), for: .touchUpInside)
+//        recordButton.backgroundColor = UIColor.black
+        
+       
+        
+//        previewView.snp.makeConstraints { (make) in
+//            make.edges.equalTo(self.view)
+//        }
+        
+        
+        view.addSubview(previewView)
+        previewView.frame = self.view.frame
+        
+        previewView.backgroundColor = UIColor.blue
+        print("preview view frame: \(previewView.frame)")
+            }
+    
+    
+    //MARK: - BUTTON METHODS
+    
+    func recordButtonPressed () {
+        print("record button pressed")
+    }
+    
+    //MARK: HELPER METHODS
+    
+    func videoOrientation() -> AVCaptureVideoOrientation {
+        print("video orientation function called")
+        var videoOrienation: AVCaptureVideoOrientation!
+        
+        let phoneOrientation: UIDeviceOrientation = UIDevice.current.orientation
+        
+        switch phoneOrientation {
+        case .portrait:
+            videoOrienation = .portrait
+            break
+        case .landscapeRight:
+            videoOrienation = .landscapeLeft
+            break
+        case .landscapeLeft:
+            videoOrienation = .landscapeRight
+            break
+        case .portraitUpsideDown:
+            videoOrienation = .portrait
+            break
+        default:
+            videoOrienation = .portrait
+            
+        }
+        
+        return videoOrienation
+    }
+    
+    func setVideoOrientation() {
+        print("set video Orientation called")
+        if let connection = self.previewLayer?.connection {
+            if connection.isVideoOrientationSupported {
+                connection.videoOrientation = self.videoOrientation()
+                self.previewLayer?.frame = self.previewView.bounds
+                
+                print("previewLayerFrame: \(previewLayer?.frame). previewViewFrame: \(previewView.frame)")
+            }
+        }
+    }
+    
+    func initializeCamera() {
+        print("initialize camera called")
+        self.captureSession.sessionPreset = AVCaptureSessionPresetHigh
+        
+        let discovery = AVCaptureDeviceDiscoverySession.init(deviceTypes: [AVCaptureDeviceType.builtInWideAngleCamera], mediaType: AVMediaTypeVideo, position: .unspecified) as AVCaptureDeviceDiscoverySession
+        
+        for device in discovery.devices as [AVCaptureDevice] {
+            if device.position == AVCaptureDevicePosition.back {
+                self.videoCaptureDevice = device
+            }
+        }
+        if videoCaptureDevice != nil {
+            do {
+                try self.captureSession.addInput(AVCaptureDeviceInput(device: self.videoCaptureDevice))
+                if let audioInput = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeAudio) {
+                    try self.captureSession.addInput(AVCaptureDeviceInput(device: audioInput))
+                }
+                self.previewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
+                self.previewView.layer.addSublayer((self.previewLayer)!)
+                
+                
+                self.previewLayer?.frame = self.previewView.frame
+                print("frame: \(view.frame)")
+                print("frame: \(previewView.frame)")
+                
+                self.setVideoOrientation()
+                
+                self.captureSession.addOutput(self.movieFileOutput)
+                
+                self.captureSession.startRunning()
+                
+            } catch {
+                print(error)
+                
+            }
+        }
+    }
 }
