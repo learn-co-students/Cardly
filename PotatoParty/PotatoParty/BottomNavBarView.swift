@@ -10,6 +10,13 @@ import Foundation
 import UIKit
 import SnapKit
 
+// MARK: - Bottom Nav Bar Protocol
+
+protocol BottomNavBarDelegate: class {
+    func addContactButtonPressed()
+    func sendToButtonPressed()
+}
+
 // MARK: - Bottom Nav Bar
 
 class BottomNavBarView: UIView {
@@ -32,6 +39,7 @@ class BottomNavBarView: UIView {
 
 class BottomNavBarLeftView: UIView {
     var addContactBtn = UIButton()
+    weak var delegate: BottomNavBarDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,14 +57,25 @@ class BottomNavBarLeftView: UIView {
         addContactBtn.titleLabel?.font = UIFont(name: "Helvetica", size: 32)
         addContactBtn.frame = CGRect()
         addContactBtn.isEnabled = true
+        addContactBtn.addTarget(self, action: #selector(addContactButtonTapped(_:)), for: .touchUpInside)
         addSubview(addContactBtn)
         addContactBtn.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
         }
         
+        
+        
         // Change background
         self.backgroundColor = UIColor.green
     }
+    
+    func addContactButtonTapped(_ sender: UIButton) {
+        
+        print("\n\nadd contact button pressed\n\n")
+        delegate?.addContactButtonPressed()
+        
+    }
+    
 }
 
 class BottomNavBarMiddleView: UIView {
@@ -78,7 +97,8 @@ class BottomNavBarMiddleView: UIView {
 
 class BottomNavBarRightView: UIView {
     var sendToContactBtn = UIButton()
-
+    weak var delegate: BottomNavBarDelegate?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -90,16 +110,29 @@ class BottomNavBarRightView: UIView {
     
     func setupView() {
         // Add button
-        self.addSubview(sendToContactBtn)
+        
         sendToContactBtn.setTitle("Send", for: .normal)
         sendToContactBtn.setTitleColor(UIColor.black, for: .normal)
+        sendToContactBtn.titleLabel?.font = UIFont(name: "Helvecta", size: 32)
         sendToContactBtn.frame = CGRect()
+        sendToContactBtn.isEnabled = true
+        sendToContactBtn.addTarget(self, action: #selector(sendToContactButtonTapped(_:)), for: .touchUpInside)
+        addSubview(sendToContactBtn)
         sendToContactBtn.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
+            
         }
         
         self.backgroundColor = UIColor.red
     }
+    
+    func sendToContactButtonTapped(_ sender: UIButton) {
+        
+        print("\n\nsend to contact button pressed\n\n")
+        delegate?.sendToButtonPressed()
+        
+    }
+    
 }
 
 
