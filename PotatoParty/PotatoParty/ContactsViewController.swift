@@ -7,26 +7,35 @@
 //
 
 import UIKit
+import SnapKit
 import FirebaseDatabase
 import FirebaseAuth
 import SnapKit
 
 
 class ContactsViewController: UIViewController, DropDownMenuDelegate {
-    public func didTapInDropDownMenuBackground(_ menu: DropDownMenu) {
-        
-    }
-    
-    
+
     var navigationBarMenu: DropDownMenu!
     var titleView: DropDownTitleView!
+    // Views
+    var bottomNavBar = BottomNavBarView()
+    var collectionView = ContactsCollectionView()
     let ref = FIRDatabase.database().reference(withPath: "contacts")
     var user: User?
     var userUid: String?
     var contacts: [Contact] = []
+
+    public func didTapInDropDownMenuBackground(_ menu: DropDownMenu) {
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Setup views
+        setupViews()
+        
+        // Firebase methods
         self.restorationIdentifier = "contactsVC"
         // Do any additional setup after loading the view.
         
@@ -43,6 +52,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         self.navigationItem.leftBarButtonItem = leftBtn
         // TO DO: Write some code in place of "nil" after "action:"
         
+        //navigationController?.navigationBar.isHidden = true
         
         FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
             guard let user = user else { return }
@@ -61,7 +71,6 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
             }
         })
     }
-    
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -136,20 +145,43 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         navigationBarMenu.backgroundAlpha = 0.7
     }
     
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
+}
+
+extension ContactsViewController {
+    // Setup all views
+    func setupViews() {
+        setupCollectionView()
+        setupTopNavBarView()
+        setupBottomNavBarView()
+    }
+    
+    // Setup individual views
+    func setupCollectionView() {
+        self.view.addSubview(collectionView)
+        collectionView.snp.makeConstraints { (make) in
+            make.bottom.equalToSuperview()
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(0.875)
+        }
+    }
+    
+    func setupBottomNavBarView() {
+        self.view.addSubview(bottomNavBar)
+        bottomNavBar.snp.makeConstraints { (make) in
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(0.125)
+        }
+    }
+    
+    func setupTopNavBarView() {
+        // Do this
+    }
     
 }
