@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0700"
+   LastUpgradeVersion = "0810"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "594E7AB61B47EC86FE83248926D8A59E"
-               BuildableName = "Pods_PotatoParty.framework"
-               BlueprintName = "Pods-PotatoParty"
+               BlueprintIdentifier = "C052BEBFBD0AB5218CC64BA3450F6547"
+               BuildableName = "GTMSessionFetcher.framework"
+               BlueprintName = "GTMSessionFetcher"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "594E7AB61B47EC86FE83248926D8A59E"
-            BuildableName = "Pods_PotatoParty.framework"
-            BlueprintName = "Pods-PotatoParty"
+            BlueprintIdentifier = "C052BEBFBD0AB5218CC64BA3450F6547"
+            BuildableName = "GTMSessionFetcher.framework"
+            BlueprintName = "GTMSessionFetcher"
             ReferencedContainer = "container:Pods.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -60,6 +60,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "C052BEBFBD0AB5218CC64BA3450F6547"
+            BuildableName = "GTMSessionFetcher.framework"
+            BlueprintName = "GTMSessionFetcher"
+            ReferencedContainer = "container:Pods.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
