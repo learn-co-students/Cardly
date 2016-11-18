@@ -30,6 +30,7 @@ class RecordCardViewController: UIViewController {
         super.viewDidLoad()
         layoutElements()
         self.initializeCamera()
+        
 
         // Do any additional setup after loading the view.
     }
@@ -40,7 +41,9 @@ class RecordCardViewController: UIViewController {
     }
     
     override func viewWillLayoutSubviews() {
+        layoutElements()
         self.setVideoOrientation()
+        print("VIEW WILL LAYOUT SUBVIEWS: previewLayerFrame: \(previewLayer?.frame). previewViewFrame: \(previewView.frame)")
     }
     
 
@@ -60,23 +63,25 @@ class RecordCardViewController: UIViewController {
         print("layout elements called")
         view.backgroundColor = UIColor.orange
         
-        view.addSubview(recordButton)
-        recordButton.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.bottomMargin.equalToSuperview().offset(-60)
-            make.width.equalTo(40)
-            make.height.equalTo(40)
-           
-        }
-        recordButton.addTarget(self, action: #selector(recordButtonPressed), for: .touchUpInside)
-        recordButton.backgroundColor = UIColor.black
+//        view.addSubview(recordButton)
+//        recordButton.snp.makeConstraints { (make) in
+//            make.centerX.equalToSuperview()
+//            make.bottomMargin.equalToSuperview().offset(-60)
+//            make.width.equalTo(40)
+//            make.height.equalTo(40)
+//           
+//        }
+//        recordButton.addTarget(self, action: #selector(recordButtonPressed), for: .touchUpInside)
+//        recordButton.backgroundColor = UIColor.black
         
-        view.addSubview(previewView)
+       
         
 //        previewView.snp.makeConstraints { (make) in
 //            make.edges.equalTo(self.view)
 //        }
         
+        
+        view.addSubview(previewView)
         previewView.frame = self.view.frame
         
         previewView.backgroundColor = UIColor.blue
@@ -124,7 +129,9 @@ class RecordCardViewController: UIViewController {
         if let connection = self.previewLayer?.connection {
             if connection.isVideoOrientationSupported {
                 connection.videoOrientation = self.videoOrientation()
-                self.previewLayer?.frame = previewView.bounds
+                self.previewLayer?.frame = self.previewView.bounds
+                
+                print("previewLayerFrame: \(previewLayer?.frame). previewViewFrame: \(previewView.frame)")
             }
         }
     }
@@ -153,9 +160,6 @@ class RecordCardViewController: UIViewController {
                 self.previewLayer?.frame = self.previewView.frame
                 print("frame: \(view.frame)")
                 print("frame: \(previewView.frame)")
-                
-            
-                
                 
                 self.setVideoOrientation()
                 
