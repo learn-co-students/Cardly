@@ -22,7 +22,6 @@
 		E4974AEE1DDE0FE100698B81 /* ContactsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4974AED1DDE0FE100698B81 /* ContactsCollectionView.swift */; };
 		E4974AF01DDE1C3700698B81 /* ContactsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4974AEF1DDE1C3700698B81 /* ContactsCollectionViewCell.swift */; };
 		E4ED56171DDD3C6700EB97D4 /* BottomNavBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4ED56161DDD3C6700EB97D4 /* BottomNavBarView.swift */; };
-		E4ED56191DDD45DF00EB97D4 /* ContactsViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4ED56181DDD45DF00EB97D4 /* ContactsViewControllerExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,7 +44,6 @@
 		E4974AED1DDE0FE100698B81 /* ContactsCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsCollectionView.swift; sourceTree = "<group>"; };
 		E4974AEF1DDE1C3700698B81 /* ContactsCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsCollectionViewCell.swift; sourceTree = "<group>"; };
 		E4ED56161DDD3C6700EB97D4 /* BottomNavBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomNavBarView.swift; sourceTree = "<group>"; };
-		E4ED56181DDD45DF00EB97D4 /* ContactsViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsViewControllerExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,7 +110,6 @@
 				E4ED56161DDD3C6700EB97D4 /* BottomNavBarView.swift */,
 				E4974AED1DDE0FE100698B81 /* ContactsCollectionView.swift */,
 				E4974AEF1DDE1C3700698B81 /* ContactsCollectionViewCell.swift */,
-				E4ED56181DDD45DF00EB97D4 /* ContactsViewControllerExtension.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -286,7 +283,6 @@
 				3F0BE6A21DDCB879007E4FD0 /* AddContactViewController.swift in Sources */,
 				E4974AF01DDE1C3700698B81 /* ContactsCollectionViewCell.swift in Sources */,
 				3F0BE6891DDCB1F5007E4FD0 /* LoginViewController.swift in Sources */,
-				E4ED56191DDD45DF00EB97D4 /* ContactsViewControllerExtension.swift in Sources */,
 				3F0BE6A81DDCB92D007E4FD0 /* SendCardViewController.swift in Sources */,
 				3F0BE6871DDCB1F5007E4FD0 /* AppDelegate.swift in Sources */,
 				3F0BE6991DDCB30F007E4FD0 /* ContactsViewController.swift in Sources */,

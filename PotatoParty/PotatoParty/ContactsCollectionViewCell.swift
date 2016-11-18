@@ -12,6 +12,8 @@ import SnapKit
 
 class ContactsCollectionViewCell: UICollectionViewCell {
     
+    var label = UILabel()
+    
     // Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,6 +27,17 @@ class ContactsCollectionViewCell: UICollectionViewCell {
     // Setup view
     func setupView() {
         backgroundColor = UIColor.cyan
+        
+        label.frame = CGRect(x: 0, y: 0, width: contentView.frame.width, height: contentView.frame.height)
+        label.text = "Cell!"
+        label.font = UIFont(name: "Helvetica", size: 24)
+        
+        contentView.addSubview(label)
+        
+        label.snp.makeConstraints { (make) in
+            make.center.equalTo(contentView.center)
+        }
+
     }
     
 }

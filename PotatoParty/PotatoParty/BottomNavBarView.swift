@@ -46,11 +46,14 @@ class BottomNavBarLeftView: UIView {
         // Add button
         addContactBtn.setTitle("+", for: .normal)
         addContactBtn.setTitleColor(UIColor.black, for: .normal)
+        addContactBtn.titleLabel?.font = UIFont(name: "Helvetica", size: 32)
         addContactBtn.frame = CGRect()
+        addContactBtn.isEnabled = true
         addSubview(addContactBtn)
         addContactBtn.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
         }
+        
         // Change background
         self.backgroundColor = UIColor.green
     }

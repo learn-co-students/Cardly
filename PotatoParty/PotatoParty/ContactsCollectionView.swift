@@ -36,7 +36,8 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
+        let cell = dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ContactsCollectionViewCell
+        
         return cell
     }
     
@@ -45,7 +46,7 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         delegate = self
         dataSource = self
         
-        // View properties
+        // Collection View properties
         backgroundColor = UIColor.brown
         
         // Create reuse cell
