@@ -57,7 +57,7 @@ class RecordCardViewController: UIViewController {
     //MARK: - UI Elements
     
     func layoutElements() {
-        
+        print("layout elements called")
         view.backgroundColor = UIColor.orange
         
         view.addSubview(recordButton)
@@ -71,18 +71,17 @@ class RecordCardViewController: UIViewController {
         recordButton.addTarget(self, action: #selector(recordButtonPressed), for: .touchUpInside)
         recordButton.backgroundColor = UIColor.black
         
-        
         view.addSubview(previewView)
-        previewView.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.topMargin.equalToSuperview()
-            make.width.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.75)
-        }
+        
+//        previewView.snp.makeConstraints { (make) in
+//            make.edges.equalTo(self.view)
+//        }
+        
+        previewView.frame = self.view.frame
         
         previewView.backgroundColor = UIColor.blue
-     
-    }
+        print("preview view frame: \(previewView.frame)")
+            }
     
     
     //MARK: - BUTTON METHODS
@@ -94,6 +93,7 @@ class RecordCardViewController: UIViewController {
     //MARK: HELPER METHODS
     
     func videoOrientation() -> AVCaptureVideoOrientation {
+        print("video orientation function called")
         var videoOrienation: AVCaptureVideoOrientation!
         
         let phoneOrientation: UIDeviceOrientation = UIDevice.current.orientation
@@ -120,6 +120,7 @@ class RecordCardViewController: UIViewController {
     }
     
     func setVideoOrientation() {
+        print("set video Orientation called")
         if let connection = self.previewLayer?.connection {
             if connection.isVideoOrientationSupported {
                 connection.videoOrientation = self.videoOrientation()
@@ -129,6 +130,7 @@ class RecordCardViewController: UIViewController {
     }
     
     func initializeCamera() {
+        print("initialize camera called")
         self.captureSession.sessionPreset = AVCaptureSessionPresetHigh
         
         let discovery = AVCaptureDeviceDiscoverySession.init(deviceTypes: [AVCaptureDeviceType.builtInWideAngleCamera], mediaType: AVMediaTypeVideo, position: .unspecified) as AVCaptureDeviceDiscoverySession
@@ -146,7 +148,14 @@ class RecordCardViewController: UIViewController {
                 }
                 self.previewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
                 self.previewView.layer.addSublayer((self.previewLayer)!)
+                
+                
                 self.previewLayer?.frame = self.previewView.frame
+                print("frame: \(view.frame)")
+                print("frame: \(previewView.frame)")
+                
+            
+                
                 
                 self.setVideoOrientation()
                 
