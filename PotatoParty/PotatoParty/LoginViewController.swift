@@ -66,7 +66,16 @@ extension LoginViewController {
             if let unwrappedEmail = emailField.text, let unwrappedPassword = passwordField.text {
                 FIRAuth.auth()!.createUser(withEmail: unwrappedEmail, password: unwrappedPassword, completion: { (user, error) in
                     if error == nil {
-                        FIRAuth.auth()!.signIn(withEmail: self.userTextfield.text!, password: self.passwordTextfield.text!)
+                        FIRAuth.auth()!.signIn(withEmail: unwrappedEmail, password: unwrappedPassword, completion: { (user, error) in
+                            if error == nil {
+                                print("Logging in")
+                                self.loginSuccess()
+                            }
+                            else {
+                                print("error")
+                                //show pop up with login error and stuff
+                            }
+                        })
                     }
                 })
             }
@@ -88,7 +97,24 @@ extension LoginViewController {
     }
     
     func loginButtonTapped() {
-        FIRAuth.auth()!.signIn(withEmail: userTextfield.text!, password: passwordTextfield.text!)
+        FIRAuth.auth()!.signIn(withEmail: userTextfield.text!, password: passwordTextfield.text!, completion: { (user, error) in
+            if error == nil {
+                print("Logging in")
+                self.loginSuccess()
+            }
+            else {
+                print("error")
+                //show pop up with login error and stuff
+            }
+        })
+        
+    }
+    
+    func loginSuccess() {
+        let initialVC = ContactsViewController()
+        print("creating navVC and making initial vc contactsVC")
+        let navigationController = UINavigationController(rootViewController: initialVC)
+        present(navigationController, animated: true, completion: nil)
     }
 }
 

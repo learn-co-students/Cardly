@@ -51,6 +51,15 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         
         //navigationController?.navigationBar.isHidden = true
         
+        
+        // WARNING: hard coded logout here because we don't have any button to logout
+        do{
+            try FIRAuth.auth()?.signOut()
+            print("signed out")
+        } catch {
+            print("Error!!!!")
+        }
+        
         FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
             guard let user = user else { return }
             self.user = User(authData: user)
@@ -67,6 +76,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
                 dump(self.contacts)
             }
         })
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
