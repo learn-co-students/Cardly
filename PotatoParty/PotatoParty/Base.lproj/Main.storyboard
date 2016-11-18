@@ -27,20 +27,5 @@
             </objects>
             <point key="canvasLocation" x="-390" y="170"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="zgs-0v-LLM">
-            <objects>
-                <navigationController storyboardIdentifier="navVC" automaticallyAdjustsScrollViewInsets="NO" id="bEh-QA-Efq" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="d95-Ia-Jg1">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="HOc-nV-M8s" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="477.60000000000002" y="169.56521739130437"/>
-        </scene>
     </scenes>
 </document>

@@ -17,23 +17,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let rootVC = ContactsViewController()
         
-        FIRAuth.auth()!.addStateDidChangeListener({ (auth, user) in
+        if FIRAuth.auth()?.currentUser != nil {
+            print("No user!")
+            self.initialVC = LoginViewController()
+        }
             
-            if user != nil {
-            self.initialVC = storyboard.instantiateViewController(withIdentifier: "navVC")
-            }
-            else {
-                self.initialVC = storyboard.instantiateViewController(withIdentifier: "loginVC")
-            }
-            
-            let frame = UIScreen.main.bounds
-            self.window = UIWindow(frame: frame)
-            self.window!.rootViewController = self.initialVC
-            self.window!.makeKeyAndVisible()
-            
-        })
+        else {
+            print("current logged in user")
+            let navVC = UINavigationController(rootViewController: rootVC)
+            self.initialVC = navVC
+        }
+        
+        let frame = UIScreen.main.bounds
+        self.window = UIWindow(frame: frame)
+        self.window!.rootViewController = self.initialVC
+        self.window!.makeKeyAndVisible()
         
         return true
     
