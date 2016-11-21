@@ -10,10 +10,10 @@ import Foundation
 import UIKit
 import SnapKit
 
-class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UICollectionViewDataSource {
-
-    let layout = UICollectionViewFlowLayout()
+class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
     let reuseIdentifier = "cell"
+    let layout = UICollectionViewFlowLayout()
     
     // Inititalizers
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -53,9 +53,14 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         register(ContactsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         
         // Cells layout
-        layout.itemSize = CGSize(width: 150, height: 150)
+        let cellWidth = self.frame.width * 0.45
+        let cellHeight = cellWidth
+        layout.itemSize = CGSize(width: cellWidth, height: cellHeight)
         layout.scrollDirection = .vertical
-        layout.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 0, right: 10)
+//        layout.minimumLineSpacing = 20
+//        layout.minimumInteritemSpacing = 20
+        
         
     }
     
