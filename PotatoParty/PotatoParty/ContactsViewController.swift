@@ -29,12 +29,9 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = false
         
-        // Setup views
         setupViews()
         
-        // Firebase methods
         self.restorationIdentifier = "contactsVC"
-        // Do any additional setup after loading the view.
         
         self.navigationBarMenu = DropDownMenu()
         
@@ -45,20 +42,10 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         self.navigationItem.rightBarButtonItem = rightBtn
         // TO DO: Hook up the action
         
-        
         let leftBtn = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(self.navToSettingsVC))
         self.navigationItem.leftBarButtonItem = leftBtn
         
         //navigationController?.navigationBar.isHidden = true
-        
-        
-        // WARNING: hard coded logout here because we don't have any button to logout
-        do{
-            try FIRAuth.auth()?.signOut()
-            print("signed out")
-        } catch {
-            print("Error!!!!")
-        }
         
         FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
             guard let user = user else { return }

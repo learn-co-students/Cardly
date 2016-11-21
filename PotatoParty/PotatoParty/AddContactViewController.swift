@@ -50,7 +50,9 @@ class AddContactViewController: UIViewController {
     func addButtonTapped () {
         guard let email = emailTextField.text, let name = nameTextField.text else { return }
         let contact = Contact(fullName: name, email: email, phone: "7322225678")
+        dump(contact)
         let contactItemRef = contactRef.childByAutoId()
+        print("key is \(contactItemRef.key)")
         contactItemRef.setValue(contact.toAny())
         
         nameTextField.text = namePlaceholder
