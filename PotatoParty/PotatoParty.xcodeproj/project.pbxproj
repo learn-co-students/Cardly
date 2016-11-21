@@ -27,6 +27,7 @@
 		3F196C521DDE30CA00497BDD /* ThankYou.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F196C511DDE30CA00497BDD /* ThankYou.swift */; };
 		3F196C541DDE3AFE00497BDD /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F196C531DDE3AFE00497BDD /* Group.swift */; };
 		3F70B6C61DE351BD0051B349 /* SettingsViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F70B6C51DE351BD0051B349 /* SettingsViewControllerExtension.swift */; };
+		3F70B6C81DE38B6E0051B349 /* RecordCardViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F70B6C71DE38B6E0051B349 /* RecordCardViewControllerExtension.swift */; };
 		3FD6DB2D1DDCEA5F0078CA45 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3FD6DB2C1DDCEA5F0078CA45 /* GoogleService-Info.plist */; };
 		3FD6DB301DDCFD7A0078CA45 /* LoginViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD6DB2F1DDCFD7A0078CA45 /* LoginViewControllerExtension.swift */; };
 		920F301338A9FC2B9FE55804 /* Pods_PotatoParty.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9928D9D1244326D898295D /* Pods_PotatoParty.framework */; };
@@ -60,6 +61,7 @@
 		3F196C511DDE30CA00497BDD /* ThankYou.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThankYou.swift; sourceTree = "<group>"; };
 		3F196C531DDE3AFE00497BDD /* Group.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		3F70B6C51DE351BD0051B349 /* SettingsViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewControllerExtension.swift; sourceTree = "<group>"; };
+		3F70B6C71DE38B6E0051B349 /* RecordCardViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordCardViewControllerExtension.swift; sourceTree = "<group>"; };
 		3FD6DB2C1DDCEA5F0078CA45 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3FD6DB2E1DDCEB760078CA45 /* PotatoParty.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PotatoParty.entitlements; sourceTree = "<group>"; };
 		3FD6DB2F1DDCFD7A0078CA45 /* LoginViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewControllerExtension.swift; sourceTree = "<group>"; wrapsLines = 0; };
@@ -147,6 +149,7 @@
 				F30919EB1DDE147800479633 /* AddContactViewControllerExtension.swift */,
 				E49BA3A61DE3443A0010A7A4 /* Constants.swift */,
 				3F70B6C51DE351BD0051B349 /* SettingsViewControllerExtension.swift */,
+				3F70B6C71DE38B6E0051B349 /* RecordCardViewControllerExtension.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -231,7 +234,7 @@
 				TargetAttributes = {
 					3F0BE6821DDCB1F5007E4FD0 = {
 						CreatedOnToolsVersion = 8.1;
-						DevelopmentTeam = HD7J783WQX;
+						DevelopmentTeam = H2562XJSGY;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Keychain = {
@@ -348,6 +351,7 @@
 				3F0BE69C1DDCB78E007E4FD0 /* SettingsViewController.swift in Sources */,
 				3F196C4E1DDE147100497BDD /* Contact.swift in Sources */,
 				3F0BE6A41DDCB8F4007E4FD0 /* RecordCardViewController.swift in Sources */,
+				3F70B6C81DE38B6E0051B349 /* RecordCardViewControllerExtension.swift in Sources */,
 				3F196C501DDE154000497BDD /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -473,11 +477,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = PotatoParty/PotatoParty.entitlements;
-				DEVELOPMENT_TEAM = HD7J783WQX;
+				DEVELOPMENT_TEAM = H2562XJSGY;
 				INFOPLIST_FILE = PotatoParty/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hhhh.PotatoParty;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ForrestApps.PotatoParty-com.ForrestApps.PotatoParty-com.ForrestApps.PotatoParty";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -489,11 +493,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = PotatoParty/PotatoParty.entitlements;
-				DEVELOPMENT_TEAM = HD7J783WQX;
+				DEVELOPMENT_TEAM = H2562XJSGY;
 				INFOPLIST_FILE = PotatoParty/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hhhh.PotatoParty;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ForrestApps.PotatoParty-com.ForrestApps.PotatoParty-com.ForrestApps.PotatoParty";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};

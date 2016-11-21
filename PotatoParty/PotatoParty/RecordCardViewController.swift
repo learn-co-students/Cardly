@@ -17,6 +17,7 @@ class RecordCardViewController: UIViewController {
     var recordButton = UIButton()
     var previewView = UIView()
     
+    var bottomNavBar: BottomNavBarView!
     
     //video control properties
     
@@ -28,10 +29,8 @@ class RecordCardViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        layoutElements()
+        layoutRecordViewElements()
         self.initializeCamera()
-        
-
         // Do any additional setup after loading the view.
     }
 
@@ -41,9 +40,8 @@ class RecordCardViewController: UIViewController {
     }
     
     override func viewWillLayoutSubviews() {
-        layoutElements()
+        layoutRecordViewElements()
         self.setVideoOrientation()
-        print("VIEW WILL LAYOUT SUBVIEWS: previewLayerFrame: \(previewLayer?.frame). previewViewFrame: \(previewView.frame)")
     }
     
 
@@ -57,50 +55,6 @@ class RecordCardViewController: UIViewController {
     }
     */
     
-    //MARK: - UI Elements
-    
-    func layoutElements() {
-        print("layout elements called")
-        view.backgroundColor = UIColor.orange
-        
-//        view.addSubview(recordButton)
-//        recordButton.snp.makeConstraints { (make) in
-//            make.centerX.equalToSuperview()
-//            make.bottomMargin.equalToSuperview().offset(-60)
-//            make.width.equalTo(40)
-//            make.height.equalTo(40)
-//           
-//        }
-//        recordButton.addTarget(self, action: #selector(recordButtonPressed), for: .touchUpInside)
-//        recordButton.backgroundColor = UIColor.black
-        
-       
-        
-//        previewView.snp.makeConstraints { (make) in
-//            make.edges.equalTo(self.view)
-//        }
-        
-        
-        view.addSubview(previewView)
-        previewView.frame = self.view.frame
-        
-        previewView.backgroundColor = UIColor.blue
-        print("preview view frame: \(previewView.frame)")
-        
-        view.addSubview(toggleCameraViewButton)
-        toggleCameraViewButton.snp.makeConstraints { (make) in
-            make.width.equalTo(100)
-            make.height.equalTo(25)
-            make.rightMargin.equalTo(self.view.snp.rightMargin).offset(-40)
-            make.topMargin.equalTo(self.view.snp.topMargin).offset(50)
-        }
-        
-        toggleCameraViewButton.setTitle("Toggle", for: .normal)
-        toggleCameraViewButton.backgroundColor = UIColor.black
-        toggleCameraViewButton.addTarget(self, action: #selector(self.toggleCameraButtonPressed), for: .touchUpInside)
-            }
-    
-    
     //MARK: - BUTTON METHODS
     
     func recordButtonPressed () {
@@ -109,38 +63,36 @@ class RecordCardViewController: UIViewController {
     
     func toggleCameraButtonPressed() {
         print("toggle Camera Button Pressed")
-    self.switchCameraInput()
+        self.switchCameraInput()
     }
     
     //MARK: HELPER METHODS
     
-    // Orientation Methods
     
     func videoOrientation() -> AVCaptureVideoOrientation {
-        print("video orientation function called")
-        var videoOrienation: AVCaptureVideoOrientation!
+        var videoOrientation: AVCaptureVideoOrientation!
         
         let phoneOrientation: UIDeviceOrientation = UIDevice.current.orientation
         
         switch phoneOrientation {
         case .portrait:
-            videoOrienation = .portrait
+            videoOrientation = .portrait
             break
         case .landscapeRight:
-            videoOrienation = .landscapeLeft
+            videoOrientation = .landscapeLeft
             break
         case .landscapeLeft:
-            videoOrienation = .landscapeRight
+            videoOrientation = .landscapeRight
             break
         case .portraitUpsideDown:
-            videoOrienation = .portrait
+            videoOrientation = .portrait
             break
         default:
-            videoOrienation = .portrait
+            videoOrientation = .portrait
             
         }
         
-        return videoOrienation
+        return videoOrientation
     }
     
     func setVideoOrientation() {
@@ -149,13 +101,9 @@ class RecordCardViewController: UIViewController {
             if connection.isVideoOrientationSupported {
                 connection.videoOrientation = self.videoOrientation()
                 self.previewLayer?.frame = self.previewView.bounds
-                
-                print("previewLayerFrame: \(previewLayer?.frame). previewViewFrame: \(previewView.frame)")
             }
         }
     }
-    
-    //toggling camera methods 
     
     func switchCameraInput() {
         self.captureSession.beginConfiguration()
@@ -204,10 +152,7 @@ class RecordCardViewController: UIViewController {
         return nil
     }
     
-    //Initializing Camera
-    
     func initializeCamera() {
-        print("initialize camera called")
         self.captureSession.sessionPreset = AVCaptureSessionPresetHigh
         
         let discovery = AVCaptureDeviceDiscoverySession.init(deviceTypes: [AVCaptureDeviceType.builtInWideAngleCamera], mediaType: AVMediaTypeVideo, position: .unspecified) as AVCaptureDeviceDiscoverySession
@@ -226,7 +171,6 @@ class RecordCardViewController: UIViewController {
                 self.previewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
                 self.previewView.layer.addSublayer((self.previewLayer)!)
                 
-                
                 self.previewLayer?.frame = self.previewView.frame
                 print("frame: \(view.frame)")
                 print("frame: \(previewView.frame)")
@@ -238,7 +182,7 @@ class RecordCardViewController: UIViewController {
                 self.captureSession.startRunning()
                 
             } catch {
-                print(error)
+                print(error.localizedDescription)
                 
             }
         }
