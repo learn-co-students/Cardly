@@ -20,7 +20,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
     var bottomNavBar: BottomNavBarView!
     var navigationBarMenu: DropDownMenu!
     var titleView: DropDownTitleView!
-
+    
     let ref = FIRDatabase.database().reference(withPath: "contacts")
     var user: User?
     var userUid: String?
@@ -33,7 +33,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         
         // Setup views
         //setupViews()
-
+        
         self.restorationIdentifier = "contactsVC"
         
         self.navigationBarMenu = DropDownMenu()
@@ -47,19 +47,22 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         
         let leftBtn = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(self.navToSettingsVC))
         self.navigationItem.leftBarButtonItem = leftBtn
-
-            self.retrieveContactsFromDB(completion: {
-                self.setupViews()
-                self.collectionView.contacts = self.contacts
-            })
-
-
+        
+        
     }
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.retrieveContactsFromDB { (contactList) in
+            self.setupViews()
+            self.collectionView.contacts = contactList
+            self.collectionView.reloadData()
+        }
     }
-   
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
         
         navigationBarMenu.container = view
         
@@ -119,25 +122,25 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         
         // create function that appends list name to the dropdown array
         
-//        let firstCell = DropDownMenuCell()
-//        
-//        firstCell.textLabel!.text = "List 1"
-//        firstCell.menuAction = nil
-//        firstCell.menuTarget = self
-//        if currentChoice == "List 1" {
-//            firstCell.accessoryType = .checkmark
-//        }
-//        
-//        let secondCell = DropDownMenuCell()
-//        
-//        secondCell.textLabel!.text = "List 2"
-//        secondCell.menuAction = nil
-//        secondCell.menuTarget = self
-//        if currentChoice == "List 2" {
-//            firstCell.accessoryType = .checkmark
-//        }
+        //        let firstCell = DropDownMenuCell()
+        //
+        //        firstCell.textLabel!.text = "List 1"
+        //        firstCell.menuAction = nil
+        //        firstCell.menuTarget = self
+        //        if currentChoice == "List 1" {
+        //            firstCell.accessoryType = .checkmark
+        //        }
+        //
+        //        let secondCell = DropDownMenuCell()
+        //
+        //        secondCell.textLabel!.text = "List 2"
+        //        secondCell.menuAction = nil
+        //        secondCell.menuTarget = self
+        //        if currentChoice == "List 2" {
+        //            firstCell.accessoryType = .checkmark
+        //        }
         
-       // navigationBarMenu.menuCells = [firstCell, secondCell]
+        // navigationBarMenu.menuCells = [firstCell, secondCell]
         navigationBarMenu.menuCells = menuCellArray
         navigationBarMenu.selectMenuCell(menuCellArray[0])
         //navigationBarMenu.selectMenuCell(secondCell)
@@ -191,7 +194,7 @@ extension ContactsViewController {
     func setupBottomNavBarView() {
         bottomNavBar = BottomNavBarView()
         bottomNavBar.leftIconView.delegate = self
-        bottomNavBar.rightIconView.delegate = self 
+        bottomNavBar.rightIconView.delegate = self
         self.view.addSubview(bottomNavBar)
         bottomNavBar.snp.makeConstraints { (make) in
             make.left.equalToSuperview()
@@ -199,12 +202,12 @@ extension ContactsViewController {
             make.bottom.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(0.125)
         }
-//        bottomNavBar.leftIconView.addContactBtn.target(forAction: #selector(self.navToAddContactBtnVC), withSender: nil)
+        //        bottomNavBar.leftIconView.addContactBtn.target(forAction: #selector(self.navToAddContactBtnVC), withSender: nil)
         
-//        bottomNavBar.rightIconView.sendToContactBtn.target(forAction: #selector(self.navToRecordCardVC), withSender: nil)
+        //        bottomNavBar.rightIconView.sendToContactBtn.target(forAction: #selector(self.navToRecordCardVC), withSender: nil)
     }
     
-    func setupTopNavBarView() { 
+    func setupTopNavBarView() {
         
     }
     
@@ -213,7 +216,7 @@ extension ContactsViewController {
 // MARK: - Navigation methods
 
 extension ContactsViewController: BottomNavBarDelegate {
-    // code that contains all the selector methods that control which screen it goes to next. 
+    // code that contains all the selector methods that control which screen it goes to next.
     // the selector above will become the function name that i make here.
     // the function will have to get the navigation controller (by calling it)
     
@@ -222,10 +225,10 @@ extension ContactsViewController: BottomNavBarDelegate {
         navigationController?.pushViewController(destVC, animated: true)
     }
     
-//    func navTo________VC() {
-//        let destVC = _________ViewController()
-//        navigationController?.pushViewController(destVC, animated: true)
-//    }
+    //    func navTo________VC() {
+    //        let destVC = _________ViewController()
+    //        navigationController?.pushViewController(destVC, animated: true)
+    //    }
     
     func addContactButtonPressed() {
         
@@ -255,21 +258,21 @@ extension ContactsViewController: BottomNavBarDelegate {
 
 extension ContactsViewController {
     
-    func retrieveContactsFromDB( completion: @escaping ()-> ()) {
-    
+    func retrieveContactsFromDB( completion: @escaping (_ : [Contact])-> ()) {
+        
         guard let user = FIRAuth.auth()?.currentUser else { return }
+        var contacts: [Contact] = []
         self.user = User(authData: user)
         self.userUid = user.uid
-        
         let contactBucketRef = ref.child(user.uid)
         contactBucketRef.observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
                 for item in snapshot.children.allObjects {
-                    self.contacts.append(Contact(snapshot: item as! FIRDataSnapshot))
+                    contacts.append(Contact(snapshot: item as! FIRDataSnapshot))
                 }
-                dump(self.contacts)
+                //dump(self.contacts)
             }
-            completion()
+            completion(contacts)
         })
         
     }
