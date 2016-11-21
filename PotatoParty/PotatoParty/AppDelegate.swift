@@ -20,12 +20,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let rootVC = ContactsViewController()
         
         if FIRAuth.auth()?.currentUser == nil {
-            print("No user!")
             self.initialVC = LoginViewController()
         }
             
         else {
-            print("current logged in user is \(FIRAuth.auth()?.currentUser)")
             let navVC = UINavigationController(rootViewController: rootVC)
             self.initialVC = navVC
         }

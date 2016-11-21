@@ -7,18 +7,34 @@
 //
 
 import UIKit
+import SnapKit
+import FirebaseAuth
 
 class SettingsViewController: UIViewController {
+    
+    var logoutButton = UIButton()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        layoutElements()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func logout() {
+        do {
+            try FIRAuth.auth()?.signOut()
+            present(LoginViewController(), animated: true, completion: {
+                self.navigationController?.viewControllers.removeAll()
+            })
+        } catch {
+            print("Logout error = (error.localizedDescription)")
+        }
+    }
 
 }
+
+

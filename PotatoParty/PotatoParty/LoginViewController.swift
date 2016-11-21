@@ -66,16 +66,7 @@ extension LoginViewController {
             if let unwrappedEmail = emailField.text, let unwrappedPassword = passwordField.text {
                 FIRAuth.auth()!.createUser(withEmail: unwrappedEmail, password: unwrappedPassword, completion: { (user, error) in
                     if error == nil {
-                        FIRAuth.auth()!.signIn(withEmail: unwrappedEmail, password: unwrappedPassword, completion: { (user, error) in
-                            if error == nil {
-                                print("Logging in")
-                                self.loginSuccess()
-                            }
-                            else {
-                                print("error")
-                                //show pop up with login error and stuff
-                            }
-                        })
+                        self.firebaseSignIn(user: unwrappedEmail, password: unwrappedPassword)
                     }
                 })
             }
@@ -97,24 +88,36 @@ extension LoginViewController {
     }
     
     func loginButtonTapped() {
-        FIRAuth.auth()!.signIn(withEmail: userTextfield.text!, password: passwordTextfield.text!, completion: { (user, error) in
-            if error == nil {
-                print("Logging in")
-                self.loginSuccess()
-            }
-            else {
-                print("error")
-                //show pop up with login error and stuff
-            }
-        })
-        
+        firebaseSignIn(user: userTextfield.text!, password: passwordTextfield.text!)
     }
     
-    func loginSuccess() {
+    func firebaseSignIn(user: String, password: String) {
+        FIRAuth.auth()!.signIn(withEmail: user, password: password, completion: { (user, error) in
+            if error == nil {
+                self.loginSuccessSegue()
+            }
+            else {
+                print("Firebase sign in error: \(error?.localizedDescription)")
+                let alertController = UIAlertController(title: "Error", message: "Email or Password is incorrect", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "Ok", style: .default, handler: { (action) in
+                    self.dismiss(animated: true, completion: nil)
+                })
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+            }
+        })
+    }
+}
+
+// MARK: - Navigation methods 
+
+extension LoginViewController {
+    
+    func loginSuccessSegue() {
         let initialVC = ContactsViewController()
-        print("creating navVC and making initial vc contactsVC")
         let navigationController = UINavigationController(rootViewController: initialVC)
         present(navigationController, animated: true, completion: nil)
     }
+
 }
 

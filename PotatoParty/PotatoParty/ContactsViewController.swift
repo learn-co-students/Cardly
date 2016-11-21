@@ -33,10 +33,8 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         
         // Setup views
         //setupViews()
-        
-        // Firebase methods
+
         self.restorationIdentifier = "contactsVC"
-        // Do any additional setup after loading the view.
         
         self.navigationBarMenu = DropDownMenu()
         
@@ -47,14 +45,9 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         self.navigationItem.rightBarButtonItem = rightBtn
         // TO DO: Hook up the action
         
-        
         let leftBtn = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(self.navToSettingsVC))
         self.navigationItem.leftBarButtonItem = leftBtn
-        
 
-        
-
-        
             self.retrieveContactsFromDB(completion: {
                 self.setupViews()
                 self.collectionView.contacts = self.contacts
@@ -110,7 +103,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         navigationBarMenu.delegate = self
         
         
-        let arrayofWeddingLists = ["Family", "Friends", "Coworkers"]
+        let arrayofWeddingLists = ["All", "Family", "Friends", "Coworkers", "Other"]
         var menuCellArray = [DropDownMenuCell]()
         for list in arrayofWeddingLists {
             let firstCell = DropDownMenuCell()
