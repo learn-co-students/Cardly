@@ -26,14 +26,13 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
     var userUid: String?
     var contacts: [Contact] = []
     
-    var dataDict = [String: String] ()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = false
         
         // Setup views
-        setupViews()
+        //setupViews()
         
         // Firebase methods
         self.restorationIdentifier = "contactsVC"
@@ -53,14 +52,19 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         self.navigationItem.leftBarButtonItem = leftBtn
         
 
+        
 
-        getCurrentUserId { (userid) in
-            self.retrieveContactsFromDB(id: userid)
-        }
+        
+            self.retrieveContactsFromDB(completion: {
+                self.setupViews()
+                self.collectionView.contacts = self.contacts
+            })
 
 
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+    }
+   
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -231,12 +235,12 @@ extension ContactsViewController: BottomNavBarDelegate {
 //    }
     
     func addContactButtonPressed() {
-        print("delegate add contact button pressed")
+        
         navToAddContactBtnVC()
     }
     
     func sendToButtonPressed() {
-        print("delegate send to button pressed")
+        
         navToRecordCardVC()
     }
     
@@ -258,27 +262,23 @@ extension ContactsViewController: BottomNavBarDelegate {
 
 extension ContactsViewController {
     
-    func getCurrentUserId(completion: @escaping (_ id: String) -> Void) {
-        FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
-            guard let user = user else { return }
-            self.user = User(authData: user)
-            //self.userUid = user.uid
-            print("Current logged in user email - \(self.user?.email)")
-            completion(user.uid)
-        })
-    }
+    func retrieveContactsFromDB( completion: @escaping ()-> ()) {
     
-    func retrieveContactsFromDB(id: String) {
-        let contactBucketRef = ref.child(id)
-        contactBucketRef.observe(.value, with: { (snapshot) in
+        guard let user = FIRAuth.auth()?.currentUser else { return }
+        self.user = User(authData: user)
+        self.userUid = user.uid
+        
+        let contactBucketRef = ref.child(user.uid)
+        contactBucketRef.observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
                 for item in snapshot.children.allObjects {
                     self.contacts.append(Contact(snapshot: item as! FIRDataSnapshot))
                 }
-                print("Current contacts list contains:")
                 dump(self.contacts)
             }
+            completion()
         })
+        
     }
     
 }

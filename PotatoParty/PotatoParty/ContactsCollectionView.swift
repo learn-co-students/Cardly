@@ -14,6 +14,7 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     
     let reuseIdentifier = "cell"
     let layout = UICollectionViewFlowLayout()
+    var contacts: [Contact] = []
     
     // Inititalizers
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -32,12 +33,16 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 20
+        return self.contacts.count
+    
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ContactsCollectionViewCell
         
+        let name = contacts[indexPath.row].fullName
+        let email = contacts[indexPath.row].email
+        cell.label.text = ("\(name)\n\(email)")
         return cell
     }
     

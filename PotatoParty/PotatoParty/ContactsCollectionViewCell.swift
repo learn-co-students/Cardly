@@ -30,8 +30,7 @@ class ContactsCollectionViewCell: UICollectionViewCell {
         
         label.frame = CGRect(x: 0, y: 0, width: contentView.frame.width, height: contentView.frame.height)
         label.text = "Cell!"
-        label.font = UIFont(name: "Helvetica", size: 24)
-        
+        label.font = UIFont(name: "Helvetica", size: 20)
         contentView.addSubview(label)
         
         label.snp.makeConstraints { (make) in
