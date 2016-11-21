@@ -106,7 +106,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         navigationBarMenu.delegate = self
         
         
-        let arrayofWeddingLists = ["Family", "Friends", "Coworkers"]
+        let arrayofWeddingLists = ["All", "Family", "Friends", "Coworkers", "Other"]
         var menuCellArray = [DropDownMenuCell]()
         for list in arrayofWeddingLists {
             let firstCell = DropDownMenuCell()
