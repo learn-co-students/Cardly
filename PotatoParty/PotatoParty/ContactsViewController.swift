@@ -14,16 +14,19 @@ import SnapKit
 
 
 class ContactsViewController: UIViewController, DropDownMenuDelegate {
-
+    
+    // Views
+    var collectionView: ContactsCollectionView!
+    var bottomNavBar: BottomNavBarView!
     var navigationBarMenu: DropDownMenu!
     var titleView: DropDownTitleView!
-    // Views
-    var bottomNavBar = BottomNavBarView()
-    var collectionView = ContactsCollectionView()
+
     let ref = FIRDatabase.database().reference(withPath: "contacts")
     var user: User?
     var userUid: String?
     var contacts: [Contact] = []
+    
+    var dataDict = [String: String] ()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,24 +48,9 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         let leftBtn = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(self.navToSettingsVC))
         self.navigationItem.leftBarButtonItem = leftBtn
         
-        //navigationController?.navigationBar.isHidden = true
-        
-        FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
-            guard let user = user else { return }
-            self.user = User(authData: user)
-            self.userUid = user.uid
-            print("Current logged in user email - \(self.user?.email)")
-        })
-        
-        ref.observe(.value, with: { (snapshot) in
-            if snapshot.exists() {
-                for item in snapshot.children.allObjects {
-                    self.contacts.append(Contact(snapshot: item as! FIRDataSnapshot))
-                }
-                print("Current contacts list contains:")
-                dump(self.contacts)
-            }
-        })
+        getCurrentUserId { (userid) in
+            self.retrieveContactsFromDB(id: userid)
+        }
 
     }
     
@@ -110,26 +98,45 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         
         navigationBarMenu.delegate = self
         
-        let firstCell = DropDownMenuCell()
         
-        firstCell.textLabel!.text = "List 1"
-        firstCell.menuAction = nil
-        firstCell.menuTarget = self
-        if currentChoice == "List 1" {
-            firstCell.accessoryType = .checkmark
+        let arrayofWeddingLists = ["Family", "Friends", "Coworkers"]
+        var menuCellArray = [DropDownMenuCell]()
+        for list in arrayofWeddingLists {
+            let firstCell = DropDownMenuCell()
+            firstCell.textLabel!.text = list
+            firstCell.menuAction = #selector(dropDownAction(_:))
+            firstCell.menuTarget = self
+            if currentChoice == list {
+                firstCell.accessoryType = .checkmark
+            }
+            
+            menuCellArray.append(firstCell)
         }
         
-        let secondCell = DropDownMenuCell()
+        // create function that appends list name to the dropdown array
         
-        secondCell.textLabel!.text = "List 2"
-        secondCell.menuAction = nil
-        secondCell.menuTarget = self
-        if currentChoice == "List 2" {
-            firstCell.accessoryType = .checkmark
-        }
+//        let firstCell = DropDownMenuCell()
+//        
+//        firstCell.textLabel!.text = "List 1"
+//        firstCell.menuAction = nil
+//        firstCell.menuTarget = self
+//        if currentChoice == "List 1" {
+//            firstCell.accessoryType = .checkmark
+//        }
+//        
+//        let secondCell = DropDownMenuCell()
+//        
+//        secondCell.textLabel!.text = "List 2"
+//        secondCell.menuAction = nil
+//        secondCell.menuTarget = self
+//        if currentChoice == "List 2" {
+//            firstCell.accessoryType = .checkmark
+//        }
         
-        navigationBarMenu.menuCells = [firstCell, secondCell]
-        navigationBarMenu.selectMenuCell(secondCell)
+       // navigationBarMenu.menuCells = [firstCell, secondCell]
+        navigationBarMenu.menuCells = menuCellArray
+        navigationBarMenu.selectMenuCell(menuCellArray[0])
+        //navigationBarMenu.selectMenuCell(secondCell)
         
         // If we set the container to the controller view, the value must be set
         // on the hidden content offset (not the visible one)
@@ -140,6 +147,12 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         navigationBarMenu.backgroundView = UIView(frame: navigationBarMenu.bounds)
         navigationBarMenu.backgroundView!.backgroundColor = UIColor.black
         navigationBarMenu.backgroundAlpha = 0.7
+    }
+    
+    func dropDownAction(_ sender: AnyObject) {
+        
+        print("\n\ndrop down action\n\n")
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -161,16 +174,18 @@ extension ContactsViewController {
     
     // Setup individual views
     func setupCollectionView() {
+        collectionView = ContactsCollectionView(frame: self.view.frame)
         self.view.addSubview(collectionView)
         collectionView.snp.makeConstraints { (make) in
             make.bottom.equalToSuperview()
             make.left.equalToSuperview()
             make.right.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.875)
+            make.height.equalToSuperview()
         }
     }
     
     func setupBottomNavBarView() {
+        bottomNavBar = BottomNavBarView()
         bottomNavBar.leftIconView.delegate = self
         bottomNavBar.rightIconView.delegate = self 
         self.view.addSubview(bottomNavBar)
@@ -220,6 +235,9 @@ extension ContactsViewController: BottomNavBarDelegate {
     
     func navToAddContactBtnVC() {
         let destVC = AddContactViewController()
+        if let uwUserUid = userUid {
+            destVC.userUID = uwUserUid
+        }
         navigationController?.pushViewController(destVC, animated: true)
     }
     
@@ -227,4 +245,33 @@ extension ContactsViewController: BottomNavBarDelegate {
         let destVC = RecordCardViewController()
         navigationController?.pushViewController(destVC, animated: true)
     }
+}
+
+// MARK: - Firebase methods
+
+extension ContactsViewController {
+    
+    func getCurrentUserId(completion: @escaping (_ id: String) -> Void) {
+        FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
+            guard let user = user else { return }
+            self.user = User(authData: user)
+            //self.userUid = user.uid
+            print("Current logged in user email - \(self.user?.email)")
+            completion(user.uid)
+        })
+    }
+    
+    func retrieveContactsFromDB(id: String) {
+        let contactBucketRef = ref.child(id)
+        contactBucketRef.observe(.value, with: { (snapshot) in
+            if snapshot.exists() {
+                for item in snapshot.children.allObjects {
+                    self.contacts.append(Contact(snapshot: item as! FIRDataSnapshot))
+                }
+                print("Current contacts list contains:")
+                dump(self.contacts)
+            }
+        })
+    }
+    
 }
