@@ -40,6 +40,7 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         
         return cell
     }
+
     
     // Setup view
     func setupView() {

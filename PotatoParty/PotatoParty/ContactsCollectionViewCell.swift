@@ -37,7 +37,11 @@ class ContactsCollectionViewCell: UICollectionViewCell {
         label.snp.makeConstraints { (make) in
             make.center.equalTo(contentView.center)
         }
-
+        
+    }
+    
+    func updateLabelWithName() {
+        
     }
     
 }

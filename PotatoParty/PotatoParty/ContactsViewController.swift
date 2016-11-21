@@ -20,7 +20,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
     var bottomNavBar: BottomNavBarView!
     var navigationBarMenu: DropDownMenu!
     var titleView: DropDownTitleView!
-
+    
     let ref = FIRDatabase.database().reference(withPath: "contacts")
     var user: User?
     var userUid: String?
@@ -41,7 +41,8 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         let title = prepareNavigationBarMenuTitleView()
         prepareNavigationBarMenu(title)
         
-        let rightBtn = UIBarButtonItem(title: "Select", style: .plain, target: self, action: nil)
+        // let rightBtn = UIBarButtonItem(title: "Select", style: .plain, target: self, action: nil)
+        let rightBtn = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(self.highlightContact))
         self.navigationItem.rightBarButtonItem = rightBtn
         // TO DO: Hook up the action
         
@@ -51,7 +52,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         getCurrentUserId { (userid) in
             self.retrieveContactsFromDB(id: userid)
         }
-
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -59,7 +60,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         
         navigationBarMenu.container = view
         
-        //toolbarMenu.container = view
+        // toolbarMenu.container = view
     }
     
     
@@ -113,33 +114,36 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
             menuCellArray.append(firstCell)
         }
         
-        // create function that appends list name to the dropdown array
         
-//        let firstCell = DropDownMenuCell()
-//        
-//        firstCell.textLabel!.text = "List 1"
-//        firstCell.menuAction = nil
-//        firstCell.menuTarget = self
-//        if currentChoice == "List 1" {
-//            firstCell.accessoryType = .checkmark
-//        }
-//        
-//        let secondCell = DropDownMenuCell()
-//        
-//        secondCell.textLabel!.text = "List 2"
-//        secondCell.menuAction = nil
-//        secondCell.menuTarget = self
-//        if currentChoice == "List 2" {
-//            firstCell.accessoryType = .checkmark
-//        }
         
-       // navigationBarMenu.menuCells = [firstCell, secondCell]
+        //        let firstCell = DropDownMenuCell()
+        //
+        //        firstCell.textLabel!.text = "List 1"
+        //        firstCell.menuAction = nil
+        //        firstCell.menuTarget = self
+        //        if currentChoice == "List 1" {
+        //            firstCell.accessoryType = .checkmark
+        //        }
+        //
+        //        let secondCell = DropDownMenuCell()
+        //
+        //        secondCell.textLabel!.text = "List 2"
+        //        secondCell.menuAction = nil
+        //        secondCell.menuTarget = self
+        //        if currentChoice == "List 2" {
+        //            firstCell.accessoryType = .checkmark
+        //        }
+        
+        // navigationBarMenu.menuCells = [firstCell, secondCell]
+        
         navigationBarMenu.menuCells = menuCellArray
         navigationBarMenu.selectMenuCell(menuCellArray[0])
+        
         //navigationBarMenu.selectMenuCell(secondCell)
         
         // If we set the container to the controller view, the value must be set
         // on the hidden content offset (not the visible one)
+        
         navigationBarMenu.visibleContentOffset =
             navigationController!.navigationBar.frame.size.height + 24
         
@@ -187,7 +191,7 @@ extension ContactsViewController {
     func setupBottomNavBarView() {
         bottomNavBar = BottomNavBarView()
         bottomNavBar.leftIconView.delegate = self
-        bottomNavBar.rightIconView.delegate = self 
+        bottomNavBar.rightIconView.delegate = self
         self.view.addSubview(bottomNavBar)
         bottomNavBar.snp.makeConstraints { (make) in
             make.left.equalToSuperview()
@@ -195,12 +199,11 @@ extension ContactsViewController {
             make.bottom.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(0.125)
         }
-//        bottomNavBar.leftIconView.addContactBtn.target(forAction: #selector(self.navToAddContactBtnVC), withSender: nil)
-        
-//        bottomNavBar.rightIconView.sendToContactBtn.target(forAction: #selector(self.navToRecordCardVC), withSender: nil)
+        //        bottomNavBar.leftIconView.addContactBtn.target(forAction: #selector(self.navToAddContactBtnVC), withSender: nil)
+        //        bottomNavBar.rightIconView.sendToContactBtn.target(forAction: #selector(self.navToRecordCardVC), withSender: nil)
     }
     
-    func setupTopNavBarView() { 
+    func setupTopNavBarView() {
         
     }
     
@@ -209,7 +212,8 @@ extension ContactsViewController {
 // MARK: - Navigation methods
 
 extension ContactsViewController: BottomNavBarDelegate {
-    // code that contains all the selector methods that control which screen it goes to next. 
+    
+    // code that contains all the selector methods that control which screen it goes to next.
     // the selector above will become the function name that i make here.
     // the function will have to get the navigation controller (by calling it)
     
@@ -218,11 +222,12 @@ extension ContactsViewController: BottomNavBarDelegate {
         navigationController?.pushViewController(destVC, animated: true)
     }
     
-//    func navTo________VC() {
-//        let destVC = _________ViewController()
-//        navigationController?.pushViewController(destVC, animated: true)
-//    }
-    
+    func highlightContact() {
+        let destVC = ContactsViewController()
+        navigationController?.pushViewController(destVC, animated: false)
+        print("\n\n highlight contact button pressed \n\n")
+    }
+
     func addContactButtonPressed() {
         print("delegate add contact button pressed")
         navToAddContactBtnVC()
