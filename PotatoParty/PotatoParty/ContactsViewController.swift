@@ -123,26 +123,45 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         
         navigationBarMenu.delegate = self
         
-        let firstCell = DropDownMenuCell()
         
-        firstCell.textLabel!.text = "List 1"
-        firstCell.menuAction = nil
-        firstCell.menuTarget = self
-        if currentChoice == "List 1" {
-            firstCell.accessoryType = .checkmark
+        let arrayofWeddingLists = ["Family", "Friends", "Coworkers"]
+        var menuCellArray = [DropDownMenuCell]()
+        for list in arrayofWeddingLists {
+            let firstCell = DropDownMenuCell()
+            firstCell.textLabel!.text = list
+            firstCell.menuAction = #selector(dropDownAction(_:))
+            firstCell.menuTarget = self
+            if currentChoice == list { // or family
+                firstCell.accessoryType = .checkmark
+            }
+            
+            menuCellArray.append(firstCell)
         }
         
-        let secondCell = DropDownMenuCell()
+        // create function that appends list name to the dropdown array
         
-        secondCell.textLabel!.text = "List 2"
-        secondCell.menuAction = nil
-        secondCell.menuTarget = self
-        if currentChoice == "List 2" {
-            firstCell.accessoryType = .checkmark
-        }
+//        let firstCell = DropDownMenuCell()
+//        
+//        firstCell.textLabel!.text = "List 1"
+//        firstCell.menuAction = nil
+//        firstCell.menuTarget = self
+//        if currentChoice == "List 1" {
+//            firstCell.accessoryType = .checkmark
+//        }
+//        
+//        let secondCell = DropDownMenuCell()
+//        
+//        secondCell.textLabel!.text = "List 2"
+//        secondCell.menuAction = nil
+//        secondCell.menuTarget = self
+//        if currentChoice == "List 2" {
+//            firstCell.accessoryType = .checkmark
+//        }
         
-        navigationBarMenu.menuCells = [firstCell, secondCell]
-        navigationBarMenu.selectMenuCell(secondCell)
+       // navigationBarMenu.menuCells = [firstCell, secondCell]
+        navigationBarMenu.menuCells = menuCellArray
+        navigationBarMenu.selectMenuCell(menuCellArray[0])
+        //navigationBarMenu.selectMenuCell(secondCell)
         
         // If we set the container to the controller view, the value must be set
         // on the hidden content offset (not the visible one)
@@ -153,6 +172,12 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         navigationBarMenu.backgroundView = UIView(frame: navigationBarMenu.bounds)
         navigationBarMenu.backgroundView!.backgroundColor = UIColor.black
         navigationBarMenu.backgroundAlpha = 0.7
+    }
+    
+    func dropDownAction(_ sender: AnyObject) {
+        
+        print("\n\ndrop down action\n\n")
+        
     }
     
     override func didReceiveMemoryWarning() {
