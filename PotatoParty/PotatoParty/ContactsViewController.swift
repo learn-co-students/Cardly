@@ -14,12 +14,13 @@ import SnapKit
 
 
 class ContactsViewController: UIViewController, DropDownMenuDelegate {
-
+    
+    // Views
+    var collectionView: ContactsCollectionView!
+    var bottomNavBar: BottomNavBarView!
     var navigationBarMenu: DropDownMenu!
     var titleView: DropDownTitleView!
-    // Views
-    var bottomNavBar = BottomNavBarView()
-    var collectionView = ContactsCollectionView()
+
     let ref = FIRDatabase.database().reference(withPath: "contacts")
     var user: User?
     var userUid: String?
@@ -180,16 +181,18 @@ extension ContactsViewController {
     
     // Setup individual views
     func setupCollectionView() {
+        collectionView = ContactsCollectionView(frame: self.view.frame)
         self.view.addSubview(collectionView)
         collectionView.snp.makeConstraints { (make) in
             make.bottom.equalToSuperview()
             make.left.equalToSuperview()
             make.right.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.875)
+            make.height.equalToSuperview()
         }
     }
     
     func setupBottomNavBarView() {
+        bottomNavBar = BottomNavBarView()
         bottomNavBar.leftIconView.delegate = self
         bottomNavBar.rightIconView.delegate = self 
         self.view.addSubview(bottomNavBar)
