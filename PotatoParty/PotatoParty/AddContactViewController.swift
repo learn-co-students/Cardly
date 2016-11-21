@@ -59,9 +59,4 @@ class AddContactViewController: UIViewController {
         emailTextField.text = emailPlaceholder
     }
     
-    
-    
-   
-    
-
 }
