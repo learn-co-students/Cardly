@@ -52,7 +52,8 @@ struct Contact {
             "phone" : phone,
             "photoUrl": photoUrl,
             "is_sent": is_sent,
-            "group_key": group_key
+            "group_key": group_key,
+            
         ]
     }
 }

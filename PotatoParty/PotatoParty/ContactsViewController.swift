@@ -25,6 +25,8 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
     var userUid: String?
     var contacts: [Contact] = []
     
+    var dataDict = [String: String] ()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = false
@@ -49,33 +51,9 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         let leftBtn = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(self.navToSettingsVC))
         self.navigationItem.leftBarButtonItem = leftBtn
         
-        //navigationController?.navigationBar.isHidden = true
-        
-        
-        // WARNING: hard coded logout here because we don't have any button to logout
-        do{
-            try FIRAuth.auth()?.signOut()
-            print("signed out")
-        } catch {
-            print("Error!!!!")
+        getCurrentUserId { (userid) in
+            self.retrieveContactsFromDB(id: userid)
         }
-        
-        FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
-            guard let user = user else { return }
-            self.user = User(authData: user)
-            self.userUid = user.uid
-            print("Current logged in user email - \(self.user?.email)")
-        })
-        
-        ref.observe(.value, with: { (snapshot) in
-            if snapshot.exists() {
-                for item in snapshot.children.allObjects {
-                    self.contacts.append(Contact(snapshot: item as! FIRDataSnapshot))
-                }
-                print("Current contacts list contains:")
-                dump(self.contacts)
-            }
-        })
 
     }
     
@@ -233,6 +211,9 @@ extension ContactsViewController: BottomNavBarDelegate {
     
     func navToAddContactBtnVC() {
         let destVC = AddContactViewController()
+        if let uwUserUid = userUid {
+            destVC.userUID = uwUserUid
+        }
         navigationController?.pushViewController(destVC, animated: true)
     }
     
@@ -240,4 +221,33 @@ extension ContactsViewController: BottomNavBarDelegate {
         let destVC = RecordCardViewController()
         navigationController?.pushViewController(destVC, animated: true)
     }
+}
+
+// MARK: - Firebase methods
+
+extension ContactsViewController {
+    
+    func getCurrentUserId(completion: @escaping (_ id: String) -> Void) {
+        FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
+            guard let user = user else { return }
+            self.user = User(authData: user)
+            //self.userUid = user.uid
+            print("Current logged in user email - \(self.user?.email)")
+            completion(user.uid)
+        })
+    }
+    
+    func retrieveContactsFromDB(id: String) {
+        let contactBucketRef = ref.child(id)
+        contactBucketRef.observe(.value, with: { (snapshot) in
+            if snapshot.exists() {
+                for item in snapshot.children.allObjects {
+                    self.contacts.append(Contact(snapshot: item as! FIRDataSnapshot))
+                }
+                print("Current contacts list contains:")
+                dump(self.contacts)
+            }
+        })
+    }
+    
 }
