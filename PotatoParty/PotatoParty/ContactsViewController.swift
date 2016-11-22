@@ -15,7 +15,7 @@ import SnapKit
 
 class ContactsViewController: UIViewController, DropDownMenuDelegate {
     
-    // Views
+    // MARK: - Views
     var collectionView: ContactsCollectionView!
     var bottomNavBar: BottomNavBarView!
     var navigationBarMenu: DropDownMenu!
@@ -31,8 +31,8 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = false
         
-        // Setup views
-        //setupViews()
+        
+        // MARK: - Setup Views
         
         self.restorationIdentifier = "contactsVC"
         
@@ -54,7 +54,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         super.viewWillAppear(animated)
         
         self.retrieveContactsFromDB { (contactList) in
-            self.setupViews()
+            self.setupViews() // This is causing the multiple views
             self.collectionView.contacts = contactList
             self.collectionView.reloadData()
         }
@@ -69,6 +69,8 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         //toolbarMenu.container = view
     }
     
+    
+    // MARK: - Navigation Bar Dropdown
     
     func prepareNavigationBarMenuTitleView() -> String {
         // Both title label and image view are fixed horizontally inside title
@@ -168,6 +170,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
     
 }
 
+
 // MARK: - Layout view elements
 
 extension ContactsViewController {
@@ -202,9 +205,9 @@ extension ContactsViewController {
             make.bottom.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(0.125)
         }
-        //        bottomNavBar.leftIconView.addContactBtn.target(forAction: #selector(self.navToAddContactBtnVC), withSender: nil)
+        // bottomNavBar.leftIconView.addContactBtn.target(forAction: #selector(self.navToAddContactBtnVC), withSender: nil)
         
-        //        bottomNavBar.rightIconView.sendToContactBtn.target(forAction: #selector(self.navToRecordCardVC), withSender: nil)
+        // bottomNavBar.rightIconView.sendToContactBtn.target(forAction: #selector(self.navToRecordCardVC), withSender: nil)
     }
     
     func setupTopNavBarView() {
@@ -213,7 +216,8 @@ extension ContactsViewController {
     
 }
 
-// MARK: - Navigation methods
+
+// MARK: - Navigation methods (buttons)
 
 extension ContactsViewController: BottomNavBarDelegate {
     // code that contains all the selector methods that control which screen it goes to next.
@@ -253,6 +257,7 @@ extension ContactsViewController: BottomNavBarDelegate {
         navigationController?.pushViewController(destVC, animated: true)
     }
 }
+
 
 // MARK: - Firebase methods
 

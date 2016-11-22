@@ -32,6 +32,8 @@ class AddContactViewController: UIViewController {
         layoutElements()
         print("USERUID: \(userUID)")
         
+        
+        
         // Do any additional setup after loading the view.
     }
 
