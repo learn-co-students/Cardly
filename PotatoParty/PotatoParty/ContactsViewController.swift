@@ -105,7 +105,8 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         
         navigationBarMenu.delegate = self
         
-        let arrayofWeddingLists = ["All", "Family", "Friends", "Coworkers", "Other"]
+        let arrayofWeddingLists = User.shared.groups
+        
         var menuCellArray = [DropDownMenuCell]()
         for list in arrayofWeddingLists {
             let firstCell = DropDownMenuCell()
@@ -256,7 +257,7 @@ extension ContactsViewController {
     
     func retrieveContactsFromDB( completion: @escaping (_ : [Contact])-> ()) {
         var contacts: [Contact] = []
-        let contactBucketRef = ref.child(uid)
+        let contactBucketRef = ref.child("\(uid)/all/")
         contactBucketRef.observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
                 for item in snapshot.children.allObjects {

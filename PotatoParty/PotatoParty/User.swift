@@ -13,6 +13,7 @@ class User {
     static let shared = User()
     
     let uid: String
+    let groups: [String] = ["All", "Family", "Friends", "Coworkers", "Other"]
     
     private init() {
         if let uid = FIRAuth.auth()?.currentUser?.uid {

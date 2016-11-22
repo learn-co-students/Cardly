@@ -11,6 +11,9 @@ import FirebaseDatabase
 
 class AddContactViewController: UIViewController {
 
+    let testArray = ["Title 1", "Title 2"]
+    
+    
     var nameTextField = UITextField()
     var emailTextField = UITextField()
     var addButton = UIButton()
@@ -30,9 +33,6 @@ class AddContactViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutElements()
-        print("USERUID: \(uid)")
-        
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
@@ -51,7 +51,8 @@ class AddContactViewController: UIViewController {
     func addButtonTapped () {
         guard let email = emailTextField.text, let name = nameTextField.text else { return }
         let contact = Contact(fullName: name, email: email, phone: "7322225678")
-        let userContactsRef = contactRef.child(uid)
+        let userContactsRef = contactRef.child("\(uid)/all/")
+        
         let contactItemRef = userContactsRef.childByAutoId()
         contactItemRef.setValue(contact.toAny())
         

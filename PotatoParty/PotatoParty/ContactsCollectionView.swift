@@ -63,9 +63,6 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         layout.itemSize = CGSize(width: cellWidth, height: cellHeight)
         layout.scrollDirection = .vertical
         layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 0, right: 10)
-//        layout.minimumLineSpacing = 20
-//        layout.minimumInteritemSpacing = 20
-        
         
     }
     

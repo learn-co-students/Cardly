@@ -39,7 +39,9 @@ extension AddContactViewController {
         
         emailTextField.backgroundColor = UIColor.blue
         emailTextField.text = "example@serviceprovider"
-        
+
+        groupDropDown.dataSource = self
+        groupDropDown.delegate = self
         view.addSubview(groupDropDown)
         groupDropDown.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
@@ -49,7 +51,7 @@ extension AddContactViewController {
         }
         
         groupDropDown.backgroundColor = UIColor.blue
-        
+
         view.addSubview(addButton)
         addButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
@@ -88,5 +90,25 @@ extension AddContactViewController {
         cancelButton.addTarget(self, action: #selector(self.cancelButtonTapped), for: .touchUpInside)
     }
     
+}
+
+// MARK: - UIPickerView data source / delegate
+extension AddContactViewController: UIPickerViewDataSource {
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return User.shared.groups.count
+    }
+    
+}
+
+extension AddContactViewController: UIPickerViewDelegate {
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return User.shared.groups[row]
+    }
 }
 
