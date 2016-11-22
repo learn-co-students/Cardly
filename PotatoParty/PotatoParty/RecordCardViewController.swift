@@ -16,11 +16,9 @@ class RecordCardViewController: UIViewController, AVCaptureFileOutputRecordingDe
     var toggleCameraViewButton = UIButton()
     var recordButton = UIButton()
     var previewView = UIView()
-    
     var bottomNavBar: BottomNavBarView!
     
     //video control properties
-    
     let captureSession = AVCaptureSession()
     var videoCaptureDevice: AVCaptureDevice?
     var previewLayer: AVCaptureVideoPreviewLayer?
@@ -43,7 +41,6 @@ class RecordCardViewController: UIViewController, AVCaptureFileOutputRecordingDe
         layoutRecordViewElements()
         self.setVideoOrientation()
     }
-    
 
     /*
     // MARK: - Navigation
@@ -122,6 +119,17 @@ class RecordCardViewController: UIViewController, AVCaptureFileOutputRecordingDe
         }
     }
     
+    func cameraWithPosition(position: AVCaptureDevicePosition) -> AVCaptureDevice? {
+        let discovery = AVCaptureDeviceDiscoverySession(deviceTypes: [AVCaptureDeviceType.builtInWideAngleCamera], mediaType: AVMediaTypeVideo, position: .unspecified) as AVCaptureDeviceDiscoverySession
+        
+        for device in discovery.devices as [AVCaptureDevice] {
+            if device.position == position {
+                return device
+            }
+        }
+        return nil
+    }
+    
     func maxRecordedDuration() -> CMTime {
         let seconds: Double = 10
         let preferredTimeScale: Int32 = 1
@@ -177,7 +185,7 @@ class RecordCardViewController: UIViewController, AVCaptureFileOutputRecordingDe
         
         for device in discovery.devices as [AVCaptureDevice] {
             if device.position == position {
-            return device
+                return device
             }
         }
         
