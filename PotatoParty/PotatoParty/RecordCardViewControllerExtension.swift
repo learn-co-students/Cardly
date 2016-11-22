@@ -11,7 +11,6 @@ extension RecordCardViewController {
     
     func layoutRecordViewElements() {
         view.backgroundColor = UIColor.clear
-        
         view.addSubview(previewView)
         previewView.frame = self.view.frame
         previewView.backgroundColor = UIColor.clear
@@ -35,7 +34,6 @@ extension RecordCardViewController {
             make.leadingMargin.equalTo(recordButton.snp.trailingMargin).offset(20)
             make.bottomMargin.equalToSuperview().offset(-60)
         }
-        
         toggleCameraViewButton.setTitle("Toggle", for: .normal)
         toggleCameraViewButton.backgroundColor = UIColor.black
         toggleCameraViewButton.addTarget(self, action: #selector(self.toggleCameraButtonPressed), for: .touchUpInside)

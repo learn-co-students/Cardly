@@ -16,7 +16,7 @@ class RecordCardViewController: UIViewController, AVCaptureFileOutputRecordingDe
     var toggleCameraViewButton = UIButton()
     var recordButton = UIButton()
     var previewView = UIView()
-    var bottomNavBar: BottomNavBarView!
+    //weak var bottomNavBar: BottomNavBarView!
     
     //video control properties
     let captureSession = AVCaptureSession()
@@ -24,9 +24,12 @@ class RecordCardViewController: UIViewController, AVCaptureFileOutputRecordingDe
     var previewLayer: AVCaptureVideoPreviewLayer?
     var movieFileOutput = AVCaptureMovieFileOutput()
     
+    var outputFileLocation: URL?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("outputfile location is \(outputFileLocation)")
         layoutRecordViewElements()
         self.initializeCamera()
         // Do any additional setup after loading the view.
@@ -42,15 +45,13 @@ class RecordCardViewController: UIViewController, AVCaptureFileOutputRecordingDe
         self.setVideoOrientation()
     }
 
-    /*
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func navToEditCardVC() {
+        print("Before pushing edit card VC")
+        let destVC = EditCardViewController()
+        destVC.fileLocation = outputFileLocation
+        navigationController?.pushViewController(destVC, animated: false)
     }
-    */
     
     //MARK: - BUTTON METHODS
     
@@ -206,20 +207,15 @@ class RecordCardViewController: UIViewController, AVCaptureFileOutputRecordingDe
         if videoCaptureDevice != nil {
             do {
                 try self.captureSession.addInput(AVCaptureDeviceInput(device: self.videoCaptureDevice))
+                
                 if let audioInput = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeAudio) {
                     try self.captureSession.addInput(AVCaptureDeviceInput(device: audioInput))
                 }
                 self.previewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
                 self.previewView.layer.addSublayer((self.previewLayer)!)
-                
                 self.previewLayer?.frame = self.previewView.frame
-                print("frame: \(view.frame)")
-                print("frame: \(previewView.frame)")
-                
                 self.setVideoOrientation()
-                
                 self.captureSession.addOutput(self.movieFileOutput)
-                
                 self.captureSession.startRunning()
                 
             } catch {
@@ -233,5 +229,7 @@ class RecordCardViewController: UIViewController, AVCaptureFileOutputRecordingDe
     
     func capture(_ captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAt outputFileURL: URL!, fromConnections connections: [Any]!, error: Error!) {
         print("Finished recording: \(outputFileURL)")
+        outputFileLocation = outputFileURL
+        navToEditCardVC()
     }
 }
