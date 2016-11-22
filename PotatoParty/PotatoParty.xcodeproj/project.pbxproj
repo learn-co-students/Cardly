@@ -26,6 +26,7 @@
 		3F196C501DDE154000497BDD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F196C4F1DDE154000497BDD /* User.swift */; };
 		3F196C521DDE30CA00497BDD /* ThankYou.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F196C511DDE30CA00497BDD /* ThankYou.swift */; };
 		3F196C541DDE3AFE00497BDD /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F196C531DDE3AFE00497BDD /* Group.swift */; };
+		3F37150B1DE49D1B006B3EAD /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F37150A1DE49D1B006B3EAD /* PlayerView.swift */; };
 		3F70B6C61DE351BD0051B349 /* SettingsViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F70B6C51DE351BD0051B349 /* SettingsViewControllerExtension.swift */; };
 		3F70B6C81DE38B6E0051B349 /* RecordCardViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F70B6C71DE38B6E0051B349 /* RecordCardViewControllerExtension.swift */; };
 		3FD6DB2D1DDCEA5F0078CA45 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3FD6DB2C1DDCEA5F0078CA45 /* GoogleService-Info.plist */; };
@@ -60,6 +61,7 @@
 		3F196C4F1DDE154000497BDD /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		3F196C511DDE30CA00497BDD /* ThankYou.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThankYou.swift; sourceTree = "<group>"; };
 		3F196C531DDE3AFE00497BDD /* Group.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
+		3F37150A1DE49D1B006B3EAD /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		3F70B6C51DE351BD0051B349 /* SettingsViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewControllerExtension.swift; sourceTree = "<group>"; };
 		3F70B6C71DE38B6E0051B349 /* RecordCardViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordCardViewControllerExtension.swift; sourceTree = "<group>"; };
 		3FD6DB2C1DDCEA5F0078CA45 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				E49BA3A61DE3443A0010A7A4 /* Constants.swift */,
 				3F70B6C51DE351BD0051B349 /* SettingsViewControllerExtension.swift */,
 				3F70B6C71DE38B6E0051B349 /* RecordCardViewControllerExtension.swift */,
+				3F37150A1DE49D1B006B3EAD /* PlayerView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -333,6 +336,7 @@
 				E4ED56171DDD3C6700EB97D4 /* BottomNavBarView.swift in Sources */,
 				3F196C521DDE30CA00497BDD /* ThankYou.swift in Sources */,
 				3F0BE6A21DDCB879007E4FD0 /* AddContactViewController.swift in Sources */,
+				3F37150B1DE49D1B006B3EAD /* PlayerView.swift in Sources */,
 				31D78BA71DDE77BD00FA855B /* DropDownTitleView.swift in Sources */,
 				31D78BA41DDE77BD00FA855B /* DropDownMenu.swift in Sources */,
 				31D78BA51DDE77BD00FA855B /* DropDownMenuCell.swift in Sources */,

@@ -7,9 +7,16 @@
 //
 
 import UIKit
+import AVFoundation
 
 class EditCardViewController: UIViewController {
 
+    
+    @IBOutlet weak var playerView: PlayerView!
+    @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var playPauseButton: UIButton!
+    @IBOutlet weak var stopButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -21,15 +28,33 @@ class EditCardViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    override func viewWillDisappear(_ animated: Bool) {
+        
     }
-    */
+    
+    func closePreview() {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func saveToLibrary() {
+    }
+    
+    func playPauseButtonPressed() {
+    }
+    
+    func showAlert(title:String, message:String, dismiss:Bool) {
+        let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        if dismiss {
+            controller.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                self.dismiss(animated: true, completion: nil)
+            }))
+        } else {
+            controller.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        }
+        
+        self.present(controller, animated: true, completion: nil)
+    }
+
 
 }
