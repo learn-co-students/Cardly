@@ -21,12 +21,12 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
     sendEmail.snp.makeConstraints { (make) in
     make.centerX.equalToSuperview()
     make.centerY.equalToSuperview()
-    make.width.equalTo(view.snp.width).multipliedBy(0.25)
+    make.width.equalTo(view.snp.width).multipliedBy(0.5)
     make.height.equalTo(view.snp.height).multipliedBy(0.25)
     }
     
         sendEmail.backgroundColor = UIColor.blue
-        sendEmail.titleLabel?.text = "SEND E-MAIL"
+        sendEmail.setTitle("SEND E-MAIL", for: .normal)
         sendEmail.addTarget(self, action: #selector(sendEmailButtonTapped), for: .touchUpInside)
     }
     
@@ -46,18 +46,24 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
             
             guard let downloadURL = url else { return }
             mail.setMessageBody("<p>You're so awesome! <p>You've received a Video!&nbsp;</p><p><a href=\(downloadURL)>Click Here to See your Video hyperlink</a></p></p><video controls=\(controls)width=\(width) height=\(height) name=\(name) src=\(downloadURL)></video> <p> <p>&nbsp;</p> <p>Love,&nbsp;</p> <p>&nbsp;</p><p>The M </p>", isHTML: true)
-            
-            
+
             present(mail, animated: true)
         } else {
             // show failure alert
-            print("error: MAIL compose view controller can NOT send mail")
+            print("error: MAIL compose view controller canNOT send mail")
         }
         
     }
 
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         controller.dismiss(animated: true)
+        print("dismiss compose mail controller")
+        successSent()
+    }
+    
+    //Let user know e-mail was sent successfully - alert controller? 
+    func successSent() {
+        print("You've send your video successfully")
     }
     
     //PULLING VIDEO FROM FIREBASE _ FOR TESTING
