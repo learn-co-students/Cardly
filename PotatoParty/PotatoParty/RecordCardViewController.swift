@@ -11,7 +11,7 @@ import SnapKit
 import AVFoundation
 import CoreMedia
 
-class RecordCardViewController: UIViewController {
+class RecordCardViewController: UIViewController, AVCaptureFileOutputRecordingDelegate {
 
     var toggleCameraViewButton = UIButton()
     var recordButton = UIButton()
@@ -58,11 +58,21 @@ class RecordCardViewController: UIViewController {
     //MARK: - BUTTON METHODS
     
     func recordButtonPressed () {
-        print("record button pressed")
+        if self.movieFileOutput.isRecording {
+            //stop recording
+            self.movieFileOutput.stopRecording()
+        }
+        else {
+            //start
+            self.movieFileOutput.connection(withMediaType: AVMediaTypeVideo).videoOrientation = self.videoOrientation()
+            self.movieFileOutput.maxRecordedDuration = self.maxRecordedDuration()
+            self.movieFileOutput.startRecording(toOutputFileURL: URL(fileURLWithPath: self.videoFileLocation()), recordingDelegate: self)
+            
+        }
+        self.updateRecordingButtonTitle()
     }
     
     func toggleCameraButtonPressed() {
-        print("toggle Camera Button Pressed")
         self.switchCameraInput()
     }
     
@@ -95,8 +105,30 @@ class RecordCardViewController: UIViewController {
         return videoOrientation
     }
     
+    func videoFileLocation() -> String {
+        return NSTemporaryDirectory().appending("videoFile.mov")
+    }
+    
+    func updateRecordingButtonTitle() {
+        if !self.movieFileOutput.isRecording {
+            print("setting to recording")
+            recordButton.backgroundColor = UIColor.green
+            recordButton.setTitle("Recording...", for: .normal)
+        }
+        else {
+            print("stopping record, setting to record")
+            recordButton.backgroundColor = UIColor.red
+            recordButton.setTitle("Record", for: .normal)
+        }
+    }
+    
+    func maxRecordedDuration() -> CMTime {
+        let seconds: Double = 10
+        let preferredTimeScale: Int32 = 1
+        return CMTime(seconds: seconds, preferredTimescale: preferredTimeScale)
+    }
+    
     func setVideoOrientation() {
-        print("set video Orientation called")
         if let connection = self.previewLayer?.connection {
             if connection.isVideoOrientationSupported {
                 connection.videoOrientation = self.videoOrientation()
@@ -162,6 +194,7 @@ class RecordCardViewController: UIViewController {
                 self.videoCaptureDevice = device
             }
         }
+        
         if videoCaptureDevice != nil {
             do {
                 try self.captureSession.addInput(AVCaptureDeviceInput(device: self.videoCaptureDevice))
@@ -188,5 +221,9 @@ class RecordCardViewController: UIViewController {
         }
     }
     
+    //MARK: -AVCaptureFileOutputDelegate
     
+    func capture(_ captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAt outputFileURL: URL!, fromConnections connections: [Any]!, error: Error!) {
+        print("Finished recording: \(outputFileURL)")
+    }
 }

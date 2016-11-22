@@ -24,7 +24,7 @@ extension RecordCardViewController {
             make.height.equalTo(50)
         }
         recordButton.addTarget(self, action: #selector(recordButtonPressed), for: .touchUpInside)
-        recordButton.setTitle("Start recording", for: .normal)
+        recordButton.setTitle("Record", for: .normal)
         recordButton.setTitleColor(UIColor.white, for: .normal)
         recordButton.backgroundColor = UIColor.red
         
