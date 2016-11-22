@@ -22,7 +22,7 @@ class AddContactViewController: UIViewController {
     
     var dataDict = [String: String] ()
     
-    var userUID: String = ""
+    var uid = User.shared.uid
     
     let contactRef = FIRDatabase.database().reference(withPath: "contacts")
     
@@ -30,7 +30,7 @@ class AddContactViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutElements()
-        print("USERUID: \(userUID)")
+        print("USERUID: \(uid)")
         
         // Do any additional setup after loading the view.
     }
@@ -51,7 +51,7 @@ class AddContactViewController: UIViewController {
     func addButtonTapped () {
         guard let email = emailTextField.text, let name = nameTextField.text else { return }
         let contact = Contact(fullName: name, email: email, phone: "7322225678")
-        let userContactsRef = contactRef.child(userUID)
+        let userContactsRef = contactRef.child(uid)
         let contactItemRef = userContactsRef.childByAutoId()
         contactItemRef.setValue(contact.toAny())
         

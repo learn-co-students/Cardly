@@ -22,8 +22,8 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
     var titleView: DropDownTitleView!
     
     let ref = FIRDatabase.database().reference(withPath: "contacts")
-    var user: User?
-    var userUid: String?
+    let uid = User.shared.uid
+    
     var contacts: [Contact] = []
     
     
@@ -32,7 +32,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         navigationController?.navigationBar.isHidden = false
         
         // Setup views
-        //setupViews()
+        setupViews()
         
         self.restorationIdentifier = "contactsVC"
         
@@ -50,14 +50,15 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         
         
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         self.retrieveContactsFromDB { (contactList) in
-            self.setupViews()
             self.collectionView.contacts = contactList
             self.collectionView.reloadData()
         }
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -99,12 +100,10 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         }
     }
     
-    
     func prepareNavigationBarMenu(_ currentChoice: String) {
         navigationBarMenu = DropDownMenu(frame: view.bounds)
         
         navigationBarMenu.delegate = self
-        
         
         let arrayofWeddingLists = ["All", "Family", "Friends", "Coworkers", "Other"]
         var menuCellArray = [DropDownMenuCell]()
@@ -242,9 +241,6 @@ extension ContactsViewController: BottomNavBarDelegate {
     
     func navToAddContactBtnVC() {
         let destVC = AddContactViewController()
-        if let uwUserUid = userUid {
-            destVC.userUID = uwUserUid
-        }
         navigationController?.pushViewController(destVC, animated: true)
     }
     
@@ -259,12 +255,8 @@ extension ContactsViewController: BottomNavBarDelegate {
 extension ContactsViewController {
     
     func retrieveContactsFromDB( completion: @escaping (_ : [Contact])-> ()) {
-        
-        guard let user = FIRAuth.auth()?.currentUser else { return }
         var contacts: [Contact] = []
-        self.user = User(authData: user)
-        self.userUid = user.uid
-        let contactBucketRef = ref.child(user.uid)
+        let contactBucketRef = ref.child(uid)
         contactBucketRef.observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
                 for item in snapshot.children.allObjects {
@@ -274,7 +266,6 @@ extension ContactsViewController {
             }
             completion(contacts)
         })
-        
     }
     
 }

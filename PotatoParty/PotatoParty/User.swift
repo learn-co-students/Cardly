@@ -9,19 +9,16 @@
 import Foundation
 import FirebaseAuth
 
-struct User {
+class User {
+    static let shared = User()
     
     let uid: String
-    let email: String
     
-    init(authData: FIRUser) {
-        uid = authData.uid
-        email = authData.email!
+    private init() {
+        if let uid = FIRAuth.auth()?.currentUser?.uid {
+            self.uid = uid
+        } else {
+            fatalError("Couldn't unwrap user ID in User.swift singleton")
+        }
     }
-    
-    init(uid: String, email: String) {
-        self.uid = uid
-        self.email = email
-    }
-    
 }

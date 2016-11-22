@@ -27,7 +27,6 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     }
     
     
-    
     // Cell data source
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
