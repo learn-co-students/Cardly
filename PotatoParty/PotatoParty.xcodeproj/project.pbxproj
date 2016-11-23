@@ -29,7 +29,6 @@
 		3F37150B1DE49D1B006B3EAD /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F37150A1DE49D1B006B3EAD /* PlayerView.swift */; };
 		3F37150D1DE4A21B006B3EAD /* EditCardViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F37150C1DE4A21B006B3EAD /* EditCardViewControllerExtension.swift */; };
 		3F70B6C61DE351BD0051B349 /* SettingsViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F70B6C51DE351BD0051B349 /* SettingsViewControllerExtension.swift */; };
-		3F70B6C81DE38B6E0051B349 /* RecordCardViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F70B6C71DE38B6E0051B349 /* RecordCardViewControllerExtension.swift */; };
 		3FD6DB2D1DDCEA5F0078CA45 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3FD6DB2C1DDCEA5F0078CA45 /* GoogleService-Info.plist */; };
 		3FD6DB301DDCFD7A0078CA45 /* LoginViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD6DB2F1DDCFD7A0078CA45 /* LoginViewControllerExtension.swift */; };
 		920F301338A9FC2B9FE55804 /* Pods_PotatoParty.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9928D9D1244326D898295D /* Pods_PotatoParty.framework */; };
@@ -65,7 +64,6 @@
 		3F37150A1DE49D1B006B3EAD /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		3F37150C1DE4A21B006B3EAD /* EditCardViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditCardViewControllerExtension.swift; sourceTree = "<group>"; };
 		3F70B6C51DE351BD0051B349 /* SettingsViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewControllerExtension.swift; sourceTree = "<group>"; };
-		3F70B6C71DE38B6E0051B349 /* RecordCardViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordCardViewControllerExtension.swift; sourceTree = "<group>"; };
 		3FD6DB2C1DDCEA5F0078CA45 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3FD6DB2E1DDCEB760078CA45 /* PotatoParty.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PotatoParty.entitlements; sourceTree = "<group>"; };
 		3FD6DB2F1DDCFD7A0078CA45 /* LoginViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewControllerExtension.swift; sourceTree = "<group>"; wrapsLines = 0; };
@@ -134,11 +132,11 @@
 			children = (
 				3F0BE6881DDCB1F5007E4FD0 /* LoginViewController.swift */,
 				3F0BE6981DDCB30F007E4FD0 /* ContactsViewController.swift */,
-				3F0BE6A11DDCB879007E4FD0 /* AddContactViewController.swift */,
-				3F0BE69B1DDCB78E007E4FD0 /* SettingsViewController.swift */,
 				3F0BE6A31DDCB8F4007E4FD0 /* RecordCardViewController.swift */,
 				3F0BE6A51DDCB913007E4FD0 /* EditCardViewController.swift */,
 				3F0BE6A71DDCB92D007E4FD0 /* SendCardViewController.swift */,
+				3F0BE6A11DDCB879007E4FD0 /* AddContactViewController.swift */,
+				3F0BE69B1DDCB78E007E4FD0 /* SettingsViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -153,7 +151,6 @@
 				F30919EB1DDE147800479633 /* AddContactViewControllerExtension.swift */,
 				E49BA3A61DE3443A0010A7A4 /* Constants.swift */,
 				3F70B6C51DE351BD0051B349 /* SettingsViewControllerExtension.swift */,
-				3F70B6C71DE38B6E0051B349 /* RecordCardViewControllerExtension.swift */,
 				3F37150A1DE49D1B006B3EAD /* PlayerView.swift */,
 				3F37150C1DE4A21B006B3EAD /* EditCardViewControllerExtension.swift */,
 			);
@@ -359,7 +356,6 @@
 				3F0BE69C1DDCB78E007E4FD0 /* SettingsViewController.swift in Sources */,
 				3F196C4E1DDE147100497BDD /* Contact.swift in Sources */,
 				3F0BE6A41DDCB8F4007E4FD0 /* RecordCardViewController.swift in Sources */,
-				3F70B6C81DE38B6E0051B349 /* RecordCardViewControllerExtension.swift in Sources */,
 				3F196C501DDE154000497BDD /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

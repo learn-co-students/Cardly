@@ -11,6 +11,8 @@ import SnapKit
 import FirebaseDatabase
 import FirebaseAuth
 import SnapKit
+import MobileCoreServices
+
 
 
 class ContactsViewController: UIViewController, DropDownMenuDelegate {
@@ -242,8 +244,9 @@ extension ContactsViewController: BottomNavBarDelegate {
     }
     
     func navToRecordCardVC() {
-        let destVC = RecordCardViewController()
-        navigationController?.pushViewController(destVC, animated: true)
+        //let destVC = RecordCardViewController()
+        //navigationController?.pushViewController(destVC, animated: true)
+         startCameraFromViewController(self, withDelegate: self)
     }
 }
 
@@ -273,5 +276,54 @@ extension ContactsViewController {
             }
         })
     }
+    
+}
+
+// MARK: - Show Camera VC
+extension ContactsViewController {
+    
+    func startCameraFromViewController(_ viewController: UIViewController, withDelegate delegate: UIImagePickerControllerDelegate & UINavigationControllerDelegate) -> Bool {
+        if UIImagePickerController.isSourceTypeAvailable(.camera) == false {
+            return false
+        }
+        
+        let cameraController = UIImagePickerController()
+        cameraController.sourceType = .camera
+        cameraController.mediaTypes = [kUTTypeMovie as NSString as String]
+        cameraController.allowsEditing = true //allow video editing
+        cameraController.delegate = delegate
+        present(cameraController, animated: true, completion: nil)
+        return true
+    }
+}
+
+// MARK: - UIImagePickerControllerDelegate
+
+extension ContactsViewController: UIImagePickerControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        let mediaType = info[UIImagePickerControllerMediaType] as! NSString
+        dismiss(animated: true, completion: nil)
+        // Handle a movie capture
+        if mediaType == kUTTypeMovie {
+            guard let unwrappedURL = info[UIImagePickerControllerMediaURL] as? URL else { return }
+            let path = unwrappedURL.path
+            print("video path is \(path)")
+            
+            // Pass video to edit video viewcontroller
+            let editVideoVC = EditCardViewController()
+            editVideoVC.fileLocation = unwrappedURL
+            navigationController?.pushViewController(editVideoVC, animated: true)
+            //            if UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(path) {
+            //                UISaveVideoAtPathToSavedPhotosAlbum(path, self, #selector(RecordCardViewController.video(_:didFinishSavingWithError:contextInfo:)), nil)
+            //            }
+        }
+    }
+    
+}
+
+// MARK: - UINavigationControllerDelegate
+
+extension ContactsViewController: UINavigationControllerDelegate {
     
 }
