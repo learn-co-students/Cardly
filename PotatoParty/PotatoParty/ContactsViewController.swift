@@ -24,7 +24,8 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
     let ref = FIRDatabase.database().reference(withPath: "contacts")
     let uid = User.shared.uid
     
-    var contacts: [Contact] = []
+    
+    var shared = User.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,7 +53,6 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         self.retrieveContactsFromDB { (contactList) in
             self.collectionView.contacts = contactList
             self.collectionView.reloadData()

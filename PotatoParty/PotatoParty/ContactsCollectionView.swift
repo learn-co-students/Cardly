@@ -16,6 +16,8 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     let layout = UICollectionViewFlowLayout()
     var contacts: [Contact] = []
     
+    let shared = User.shared
+    
     // Inititalizers
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: self.layout)
@@ -46,12 +48,14 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+        print("selected item")
         print(#function)    
         
         var selectedContact = contacts[indexPath.row]
     
         selectedContact.isChosen = !selectedContact.isChosen
+        
+        shared.selectedContacts.append(selectedContact)
         
         contacts[indexPath.row] = selectedContact
         
@@ -59,7 +63,46 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         
         selectedCell.handleTap()
         
+        collectionView.deselectItem(at: indexPath, animated: true)
+    
+//        if selectedCell.isSelected == true {
+//            shared.selectedContacts = shared.selectedContacts.filter { (contact) -> Bool in
+//                
+//                return contact.email != selectedContact.email
+//                
+//            }
+
+        }
+    
+    override func deselectItem(at indexPath: IndexPath, animated: Bool) {
+        
+        
+    var deselectedContact = contacts[indexPath.row]
+        deselectedContact.isChosen = !deselectedContact.isChosen
+        shared.selectedContacts = shared.selectedContacts.filter { (contact) -> Bool in
+            
+            return contact.email != deselectedContact.email
+            
+        }
+        
     }
+
+    
+//    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+//        var deselectedContact = contacts[indexPath.row]
+//        deselectedContact.isChosen = !deselectedContact.isChosen
+//        
+//        let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
+//        
+//        selectedCell.handleTap()
+//    shared.selectedContacts = shared.selectedContacts.filter { (contact) -> Bool in
+//    
+//                return contact.email != deselectedContact.email
+//    
+//            }
+//
+//    }
+    
     
     // Setup view
     func setupView() {
