@@ -40,10 +40,25 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ContactsCollectionViewCell
         
-        let name = contacts[indexPath.row].fullName
-        let email = contacts[indexPath.row].email
-        cell.label.text = ("\(name)\n\(email)")
+        cell.contact = contacts[indexPath.row]
+        
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        print(#function)    
+        
+        var selectedContact = contacts[indexPath.row]
+    
+        selectedContact.isChosen = !selectedContact.isChosen
+        
+        contacts[indexPath.row] = selectedContact
+        
+        let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
+        
+        selectedCell.handleTap()
+        
     }
     
     // Setup view
