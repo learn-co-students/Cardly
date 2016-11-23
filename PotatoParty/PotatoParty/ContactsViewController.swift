@@ -27,7 +27,6 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
     var user: User?
     var userUid: String?
     var contacts: [Contact] = []
-    
     var dataDict = [String: String] ()
     
     override func viewDidLoad() {
@@ -58,10 +57,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         navigationBarMenu.container = view
-        
-        //toolbarMenu.container = view
     }
     
     
