@@ -11,11 +11,11 @@ import SnapKit
 import FirebaseDatabase
 import FirebaseAuth
 import SnapKit
-
+import MobileCoreServices
 
 class ContactsViewController: UIViewController, DropDownMenuDelegate {
     
-    // Views
+    // MARK: - Views
     var collectionView: ContactsCollectionView!
     var bottomNavBar: BottomNavBarView!
     var navigationBarMenu: DropDownMenu!
@@ -26,12 +26,11 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
     
     var contacts: [Contact] = []
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = false
         
-        // Setup views
+        // MARK: - Setup Views
         setupViews()
         
         self.restorationIdentifier = "contactsVC"
@@ -41,7 +40,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         let title = prepareNavigationBarMenuTitleView()
         prepareNavigationBarMenu(title)
         
-        let rightBtn = UIBarButtonItem(title: "Select", style: .plain, target: self, action: nil)
+        let rightBtn = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(self.selectBtnClicked))
         self.navigationItem.rightBarButtonItem = rightBtn
         // TO DO: Hook up the action
         
@@ -63,13 +62,10 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        
         navigationBarMenu.container = view
-        
-        //toolbarMenu.container = view
     }
     
+    // MARK: - Navigation Bar Dropdown
     
     func prepareNavigationBarMenuTitleView() -> String {
         // Both title label and image view are fixed horizontally inside title
@@ -119,31 +115,9 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
             
             menuCellArray.append(firstCell)
         }
-        
-        // create function that appends list name to the dropdown array
-        
-        //        let firstCell = DropDownMenuCell()
-        //
-        //        firstCell.textLabel!.text = "List 1"
-        //        firstCell.menuAction = nil
-        //        firstCell.menuTarget = self
-        //        if currentChoice == "List 1" {
-        //            firstCell.accessoryType = .checkmark
-        //        }
-        //
-        //        let secondCell = DropDownMenuCell()
-        //
-        //        secondCell.textLabel!.text = "List 2"
-        //        secondCell.menuAction = nil
-        //        secondCell.menuTarget = self
-        //        if currentChoice == "List 2" {
-        //            firstCell.accessoryType = .checkmark
-        //        }
-        
-        // navigationBarMenu.menuCells = [firstCell, secondCell]
+
         navigationBarMenu.menuCells = menuCellArray
         navigationBarMenu.selectMenuCell(menuCellArray[0])
-        //navigationBarMenu.selectMenuCell(secondCell)
         
         // If we set the container to the controller view, the value must be set
         // on the hidden content offset (not the visible one)
@@ -202,9 +176,6 @@ extension ContactsViewController {
             make.bottom.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(0.125)
         }
-        //        bottomNavBar.leftIconView.addContactBtn.target(forAction: #selector(self.navToAddContactBtnVC), withSender: nil)
-        
-        //        bottomNavBar.rightIconView.sendToContactBtn.target(forAction: #selector(self.navToRecordCardVC), withSender: nil)
     }
     
     func setupTopNavBarView() {
@@ -213,22 +184,21 @@ extension ContactsViewController {
     
 }
 
-// MARK: - Navigation methods
+// MARK: - Navigation methods (buttons)
 
 extension ContactsViewController: BottomNavBarDelegate {
-    // code that contains all the selector methods that control which screen it goes to next.
-    // the selector above will become the function name that i make here.
-    // the function will have to get the navigation controller (by calling it)
     
     func navToSettingsVC() {
         let destVC = SettingsViewController()
         navigationController?.pushViewController(destVC, animated: true)
     }
     
-    //    func navTo________VC() {
-    //        let destVC = _________ViewController()
-    //        navigationController?.pushViewController(destVC, animated: true)
-    //    }
+    func selectBtnClicked() {
+        let destVC = ContactsViewController()
+        navigationController?.pushViewController(destVC, animated: false)
+        print("\n\n Select Button Clicked Working")
+        
+    }
     
     func addContactButtonPressed() {
         
@@ -246,8 +216,7 @@ extension ContactsViewController: BottomNavBarDelegate {
     }
     
     func navToRecordCardVC() {
-        let destVC = RecordCardViewController()
-        navigationController?.pushViewController(destVC, animated: true)
+         startCameraFromViewController(self, withDelegate: self)
     }
 }
 
@@ -263,10 +232,56 @@ extension ContactsViewController {
                 for item in snapshot.children.allObjects {
                     contacts.append(Contact(snapshot: item as! FIRDataSnapshot))
                 }
-                //dump(self.contacts)
             }
             completion(contacts)
         })
     }
+    
+}
+
+// MARK: - Show Camera VC
+extension ContactsViewController {
+    
+    func startCameraFromViewController(_ viewController: UIViewController, withDelegate delegate: UIImagePickerControllerDelegate & UINavigationControllerDelegate) -> Bool {
+        if UIImagePickerController.isSourceTypeAvailable(.camera) == false {
+            return false
+        }
+        
+        let cameraController = UIImagePickerController()
+        cameraController.sourceType = .camera
+        cameraController.mediaTypes = [kUTTypeMovie as NSString as String]
+        cameraController.allowsEditing = true //allow video editing
+        cameraController.delegate = delegate
+        present(cameraController, animated: true, completion: nil)
+        return true
+    }
+}
+
+// MARK: - UIImagePickerControllerDelegate
+
+extension ContactsViewController: UIImagePickerControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        let mediaType = info[UIImagePickerControllerMediaType] as! NSString
+        dismiss(animated: true, completion: nil)
+        // Handle a movie capture
+        if mediaType == kUTTypeMovie {
+            guard let unwrappedURL = info[UIImagePickerControllerMediaURL] as? URL else { return }
+            
+            // Pass video to edit video viewcontroller
+            let editVideoVC = EditCardViewController()
+            editVideoVC.fileLocation = unwrappedURL
+            navigationController?.pushViewController(editVideoVC, animated: true)
+            //            if UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(path) {
+            //                UISaveVideoAtPathToSavedPhotosAlbum(path, self, #selector(RecordCardViewController.video(_:didFinishSavingWithError:contextInfo:)), nil)
+            //            }
+        }
+    }
+    
+}
+
+// MARK: - UINavigationControllerDelegate
+
+extension ContactsViewController: UINavigationControllerDelegate {
     
 }

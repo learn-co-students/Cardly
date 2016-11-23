@@ -21,9 +21,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.initialVC = LoginViewController()
         }
         else {
+
             let rootVC = ContactsViewController()
             let navVC = UINavigationController(rootViewController: rootVC)
             self.initialVC = navVC
+
         }
         
         let frame = UIScreen.main.bounds

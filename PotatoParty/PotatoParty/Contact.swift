@@ -20,6 +20,7 @@ struct Contact {
     var is_sent: Bool
     var group_key: String
     let ref: FIRDatabaseReference?
+    var isChosen: Bool = false
     
     init(fullName: String, email: String, phone: String, is_sent: Bool = false, key: String = "", group_key: String = "", photoUrl: String = "") {
         self.key = key

@@ -26,7 +26,6 @@ class AddContactViewController: UIViewController {
     
     let contactRef = FIRDatabase.database().reference(withPath: "contacts")
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutElements()
