@@ -17,22 +17,22 @@ import MobileCoreServices
 
 class ContactsViewController: UIViewController, DropDownMenuDelegate {
     
-    // Views
+    // MARK: - Views
     var collectionView: ContactsCollectionView!
     var bottomNavBar: BottomNavBarView!
     var navigationBarMenu: DropDownMenu!
     var titleView: DropDownTitleView!
-
+    
     let ref = FIRDatabase.database().reference(withPath: "contacts")
-    var user: User?
-    var userUid: String?
+    let uid = User.shared.uid
+    
     var contacts: [Contact] = []
-    var dataDict = [String: String] ()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = false
         
+        // MARK: - Setup Views
         setupViews()
         
         self.restorationIdentifier = "contactsVC"
@@ -42,17 +42,24 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         let title = prepareNavigationBarMenuTitleView()
         prepareNavigationBarMenu(title)
         
-        let rightBtn = UIBarButtonItem(title: "Select", style: .plain, target: self, action: nil)
+        let rightBtn = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(self.selectBtnClicked))
         self.navigationItem.rightBarButtonItem = rightBtn
         // TO DO: Hook up the action
         
         let leftBtn = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(self.navToSettingsVC))
         self.navigationItem.leftBarButtonItem = leftBtn
         
-        getCurrentUserId { (userid) in
-            self.retrieveContactsFromDB(id: userid)
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.retrieveContactsFromDB { (contactList) in
+            self.collectionView.contacts = contactList
+            self.collectionView.reloadData()
         }
-
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -60,6 +67,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         navigationBarMenu.container = view
     }
     
+    // MARK: - Navigation Bar Dropdown
     
     func prepareNavigationBarMenuTitleView() -> String {
         // Both title label and image view are fixed horizontally inside title
@@ -90,14 +98,12 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         }
     }
     
-    
     func prepareNavigationBarMenu(_ currentChoice: String) {
         navigationBarMenu = DropDownMenu(frame: view.bounds)
         
         navigationBarMenu.delegate = self
         
-        
-        let arrayofWeddingLists = ["Family", "Friends", "Coworkers"]
+        let arrayofWeddingLists = ["All", "Family", "Friends", "Coworkers", "Other"]
         var menuCellArray = [DropDownMenuCell]()
         for list in arrayofWeddingLists {
             let firstCell = DropDownMenuCell()
@@ -110,7 +116,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
             
             menuCellArray.append(firstCell)
         }
-        
+
         navigationBarMenu.menuCells = menuCellArray
         navigationBarMenu.selectMenuCell(menuCellArray[0])
         
@@ -163,7 +169,7 @@ extension ContactsViewController {
     func setupBottomNavBarView() {
         bottomNavBar = BottomNavBarView()
         bottomNavBar.leftIconView.delegate = self
-        bottomNavBar.rightIconView.delegate = self 
+        bottomNavBar.rightIconView.delegate = self
         self.view.addSubview(bottomNavBar)
         bottomNavBar.snp.makeConstraints { (make) in
             make.left.equalToSuperview()
@@ -173,13 +179,13 @@ extension ContactsViewController {
         }
     }
     
-    func setupTopNavBarView() { 
+    func setupTopNavBarView() {
         
     }
     
 }
 
-// MARK: - Navigation methods
+// MARK: - Navigation methods (buttons)
 
 extension ContactsViewController: BottomNavBarDelegate {
     
@@ -188,21 +194,25 @@ extension ContactsViewController: BottomNavBarDelegate {
         navigationController?.pushViewController(destVC, animated: true)
     }
     
+    func selectBtnClicked() {
+        let destVC = ContactsViewController()
+        navigationController?.pushViewController(destVC, animated: false)
+        print("\n\n Select Button Clicked Working")
+        
+    }
+    
     func addContactButtonPressed() {
-        print("delegate add contact button pressed")
+        
         navToAddContactBtnVC()
     }
     
     func sendToButtonPressed() {
-        print("delegate send to button pressed")
+        
         navToRecordCardVC()
     }
     
     func navToAddContactBtnVC() {
         let destVC = AddContactViewController()
-        if let uwUserUid = userUid {
-            destVC.userUID = uwUserUid
-        }
         navigationController?.pushViewController(destVC, animated: true)
     }
     
@@ -215,22 +225,16 @@ extension ContactsViewController: BottomNavBarDelegate {
 
 extension ContactsViewController {
     
-    func getCurrentUserId(completion: @escaping (_ id: String) -> Void) {
-        FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
-            guard let user = user else { return }
-            self.user = User(authData: user)
-            completion(user.uid)
-        })
-    }
-    
-    func retrieveContactsFromDB(id: String) {
-        let contactBucketRef = ref.child(id)
-        contactBucketRef.observe(.value, with: { (snapshot) in
+    func retrieveContactsFromDB( completion: @escaping (_ : [Contact])-> ()) {
+        var contacts: [Contact] = []
+        let contactBucketRef = ref.child(uid)
+        contactBucketRef.observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
                 for item in snapshot.children.allObjects {
-                    self.contacts.append(Contact(snapshot: item as! FIRDataSnapshot))
+                    contacts.append(Contact(snapshot: item as! FIRDataSnapshot))
                 }
             }
+            completion(contacts)
         })
     }
     

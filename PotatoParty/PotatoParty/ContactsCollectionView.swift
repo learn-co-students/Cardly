@@ -14,6 +14,7 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     
     let reuseIdentifier = "cell"
     let layout = UICollectionViewFlowLayout()
+    var contacts: [Contact] = []
     
     // Inititalizers
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -32,13 +33,32 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 20
+        return self.contacts.count
+    
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ContactsCollectionViewCell
         
+        cell.contact = contacts[indexPath.row]
+        
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        print(#function)    
+        
+        var selectedContact = contacts[indexPath.row]
+    
+        selectedContact.isChosen = !selectedContact.isChosen
+        
+        contacts[indexPath.row] = selectedContact
+        
+        let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
+        
+        selectedCell.handleTap()
+        
     }
     
     // Setup view

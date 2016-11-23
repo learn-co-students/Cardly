@@ -17,15 +17,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        let rootVC = ContactsViewController()
-        
         if FIRAuth.auth()?.currentUser == nil {
             self.initialVC = LoginViewController()
         }
-            
         else {
+
+            let rootVC = ContactsViewController()
             let navVC = UINavigationController(rootViewController: rootVC)
             self.initialVC = navVC
+
         }
         
         let frame = UIScreen.main.bounds
