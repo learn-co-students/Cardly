@@ -145,5 +145,14 @@ class EditCardViewController: UIViewController {
         
         self.present(controller, animated: true, completion: nil)
     }
+    
+    // MARK: Navigation
+    
+    func navToSendCardVC() {
+        print("save button pressed!!!")
+        let destVC = SendCardViewController()
+        destVC.videoURL = fileLocation
+        navigationController?.pushViewController(destVC, animated: true)
+    }
 
 }

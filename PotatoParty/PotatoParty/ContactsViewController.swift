@@ -216,7 +216,7 @@ extension ContactsViewController: BottomNavBarDelegate {
     }
     
     func navToRecordCardVC() {
-         startCameraFromViewController(self, withDelegate: self)
+         let _ = startCameraFromViewController(self, withDelegate: self)
     }
 }
 

@@ -13,15 +13,16 @@ import FirebaseStorage
 class SendCardViewController: UIViewController, MFMailComposeViewControllerDelegate {
     
     var sendEmail = UIButton()
+    var videoURL: URL?
     
     func layoutElements() {
-    view.addSubview(sendEmail)
-    sendEmail.snp.makeConstraints { (make) in
-    make.centerX.equalToSuperview()
-    make.centerY.equalToSuperview()
-    make.width.equalTo(view.snp.width).multipliedBy(0.5)
-    make.height.equalTo(view.snp.height).multipliedBy(0.25)
-    }
+        view.addSubview(sendEmail)
+        sendEmail.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.width.equalTo(view.snp.width).multipliedBy(0.5)
+            make.height.equalTo(view.snp.height).multipliedBy(0.25)
+        }
     
         sendEmail.backgroundColor = UIColor.blue
         sendEmail.setTitle("SEND E-MAIL", for: .normal)
@@ -91,7 +92,12 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutElements()
-
+        if let unwrappedVideoURL = videoURL {
+            print("Passed video url is \(unwrappedVideoURL)")
+        }
+        else {
+            print("Video url is nil!!!!")
+        }
         // Do any additional setup after loading the view.
     }
 
