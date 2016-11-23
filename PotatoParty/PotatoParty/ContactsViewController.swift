@@ -115,30 +115,8 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
             menuCellArray.append(firstCell)
         }
         
-        // create function that appends list name to the dropdown array
-        
-//        let firstCell = DropDownMenuCell()
-//        
-//        firstCell.textLabel!.text = "List 1"
-//        firstCell.menuAction = nil
-//        firstCell.menuTarget = self
-//        if currentChoice == "List 1" {
-//            firstCell.accessoryType = .checkmark
-//        }
-//        
-//        let secondCell = DropDownMenuCell()
-//        
-//        secondCell.textLabel!.text = "List 2"
-//        secondCell.menuAction = nil
-//        secondCell.menuTarget = self
-//        if currentChoice == "List 2" {
-//            firstCell.accessoryType = .checkmark
-//        }
-        
-       // navigationBarMenu.menuCells = [firstCell, secondCell]
         navigationBarMenu.menuCells = menuCellArray
         navigationBarMenu.selectMenuCell(menuCellArray[0])
-        //navigationBarMenu.selectMenuCell(secondCell)
         
         // If we set the container to the controller view, the value must be set
         // on the hidden content offset (not the visible one)
@@ -197,9 +175,6 @@ extension ContactsViewController {
             make.bottom.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(0.125)
         }
-//        bottomNavBar.leftIconView.addContactBtn.target(forAction: #selector(self.navToAddContactBtnVC), withSender: nil)
-        
-//        bottomNavBar.rightIconView.sendToContactBtn.target(forAction: #selector(self.navToRecordCardVC), withSender: nil)
     }
     
     func setupTopNavBarView() { 
@@ -211,19 +186,11 @@ extension ContactsViewController {
 // MARK: - Navigation methods
 
 extension ContactsViewController: BottomNavBarDelegate {
-    // code that contains all the selector methods that control which screen it goes to next. 
-    // the selector above will become the function name that i make here.
-    // the function will have to get the navigation controller (by calling it)
     
     func navToSettingsVC() {
         let destVC = SettingsViewController()
         navigationController?.pushViewController(destVC, animated: true)
     }
-    
-//    func navTo________VC() {
-//        let destVC = _________ViewController()
-//        navigationController?.pushViewController(destVC, animated: true)
-//    }
     
     func addContactButtonPressed() {
         print("delegate add contact button pressed")
@@ -244,8 +211,6 @@ extension ContactsViewController: BottomNavBarDelegate {
     }
     
     func navToRecordCardVC() {
-        //let destVC = RecordCardViewController()
-        //navigationController?.pushViewController(destVC, animated: true)
          startCameraFromViewController(self, withDelegate: self)
     }
 }
@@ -258,8 +223,6 @@ extension ContactsViewController {
         FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
             guard let user = user else { return }
             self.user = User(authData: user)
-            //self.userUid = user.uid
-            print("Current logged in user email - \(self.user?.email)")
             completion(user.uid)
         })
     }
@@ -271,8 +234,6 @@ extension ContactsViewController {
                 for item in snapshot.children.allObjects {
                     self.contacts.append(Contact(snapshot: item as! FIRDataSnapshot))
                 }
-                print("Current contacts list contains:")
-                dump(self.contacts)
             }
         })
     }
@@ -307,8 +268,6 @@ extension ContactsViewController: UIImagePickerControllerDelegate {
         // Handle a movie capture
         if mediaType == kUTTypeMovie {
             guard let unwrappedURL = info[UIImagePickerControllerMediaURL] as? URL else { return }
-            let path = unwrappedURL.path
-            print("video path is \(path)")
             
             // Pass video to edit video viewcontroller
             let editVideoVC = EditCardViewController()

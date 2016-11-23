@@ -19,7 +19,6 @@
 		3F0BE6991DDCB30F007E4FD0 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0BE6981DDCB30F007E4FD0 /* ContactsViewController.swift */; };
 		3F0BE69C1DDCB78E007E4FD0 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0BE69B1DDCB78E007E4FD0 /* SettingsViewController.swift */; };
 		3F0BE6A21DDCB879007E4FD0 /* AddContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0BE6A11DDCB879007E4FD0 /* AddContactViewController.swift */; };
-		3F0BE6A41DDCB8F4007E4FD0 /* RecordCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0BE6A31DDCB8F4007E4FD0 /* RecordCardViewController.swift */; };
 		3F0BE6A61DDCB913007E4FD0 /* EditCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0BE6A51DDCB913007E4FD0 /* EditCardViewController.swift */; };
 		3F0BE6A81DDCB92D007E4FD0 /* SendCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0BE6A71DDCB92D007E4FD0 /* SendCardViewController.swift */; };
 		3F196C4E1DDE147100497BDD /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F196C4D1DDE147100497BDD /* Contact.swift */; };
@@ -54,7 +53,6 @@
 		3F0BE6981DDCB30F007E4FD0 /* ContactsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
 		3F0BE69B1DDCB78E007E4FD0 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		3F0BE6A11DDCB879007E4FD0 /* AddContactViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddContactViewController.swift; sourceTree = "<group>"; };
-		3F0BE6A31DDCB8F4007E4FD0 /* RecordCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordCardViewController.swift; sourceTree = "<group>"; };
 		3F0BE6A51DDCB913007E4FD0 /* EditCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditCardViewController.swift; sourceTree = "<group>"; };
 		3F0BE6A71DDCB92D007E4FD0 /* SendCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendCardViewController.swift; sourceTree = "<group>"; };
 		3F196C4D1DDE147100497BDD /* Contact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
@@ -132,7 +130,6 @@
 			children = (
 				3F0BE6881DDCB1F5007E4FD0 /* LoginViewController.swift */,
 				3F0BE6981DDCB30F007E4FD0 /* ContactsViewController.swift */,
-				3F0BE6A31DDCB8F4007E4FD0 /* RecordCardViewController.swift */,
 				3F0BE6A51DDCB913007E4FD0 /* EditCardViewController.swift */,
 				3F0BE6A71DDCB92D007E4FD0 /* SendCardViewController.swift */,
 				3F0BE6A11DDCB879007E4FD0 /* AddContactViewController.swift */,
@@ -355,7 +352,6 @@
 				F30919EC1DDE147800479633 /* AddContactViewControllerExtension.swift in Sources */,
 				3F0BE69C1DDCB78E007E4FD0 /* SettingsViewController.swift in Sources */,
 				3F196C4E1DDE147100497BDD /* Contact.swift in Sources */,
-				3F0BE6A41DDCB8F4007E4FD0 /* RecordCardViewController.swift in Sources */,
 				3F196C501DDE154000497BDD /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
