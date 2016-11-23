@@ -15,8 +15,9 @@ extension AddContactViewController {
     
     func layoutElements() {
         
-       view.backgroundColor = UIColor.orange
+        view.backgroundColor = UIColor.orange
         
+        // Name
         view.addSubview(nameTextField)
         nameTextField.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
@@ -28,7 +29,7 @@ extension AddContactViewController {
         nameTextField.backgroundColor = UIColor.blue
         nameTextField.text = "Name"
         
-        
+        // E-Mail
         view.addSubview(emailTextField)
         emailTextField.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
@@ -40,6 +41,8 @@ extension AddContactViewController {
         emailTextField.backgroundColor = UIColor.blue
         emailTextField.text = "example@serviceprovider"
 
+        
+        // Group
         groupDropDown.dataSource = self
         groupDropDown.delegate = self
         view.addSubview(groupDropDown)
@@ -52,6 +55,7 @@ extension AddContactViewController {
         
         groupDropDown.backgroundColor = UIColor.blue
 
+        // Add button
         view.addSubview(addButton)
         addButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
@@ -64,7 +68,7 @@ extension AddContactViewController {
         addButton.setTitle("Add", for: .normal)
         addButton.addTarget(self, action: #selector(self.addButtonTapped), for: .touchUpInside)
         
-        
+        // Import contacts
         view.addSubview(importContactsButton)
         importContactsButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
@@ -77,6 +81,7 @@ extension AddContactViewController {
         importContactsButton.setTitle("Import from Contacts", for: .normal)
         importContactsButton.addTarget(self, action: #selector(self.importContactButtonTapped), for: .touchUpInside)
         
+        // Cancel
         view.addSubview(cancelButton)
         cancelButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
@@ -93,6 +98,7 @@ extension AddContactViewController {
 }
 
 // MARK: - UIPickerView data source / delegate
+
 extension AddContactViewController: UIPickerViewDataSource {
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -100,7 +106,7 @@ extension AddContactViewController: UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return User.shared.groups.count
+        return groups.count
     }
     
 }
@@ -108,7 +114,7 @@ extension AddContactViewController: UIPickerViewDataSource {
 extension AddContactViewController: UIPickerViewDelegate {
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return User.shared.groups[row]
+        return groups[row]
     }
 }
 

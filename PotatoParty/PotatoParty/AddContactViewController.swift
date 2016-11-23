@@ -10,9 +10,8 @@ import UIKit
 import FirebaseDatabase
 
 class AddContactViewController: UIViewController {
-
-    let testArray = ["Title 1", "Title 2"]
-    
+    let uid = User.shared.uid
+    let groups = User.shared.groups
     
     var nameTextField = UITextField()
     var emailTextField = UITextField()
@@ -24,8 +23,6 @@ class AddContactViewController: UIViewController {
     let emailPlaceholder = "example@serviceprovider"
     
     var dataDict = [String: String] ()
-    
-    var uid = User.shared.uid
     
     let contactRef = FIRDatabase.database().reference(withPath: "contacts")
     

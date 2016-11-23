@@ -145,8 +145,8 @@
 				E4974AEF1DDE1C3700698B81 /* ContactsCollectionViewCell.swift */,
 				3FD6DB2F1DDCFD7A0078CA45 /* LoginViewControllerExtension.swift */,
 				F30919EB1DDE147800479633 /* AddContactViewControllerExtension.swift */,
-				E49BA3A61DE3443A0010A7A4 /* Constants.swift */,
 				3F70B6C51DE351BD0051B349 /* SettingsViewControllerExtension.swift */,
+				E49BA3A61DE3443A0010A7A4 /* Constants.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -154,8 +154,8 @@
 		3F0BE69E1DDCB7FE007E4FD0 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				3F196C4D1DDE147100497BDD /* Contact.swift */,
 				3F196C4F1DDE154000497BDD /* User.swift */,
+				3F196C4D1DDE147100497BDD /* Contact.swift */,
 				3F196C511DDE30CA00497BDD /* ThankYou.swift */,
 				3F196C531DDE3AFE00497BDD /* Group.swift */,
 			);
