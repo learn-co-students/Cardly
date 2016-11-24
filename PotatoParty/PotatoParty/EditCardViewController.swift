@@ -112,75 +112,74 @@ class EditCardViewController: UIViewController {
             } catch {
                 print(error)
             }
+        }
+        
+        let size = videoTrack.naturalSize
+        
+        // Set up watermark/overlays (probably should use snapkit)
+        let watermark = UIImage(named: "watermark.png")
+        let watermarklayer = CALayer()
+        watermarklayer.contents = watermark?.cgImage
+        watermarklayer.frame = CGRect(x: 10, y: 10, width: 180, height: 180)
+        watermarklayer.opacity = 0.5
             
-            let size = videoTrack.naturalSize
+        let textLayer = CATextLayer()
+        textLayer.string = "DOWNLOAD POTATO PARTY OR DIE"
+        textLayer.font = UIFont(name: "Helvetica", size: 65.0)
+        textLayer.shadowOpacity = 0.5
+        textLayer.alignmentMode = kCAAlignmentCenter
+        textLayer.frame = CGRect(x: 0, y: 50, width: size.width, height: size.height/6)
+        
+        let videoLayer = CALayer()
+        videoLayer.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        
+        let parentLayer = CALayer()
+        parentLayer.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        parentLayer.addSublayer(videoLayer)
+        parentLayer.addSublayer(watermarklayer)
+        parentLayer.addSublayer(textLayer)
             
-            // Set up watermark/overlays (probably should use snapkit)
-            let watermark = UIImage(named: "watermark.png")
-            let watermarklayer = CALayer()
-            watermarklayer.contents = watermark?.cgImage
-            watermarklayer.frame = CGRect(x: 10, y: 10, width: 180, height: 180)
-            watermarklayer.opacity = 0.5
+        let layercomposition = AVMutableVideoComposition()
+        layercomposition.frameDuration = CMTimeMake(1, 30)
+        layercomposition.renderSize = size
+        layercomposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer:videoLayer, in: parentLayer)
             
-            let textLayer = CATextLayer()
-            textLayer.string = "DOWNLOAD POTATO PARTY OR DIE"
-            textLayer.font = UIFont(name: "Helvetica", size: 65.0)
-            textLayer.shadowOpacity = 0.5
-            textLayer.alignmentMode = kCAAlignmentCenter
-            textLayer.frame = CGRect(x: 0, y: 50, width: size.width, height: size.height/6)
+        let instruction = AVMutableVideoCompositionInstruction()
+        instruction.timeRange = CMTimeRangeMake(kCMTimeZero, composition.duration)
+        let videotrack = composition.tracks(withMediaType: AVMediaTypeVideo)[0] as AVAssetTrack
+        let layerInstruction = AVMutableVideoCompositionLayerInstruction(assetTrack: videotrack)
+        instruction.layerInstructions = [layerInstruction]
+        layercomposition.instructions = [instruction]
             
-            let videoLayer = CALayer()
-            videoLayer.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        let filePath = NSTemporaryDirectory() + fileName()
+        let movieUrl = URL(fileURLWithPath: filePath)
             
-            let parentLayer = CALayer()
-            parentLayer.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
-            parentLayer.addSublayer(videoLayer)
-            parentLayer.addSublayer(watermarklayer)
-            parentLayer.addSublayer(textLayer)
+        guard let assetExport = AVAssetExportSession(asset: composition, presetName:AVAssetExportPresetHighestQuality) else { return }
+        assetExport.videoComposition = layercomposition
+        assetExport.outputFileType = AVFileTypeMPEG4
+        assetExport.outputURL = movieUrl
             
-            let layercomposition = AVMutableVideoComposition()
-            layercomposition.frameDuration = CMTimeMake(1, 30)
-            layercomposition.renderSize = size
-            layercomposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videoLayer, in: parentLayer)
-            
-            let instruction = AVMutableVideoCompositionInstruction()
-            instruction.timeRange = CMTimeRangeMake(kCMTimeZero, composition.duration)
-            let videoTrack = composition.tracks(withMediaType: AVMediaTypeVideo)[0] as AVAssetTrack
-            let layerInstruction = AVMutableVideoCompositionLayerInstruction(assetTrack: videoTrack)
-            instruction.layerInstructions = [layerInstruction]
-            layercomposition.instructions = [instruction]
-            
-            let filePath = NSTemporaryDirectory() + fileName()
-            let movieUrl = URL(fileURLWithPath: filePath)
-            
-            guard let assetExport = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHighestQuality) else { return }
-            assetExport.videoComposition = layercomposition
-            assetExport.outputFileType = AVFileTypeMPEG4
-            assetExport.outputURL = movieUrl
-            
-            assetExport.exportAsynchronously {
-                switch assetExport.status {
-                case .completed:
-                    print("Success")
-                    self.fileLocation = movieUrl
-                    
-                    //send out video
-                    break
-                case.cancelled:
-                    print("Canceled")
-                    break
-                case .exporting:
-                    print("Exporting")
-                    break
-                case .failed:
-                    print("Failed \(assetExport.error)")
-                    break
-                case.unknown:
-                    print("Unknown error")
-                    break
-                case.waiting:
-                    print("Waiting")
-                }
+        assetExport.exportAsynchronously {
+            switch assetExport.status {
+            case .completed:
+                print("Success")
+                self.fileLocation = movieUrl
+                //send out video
+                break
+            case.cancelled:
+                print("Canceled")
+                break
+            case .exporting:
+                print("Exporting")
+                break
+            case .failed:
+                print("Failed \(assetExport.error)")
+                break
+            case.unknown:
+                print("Unknown error")
+                break
+            case.waiting:
+                print("Waiting")
             }
         }
     }
