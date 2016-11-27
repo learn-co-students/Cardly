@@ -10,7 +10,6 @@ import Foundation
 import FirebaseAuth
 
 class User {
-    
     static let shared = User()
     
     let uid: String

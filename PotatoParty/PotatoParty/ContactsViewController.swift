@@ -224,7 +224,7 @@ extension ContactsViewController: BottomNavBarDelegate {
 
 extension ContactsViewController {
     
-    func retrieveContactsFromDB( completion: @escaping (_ : [Contact])-> ()) {
+    func retrieveContactsFromDB(completion: @escaping (_ : [Contact])-> ()) {
         var contacts: [Contact] = []
         let contactBucketRef = ref.child("\(uid)/all/")
         contactBucketRef.observeSingleEvent(of: .value, with: { (snapshot) in
