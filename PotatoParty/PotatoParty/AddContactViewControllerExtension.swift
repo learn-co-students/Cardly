@@ -44,6 +44,16 @@ extension AddContactViewController {
     
         
         // Add Phone Number
+        view.addSubview(phoneTextField)
+        phoneTextField.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(emailTextField.snp.bottomMargin).offset(40)
+            make.width.equalTo(nameTextField)
+            make.height.equalTo(nameTextField)
+        }
+        
+        phoneTextField.backgroundColor = UIColor.blue
+        phoneTextField.placeholder = "2224446666"
         
 
         
@@ -53,9 +63,9 @@ extension AddContactViewController {
         view.addSubview(groupPickerView)
         groupPickerView.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(emailTextField.snp.bottomMargin).offset(40)
-            make.width.equalTo(emailTextField)
-            make.height.equalTo(emailTextField)
+            make.topMargin.equalTo(phoneTextField.snp.bottomMargin).offset(40)
+            make.width.equalTo(phoneTextField)
+            make.height.equalTo(phoneTextField)
         }
         
         groupPickerView.backgroundColor = UIColor.blue

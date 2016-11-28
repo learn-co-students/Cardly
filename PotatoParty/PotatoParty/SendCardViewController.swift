@@ -56,6 +56,7 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
                 phoneNumberArray.append(phoneNumber)
             }
             message.recipients = phoneNumberArray
+            print("phone number array: \(phoneNumberArray)")
             message.subject = "Thank You Video"
             
             message.addAttachmentURL(videoURL, withAlternateFilename: nil)
