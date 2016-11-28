@@ -16,19 +16,18 @@ class AddContactViewController: UIViewController {
     var nameTextField = UITextField()
     var emailTextField = UITextField()
     var addButton = UIButton()
-    var groupDropDown = UIPickerView()
+    var groupPickerView = UIPickerView()
     var importContactsButton = UIButton()
     var cancelButton = UIButton()
-    let namePlaceholder = "Name"
-    let emailPlaceholder = "example@serviceprovider"
     
     var dataDict = [String: String] ()
     
-    let contactRef = FIRDatabase.database().reference(withPath: "contacts")
+    var groupSelected: String = "All"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutElements()
+        print("Group selected: \(groupSelected)")
     }
 
     override func didReceiveMemoryWarning() {
@@ -47,13 +46,31 @@ class AddContactViewController: UIViewController {
     func addButtonTapped () {
         guard let email = emailTextField.text, let name = nameTextField.text else { return }
         let contact = Contact(fullName: name, email: email, phone: "7322225678")
-        let userContactsRef = contactRef.child("\(uid)/all/")
-        
+
+        // Add to contacts bucket
+        let contactsRef = FIRDatabase.database().reference(withPath: "contacts")
+        let userContactsRef = contactsRef.child("\(uid)/all/")
         let contactItemRef = userContactsRef.childByAutoId()
         contactItemRef.setValue(contact.toAny())
         
-        nameTextField.text = namePlaceholder
-        emailTextField.text = emailPlaceholder
+
+        if groupSelected != "All" {
+            let path = "\(uid)/\(groupSelected.lowercased())/\(contactItemRef.key)/"
+            let groupContactsRef = contactsRef.child(path)
+            groupContactsRef.setValue(contact.toAny())
+        }
+        
+        // Add to groups bucket
+        let groupsRef = FIRDatabase.database().reference(withPath: "groups")
+        let groupsUserRef = groupsRef.child("\(uid)/all/")
+        groupsUserRef.setValue(contact.toAny())
+        
+        if groupSelected != "All" {
+            let path = "\(uid)/\(groupSelected.lowercased())/\(contactItemRef.key)/"
+            let groupContactsRef = groupsRef.child(path)
+            groupContactsRef.setValue(contact.toAny())
+        }
+
     }
     
 }

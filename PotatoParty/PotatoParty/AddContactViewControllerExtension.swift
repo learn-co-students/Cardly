@@ -27,7 +27,8 @@ extension AddContactViewController {
         }
         
         nameTextField.backgroundColor = UIColor.blue
-        nameTextField.text = "Name"
+        nameTextField.placeholder = "Name"
+        
         
         // E-Mail
         view.addSubview(emailTextField)
@@ -39,27 +40,31 @@ extension AddContactViewController {
         }
         
         emailTextField.backgroundColor = UIColor.blue
-        emailTextField.text = "example@serviceprovider"
+        emailTextField.placeholder = "example@serviceprovider"
+    
+        
+        // Add Phone Number
+        
 
         
         // Group
-        groupDropDown.dataSource = self
-        groupDropDown.delegate = self
-        view.addSubview(groupDropDown)
-        groupDropDown.snp.makeConstraints { (make) in
+        groupPickerView.dataSource = self
+        groupPickerView.delegate = self
+        view.addSubview(groupPickerView)
+        groupPickerView.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(emailTextField.snp.bottomMargin).offset(40)
             make.width.equalTo(emailTextField)
             make.height.equalTo(emailTextField)
         }
         
-        groupDropDown.backgroundColor = UIColor.blue
+        groupPickerView.backgroundColor = UIColor.blue
 
         // Add button
         view.addSubview(addButton)
         addButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(groupDropDown.snp.bottomMargin).offset(40)
+            make.topMargin.equalTo(groupPickerView.snp.bottomMargin).offset(40)
             make.width.equalTo(nameTextField.snp.width).multipliedBy(0.5)
             make.height.equalTo(nameTextField.snp.height).multipliedBy(0.5)
         }
@@ -115,6 +120,11 @@ extension AddContactViewController: UIPickerViewDelegate {
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return groups[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        self.groupSelected = groups[row]
+        print(groupSelected)
     }
 }
 

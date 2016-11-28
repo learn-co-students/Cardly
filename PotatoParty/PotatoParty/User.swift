@@ -10,12 +10,14 @@ import Foundation
 import FirebaseAuth
 
 class User {
-    
     static let shared = User()
     
     let uid: String
     let groups: [String] = ["All", "Family", "Friends", "Coworkers", "Other"]
-    
+    var selectedContacts = [Contact]()
+    // TODO: - What am I doing with this? (Dave)
+    var contacts: [Contact] = []
+
     private init() {
         if let uid = FIRAuth.auth()?.currentUser?.uid {
             self.uid = uid

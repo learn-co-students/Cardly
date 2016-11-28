@@ -16,6 +16,8 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     let layout = UICollectionViewFlowLayout()
     var contacts: [Contact] = []
     
+    let shared = User.shared
+    
     // Inititalizers
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: self.layout)
@@ -46,20 +48,37 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+        print("selected item")
         print(#function)    
         
         var selectedContact = contacts[indexPath.row]
-    
         selectedContact.isChosen = !selectedContact.isChosen
+        if selectedContact.isChosen == false {
+            collectionView.deselectItem(at: indexPath, animated: true)
+            shared.selectedContacts = shared.selectedContacts.filter { (contact) -> Bool in
+                
+                return contact.email != selectedContact.email
+            }
+            let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
+            
+            selectedCell.handleTap()
+            
+        } else {
+        
+        shared.selectedContacts.append(selectedContact)
         
         contacts[indexPath.row] = selectedContact
         
         let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
         
         selectedCell.handleTap()
-        
+            
+        }
+  
     }
+    
+
+    
     
     // Setup view
     func setupView() {

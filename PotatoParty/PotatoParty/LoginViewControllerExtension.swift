@@ -20,8 +20,9 @@ extension LoginViewController {
             make.width.equalToSuperview().multipliedBy(textFieldToSuperviewWidthMultiplier)
             make.height.equalTo(userTextfield.snp.width).multipliedBy(textFieldToSuperviewHeightMultiplier)
         }
-        userTextfield.text = "example@emailprovider"
-        userTextfield.backgroundColor = UIColor.blue
+        
+        userTextfield.placeholder = "example@emailprovider.com"
+        userTextfield.backgroundColor = UIColor.cyan
         
         view.addSubview(passwordTextfield)
         passwordTextfield.snp.makeConstraints { (make) in
@@ -30,8 +31,9 @@ extension LoginViewController {
             make.width.equalTo(userTextfield.snp.width)
             make.height.equalTo(userTextfield.snp.height)
         }
-        passwordTextfield.text = "password"
-        passwordTextfield.backgroundColor = UIColor.blue
+
+        passwordTextfield.placeholder = "Password"
+        passwordTextfield.backgroundColor = UIColor.cyan
         
         view.addSubview(loginButton)
         loginButton.snp.makeConstraints { (make) in
