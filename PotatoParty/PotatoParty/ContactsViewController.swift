@@ -43,7 +43,6 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         
         let rightBtn = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(self.selectBtnClicked))
         self.navigationItem.rightBarButtonItem = rightBtn
-        // TO DO: Hook up the action
         
         let leftBtn = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(self.navToSettingsVC))
         self.navigationItem.leftBarButtonItem = leftBtn
@@ -53,11 +52,12 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        retrieveContacts(for: User.shared.groups[0], completion: { contacts in
+
+        retrieveContacts(for: User.shared.groups[0], completion: { contacts in 
             self.collectionView.contacts = contacts
             self.collectionView.reloadData()
         })
+        
         
     }
     
@@ -69,32 +69,50 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
     // MARK: - Navigation Bar Dropdown
     
     func prepareNavigationBarMenuTitleView() -> String {
-        // Both title label and image view are fixed horizontally inside title
-        // view, UIKit is responsible to center title view in the navigation bar.
-        // We want to ensure the space between title and image remains constant,
-        // even when title view is moved to remain centered (but never resized).
         titleView = DropDownTitleView(frame: CGRect(x: 0, y: 0, width: 150, height: 40))
         
-        titleView.addTarget(self, action: #selector(self.willToggle), for: .touchUpInside)
+        titleView.addTarget(self, action: #selector(self.willToggleNavigationBarMenu(_:)), for: .touchUpInside)
+        titleView.addTarget(self, action: #selector(self.didToggleNavigationBarMenu(_:)), for: .valueChanged)
+        
         titleView.titleLabel.textColor = UIColor.black
-        titleView.title = "Groups"
+        titleView.title = "Lists"
         
         navigationItem.titleView = titleView
         
         return titleView.title!
     }
     
-    public func didTapInDropDownMenuBackground(_ menu: DropDownMenu) {
-        
+    func showToolbarMenu() {
+        if titleView.isUp {
+            titleView.toggleMenu()
+        }
+        navigationBarMenu.show()
     }
     
-    func willToggle(){
-        if self.titleView.isUp{
+    func willToggleNavigationBarMenu(_ sender: DropDownTitleView) {
+        navigationBarMenu.hide()
+        
+        if sender.isUp {
             navigationBarMenu.hide()
-        }else{
+        }
+        else {
             navigationBarMenu.show()
         }
     }
+    
+    func didToggleNavigationBarMenu(_ sender: DropDownTitleView) {
+        print("Sent did toggle navigation bar menu action")
+    }
+    
+    func didTapInDropDownMenuBackground(_ menu: DropDownMenu) {
+        if menu == navigationBarMenu {
+            titleView.toggleMenu()
+        }
+        else {
+            menu.hide()
+        }
+    }
+    
     
     func prepareNavigationBarMenu(_ currentChoice: String) {
         navigationBarMenu = DropDownMenu(frame: view.bounds)
@@ -107,7 +125,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         for list in arrayofWeddingLists {
             let firstCell = DropDownMenuCell()
             firstCell.textLabel!.text = list
-            firstCell.menuAction = #selector(selectGroup(_:))
+            firstCell.menuAction = #selector(dropDownAction(_:)) // Changed from selectGroup(_:) so dropdown will hide
             firstCell.menuTarget = self
             if currentChoice == list {
                 firstCell.accessoryType = .checkmark
@@ -115,14 +133,10 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
             
             menuCellArray.append(firstCell)
         }
-
+        
         navigationBarMenu.menuCells = menuCellArray
         navigationBarMenu.selectMenuCell(menuCellArray[0])
-        
-        // If we set the container to the controller view, the value must be set
-        // on the hidden content offset (not the visible one)
-        navigationBarMenu.visibleContentOffset =
-            navigationController!.navigationBar.frame.size.height + 24
+        navigationBarMenu.visibleContentOffset = navigationController!.navigationBar.frame.size.height + 24
         
         // For a simple gray overlay in background
         navigationBarMenu.backgroundView = UIView(frame: navigationBarMenu.bounds)
@@ -130,12 +144,21 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         navigationBarMenu.backgroundAlpha = 0.7
     }
     
+    
+    func dropDownAction(_ sender: AnyObject) {
+        
+        print("\n\ndrop down action\n\n")
+        navigationBarMenu.hide()
+    }
+    
+    
     func selectGroup(_ sender: UITableViewCell) {
         guard let group = sender.textLabel?.text?.lowercased() else { return }
         self.retrieveContacts(for: group, completion: { contacts in
             self.collectionView.contacts = contacts
             self.collectionView.reloadData()
         })
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -219,26 +242,13 @@ extension ContactsViewController: BottomNavBarDelegate {
     }
     
     func navToRecordCardVC() {
-         let _ = startCameraFromViewController(self, withDelegate: self)
+        let _ = startCameraFromViewController(self, withDelegate: self)
     }
 }
 
 // MARK: - Firebase methods
 
 extension ContactsViewController {
-    
-    func retrieveContactsFromDB(completion: @escaping (_ : [Contact])-> ()) {
-        var contacts: [Contact] = []
-        let contactBucketRef = ref.child("\(uid)/all/")
-        contactBucketRef.observeSingleEvent(of: .value, with: { (snapshot) in
-            if snapshot.exists() {
-                for item in snapshot.children.allObjects {
-                    contacts.append(Contact(snapshot: item as! FIRDataSnapshot))
-                }
-            }
-            completion(contacts)
-        })
-    }
     
     func retrieveContacts(for group: String, completion: @escaping (_: [Contact]) -> Void) {
         var contacts: [Contact] = []
@@ -271,7 +281,9 @@ extension ContactsViewController {
         cameraController.sourceType = .camera
         cameraController.mediaTypes = [kUTTypeMovie as NSString as String]
         cameraController.allowsEditing = true //allow video editing
+        cameraController.cameraCaptureMode = .video
         cameraController.delegate = delegate
+        cameraController.videoQuality = .typeIFrame1280x720
         present(cameraController, animated: true, completion: nil)
         return true
     }
