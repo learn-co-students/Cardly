@@ -234,7 +234,7 @@
 				TargetAttributes = {
 					3F0BE6821DDCB1F5007E4FD0 = {
 						CreatedOnToolsVersion = 8.1;
-						DevelopmentTeam = H2562XJSGY;
+						DevelopmentTeam = HD7J783WQX;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Keychain = {
@@ -477,11 +477,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = PotatoParty/PotatoParty.entitlements;
-				DEVELOPMENT_TEAM = H2562XJSGY;
+				DEVELOPMENT_TEAM = HD7J783WQX;
 				INFOPLIST_FILE = PotatoParty/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.ForrestApps.PotatoParty-com.ForrestApps.PotatoParty-com.ForrestApps.PotatoParty";
+				PRODUCT_BUNDLE_IDENTIFIER = com.hhh.ForrestApps.PotatoParty;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -493,11 +493,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = PotatoParty/PotatoParty.entitlements;
-				DEVELOPMENT_TEAM = H2562XJSGY;
+				DEVELOPMENT_TEAM = HD7J783WQX;
 				INFOPLIST_FILE = PotatoParty/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.ForrestApps.PotatoParty-com.ForrestApps.PotatoParty-com.ForrestApps.PotatoParty";
+				PRODUCT_BUNDLE_IDENTIFIER = com.hhh.ForrestApps.PotatoParty;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};

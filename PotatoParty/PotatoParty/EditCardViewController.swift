@@ -49,6 +49,7 @@ class EditCardViewController: UIViewController {
         addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.playerReachedEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
         // Do any additional setup after loading the view.
+        
     }
 
     override func didReceiveMemoryWarning() {

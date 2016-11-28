@@ -24,7 +24,8 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
     let ref = FIRDatabase.database().reference(withPath: "contacts")
     let uid = User.shared.uid
     
-    var contacts: [Contact] = []
+    
+    var shared = User.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,11 +52,12 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        self.retrieveContactsFromDB { (contactList) in
-            self.collectionView.contacts = contactList
+
+        retrieveContacts(for: User.shared.groups[0], completion: { contacts in 
+            self.collectionView.contacts = contacts
             self.collectionView.reloadData()
-        }
+        })
+        
         
     }
     
@@ -68,8 +70,10 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
     
     func prepareNavigationBarMenuTitleView() -> String {
         titleView = DropDownTitleView(frame: CGRect(x: 0, y: 0, width: 150, height: 40))
+        
         titleView.addTarget(self, action: #selector(self.willToggleNavigationBarMenu(_:)), for: .touchUpInside)
         titleView.addTarget(self, action: #selector(self.didToggleNavigationBarMenu(_:)), for: .valueChanged)
+        
         titleView.titleLabel.textColor = UIColor.black
         titleView.title = "Lists"
         
@@ -121,7 +125,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         for list in arrayofWeddingLists {
             let firstCell = DropDownMenuCell()
             firstCell.textLabel!.text = list
-            firstCell.menuAction = #selector(dropDownAction(_:))
+            firstCell.menuAction = #selector(dropDownAction(_:)) // Changed from selectGroup(_:) so dropdown will hide
             firstCell.menuTarget = self
             if currentChoice == list {
                 firstCell.accessoryType = .checkmark
@@ -140,10 +144,20 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         navigationBarMenu.backgroundAlpha = 0.7
     }
     
+    
     func dropDownAction(_ sender: AnyObject) {
         
         print("\n\ndrop down action\n\n")
         navigationBarMenu.hide()
+    }
+    
+    
+    func selectGroup(_ sender: UITableViewCell) {
+        guard let group = sender.textLabel?.text?.lowercased() else { return }
+        self.retrieveContacts(for: group, completion: { contacts in
+            self.collectionView.contacts = contacts
+            self.collectionView.reloadData()
+        })
         
     }
     
@@ -195,6 +209,7 @@ extension ContactsViewController {
     
 }
 
+
 // MARK: - Navigation methods (buttons)
 
 extension ContactsViewController: BottomNavBarDelegate {
@@ -235,10 +250,11 @@ extension ContactsViewController: BottomNavBarDelegate {
 
 extension ContactsViewController {
     
-    func retrieveContactsFromDB( completion: @escaping (_ : [Contact])-> ()) {
+    func retrieveContacts(for group: String, completion: @escaping (_: [Contact]) -> Void) {
         var contacts: [Contact] = []
-        let contactBucketRef = ref.child("\(uid)/all/")
-        contactBucketRef.observeSingleEvent(of: .value, with: { (snapshot) in
+        let path = "\(uid)/\(group.lowercased())/"
+        let contactBucketRef = ref.child(path)
+        contactBucketRef.observeSingleEvent(of: .value, with: { snapshot in
             if snapshot.exists() {
                 for item in snapshot.children.allObjects {
                     contacts.append(Contact(snapshot: item as! FIRDataSnapshot))
@@ -247,6 +263,9 @@ extension ContactsViewController {
             completion(contacts)
         })
     }
+    
+    
+    
     
 }
 
