@@ -46,6 +46,11 @@ class EditCardViewController: UIViewController {
         super.viewDidLoad()
         layoutViewElements()
         playerView.playerLayer.player = player
+        playerView.playerLayer.frame = view.bounds
+        
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.navigationBar.backgroundColor = UIColor.clear
+        navigationController?.navigationBar.alpha = 0.0
         
         addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.playerReachedEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
@@ -88,6 +93,9 @@ class EditCardViewController: UIViewController {
     }
     
     func exportWithWatermark() {
+        
+        playerView.playerLayer.contentsGravity = AVLayerVideoGravityResizeAspect
+        //playerView.playerLayer.frame = CGRect(x: 0, y: 0, width: 240, height: 120)
         let composition = AVMutableComposition()
         let asset = AVURLAsset(url: fileLocation!)
         
@@ -99,8 +107,9 @@ class EditCardViewController: UIViewController {
         
         do {
             try compositionVideoTrack.insertTimeRange(timerange, of: videoTrack, at: kCMTimeZero)
-            compositionVideoTrack.preferredTransform = videoTrack.preferredTransform
+            //compositionVideoTrack.preferredTransform = videoTrack.preferredTransform
         } catch  {
+            print("composing video track error")
             print(error)
         }
         
@@ -110,59 +119,71 @@ class EditCardViewController: UIViewController {
             do {
                 try compositionAudioTrack.insertTimeRange(audioTrack.timeRange, of: audioTrack, at: kCMTimeZero)
             } catch {
+                print("composing audio track error")
                 print(error)
             }
         }
         
         let size = videoTrack.naturalSize
-        
+
         // Set up watermark/overlays (probably should use snapkit)
-        let watermark = UIImage(named: "watermark.png")
-        let watermarklayer = CALayer()
-        watermarklayer.contents = watermark?.cgImage
-        watermarklayer.frame = CGRect(x: 10, y: 10, width: 180, height: 180)
-        watermarklayer.opacity = 0.5
-            
-        let textLayer = CATextLayer()
-        textLayer.string = "DOWNLOAD POTATO PARTY OR DIE"
-        textLayer.font = UIFont(name: "Helvetica", size: 65.0)
-        textLayer.shadowOpacity = 0.5
-        textLayer.alignmentMode = kCAAlignmentCenter
-        textLayer.frame = CGRect(x: 0, y: 50, width: size.width, height: size.height/6)
+//        let watermark = UIImage(named: "watermark.png")
+//        let watermarklayer = CALayer()
+//        watermarklayer.contents = watermark?.cgImage
+//        watermarklayer.frame = CGRect(x: 10, y: 10, width: 180, height: 180)
+//        watermarklayer.opacity = 0.5
+//            
+//        let textLayer = CATextLayer()
+//        textLayer.string = "DOWNLOAD POTATO PARTY OR DIE"
+//        textLayer.font = UIFont(name: "Helvetica", size: 65.0)
+//        textLayer.shadowOpacity = 0.5
+//        textLayer.alignmentMode = kCAAlignmentCenter
+//        textLayer.frame = CGRect(x: 0, y: 50, width: size.width, height: size.height/6)
+        
+        let overlayImage = UIImage(named: "thankYou")
+        let overlayLayer = CALayer()
+        overlayLayer.contents = overlayImage?.cgImage
+        overlayLayer.masksToBounds = true
+        overlayLayer.frame = CGRect(x: 0, y: 0, width: playerView.playerLayer.frame.width, height: playerView.playerLayer.frame.height)
         
         let videoLayer = CALayer()
-        videoLayer.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        videoLayer.backgroundColor = UIColor.blue.cgColor
+        videoLayer.frame = CGRect(x: 0, y: 0, width: playerView.playerLayer.frame.width, height: playerView.playerLayer.frame.height)
         
         let parentLayer = CALayer()
-        parentLayer.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        parentLayer.contentsGravity = AVLayerVideoGravityResize
+        parentLayer.frame = CGRect(x: 0, y: 0, width: size.height, height: size.width)
         parentLayer.addSublayer(videoLayer)
-        parentLayer.addSublayer(watermarklayer)
-        parentLayer.addSublayer(textLayer)
+        parentLayer.addSublayer(overlayLayer)
+        //parentLayer.addSublayer(watermarklayer)
+        //parentLayer.addSublayer(textLayer)
             
         let layercomposition = AVMutableVideoComposition()
         layercomposition.frameDuration = CMTimeMake(1, 30)
-        layercomposition.renderSize = size
+        layercomposition.renderSize = view.frame.size
+        
+        print(view.frame.size)
         layercomposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer:videoLayer, in: parentLayer)
-            
+        
         let instruction = AVMutableVideoCompositionInstruction()
         instruction.timeRange = CMTimeRangeMake(kCMTimeZero, composition.duration)
-        let videotrack = composition.tracks(withMediaType: AVMediaTypeVideo)[0] as AVAssetTrack
-        let layerInstruction = AVMutableVideoCompositionLayerInstruction(assetTrack: videotrack)
-        instruction.layerInstructions = [layerInstruction]
+        let layerInstr = videoCompositionInstructionForTrack(track: compositionVideoTrack, asset: asset)
+        instruction.layerInstructions = [layerInstr]
         layercomposition.instructions = [instruction]
-            
+        
         let filePath = NSTemporaryDirectory() + fileName()
         let movieUrl = URL(fileURLWithPath: filePath)
             
         guard let assetExport = AVAssetExportSession(asset: composition, presetName:AVAssetExportPresetHighestQuality) else { return }
         assetExport.videoComposition = layercomposition
-        assetExport.outputFileType = AVFileTypeMPEG4
+        assetExport.outputFileType = AVFileTypeQuickTimeMovie
         assetExport.outputURL = movieUrl
             
         assetExport.exportAsynchronously {
             switch assetExport.status {
             case .completed:
                 print("Success")
+                print(movieUrl)
                 self.fileLocation = movieUrl
                 //send out video
                 break
@@ -182,6 +203,62 @@ class EditCardViewController: UIViewController {
                 print("Waiting")
             }
         }
+    }
+    
+    // MARK: - Correct video orientation
+    
+    func orientationFromTransform(transform: CGAffineTransform) -> (orientation: UIImageOrientation, isPortrait: Bool) {
+        var assetOrientation = UIImageOrientation.up
+        var isPortrait = false
+        if transform.a == 0 && transform.b == 1.0 && transform.c == -1.0 && transform.d == 0 {
+            assetOrientation = .right
+            isPortrait = true
+        } else if transform.a == 0 && transform.b == -1.0 && transform.c == 1.0 && transform.d == 0 {
+            assetOrientation = .left
+            isPortrait = true
+        } else if transform.a == 1.0 && transform.b == 0 && transform.c == 0 && transform.d == 1.0 {
+            assetOrientation = .up
+        } else if transform.a == -1.0 && transform.b == 0 && transform.c == 0 && transform.d == -1.0 {
+            assetOrientation = .down
+        }
+        return (assetOrientation, isPortrait)
+    }
+    
+    func videoCompositionInstructionForTrack(track: AVCompositionTrack, asset: AVAsset) -> AVMutableVideoCompositionLayerInstruction {
+        let instruction = AVMutableVideoCompositionLayerInstruction(assetTrack: track)
+        let assetTrack = asset.tracks(withMediaType: AVMediaTypeVideo)[0]
+        //playerLayer?.videoGravity
+        let transform = assetTrack.preferredTransform
+        let assetInfo = orientationFromTransform(transform: transform)
+        print("playerView bounds width is \(playerView.playerLayer.bounds.width)")
+        print("playerView bounds height is \(playerView.playerLayer.bounds.height)")
+        print("assetTrack naturalSize width is \(assetTrack.naturalSize.width)")
+        print("assetTrack naturalSize height is \(assetTrack.naturalSize.height)")
+        var scaleToFitRatio = playerView.playerLayer.bounds.width / assetTrack.naturalSize.width
+        print("Scale fit ratios is \(scaleToFitRatio)")
+        
+        
+        if assetInfo.isPortrait {
+            print("not running")
+            playerView.playerLayer.videoGravity = AVLayerVideoGravityResize
+            scaleToFitRatio = playerView.playerLayer.bounds.width / assetTrack.naturalSize.height
+        let scaleFactor = CGAffineTransform(scaleX: scaleToFitRatio, y: scaleToFitRatio)
+        instruction.setTransform(assetTrack.preferredTransform.concatenating(scaleFactor),
+                                    at: kCMTimeZero)
+        } else {
+            let scaleFactor = CGAffineTransform(scaleX: scaleToFitRatio, y: scaleToFitRatio)
+            var concat = assetTrack.preferredTransform.concatenating(scaleFactor).concatenating(CGAffineTransform(translationX: 0, y: playerView.playerLayer.bounds.width / 2))
+            if assetInfo.orientation == .down {
+                let fixUpsideDown = CGAffineTransform(rotationAngle: CGFloat(M_PI))
+                let windowBounds = playerView.playerLayer.bounds
+                let yFix = assetTrack.naturalSize.height + windowBounds.height
+                let centerFix = CGAffineTransform(translationX: assetTrack.naturalSize.width, y: yFix)
+                concat = fixUpsideDown.concatenating(centerFix).concatenating(scaleFactor)
+            }
+            instruction.setTransform(concat, at: kCMTimeZero)
+        }
+      
+        return instruction
     }
     
     // MARK: - Callbacks
