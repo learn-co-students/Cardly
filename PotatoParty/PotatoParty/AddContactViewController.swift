@@ -19,8 +19,8 @@ class AddContactViewController: UIViewController {
     var groupDropDown = UIPickerView()
     var importContactsButton = UIButton()
     var cancelButton = UIButton()
-    let namePlaceholder = "Name"
-    let emailPlaceholder = "example@serviceprovider"
+//    let namePlaceholder = "Name"
+//    let emailPlaceholder = "example@serviceprovider"
     
     var dataDict = [String: String] ()
     
@@ -52,8 +52,7 @@ class AddContactViewController: UIViewController {
         let contactItemRef = userContactsRef.childByAutoId()
         contactItemRef.setValue(contact.toAny())
         
-        nameTextField.text = namePlaceholder
-        emailTextField.text = emailPlaceholder
+    
     }
     
 }

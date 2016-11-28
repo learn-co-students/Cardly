@@ -46,8 +46,8 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
     
     func sendTextButtonTapped() {
         
-        if MFMessageComposeViewController.canSendText()  {
-            //&& MFMessageComposeViewController.canSendAttachments()
+        if MFMessageComposeViewController.canSendText() && MFMessageComposeViewController.canSendAttachments()  {
+    
             let message = MFMessageComposeViewController()
             message.messageComposeDelegate = self
             var phoneNumberArray: [String] = []

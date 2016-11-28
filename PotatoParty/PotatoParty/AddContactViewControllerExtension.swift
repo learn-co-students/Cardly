@@ -27,7 +27,8 @@ extension AddContactViewController {
         }
         
         nameTextField.backgroundColor = UIColor.blue
-        nameTextField.text = "Name"
+        nameTextField.placeholder = "Name"
+        
         
         // E-Mail
         view.addSubview(emailTextField)
@@ -39,7 +40,11 @@ extension AddContactViewController {
         }
         
         emailTextField.backgroundColor = UIColor.blue
-        emailTextField.text = "example@serviceprovider"
+        emailTextField.placeholder = "example@serviceprovider"
+    
+        
+        // Add Phone Number
+        
 
         
         // Group
