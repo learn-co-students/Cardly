@@ -19,8 +19,6 @@ class AddContactViewController: UIViewController {
     var groupPickerView = UIPickerView()
     var importContactsButton = UIButton()
     var cancelButton = UIButton()
-    let namePlaceholder = "Name"
-    let emailPlaceholder = "example@serviceprovider"
     
     var dataDict = [String: String] ()
     
@@ -55,6 +53,7 @@ class AddContactViewController: UIViewController {
         let contactItemRef = userContactsRef.childByAutoId()
         contactItemRef.setValue(contact.toAny())
         
+
         if groupSelected != "All" {
             let path = "\(uid)/\(groupSelected.lowercased())/\(contactItemRef.key)/"
             let groupContactsRef = contactsRef.child(path)
@@ -71,9 +70,7 @@ class AddContactViewController: UIViewController {
             let groupContactsRef = groupsRef.child(path)
             groupContactsRef.setValue(contact.toAny())
         }
-        
-        nameTextField.text = namePlaceholder
-        emailTextField.text = emailPlaceholder
+
     }
     
 }
