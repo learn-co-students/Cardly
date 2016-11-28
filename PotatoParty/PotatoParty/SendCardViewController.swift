@@ -9,10 +9,12 @@
 import UIKit
 import MessageUI
 import FirebaseStorage
+import SnapKit
 
-class SendCardViewController: UIViewController, MFMailComposeViewControllerDelegate {
-    
+class SendCardViewController: UIViewController, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate {
+   
     var sendEmail = UIButton()
+    var sendText = UIButton()
     var videoURL: URL!
     var shared = User.shared
     
@@ -20,7 +22,7 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
         view.addSubview(sendEmail)
         sendEmail.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
+            make.topMargin.equalToSuperview().offset(20)
             make.width.equalTo(view.snp.width).multipliedBy(0.5)
             make.height.equalTo(view.snp.height).multipliedBy(0.25)
         }
@@ -28,6 +30,49 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
         sendEmail.backgroundColor = UIColor.blue
         sendEmail.setTitle("SEND E-MAIL", for: .normal)
         sendEmail.addTarget(self, action: #selector(sendEmailButtonTapped), for: .touchUpInside)
+        
+        view.addSubview(sendText)
+        sendText.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(sendEmail.snp.bottomMargin).offset(0.5)
+            make.width.equalTo(sendEmail)
+            make.height.equalTo(sendEmail)
+        }
+        
+        sendText.backgroundColor = UIColor.blue
+        sendText.setTitle("SEND TEXT", for: .normal)
+        sendText.addTarget(self, action: #selector(sendTextButtonTapped), for: .touchUpInside)
+    }
+    
+    func sendTextButtonTapped() {
+        
+        if MFMessageComposeViewController.canSendText()  {
+            //&& MFMessageComposeViewController.canSendAttachments()
+            let message = MFMessageComposeViewController()
+            message.messageComposeDelegate = self
+            var phoneNumberArray: [String] = []
+            for contact in shared.selectedContacts {
+                let phoneNumber = contact.phone
+                phoneNumberArray.append(phoneNumber)
+            }
+            message.recipients = phoneNumberArray
+            message.subject = "Thank You Video"
+            
+            message.addAttachmentURL(videoURL, withAlternateFilename: nil)
+            message.body = "Thank You so much!"
+            
+            present(message, animated: true, completion: nil)
+            shared.selectedContacts.removeAll()
+        } else {
+            print("error: MAIL compose view controller canNOT send mail")
+        }
+    }
+    
+    public func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+        controller.dismiss(animated: true)
+        print("dismiss compose mail controller")
+        successSent()
+        
     }
     
     func sendEmailButtonTapped(){
@@ -77,7 +122,7 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
     
     //Let user know e-mail was sent successfully - alert controller? 
     func successSent() {
-        print("You've send your video successfully")
+        print("You've sent your video successfully")
     }
     
     //PULLING VIDEO FROM FIREBASE _ FOR TESTING
