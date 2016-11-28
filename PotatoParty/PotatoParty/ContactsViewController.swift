@@ -53,10 +53,10 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.retrieveContactsFromDB { (contactList) in
-            self.collectionView.contacts = contactList
+        retrieveContacts(for: User.shared.groups[0], completion: { contacts in
+            self.collectionView.contacts = contacts
             self.collectionView.reloadData()
-        }
+        })
         
     }
     
@@ -74,10 +74,9 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         // even when title view is moved to remain centered (but never resized).
         titleView = DropDownTitleView(frame: CGRect(x: 0, y: 0, width: 150, height: 40))
         
-        
         titleView.addTarget(self, action: #selector(self.willToggle), for: .touchUpInside)
         titleView.titleLabel.textColor = UIColor.black
-        titleView.title = "Lists"
+        titleView.title = "Groups"
         
         navigationItem.titleView = titleView
         
@@ -107,7 +106,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         for list in arrayofWeddingLists {
             let firstCell = DropDownMenuCell()
             firstCell.textLabel!.text = list
-            firstCell.menuAction = #selector(dropDownAction(_:))
+            firstCell.menuAction = #selector(selectGroup(_:))
             firstCell.menuTarget = self
             if currentChoice == list {
                 firstCell.accessoryType = .checkmark
@@ -130,10 +129,12 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         navigationBarMenu.backgroundAlpha = 0.7
     }
     
-    func dropDownAction(_ sender: AnyObject) {
-        
-        print("\n\ndrop down action\n\n")
-        
+    func selectGroup(_ sender: UITableViewCell) {
+        guard let group = sender.textLabel?.text?.lowercased() else { return }
+        self.retrieveContacts(for: group, completion: { contacts in
+            self.collectionView.contacts = contacts
+            self.collectionView.reloadData()
+        })
     }
     
     override func didReceiveMemoryWarning() {
@@ -183,6 +184,7 @@ extension ContactsViewController {
     }
     
 }
+
 
 // MARK: - Navigation methods (buttons)
 
@@ -236,6 +238,23 @@ extension ContactsViewController {
             completion(contacts)
         })
     }
+    
+    func retrieveContacts(for group: String, completion: @escaping (_: [Contact]) -> Void) {
+        var contacts: [Contact] = []
+        let path = "\(uid)/\(group.lowercased())/"
+        let contactBucketRef = ref.child(path)
+        contactBucketRef.observeSingleEvent(of: .value, with: { snapshot in
+            if snapshot.exists() {
+                for item in snapshot.children.allObjects {
+                    contacts.append(Contact(snapshot: item as! FIRDataSnapshot))
+                }
+            }
+            completion(contacts)
+        })
+    }
+    
+    
+    
     
 }
 
