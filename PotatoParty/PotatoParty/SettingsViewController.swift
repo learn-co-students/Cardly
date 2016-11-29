@@ -9,7 +9,6 @@
 import UIKit
 import SnapKit
 import FirebaseAuth
-// import GuillotineMenu
 
 class SettingsViewController: UIViewController, GuillotineMenu {
     
@@ -37,16 +36,12 @@ class SettingsViewController: UIViewController, GuillotineMenu {
             make.height.equalTo(20)
         }
         
-        dismissButton = {
-            let button = UIButton(frame: .zero)
-            button.setImage(UIImage(named: "ic_menu"), for: .normal)
-            button.addTarget(self, action: #selector(dismissButtonTapped(_:)), for: .touchUpInside)
-            return button
-        }()
-        
-        
-        
-        
+//        dismissButton = {
+//            let button = UIButton(frame: .zero)
+//            button.setImage(UIImage(named: "ic_menu"), for: .normal)
+//            button.addTarget(self, action: #selector(dismissButtonTapped(_:)), for: .touchUpInside)
+//            return button
+//        }()
         
         
         
@@ -68,19 +63,6 @@ class SettingsViewController: UIViewController, GuillotineMenu {
         // Dispose of any resources that can be recreated.
     }
     
-//    func changeEmailButtonTapped() {
-//
-//
-//    }
-    
-
-//    func changePasswordButtonTapped() {
-//
-//
-//    }
-
-
-    
     func logout() {
         do {
             try FIRAuth.auth()?.signOut()
@@ -95,7 +77,20 @@ class SettingsViewController: UIViewController, GuillotineMenu {
     func dismissButtonTapped(_ sender: UIButton) {
         presentingViewController!.dismiss(animated: true, completion: nil)
     }
-
+    
+    
+    func changeEmailButtonTapped(_sender: UIButton) {
+        
+        
+    }
+    
+    
+    func changePasswordButtonTapped(_sender: UIButton) {
+        
+        
+    }
+    
+    
 }
 
 // MARK - Settings Animation
