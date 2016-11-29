@@ -23,6 +23,8 @@ extension LoginViewController {
         
         userTextfield.placeholder = "example@emailprovider.com"
         userTextfield.backgroundColor = UIColor.cyan
+        userTextfield.textAlignment = .center
+        userTextfield.autocapitalizationType = UITextAutocapitalizationType.none
         
         view.addSubview(passwordTextfield)
         passwordTextfield.snp.makeConstraints { (make) in
@@ -34,6 +36,8 @@ extension LoginViewController {
 
         passwordTextfield.placeholder = "Password"
         passwordTextfield.backgroundColor = UIColor.cyan
+        passwordTextfield.textAlignment = .center
+        passwordTextfield.autocapitalizationType = UITextAutocapitalizationType.none
         
         view.addSubview(loginButton)
         loginButton.snp.makeConstraints { (make) in

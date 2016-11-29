@@ -28,6 +28,8 @@ extension AddContactViewController {
         
         nameTextField.backgroundColor = UIColor.blue
         nameTextField.placeholder = "Name"
+        nameTextField.textAlignment = .center
+        nameTextField.autocapitalizationType = UITextAutocapitalizationType.none
         
         
         // E-Mail
@@ -41,6 +43,8 @@ extension AddContactViewController {
         
         emailTextField.backgroundColor = UIColor.blue
         emailTextField.placeholder = "example@serviceprovider"
+        emailTextField.textAlignment = .center
+        emailTextField.autocapitalizationType = UITextAutocapitalizationType.none
     
         
         // Add Phone Number
@@ -54,7 +58,8 @@ extension AddContactViewController {
         
         phoneTextField.backgroundColor = UIColor.blue
         phoneTextField.placeholder = "2224446666"
-        
+        phoneTextField.textAlignment = .center
+        phoneTextField.autocapitalizationType = UITextAutocapitalizationType.none
 
         
         // Group
