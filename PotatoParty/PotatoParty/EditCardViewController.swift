@@ -94,7 +94,6 @@ class EditCardViewController: UIViewController {
     func exportWithWatermark() {
         
         playerView.playerLayer.contentsGravity = AVLayerVideoGravityResizeAspect
-        //playerView.playerLayer.frame = CGRect(x: 0, y: 0, width: 240, height: 120)
         let composition = AVMutableComposition()
         let asset = AVURLAsset(url: fileLocation!)
         
@@ -122,7 +121,6 @@ class EditCardViewController: UIViewController {
             }
         }
         
-        // Set up watermark/overlays (probably should use snapkit)
 //        let watermark = UIImage(named: "watermark.png")
 //        let watermarklayer = CALayer()
 //        watermarklayer.contents = watermark?.cgImage
@@ -173,7 +171,6 @@ class EditCardViewController: UIViewController {
             switch assetExport.status {
             case .completed:
                 print("Success")
-                print(movieUrl)
                 self.fileLocation = movieUrl
                 break
             case.cancelled:
@@ -250,7 +247,6 @@ class EditCardViewController: UIViewController {
             saveButton.isHidden = false
         }
     }
-    
     
     // MARK: - Actions
     
