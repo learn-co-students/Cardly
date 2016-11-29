@@ -53,38 +53,27 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     }
     
     func importContactButtonTapped () {
-        
-        
         self.pickAContact()
         print ("import Contact Button Tapped")
     }
     
-    
+    // Accessing and Importing Selected Contact from User's Contact book
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contacts: [CNContact]) {
+        
         for contact in contacts {
-            var emailArray: [String] = [String(describing: [contact.emailAddresses])]
-            var phoneNumberArray: [String] = [String(describing: [contact.phoneNumbers])]
-            var phoneNumber = ""
-            var email = ""
             
-            if emailArray.isEmpty == false{
-                email = emailArray[0].
-                print("emailAddress: \(email)")
-            } else {
-                print("NO email addresses")
-            }
+            guard let firstAddress = contact.emailAddresses.first else { return }
+            let emailAddress = String(firstAddress.value)
+            print("emailAddress: \(emailAddress)")
             
-            if phoneNumberArray.isEmpty == false{
-                phoneNumber = phoneNumberArray[0]
-                print("phoneNumber: \(phoneNumber)")
-            } else {
-                print("No phone number")
-            }
+            guard let firstPhoneNumber = contact.phoneNumbers.first else { return }
+            let phoneNumber = String(describing: firstPhoneNumber.value.stringValue)
+            print("phoneNumber: \(phoneNumber)")
             
             let firstName = contact.givenName
             let lastName = contact.familyName
             
-            let appContact = Contact(fullName: firstName + lastName, email: email, phone: phoneNumber)
+            let appContact = Contact(fullName: firstName + lastName, email: emailAddress, phone: phoneNumber)
             
             let contactsRef = FIRDatabase.database().reference(withPath: "contacts")
             let userContactsRef = contactsRef.child("\(uid)/all/")
@@ -100,11 +89,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         
     }
     
-    func pickAContact(){
-        let controller = CNContactPickerViewController()
-        controller.delegate = self
-        navigationController?.present(controller, animated: true, completion: nil)
-    }
+
     
     func contactPickerDidCancel(_ picker: CNContactPickerViewController) {
         print("Cancel Contact Picker")
@@ -132,8 +117,15 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
             completion(true)
             
         }
-        
     }
+    
+    func pickAContact(){
+        let controller = CNContactPickerViewController()
+        controller.delegate = self
+        navigationController?.present(controller, animated: true, completion: nil)
+    }
+    
+    
     func addButtonTapped() {
         guard let email = emailTextField.text, let name = nameTextField.text, let phone = phoneTextField.text else { return }
         let contact = Contact(fullName: name, email: email, phone: phone)
