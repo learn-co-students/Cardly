@@ -122,6 +122,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     func pickAContact(){
         let controller = CNContactPickerViewController()
         controller.delegate = self
+        controller.predicateForEnablingContact = NSPredicate(format: "(phoneNumbers.@count > 0) && (emailAddresses.@count > 0)", argumentArray: nil)
         navigationController?.present(controller, animated: true, completion: nil)
     }
     
