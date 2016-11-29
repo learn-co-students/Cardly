@@ -8,6 +8,7 @@
 
 import UIKit
 import MessageUI
+import Firebase
 import FirebaseStorage
 import SnapKit
 
@@ -63,7 +64,11 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
             message.body = "Thank You so much!"
             
             present(message, animated: true, completion: nil)
-            shared.selectedContacts.removeAll()
+            
+            videoWasSent {
+                shared.selectedContacts.removeAll()
+            }
+           
         } else {
             print("error: MAIL compose view controller canNOT send mail")
         }
@@ -84,7 +89,8 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
             mail.mailComposeDelegate = self
             var emailArray: [String] = []
             for contact in shared.selectedContacts {
-            let email = contact.email
+                
+                let email = contact.email
                 emailArray.append(email)
             }
             mail.setBccRecipients(emailArray)
@@ -106,7 +112,11 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
             //            mail.setMessageBody("<p>You're so awesome! <p>You've received a Video!&nbsp;</p><p><a href=\(unwrappedVideoURL)>Click Here to See your Video hyperlink</a></p></p><video controls=\(controls)width=\(width) height=\(height) name=\(name) src=\(unwrappedVideoURL)></video> <p> <p>&nbsp;</p> <p>Love,&nbsp;</p> <p>&nbsp;</p><p>The M </p>", isHTML: true)
             
             present(mail, animated: true)
-            shared.selectedContacts.removeAll()
+            
+            videoWasSent {
+                shared.selectedContacts.removeAll()
+            }
+            
             
         } else {
             // show failure alert
@@ -114,7 +124,7 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
         }
         
     }
-
+    
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         controller.dismiss(animated: true)
         print("dismiss compose mail controller")
@@ -146,9 +156,22 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
 //        }
 //    }
     
-   
-    
+    func videoWasSent(completion:() -> ()) {
         
+        for contactIndex in shared.selectedContacts.indices {
+            shared.selectedContacts[contactIndex].is_sent = true
+            print("was video sent: \(shared.selectedContacts[contactIndex].is_sent)")
+            
+            
+            let contactsRef = FIRDatabase.database().reference(withPath: "contacts")
+            let userContactsRef = contactsRef.child("\(User.shared.uid)/all/\(shared.selectedContacts[contactIndex].key)/is_sent")
+            
+            userContactsRef.setValue(true)
+        }
+        completion()
+    }
+    
+    
         
     override func viewDidLoad() {
         super.viewDidLoad()
