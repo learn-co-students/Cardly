@@ -46,6 +46,7 @@ PODS:
     - GoogleToolboxForMac/NSString+URLArguments (= 2.1.0)
   - GoogleToolboxForMac/NSString+URLArguments (2.1.0)
   - GTMSessionFetcher/Core (1.1.7)
+  - GuillotineMenu (3.0)
   - SnapKit (3.0.2)
 
 DEPENDENCIES:
@@ -54,6 +55,7 @@ DEPENDENCIES:
   - Firebase/Core
   - Firebase/Database
   - Firebase/Storage
+  - GuillotineMenu (~> 3.0)
   - SnapKit (~> 3.0)
 
 SPEC CHECKSUMS:
@@ -68,8 +70,9 @@ SPEC CHECKSUMS:
   GoogleSymbolUtilities: 631ee17048aa5e9ab133470d768ea997a5ef9b96
   GoogleToolboxForMac: 2b2596cbb7186865e98cadf2b1e262d851c2b168
   GTMSessionFetcher: a1f8ed39e4fe21c68957daed472c7afbcdf29166
+  GuillotineMenu: 611ccb58ae092f2d929535377570ef25a7b5bc63
   SnapKit: 2e456761aa92d4d4067a7a5594c18769d451a8ad
 
-PODFILE CHECKSUM: 52cc0dbdd31fba88b404a51d1a6b52146f1fc4ce
+PODFILE CHECKSUM: 9ea60bd5cb5b84aed12b4da728e4a83e544302e1
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.2.0.beta.1

@@ -12,14 +12,25 @@ import FirebaseDatabase
 import FirebaseAuth
 import SnapKit
 import MobileCoreServices
+import GuillotineMenu
 
-class ContactsViewController: UIViewController, DropDownMenuDelegate {
+class ContactsViewController: UIViewController, DropDownMenuDelegate{
     
     // MARK: - Views
     var collectionView: ContactsCollectionView!
     var bottomNavBar: BottomNavBarView!
     var navigationBarMenu: DropDownMenu!
     var titleView: DropDownTitleView!
+    
+    var dismissButton: UIButton?
+    var titleLabel: UILabel?
+    
+    fileprivate let cellHeight: CGFloat = 210
+    fileprivate let cellSpacing: CGFloat = 20
+    
+    
+    fileprivate lazy var presentationAnimator = GuillotineTransitionAnimation()
+    
     
     let ref = FIRDatabase.database().reference(withPath: "contacts")
     let uid = User.shared.uid
@@ -41,19 +52,33 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate {
         let title = prepareNavigationBarMenuTitleView()
         prepareNavigationBarMenu(title)
         
+  
+        
         let rightBtn = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(self.selectBtnClicked))
         self.navigationItem.rightBarButtonItem = rightBtn
         
-        let leftBtn = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(self.navToSettingsVC))
-        self.navigationItem.leftBarButtonItem = leftBtn
+        
+        
+        let btnName = UIButton()
+        btnName.setTitle("Settings", for: .normal)
+        btnName.frame = CGRect(x: 0, y: 0, width: 100, height: 30)
+        btnName.addTarget(self, action: #selector(self.navToSettingsVC), for: .touchUpInside)
+        
+        //.... Set Right/Left Bar Button item
+        let leftBarButton = UIBarButtonItem()
+        leftBarButton.customView = btnName
+        self.navigationItem.leftBarButtonItem = leftBarButton
+        
+//        let leftBtn = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(self.navToSettingsVC))
+//        self.navigationItem.leftBarButtonItem = leftBtn
         
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-        retrieveContacts(for: User.shared.groups[0], completion: { contacts in 
+        
+        retrieveContacts(for: User.shared.groups[0], completion: { contacts in
             self.collectionView.contacts = contacts
             self.collectionView.reloadData()
         })
@@ -214,15 +239,35 @@ extension ContactsViewController {
 
 extension ContactsViewController: BottomNavBarDelegate {
     
-    func navToSettingsVC() {
+    func navToSettingsVC(_ sender: UIButton) {
         let destVC = SettingsViewController()
-        navigationController?.pushViewController(destVC, animated: true)
+        //navigationController?.pushViewController(destVC, animated: true)
+        
+        
+        destVC.modalPresentationStyle = .custom
+        destVC.transitioningDelegate = self
+        
+//        let view = UIView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+//        
+//        
+//        view.backgroundColor = UIColor.white
+        
+        presentationAnimator.animationDelegate = destVC as? GuillotineAnimationDelegate
+        presentationAnimator.supportView = navigationController!.navigationBar
+        presentationAnimator.presentButton = view
+        present(destVC, animated: true, completion: nil)
+
+        
+        
+        
     }
     
     func selectBtnClicked() {
         let destVC = ContactsViewController()
         navigationController?.pushViewController(destVC, animated: false)
         print("\n\n Select Button Clicked Working")
+        
+        
         
     }
     
@@ -315,3 +360,46 @@ extension ContactsViewController: UIImagePickerControllerDelegate {
 extension ContactsViewController: UINavigationControllerDelegate {
     
 }
+
+
+// MARK: - Animated Settings Button
+
+
+extension ContactsViewController: UIViewControllerTransitioningDelegate {
+    
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        presentationAnimator.mode = .presentation
+        return presentationAnimator
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        presentationAnimator.mode = .dismissal
+        return presentationAnimator
+    }
+}
+
+
+
+//extension ContactsViewController: GuillotineAnimationDelegate {
+//    
+//    func animatorDidFinishPresentation(_ animator: GuillotineTransitionAnimation) {
+//        print("menuDidFinishPresentation")
+//    }
+//    func animatorDidFinishDismissal(_ animator: GuillotineTransitionAnimation) {
+//        print("menuDidFinishDismissal")
+//    }
+//    
+//    func animatorWillStartPresentation(_ animator: GuillotineTransitionAnimation) {
+//        print("willStartPresentation")
+//    }
+//    
+//    func animatorWillStartDismissal(_ animator: GuillotineTransitionAnimation) {
+//        print("willStartDismissal")
+//    }
+//}
+//
+
+
+
+
+

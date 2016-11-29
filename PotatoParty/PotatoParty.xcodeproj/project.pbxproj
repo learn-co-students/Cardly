@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3173A1C41DECC36F003385B6 /* AnimatedSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3173A1C31DECC36F003385B6 /* AnimatedSettingsViewController.swift */; };
+		3173A1C61DECF961003385B6 /* ic_menu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3173A1C51DECF961003385B6 /* ic_menu@3x.png */; };
 		31D78BA41DDE77BD00FA855B /* DropDownMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D78BA01DDE77BD00FA855B /* DropDownMenu.swift */; };
 		31D78BA51DDE77BD00FA855B /* DropDownMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D78BA11DDE77BD00FA855B /* DropDownMenuCell.swift */; };
 		31D78BA61DDE77BD00FA855B /* DropDownMenuKit.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 31D78BA21DDE77BD00FA855B /* DropDownMenuKit.xcassets */; };
@@ -39,6 +41,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3173A1C31DECC36F003385B6 /* AnimatedSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatedSettingsViewController.swift; sourceTree = "<group>"; };
+		3173A1C51DECF961003385B6 /* ic_menu@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_menu@3x.png"; sourceTree = "<group>"; };
 		31D78BA01DDE77BD00FA855B /* DropDownMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDownMenu.swift; sourceTree = "<group>"; };
 		31D78BA11DDE77BD00FA855B /* DropDownMenuCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDownMenuCell.swift; sourceTree = "<group>"; };
 		31D78BA21DDE77BD00FA855B /* DropDownMenuKit.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DropDownMenuKit.xcassets; sourceTree = "<group>"; };
@@ -133,6 +137,7 @@
 				3F0BE6A51DDCB913007E4FD0 /* EditCardViewController.swift */,
 				3F0BE6A71DDCB92D007E4FD0 /* SendCardViewController.swift */,
 				3F0BE6A11DDCB879007E4FD0 /* AddContactViewController.swift */,
+				3173A1C51DECF961003385B6 /* ic_menu@3x.png */,
 				3F0BE69B1DDCB78E007E4FD0 /* SettingsViewController.swift */,
 			);
 			name = ViewControllers;
@@ -150,6 +155,7 @@
 				E49BA3A61DE3443A0010A7A4 /* Constants.swift */,
 				3F37150A1DE49D1B006B3EAD /* PlayerView.swift */,
 				3F37150C1DE4A21B006B3EAD /* EditCardViewControllerExtension.swift */,
+				3173A1C31DECC36F003385B6 /* AnimatedSettingsViewController.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -267,6 +273,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3173A1C61DECF961003385B6 /* ic_menu@3x.png in Resources */,
 				3F0BE6911DDCB1F5007E4FD0 /* LaunchScreen.storyboard in Resources */,
 				3FD6DB2D1DDCEA5F0078CA45 /* GoogleService-Info.plist in Resources */,
 				31D78BA61DDE77BD00FA855B /* DropDownMenuKit.xcassets in Resources */,
@@ -342,6 +349,7 @@
 				E4974AF01DDE1C3700698B81 /* ContactsCollectionViewCell.swift in Sources */,
 				3F0BE6891DDCB1F5007E4FD0 /* LoginViewController.swift in Sources */,
 				3F0BE6A81DDCB92D007E4FD0 /* SendCardViewController.swift in Sources */,
+				3173A1C41DECC36F003385B6 /* AnimatedSettingsViewController.swift in Sources */,
 				3F0BE6871DDCB1F5007E4FD0 /* AppDelegate.swift in Sources */,
 				3F0BE6991DDCB30F007E4FD0 /* ContactsViewController.swift in Sources */,
 				E49BA3A71DE3443B0010A7A4 /* Constants.swift in Sources */,
