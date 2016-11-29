@@ -283,7 +283,7 @@ extension ContactsViewController {
         cameraController.allowsEditing = true //allow video editing
         cameraController.cameraCaptureMode = .video
         cameraController.delegate = delegate
-        cameraController.videoQuality = .typeIFrame1280x720
+        cameraController.videoQuality = .typeHigh
         present(cameraController, animated: true, completion: nil)
         return true
     }

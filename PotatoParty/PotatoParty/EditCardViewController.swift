@@ -54,13 +54,11 @@ class EditCardViewController: UIViewController {
         
         addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.playerReachedEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
-        // Do any additional setup after loading the view.
         
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -108,7 +106,6 @@ class EditCardViewController: UIViewController {
         
         do {
             try compositionVideoTrack.insertTimeRange(timerange, of: videoTrack, at: kCMTimeZero)
-            //compositionVideoTrack.preferredTransform = videoTrack.preferredTransform
         } catch  {
             print("composing video track error")
             print(error)
@@ -125,8 +122,6 @@ class EditCardViewController: UIViewController {
             }
         }
         
-        let size = videoTrack.naturalSize
-
         // Set up watermark/overlays (probably should use snapkit)
 //        let watermark = UIImage(named: "watermark.png")
 //        let watermarklayer = CALayer()
@@ -144,26 +139,20 @@ class EditCardViewController: UIViewController {
         let overlayImage = UIImage(named: "thankYou")
         let overlayLayer = CALayer()
         overlayLayer.contents = overlayImage?.cgImage
-        overlayLayer.masksToBounds = true
-        overlayLayer.frame = CGRect(x: 0, y: 0, width: playerView.playerLayer.frame.width, height: playerView.playerLayer.frame.height)
+        overlayLayer.frame = playerView.playerLayer.bounds
         
         let videoLayer = CALayer()
         videoLayer.backgroundColor = UIColor.blue.cgColor
-        videoLayer.frame = CGRect(x: 0, y: 0, width: playerView.playerLayer.frame.width, height: playerView.playerLayer.frame.height)
+        videoLayer.frame = overlayLayer.frame
         
         let parentLayer = CALayer()
-        parentLayer.contentsGravity = AVLayerVideoGravityResize
-        parentLayer.frame = CGRect(x: 0, y: 0, width: size.height, height: size.width)
+        parentLayer.frame = playerView.playerLayer.bounds
         parentLayer.addSublayer(videoLayer)
         parentLayer.addSublayer(overlayLayer)
-        //parentLayer.addSublayer(watermarklayer)
-        //parentLayer.addSublayer(textLayer)
             
         let layercomposition = AVMutableVideoComposition()
         layercomposition.frameDuration = CMTimeMake(1, 30)
         layercomposition.renderSize = view.frame.size
-        
-        print(view.frame.size)
         layercomposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer:videoLayer, in: parentLayer)
         
         let instruction = AVMutableVideoCompositionInstruction()
@@ -186,7 +175,6 @@ class EditCardViewController: UIViewController {
                 print("Success")
                 print(movieUrl)
                 self.fileLocation = movieUrl
-                //send out video
                 break
             case.cancelled:
                 print("Canceled")
@@ -228,25 +216,17 @@ class EditCardViewController: UIViewController {
     func videoCompositionInstructionForTrack(track: AVCompositionTrack, asset: AVAsset) -> AVMutableVideoCompositionLayerInstruction {
         let instruction = AVMutableVideoCompositionLayerInstruction(assetTrack: track)
         let assetTrack = asset.tracks(withMediaType: AVMediaTypeVideo)[0]
-        //playerLayer?.videoGravity
         let transform = assetTrack.preferredTransform
         let assetInfo = orientationFromTransform(transform: transform)
-        print("playerView bounds width is \(playerView.playerLayer.bounds.width)")
-        print("playerView bounds height is \(playerView.playerLayer.bounds.height)")
-        print("assetTrack naturalSize width is \(assetTrack.naturalSize.width)")
-        print("assetTrack naturalSize height is \(assetTrack.naturalSize.height)")
         var scaleToFitRatio = playerView.playerLayer.bounds.width / assetTrack.naturalSize.width
-        print("Scale fit ratios is \(scaleToFitRatio)")
-        
         
         if assetInfo.isPortrait {
-            print("not running")
-            playerView.playerLayer.videoGravity = AVLayerVideoGravityResize
             scaleToFitRatio = playerView.playerLayer.bounds.width / assetTrack.naturalSize.height
-        let scaleFactor = CGAffineTransform(scaleX: scaleToFitRatio, y: scaleToFitRatio)
-        instruction.setTransform(assetTrack.preferredTransform.concatenating(scaleFactor),
+            let scaleFactor = CGAffineTransform(scaleX: scaleToFitRatio, y: scaleToFitRatio)
+            instruction.setTransform(assetTrack.preferredTransform.concatenating(scaleFactor),
                                     at: kCMTimeZero)
-        } else {
+        }
+        else {
             let scaleFactor = CGAffineTransform(scaleX: scaleToFitRatio, y: scaleToFitRatio)
             var concat = assetTrack.preferredTransform.concatenating(scaleFactor).concatenating(CGAffineTransform(translationX: 0, y: playerView.playerLayer.bounds.width / 2))
             if assetInfo.orientation == .down {
@@ -288,7 +268,6 @@ class EditCardViewController: UIViewController {
     }
     
     func playPauseButtonPressed() {
-        print("Play pause button pressedd")
         updatePlayPauseButtonTitle()
     }
     
@@ -298,12 +277,10 @@ class EditCardViewController: UIViewController {
     func updatePlayPauseButtonTitle() {
         if player.rate > 0 {
             //playing
-            print("Pausing video")
             player.pause()
             playPauseButton.setTitle("Play", for: .normal)
         } else {
             //paused / stopped
-            print("Playing video")
             player.play()
             playPauseButton.setTitle("Pause", for: .normal)
         }
@@ -332,7 +309,6 @@ class EditCardViewController: UIViewController {
     // MARK: Navigation
     
     func navToSendCardVC() {
-        print("save button pressed!!!")
         let destVC = SendCardViewController()
         destVC.videoURL = fileLocation
         navigationController?.pushViewController(destVC, animated: true)
