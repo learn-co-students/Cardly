@@ -64,10 +64,6 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
             message.body = "Thank You so much!"
             
             present(message, animated: true, completion: nil)
-            
-            videoWasSent {
-                shared.selectedContacts.removeAll()
-            }
            
         } else {
             print("error: MAIL compose view controller canNOT send mail")
@@ -75,10 +71,17 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
     }
     
     public func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
-        controller.dismiss(animated: true)
-        print("dismiss compose mail controller")
-        successSent()
-        
+        switch result {
+        case .sent:
+            videoWasSent {
+                shared.selectedContacts.removeAll()
+            }
+            controller.dismiss(animated: true)
+            let destVC = ContactsViewController()
+            navigationController?.pushViewController(destVC, animated: true)
+        default:
+            controller.dismiss(animated: true)
+        }
     }
     
     func sendEmailButtonTapped(){
@@ -113,9 +116,6 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
             
             present(mail, animated: true)
             
-            videoWasSent {
-                shared.selectedContacts.removeAll()
-            }
             
             
         } else {
@@ -126,9 +126,20 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
     }
     
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-        controller.dismiss(animated: true)
-        print("dismiss compose mail controller")
-        successSent()
+        
+        switch result {
+        case .sent:
+            videoWasSent {
+                shared.selectedContacts.removeAll()
+            }
+            controller.dismiss(animated: true)
+            let destVC = ContactsViewController()
+            navigationController?.pushViewController(destVC, animated: true)
+        default:
+            controller.dismiss(animated: true)
+        }
+        
+        
     }
     
     //Let user know e-mail was sent successfully - alert controller? 
