@@ -81,8 +81,8 @@ extension AddContactViewController {
         
         addButton.backgroundColor = UIColor.blue
         addButton.setTitle("Add", for: .normal)
-        addButton.addTarget(self, action: #selector(self.addButtonTapped), for: .touchUpInside)
-        
+        addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
+
         // Import contacts
         view.addSubview(importContactsButton)
         importContactsButton.snp.makeConstraints { (make) in
