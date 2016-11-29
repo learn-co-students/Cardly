@@ -52,7 +52,7 @@ open class GuillotineTransitionAnimation: NSObject {
     }
     
     fileprivate var displayLink: CADisplayLink!
-    fileprivate var vectorDY: CGFloat = 1500
+    fileprivate var vectorDY: CGFloat = 20000
     fileprivate var fromYPresentationLandscapeAdjustment: CGFloat = 1.0
     fileprivate var fromYDismissalLandscapeAdjustment: CGFloat = 1.0
     fileprivate var toYDismissalLandscapeAdjustment: CGFloat = 1.0
@@ -60,7 +60,7 @@ open class GuillotineTransitionAnimation: NSObject {
     fileprivate var fromYDismissalAdjustment: CGFloat = 1.0
     fileprivate var toXPresentationLandscapeAdjustment: CGFloat = 1.0
     fileprivate let initialMenuRotationAngle: CGFloat = -90
-    fileprivate let menuElasticity: CGFloat = 0.6
+    fileprivate let menuElasticity: CGFloat = 0.45
     fileprivate let vectorDYCoefficient: Double = 2 / M_PI
     fileprivate var topOffset: CGFloat = 0
     fileprivate var anchorPoint: CGPoint!
@@ -254,7 +254,7 @@ fileprivate extension GuillotineTransitionAnimation {
                 fromY = context.containerView.frame.height + fromYPresentationAdjustment
                 toX = fromX
                 toY = fromY + 1
-            }
+        }
         } else {
             if supportView != nil {
                 showHostTitleLabel(true, animated: true)

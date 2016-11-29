@@ -12,7 +12,7 @@ import FirebaseDatabase
 import FirebaseAuth
 import SnapKit
 import MobileCoreServices
-import GuillotineMenu
+// import GuillotineMenu
 
 class ContactsViewController: UIViewController, DropDownMenuDelegate{
     
@@ -240,6 +240,7 @@ extension ContactsViewController {
 extension ContactsViewController: BottomNavBarDelegate {
     
     func navToSettingsVC(_ sender: UIButton) {
+        print("hey im being pressed!!!")
         let destVC = SettingsViewController()
         //navigationController?.pushViewController(destVC, animated: true)
         
@@ -251,9 +252,11 @@ extension ContactsViewController: BottomNavBarDelegate {
 //        
 //        
 //        view.backgroundColor = UIColor.white
-        
+//       
+        presentationAnimator.animationDuration = 0.2
+        //presentationAnimator.
         presentationAnimator.animationDelegate = destVC as? GuillotineAnimationDelegate
-        presentationAnimator.supportView = navigationController!.navigationBar
+        //presentationAnimator.supportView = navigationController!.navigationBar
         presentationAnimator.presentButton = view
         present(destVC, animated: true, completion: nil)
 

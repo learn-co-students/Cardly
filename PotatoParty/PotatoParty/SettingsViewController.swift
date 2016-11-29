@@ -9,10 +9,12 @@
 import UIKit
 import SnapKit
 import FirebaseAuth
-import GuillotineMenu
+// import GuillotineMenu
 
 class SettingsViewController: UIViewController, GuillotineMenu {
     
+    var changeEmailButton = UIButton()
+    var changePasswordButton = UIButton()
     var logoutButton = UIButton()
     var dismissButton: UIButton?
     var titleLabel: UILabel?
@@ -23,12 +25,30 @@ class SettingsViewController: UIViewController, GuillotineMenu {
         layoutElements()
         
         
+        let closeBtn = UIButton()
+        self.view.addSubview(closeBtn)
+        closeBtn.setTitle("Close", for: .normal)
+        closeBtn.addTarget(self, action: #selector(dismissButtonTapped(_:)), for: .touchUpInside)
+        
+        closeBtn.snp.makeConstraints { (make) in
+            make.left.equalTo(self.view).offset(20)
+            make.top.equalTo(self.view).offset(35)
+            make.width.equalTo(80)
+            make.height.equalTo(20)
+        }
+        
         dismissButton = {
             let button = UIButton(frame: .zero)
             button.setImage(UIImage(named: "ic_menu"), for: .normal)
             button.addTarget(self, action: #selector(dismissButtonTapped(_:)), for: .touchUpInside)
             return button
         }()
+        
+        
+        
+        
+        
+        
         
         titleLabel = {
             let label = UILabel()
@@ -41,14 +61,25 @@ class SettingsViewController: UIViewController, GuillotineMenu {
         }()
     }
     
-    func dismissButtonTapped(_ sender: UIButton) {
-        presentingViewController!.dismiss(animated: true, completion: nil)
-    }
-
+    // MARK - Methods (mostly buttons)
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+//    func changeEmailButtonTapped() {
+//
+//
+//    }
+    
+
+//    func changePasswordButtonTapped() {
+//
+//
+//    }
+
+
     
     func logout() {
         do {
@@ -60,8 +91,14 @@ class SettingsViewController: UIViewController, GuillotineMenu {
             print("Logout error = (error.localizedDescription)")
         }
     }
+    
+    func dismissButtonTapped(_ sender: UIButton) {
+        presentingViewController!.dismiss(animated: true, completion: nil)
+    }
 
 }
+
+// MARK - Settings Animation
 
 extension SettingsViewController: GuillotineAnimationDelegate {
     

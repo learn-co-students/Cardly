@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import GuillotineMenu
+// import GuillotineMenu
 
 class AnimatedSettingsViewController: UIViewController {
     
