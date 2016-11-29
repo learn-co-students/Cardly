@@ -10,7 +10,7 @@ import UIKit
 extension SettingsViewController {
     
     func layoutElements() {
-        view.backgroundColor = UIColor.green
+        view.backgroundColor = UIColor.cyan
         view.addSubview(logoutButton)
         logoutButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
