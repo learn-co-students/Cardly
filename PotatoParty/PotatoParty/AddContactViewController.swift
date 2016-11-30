@@ -35,6 +35,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         layoutElements()
         emailTextField.delegate = self
         phoneTextField.delegate = self
+        nameTextField.delegate = self
         print("Group selected: \(groupSelected)")
         authorizeAddressBook { (accessGranted) in
             print(accessGranted)
@@ -132,7 +133,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     
     func addButtonTapped() {
         
-        if validatePhone(phone: phoneTextField.text!) && validateEmail(email: emailTextField.text!) {
+        if validatePhone(phone: phoneTextField.text!) && validateEmail(email: emailTextField.text!) && validateName(name: nameTextField.text!) {
             
             guard let email = emailTextField.text, let name = nameTextField.text, let phone = phoneTextField.text else { return }
             let contact = Contact(fullName: name, email: email, phone: phone)
@@ -170,7 +171,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
             }
         } else {
             shake(textfield: emailTextField)
-            
+            shake(textfield: nameTextField)
             shake(textfield: phoneTextField)
         }
     }
@@ -187,6 +188,10 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
             isValid = true
         }
         return isValid
+    }
+    
+    func validateName(name: String) -> Bool {
+        return name.characters.count >= 1
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -207,7 +212,12 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
                 print ("non valid email")
             }
         case nameTextField:
-            return
+            if validateName(name: nameTextField.text!){
+                print("valid name")
+            } else {
+                shake(textfield: nameTextField)
+                print("enter your name")
+            }
         default:
             return
         }
