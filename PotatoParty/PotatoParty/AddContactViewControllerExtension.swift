@@ -43,9 +43,10 @@ extension AddContactViewController {
         
         emailTextField.backgroundColor = UIColor.blue
         emailTextField.placeholder = "example@serviceprovider"
+
         emailTextField.textAlignment = .center
         emailTextField.autocapitalizationType = UITextAutocapitalizationType.none
-    
+
         
         // Add Phone Number
         view.addSubview(phoneTextField)
@@ -74,7 +75,7 @@ extension AddContactViewController {
         }
         
         groupPickerView.backgroundColor = UIColor.blue
-
+        
         // Add button
         view.addSubview(addButton)
         addButton.snp.makeConstraints { (make) in
@@ -87,7 +88,7 @@ extension AddContactViewController {
         addButton.backgroundColor = UIColor.gray
         addButton.setTitle("Add", for: .normal)
         addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
-
+        
         // Import contacts
         view.addSubview(importContactsButton)
         importContactsButton.snp.makeConstraints { (make) in

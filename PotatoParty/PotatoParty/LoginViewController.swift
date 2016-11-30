@@ -33,6 +33,8 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutViewAndContraints()
+        let tapGesture = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        view.addGestureRecognizer(tapGesture)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -107,6 +109,10 @@ extension LoginViewController {
                 self.present(alertController, animated: true, completion: nil)
             }
         })
+    }
+    
+    func dismissKeyboard() {
+        view.endEditing(true)
     }
     
 }

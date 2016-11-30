@@ -26,11 +26,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.initialVC = LoginViewController()
         }
         else {
-
+            
             let rootVC = ContactsViewController()
             let navVC = UINavigationController(rootViewController: rootVC)
             self.initialVC = navVC
-
+            
         }
         
         let frame = UIScreen.main.bounds
@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window!.makeKeyAndVisible()
         
         return true
-    
+        
     }
     
     override init() {
