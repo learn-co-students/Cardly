@@ -21,7 +21,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate{
     var bottomNavBar: BottomNavBarView!
     var navigationBarMenu: DropDownMenu!
     var titleView: DropDownTitleView!
-    
+    var contactsBackgroundImage: UIImage = #imageLiteral(resourceName: "contactsAndSettingsVCBackgroundImage")
     var dismissButton: UIButton?
     var titleLabel: UILabel?
     

@@ -12,6 +12,7 @@ extension SettingsViewController {
     func layoutElements() {
         addBlurEffect()
         view.backgroundColor = UIColor.cyan
+      //  view.backgroundColor = UIColor.init(patternImage: settingsBackgroundImage)
         view.addSubview(logoutButton)
         view.addSubview(changeEmailButton)
         view.addSubview(changePasswordButton)

@@ -17,6 +17,7 @@ class SettingsViewController: UIViewController {
     var logoutButton = UIButton()
     var dismissButton: UIButton?
     var titleLabel: UILabel?
+  //  var settingsBackgroundImage: UIImage = #imageLiteral(resourceName: "contactsAndSettingsVCBackgroundImage")
       
     override func viewDidLoad() {
         super.viewDidLoad()
