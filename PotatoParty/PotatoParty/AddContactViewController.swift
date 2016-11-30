@@ -36,6 +36,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         emailTextField.delegate = self
         phoneTextField.delegate = self
         nameTextField.delegate = self
+        addButton.isEnabled = false
         print("Group selected: \(groupSelected)")
         authorizeAddressBook { (accessGranted) in
             print(accessGranted)
@@ -133,95 +134,152 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     
     func addButtonTapped() {
         
-        if validatePhone(phone: phoneTextField.text!) && validateEmail(email: emailTextField.text!) && validateName(name: nameTextField.text!) {
+//        let validPhone = validate(phoneTextField: phoneTextField)
+//        let validName = validate(nameTextField: nameTextField)
+//        let validEmail = validate(emailTextField: emailTextField)
+        guard validCheck() else { return }
+        
+        guard let email = emailTextField.text, let name = nameTextField.text, let phone = phoneTextField.text else { return }
+        let contact = Contact(fullName: name, email: email, phone: phone)
+        
+        // Add to contacts bucket
+        let contactsRef = FIRDatabase.database().reference(withPath: "contacts")
+        let userContactsRef = contactsRef.child("\(uid)/all/")
+        let contactItemRef = userContactsRef.childByAutoId()
+        contactItemRef.setValue(contact.toAny())
+        
+        nameTextField.text = ""
+        emailTextField.text = ""
+        phoneTextField.text = ""
+        nameTextField.placeholder = "Name"
+        emailTextField.placeholder = "example@serviceprovider"
+        phoneTextField.placeholder = "2224446666"
+        
+        
+        if groupSelected != "All" {
+            let path = "\(uid)/\(groupSelected.lowercased())/\(contactItemRef.key)/"
+            let groupContactsRef = contactsRef.child(path)
+            groupContactsRef.setValue(contact.toAny())
             
-            guard let email = emailTextField.text, let name = nameTextField.text, let phone = phoneTextField.text else { return }
-            let contact = Contact(fullName: name, email: email, phone: phone)
-            
-            // Add to contacts bucket
-            let contactsRef = FIRDatabase.database().reference(withPath: "contacts")
-            let userContactsRef = contactsRef.child("\(uid)/all/")
-            let contactItemRef = userContactsRef.childByAutoId()
-            contactItemRef.setValue(contact.toAny())
-            
-            nameTextField.text = ""
-            emailTextField.text = ""
-            phoneTextField.text = ""
-            nameTextField.placeholder = "Name"
-            emailTextField.placeholder = "example@serviceprovider"
-            phoneTextField.placeholder = "2224446666"
-            
-            
-            if groupSelected != "All" {
-                let path = "\(uid)/\(groupSelected.lowercased())/\(contactItemRef.key)/"
-                let groupContactsRef = contactsRef.child(path)
-                groupContactsRef.setValue(contact.toAny())
-                
-            }
-            
-            // Add to groups bucket
-            let groupsRef = FIRDatabase.database().reference(withPath: "groups")
-            let groupsUserRef = groupsRef.child("\(uid)/all/")
-            groupsUserRef.setValue(contact.toAny())
-            
-            if groupSelected != "All" {
-                let path = "\(uid)/\(groupSelected.lowercased())/\(contactItemRef.key)/"
-                let groupContactsRef = groupsRef.child(path)
-                groupContactsRef.setValue(contact.toAny())
-            }
-        } else {
-            shake(textfield: emailTextField)
-            shake(textfield: nameTextField)
-            shake(textfield: phoneTextField)
+        }
+        
+        // Add to groups bucket
+        let groupsRef = FIRDatabase.database().reference(withPath: "groups")
+        let groupsUserRef = groupsRef.child("\(uid)/all/")
+        groupsUserRef.setValue(contact.toAny())
+        
+        if groupSelected != "All" {
+            let path = "\(uid)/\(groupSelected.lowercased())/\(contactItemRef.key)/"
+            let groupContactsRef = groupsRef.child(path)
+            groupContactsRef.setValue(contact.toAny())
         }
     }
     
     //Validating Fields
-    func validateEmail(email: String) -> Bool {
-        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}"
-        return NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: email)
-    }
-    func validatePhone(phone: String) -> Bool {
-        var isValid = false
-        let characterArray = [Character](phone.characters)
-        if characterArray.count == 10 {
-            isValid = true
-        }
-        return isValid
-    }
     
-    func validateName(name: String) -> Bool {
-        return name.characters.count >= 1
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        
-        switch textField {
-        case phoneTextField:
-            if validatePhone(phone: phoneTextField.text!){
-                print("valid phone")
-            } else {
-                print("not valid phone")
-                shake(textfield: phoneTextField)
-            }
-        case emailTextField:
-            if validateEmail(email: emailTextField.text!) {
-                print("Valid Email")
-            } else {
-                shake(textfield: emailTextField)
-                print ("non valid email")
-            }
-        case nameTextField:
-            if validateName(name: nameTextField.text!){
-                print("valid name")
-            } else {
-                shake(textfield: nameTextField)
-                print("enter your name")
-            }
-        default:
-            return
+//    func validate(phoneTextField: UITextField) -> Bool {
+//        
+//        let text = phoneTextField.text ?? ""
+//        
+//        if text.characters.count == 10 {
+//            
+//            return true
+//            
+//        } else {
+//            
+//            shake(textfield: phoneTextField)
+//            
+//            return false
+//        }
+//        
+//    }
+//    
+//    func validate(nameTextField: UITextField) -> Bool {
+//        
+//        let text = nameTextField.text ?? ""
+//        
+//        if text.characters.count >= 1 {
+//            
+//            return true
+//            
+//        } else {
+//            
+//            shake(textfield: nameTextField)
+//            
+//            return false
+//        }
+//    }
+//    
+//    func validate(emailTextField: UITextField) -> Bool {
+//        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}"
+//        if NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: emailTextField) {
+//            return true
+//        } else {
+//            shake(textfield: emailTextField)
+//            return false
+//        }
+//        
+//    }
+        func validateEmail(email: String) -> Bool {
+            let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}"
+            return NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: email)
         }
+    
+        func validatePhone(phone: String) -> Bool {
+            let characterArray = [Character](phone.characters)
+            return characterArray.count == 10
+        }
+    
+        func validateName(name: String) -> Bool {
+            return name.characters.count >= 1
+        }
+    
+        func textFieldDidEndEditing(_ textField: UITextField) {
+    
+            switch textField {
+            case phoneTextField:
+                if validatePhone(phone: phoneTextField.text!){
+                    if validCheck() {
+                        enableAddButton()
+                    }
+                    print("valid phone")
+                } else {
+                    print("not valid phone")
+                    shake(textfield: phoneTextField)
+                }
+            case emailTextField:
+                if validateEmail(email: emailTextField.text!) {
+                    print("Valid Email")
+                    if validCheck() {
+                        enableAddButton()
+                    }
+                } else {
+                    shake(textfield: emailTextField)
+                    print ("non valid email")
+                }
+            case nameTextField:
+                if validateName(name: nameTextField.text!){
+                    if validCheck() {
+                        enableAddButton()
+                    }
+                    print("valid name")
+                } else {
+                    shake(textfield: nameTextField)
+                    print("enter your name")
+                }
+            default:
+                return
+            }
+    
+        }
+    
+    func validCheck() -> Bool {
+        return validateName(name: nameTextField.text!) && validatePhone(phone: phoneTextField.text!) && validateEmail(email: emailTextField.text!)
         
+    }
+    func enableAddButton() {
+        addButton.isEnabled = true
+        addButton.backgroundColor = UIColor.blue
     }
     
     func shake(textfield: UITextField) {

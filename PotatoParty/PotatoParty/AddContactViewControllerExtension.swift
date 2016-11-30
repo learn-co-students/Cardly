@@ -84,7 +84,7 @@ extension AddContactViewController {
             make.height.equalTo(nameTextField.snp.height).multipliedBy(0.5)
         }
         
-        addButton.backgroundColor = UIColor.blue
+        addButton.backgroundColor = UIColor.gray
         addButton.setTitle("Add", for: .normal)
         addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
 
