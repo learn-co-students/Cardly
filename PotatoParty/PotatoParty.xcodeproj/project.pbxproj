@@ -11,8 +11,6 @@
 		3173A1C41DECC36F003385B6 /* AnimatedSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3173A1C31DECC36F003385B6 /* AnimatedSettingsViewController.swift */; };
 		3182D5191DEF706B0090AB2E /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3182D5131DEF706B0090AB2E /* ContactsViewController.swift */; };
 		3182D51A1DEF706B0090AB2E /* EditCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3182D5141DEF706B0090AB2E /* EditCardViewController.swift */; };
-		3182D51B1DEF706B0090AB2E /* RecordCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3182D5151DEF706B0090AB2E /* RecordCardViewController.swift */; };
-		3182D51C1DEF706B0090AB2E /* RecordCardViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3182D5161DEF706B0090AB2E /* RecordCardViewControllerExtension.swift */; };
 		3182D51D1DEF706B0090AB2E /* SendCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3182D5171DEF706B0090AB2E /* SendCardViewController.swift */; };
 		3182D51E1DEF706B0090AB2E /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3182D5181DEF706B0090AB2E /* SettingsViewController.swift */; };
 		3182D5201DEF71E70090AB2E /* ic_menu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3182D51F1DEF71E70090AB2E /* ic_menu@3x.png */; };
@@ -48,8 +46,6 @@
 		3173A1C31DECC36F003385B6 /* AnimatedSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatedSettingsViewController.swift; sourceTree = "<group>"; };
 		3182D5131DEF706B0090AB2E /* ContactsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
 		3182D5141DEF706B0090AB2E /* EditCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditCardViewController.swift; sourceTree = "<group>"; };
-		3182D5151DEF706B0090AB2E /* RecordCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordCardViewController.swift; sourceTree = "<group>"; };
-		3182D5161DEF706B0090AB2E /* RecordCardViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordCardViewControllerExtension.swift; sourceTree = "<group>"; };
 		3182D5171DEF706B0090AB2E /* SendCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendCardViewController.swift; sourceTree = "<group>"; };
 		3182D5181DEF706B0090AB2E /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		3182D51F1DEF71E70090AB2E /* ic_menu@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_menu@3x.png"; path = "PotatoParty/ic_menu@3x.png"; sourceTree = "<group>"; };
@@ -143,8 +139,6 @@
 			children = (
 				3182D5131DEF706B0090AB2E /* ContactsViewController.swift */,
 				3182D5141DEF706B0090AB2E /* EditCardViewController.swift */,
-				3182D5151DEF706B0090AB2E /* RecordCardViewController.swift */,
-				3182D5161DEF706B0090AB2E /* RecordCardViewControllerExtension.swift */,
 				3182D5171DEF706B0090AB2E /* SendCardViewController.swift */,
 				3182D5181DEF706B0090AB2E /* SettingsViewController.swift */,
 				3F0BE6881DDCB1F5007E4FD0 /* LoginViewController.swift */,
@@ -355,7 +349,6 @@
 				3F37150D1DE4A21B006B3EAD /* EditCardViewControllerExtension.swift in Sources */,
 				31D78BA41DDE77BD00FA855B /* DropDownMenu.swift in Sources */,
 				31D78BA51DDE77BD00FA855B /* DropDownMenuCell.swift in Sources */,
-				3182D51C1DEF706B0090AB2E /* RecordCardViewControllerExtension.swift in Sources */,
 				3F70B6C61DE351BD0051B349 /* SettingsViewControllerExtension.swift in Sources */,
 				3182D51A1DEF706B0090AB2E /* EditCardViewController.swift in Sources */,
 				3182D5191DEF706B0090AB2E /* ContactsViewController.swift in Sources */,
@@ -364,7 +357,6 @@
 				3173A1C41DECC36F003385B6 /* AnimatedSettingsViewController.swift in Sources */,
 				3F0BE6871DDCB1F5007E4FD0 /* AppDelegate.swift in Sources */,
 				E49BA3A71DE3443B0010A7A4 /* Constants.swift in Sources */,
-				3182D51B1DEF706B0090AB2E /* RecordCardViewController.swift in Sources */,
 				3F196C541DDE3AFE00497BDD /* Group.swift in Sources */,
 				E4974AEE1DDE0FE100698B81 /* ContactsCollectionView.swift in Sources */,
 				3FD6DB301DDCFD7A0078CA45 /* LoginViewControllerExtension.swift in Sources */,

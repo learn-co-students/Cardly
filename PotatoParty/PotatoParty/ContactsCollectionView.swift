@@ -15,7 +15,7 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     let reuseIdentifier = "cell"
     let layout = UICollectionViewFlowLayout()
     var contacts: [Contact] = []
-    var contactsBackgroundImage: UIImage = #imageLiteral(resourceName: "contactsAndSettingsVCBackgroundImage")
+  //  var contactsBackgroundImage: UIImage = #imageLiteral(resourceName: "contactsAndSettingsVCBackgroundImage")
     let shared = User.shared
     
     // Inititalizers
