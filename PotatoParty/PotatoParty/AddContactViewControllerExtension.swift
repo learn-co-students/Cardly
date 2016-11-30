@@ -41,11 +41,21 @@ extension AddContactViewController {
         
         emailTextField.backgroundColor = UIColor.blue
         emailTextField.placeholder = "example@serviceprovider"
-    
+        
         
         // Add Phone Number
+        view.addSubview(phoneTextField)
+        phoneTextField.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(emailTextField.snp.bottomMargin).offset(40)
+            make.width.equalTo(nameTextField)
+            make.height.equalTo(nameTextField)
+        }
         
-
+        phoneTextField.backgroundColor = UIColor.blue
+        phoneTextField.placeholder = "2224446666"
+        
+        
         
         // Group
         groupPickerView.dataSource = self
@@ -53,13 +63,13 @@ extension AddContactViewController {
         view.addSubview(groupPickerView)
         groupPickerView.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(emailTextField.snp.bottomMargin).offset(40)
-            make.width.equalTo(emailTextField)
-            make.height.equalTo(emailTextField)
+            make.topMargin.equalTo(phoneTextField.snp.bottomMargin).offset(40)
+            make.width.equalTo(phoneTextField)
+            make.height.equalTo(phoneTextField)
         }
         
         groupPickerView.backgroundColor = UIColor.blue
-
+        
         // Add button
         view.addSubview(addButton)
         addButton.snp.makeConstraints { (make) in
@@ -71,7 +81,7 @@ extension AddContactViewController {
         
         addButton.backgroundColor = UIColor.blue
         addButton.setTitle("Add", for: .normal)
-        addButton.addTarget(self, action: #selector(self.addButtonTapped), for: .touchUpInside)
+        addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         
         // Import contacts
         view.addSubview(importContactsButton)

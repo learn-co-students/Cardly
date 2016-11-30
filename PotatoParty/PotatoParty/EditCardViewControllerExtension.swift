@@ -22,7 +22,7 @@ extension EditCardViewController {
         playPauseButton.backgroundColor = UIColor.red
         view.addSubview(playPauseButton)
         playPauseButton.snp.makeConstraints { (make) in
-            make.width.equalToSuperview().dividedBy(3)
+            make.width.equalToSuperview().dividedBy(3).offset(-40)
             make.height.equalTo(self.playPauseButton.snp.width).dividedBy(2)
             make.bottomMargin.equalToSuperview().offset(-20)
             make.leadingMargin.equalToSuperview()
@@ -39,5 +39,16 @@ extension EditCardViewController {
             make.trailingMargin.equalToSuperview()
         }
         saveButton.addTarget(self, action: #selector(self.navToSendCardVC), for: .touchUpInside)
+        
+        addOverlayButton.backgroundColor = UIColor.orange
+        addOverlayButton.setTitle("Overlay", for: .normal)
+        view.addSubview(addOverlayButton)
+        addOverlayButton.snp.makeConstraints { (make) in
+            make.height.equalTo(playPauseButton.snp.height)
+            make.width.equalTo(playPauseButton.snp.width)
+            make.centerX.equalToSuperview()
+            make.bottomMargin.equalToSuperview().offset(-20)
+        }
+        addOverlayButton.addTarget(self, action: #selector(self.exportWithWatermark), for: .touchUpInside)
     }
 }

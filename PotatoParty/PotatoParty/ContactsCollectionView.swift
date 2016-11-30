@@ -36,7 +36,7 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.contacts.count
-    
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -44,12 +44,16 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         
         cell.contact = contacts[indexPath.row]
         
+        if cell.contact.is_sent == true {
+            cell.alpha = 0.5
+        }
+        
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("selected item")
-        print(#function)    
+        print(#function)
         
         var selectedContact = contacts[indexPath.row]
         selectedContact.isChosen = !selectedContact.isChosen
@@ -64,20 +68,20 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
             selectedCell.handleTap()
             
         } else {
-        
-        shared.selectedContacts.append(selectedContact)
-        
-        contacts[indexPath.row] = selectedContact
-        
-        let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
-        
-        selectedCell.handleTap()
+            
+            shared.selectedContacts.append(selectedContact)
+            
+            contacts[indexPath.row] = selectedContact
+            
+            let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
+            
+            selectedCell.handleTap()
             
         }
-  
+        
     }
     
-
+    
     
     
     // Setup view
@@ -86,8 +90,8 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         dataSource = self
         
         // Collection View properties
-       backgroundColor = UIColor.brown
-      // backgroundColor = UIColor.init(patternImage: contactsBackgroundImage) // NOTE: maybe not pattern
+        backgroundColor = UIColor.brown
+        // backgroundColor = UIColor.init(patternImage: contactsBackgroundImage) // NOTE: maybe not pattern
         
         // Create reuse cell
         register(ContactsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)

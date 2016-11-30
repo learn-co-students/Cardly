@@ -9,11 +9,16 @@
 import UIKit
 import Firebase
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     var initialVC: UIViewController?
+    
+    class func getAppDelegate() -> AppDelegate {
+        return UIApplication.shared.delegate as! AppDelegate
+    }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
@@ -21,11 +26,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.initialVC = LoginViewController()
         }
         else {
-
+            
             let rootVC = ContactsViewController()
             let navVC = UINavigationController(rootViewController: rootVC)
             self.initialVC = navVC
-
+            
         }
         
         let frame = UIScreen.main.bounds
@@ -34,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window!.makeKeyAndVisible()
         
         return true
-    
+        
     }
     
     override init() {

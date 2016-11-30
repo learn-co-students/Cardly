@@ -329,7 +329,9 @@ extension ContactsViewController {
         cameraController.sourceType = .camera
         cameraController.mediaTypes = [kUTTypeMovie as NSString as String]
         cameraController.allowsEditing = true //allow video editing
+        cameraController.cameraCaptureMode = .video
         cameraController.delegate = delegate
+        cameraController.videoQuality = .typeHigh
         present(cameraController, animated: true, completion: nil)
         return true
     }
