@@ -10,19 +10,19 @@ import UIKit
 import SnapKit
 import FirebaseAuth
 
-class SettingsViewController: UIViewController, GuillotineMenu {
+class SettingsViewController: UIViewController {
     
     var changeEmailButton = UIButton()
     var changePasswordButton = UIButton()
     var logoutButton = UIButton()
     var dismissButton: UIButton?
     var titleLabel: UILabel?
-    
+
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         
         layoutElements()
-        
         
         let closeBtn = UIButton()
         self.view.addSubview(closeBtn)
@@ -42,9 +42,7 @@ class SettingsViewController: UIViewController, GuillotineMenu {
 //            button.addTarget(self, action: #selector(dismissButtonTapped(_:)), for: .touchUpInside)
 //            return button
 //        }()
-        
-        
-        
+
         titleLabel = {
             let label = UILabel()
             label.numberOfLines = 1;
@@ -55,6 +53,8 @@ class SettingsViewController: UIViewController, GuillotineMenu {
             return label
         }()
     }
+    
+
     
     // MARK - Methods (mostly buttons)
     
