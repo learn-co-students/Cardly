@@ -33,7 +33,8 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         
         super.viewDidLoad()
         layoutElements()
-        
+        emailTextField.delegate = self
+        phoneTextField.delegate = self
         print("Group selected: \(groupSelected)")
         authorizeAddressBook { (accessGranted) in
             print(accessGranted)
@@ -91,7 +92,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         
     }
     
-
+    
     
     func contactPickerDidCancel(_ picker: CNContactPickerViewController) {
         print("Cancel Contact Picker")
@@ -130,41 +131,48 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     
     
     func addButtonTapped() {
-        guard let email = emailTextField.text, let name = nameTextField.text, let phone = phoneTextField.text else { return }
-        let contact = Contact(fullName: name, email: email, phone: phone)
         
-        // Add to contacts bucket
-        let contactsRef = FIRDatabase.database().reference(withPath: "contacts")
-        let userContactsRef = contactsRef.child("\(uid)/all/")
-        let contactItemRef = userContactsRef.childByAutoId()
-        contactItemRef.setValue(contact.toAny())
-        
-        nameTextField.text = ""
-        emailTextField.text = ""
-        phoneTextField.text = ""
-        nameTextField.placeholder = "Name"
-        emailTextField.placeholder = "example@serviceprovider"
-        phoneTextField.placeholder = "2224446666"
-        
-        
-        if groupSelected != "All" {
-            let path = "\(uid)/\(groupSelected.lowercased())/\(contactItemRef.key)/"
-            let groupContactsRef = contactsRef.child(path)
-            groupContactsRef.setValue(contact.toAny())
+        if validatePhone(phone: phoneTextField.text!) && validateEmail(email: emailTextField.text!) {
             
+            guard let email = emailTextField.text, let name = nameTextField.text, let phone = phoneTextField.text else { return }
+            let contact = Contact(fullName: name, email: email, phone: phone)
+            
+            // Add to contacts bucket
+            let contactsRef = FIRDatabase.database().reference(withPath: "contacts")
+            let userContactsRef = contactsRef.child("\(uid)/all/")
+            let contactItemRef = userContactsRef.childByAutoId()
+            contactItemRef.setValue(contact.toAny())
+            
+            nameTextField.text = ""
+            emailTextField.text = ""
+            phoneTextField.text = ""
+            nameTextField.placeholder = "Name"
+            emailTextField.placeholder = "example@serviceprovider"
+            phoneTextField.placeholder = "2224446666"
+            
+            
+            if groupSelected != "All" {
+                let path = "\(uid)/\(groupSelected.lowercased())/\(contactItemRef.key)/"
+                let groupContactsRef = contactsRef.child(path)
+                groupContactsRef.setValue(contact.toAny())
+                
+            }
+            
+            // Add to groups bucket
+            let groupsRef = FIRDatabase.database().reference(withPath: "groups")
+            let groupsUserRef = groupsRef.child("\(uid)/all/")
+            groupsUserRef.setValue(contact.toAny())
+            
+            if groupSelected != "All" {
+                let path = "\(uid)/\(groupSelected.lowercased())/\(contactItemRef.key)/"
+                let groupContactsRef = groupsRef.child(path)
+                groupContactsRef.setValue(contact.toAny())
+            }
+        } else {
+            shake(textfield: emailTextField)
+            
+            shake(textfield: phoneTextField)
         }
-        
-        // Add to groups bucket
-        let groupsRef = FIRDatabase.database().reference(withPath: "groups")
-        let groupsUserRef = groupsRef.child("\(uid)/all/")
-        groupsUserRef.setValue(contact.toAny())
-        
-        if groupSelected != "All" {
-            let path = "\(uid)/\(groupSelected.lowercased())/\(contactItemRef.key)/"
-            let groupContactsRef = groupsRef.child(path)
-            groupContactsRef.setValue(contact.toAny())
-        }
-        
     }
     
     //Validating Fields
@@ -172,15 +180,46 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}"
         return NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: email)
     }
+    func validatePhone(phone: String) -> Bool {
+        var isValid = false
+        let characterArray = [Character](phone.characters)
+        if characterArray.count == 10 {
+            isValid = true
+        }
+        return isValid
+    }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField == emailTextField {
+        
+        switch textField {
+        case phoneTextField:
+            if validatePhone(phone: phoneTextField.text!){
+                print("valid phone")
+            } else {
+                print("not valid phone")
+                shake(textfield: phoneTextField)
+            }
+        case emailTextField:
             if validateEmail(email: emailTextField.text!) {
                 print("Valid Email")
             } else {
+                shake(textfield: emailTextField)
                 print ("non valid email")
             }
+        case nameTextField:
+            return
+        default:
+            return
         }
+        
     }
-
+    
+    func shake(textfield: UITextField) {
+        let animation = CAKeyframeAnimation(keyPath: "transform.translation.x")
+        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+        animation.duration = 0.6
+        animation.values = [-20.0, 20.0, -20.0, 20.0, -10.0, 10.0, -5.0, 5.0, 0.0 ]
+        textfield.layer.add(animation, forKey: "shake")
+        
+    }
 }
