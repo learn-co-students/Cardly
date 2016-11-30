@@ -17,8 +17,7 @@ class SettingsViewController: UIViewController {
     var logoutButton = UIButton()
     var dismissButton: UIButton?
     var titleLabel: UILabel?
-
-   
+      
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -63,6 +62,14 @@ class SettingsViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    func addBlurEffect() {
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.extraLight)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(blurEffectView)
+    }
+    
     func logout() {
         do {
             try FIRAuth.auth()?.signOut()
@@ -80,13 +87,13 @@ class SettingsViewController: UIViewController {
     
     
     func changeEmailButtonTapped(_sender: UIButton) {
-        
+        // TO DO
         
     }
     
     
     func changePasswordButtonTapped(_sender: UIButton) {
-        
+        // TO DO
         
     }
     

@@ -10,10 +10,12 @@ import UIKit
 extension SettingsViewController {
     
     func layoutElements() {
+        addBlurEffect()
         view.backgroundColor = UIColor.cyan
         view.addSubview(logoutButton)
         view.addSubview(changeEmailButton)
         view.addSubview(changePasswordButton)
+        
         
         changeEmailButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
