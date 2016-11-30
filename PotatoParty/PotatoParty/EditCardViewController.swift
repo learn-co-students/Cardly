@@ -22,11 +22,11 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     var addOverlayButton = UIButton()
     var stopButton = UIButton()
     var addTextButton = UIButton()
+    var activityIndicator = UIActivityIndicatorView()
     
     let player = AVPlayer()
     var asset: AVURLAsset? {
         didSet {
-            print("new asset created \(asset)")
             guard let newAsset = asset else { return }
             loadURLAsset(newAsset)
         }
@@ -36,12 +36,8 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     }
     var playerItem: AVPlayerItem? {
         didSet {
-            
-            //self.addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: nil)
             player.replaceCurrentItem(with: playerItem)
             player.actionAtItemEnd = .none
-            player.play()
-            player.pause()
         }
     }
     
@@ -55,11 +51,9 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         super.viewDidLoad()
         layoutViewElements()
         playerView.playerLayer.player = player
-        //playerView.playerLayer.frame = view.bounds
         
-        //addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: nil)
-        //NotificationCenter.default.addObserver(self, selector: #selector(self.playerReachedEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
-        //player.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions(), context: nil)
+        addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.playerReachedEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -67,7 +61,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        //removeObserver(self, forKeyPath: "player.currentItem.status")
+        removeObserver(self, forKeyPath: "player.currentItem.status")
     }
     
     // MARK: - Main
@@ -154,15 +148,18 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         assetExport.videoComposition = layercomposition
         assetExport.outputFileType = AVFileTypeQuickTimeMovie
         assetExport.outputURL = movieUrl
-
+        self.activityIndicator.isHidden = false
+        self.activityIndicator.startAnimating()
         assetExport.exportAsynchronously {
             DispatchQueue.main.async {
+                
                 switch assetExport.status {
                 case .completed:
                     print("Success")
                     print("start sleep")
-                    sleep(15)
+                    sleep(5)
                     print("finish sleep")
+                    self.activityIndicator.stopAnimating()
                     self.fileLocation = movieUrl
 //                    let player2 = AVPlayer(url: movieUrl)
 //                    let playerViewController = AVPlayerViewController()
@@ -211,15 +208,12 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         
         let compositionAudioTrack: AVMutableCompositionTrack = composition.addMutableTrack(withMediaType: AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
         
-//        for audioTrack in asset.tracks(withMediaType: AVMediaTypeAudio) {
-            do {
-                //try compositionAudioTrack.insertTimeRange(audioTrack.timeRange, of: audioTrack, at: kCMTimeZero)
-                try compositionAudioTrack.insertTimeRange(timerange, of: asset.tracks(withMediaType: AVMediaTypeAudio)[0], at: kCMTimeZero)
-            } catch {
-                print("composing audio track error")
-                print(error)
-            }
-//        }
+        do {
+            try compositionAudioTrack.insertTimeRange(timerange, of: asset.tracks(withMediaType: AVMediaTypeAudio)[0], at: kCMTimeZero)
+        } catch {
+            print("composing audio track error")
+            print(error)
+        }
         
         let textLayer = CATextLayer()
         textLayer.string = text
@@ -255,12 +249,17 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         assetExport.videoComposition = layercomposition
         assetExport.outputFileType = AVFileTypeQuickTimeMovie
         assetExport.outputURL = movieUrl
-        
+        self.activityIndicator.isHidden = false
+        self.activityIndicator.startAnimating()
         assetExport.exportAsynchronously {
             DispatchQueue.main.async(execute: {
                 switch assetExport.status {
                 case .completed:
                     print("Success")
+                    print("start sleep")
+                    sleep(5)
+                    print("finish sleep")
+                    self.activityIndicator.stopAnimating()
                     self.fileLocation = movieUrl
                     break
                 case.cancelled:
@@ -280,7 +279,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
                 }
 
             })
-                    }
+        }
     }
     
     // MARK: - Correct video orientation
@@ -316,7 +315,6 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
                                     at: kCMTimeZero)
         }
         else {
-            print("VideoComposition instructions for landscape mode")
             let scaleFactor = CGAffineTransform(scaleX: scaleToFitRatio, y: scaleToFitRatio)
             var concat = assetTrack.preferredTransform.concatenating(scaleFactor).concatenating(CGAffineTransform(translationX: 0, y: playerView.playerLayer.bounds.width / 2))
             if assetInfo.orientation == .down {
@@ -328,7 +326,6 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
             }
             instruction.setTransform(concat, at: kCMTimeZero)
         }
-      
         return instruction
     }
     
@@ -336,15 +333,11 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "player.currentItem.status" {
-            print("observer is triggered")
-            //playPauseButton.isHidden = false
-            //saveButton.isHidden = false
             if player.status == AVPlayerStatus.readyToPlay {
                 print("goes into if of observer for readyToPlayer")
                 playPauseButton.isEnabled = true
             }
         }
-
     }
     
     // MARK: - Actions
@@ -371,11 +364,9 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     
     func updatePlayPauseButtonTitle() {
         if player.rate > 0 {
-            //playing
             player.pause()
             playPauseButton.setTitle("Play", for: .normal)
         } else {
-            //paused / stopped
             player.play()
             playPauseButton.setTitle("Pause", for: .normal)
         }
@@ -429,8 +420,6 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     // MARK: Save video to photo library
     
     func saveVideoToPhotoLibrary(_ videoUrl: URL) {
-        var videoAssetPlaceholder:PHObjectPlaceholder!
-
         PHPhotoLibrary.requestAuthorization({ (authorizationStatus: PHAuthorizationStatus) -> Void in
             // check if user authorized access photos for your app
             if authorizationStatus == .authorized {
@@ -438,21 +427,12 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
                     PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoUrl)}) { completed, error in
                         if completed {
                             print("Video asset created")
-//                            let localID = videoAssetPlaceholder.localIdentifier
-//                            let assetID = localID.replacingOccurrences(of: "/.*", with: "", options: String.CompareOptions.regularExpression, range: nil)
-////                            let assetID = localID.stringByReplacingOccurrencesOfString("/.*", withString: "",
-////                                    options: NSString.CompareOptions.RegularExpressionSearch, range: nil)
-//                            let ext = "mp4"
-//                            let assetURLStr = "assets-library://asset/asset.\(ext)?id=\(assetID)&ext=\(ext)"
-                            
-                            
                         } else {
                             if let error = error { print(error) }
                         }
                 }
             }
         })
-        
     }
 
 }

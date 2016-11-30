@@ -65,5 +65,14 @@ extension EditCardViewController {
             make.bottomMargin.equalTo(addOverlayButton.snp.topMargin).offset(-20)
         }
         addTextButton.addTarget(self, action: #selector(self.addTextToVideo), for: .touchUpInside)
+        
+        playerView.addSubview(activityIndicator)
+        activityIndicator.snp.makeConstraints { (make) in
+            make.size.equalTo(CGSize(width: 30, height: 30))
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+        self.activityIndicator.isHidden = true
+        activityIndicator.hidesWhenStopped = true
     }
 }
