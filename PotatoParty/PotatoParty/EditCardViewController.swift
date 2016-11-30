@@ -17,12 +17,13 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     static let assetKeysRequiredToPlay = ["playable", "hasProtectedContent"]
     
     var playerView = PlayerView()
-    var saveButton = UIButton()
-    var playPauseButton = UIButton()
-    var addOverlayButton = UIButton()
-    var stopButton = UIButton()
-    var addTextButton = UIButton()
-    var activityIndicator = UIActivityIndicatorView()
+    var saveButton: UIButton!
+    var playPauseButton: UIButton!
+    var addOverlayButton: UIButton!
+    var addTextButton: UIButton!
+    var activityIndicator: UIActivityIndicatorView!
+    
+    lazy var buttons: [UIButton] = [self.saveButton, self.playPauseButton, self.addOverlayButton, self.addTextButton]
     
     let player = AVPlayer()
     var asset: AVURLAsset? {
@@ -49,6 +50,11 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        saveButton = UIButton()
+        playPauseButton = UIButton()
+        addOverlayButton = UIButton()
+        addTextButton = UIButton()
+        activityIndicator = UIActivityIndicatorView()
         layoutViewElements()
         playerView.playerLayer.player = player
         
@@ -148,8 +154,9 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         assetExport.videoComposition = layercomposition
         assetExport.outputFileType = AVFileTypeQuickTimeMovie
         assetExport.outputURL = movieUrl
-        self.activityIndicator.isHidden = false
-        self.activityIndicator.startAnimating()
+        disableAllButtons()
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
         assetExport.exportAsynchronously {
             DispatchQueue.main.async {
                 
@@ -161,6 +168,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
                     print("finish sleep")
                     self.activityIndicator.stopAnimating()
                     self.fileLocation = movieUrl
+                    self.enableAllButtons()
 //                    let player2 = AVPlayer(url: movieUrl)
 //                    let playerViewController = AVPlayerViewController()
 //                    playerViewController.player = player2
@@ -249,6 +257,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         assetExport.videoComposition = layercomposition
         assetExport.outputFileType = AVFileTypeQuickTimeMovie
         assetExport.outputURL = movieUrl
+        disableAllButtons()
         self.activityIndicator.isHidden = false
         self.activityIndicator.startAnimating()
         assetExport.exportAsynchronously {
@@ -261,6 +270,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
                     print("finish sleep")
                     self.activityIndicator.stopAnimating()
                     self.fileLocation = movieUrl
+                    self.enableAllButtons()
                     break
                 case.cancelled:
                     print("Canceled")
@@ -380,7 +390,9 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         let submitAction = UIAlertAction(title: "Submit", style: .default) { (action) in
             self.overlayText((alertController.textFields?[0].text!)!)
         }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alertController.addAction(submitAction)
+        alertController.addAction(cancelAction)
         present(alertController, animated: true, completion: nil)
     }
     
@@ -401,6 +413,18 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         }
         
         self.present(controller, animated: true, completion: nil)
+    }
+    
+    func disableAllButtons() {
+        for button in self.buttons {
+            button.isEnabled = false
+        }
+    }
+    
+    func enableAllButtons() {
+        for button in self.buttons {
+            button.isEnabled = true
+        }
     }
     
     func fileName() -> String {
