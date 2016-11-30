@@ -12,10 +12,13 @@ extension EditCardViewController {
     
     func layoutViewElements() {
         view.backgroundColor = UIColor.clear
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.navigationBar.backgroundColor = UIColor.clear
+        navigationController?.navigationBar.alpha = 0.0
         
         view.addSubview(playerView)
         playerView.frame = self.view.frame
-        playerView.backgroundColor = UIColor.yellow
+        playerView.backgroundColor = UIColor.clear
         playerView.playerLayer.frame = playerView.bounds
         
         playPauseButton.setTitle("Play", for: .normal)
@@ -27,6 +30,7 @@ extension EditCardViewController {
             make.bottomMargin.equalToSuperview().offset(-20)
             make.leadingMargin.equalToSuperview()
         }
+        playPauseButton.isEnabled = false
         playPauseButton.addTarget(self, action: #selector(self.playPauseButtonPressed), for: .touchUpInside)
         
         saveButton.backgroundColor = UIColor.red
@@ -49,6 +53,17 @@ extension EditCardViewController {
             make.centerX.equalToSuperview()
             make.bottomMargin.equalToSuperview().offset(-20)
         }
-        addOverlayButton.addTarget(self, action: #selector(self.exportWithWatermark), for: .touchUpInside)
+        addOverlayButton.addTarget(self, action: #selector(self.exportWithFrameLayer), for: .touchUpInside)
+        
+        addTextButton.backgroundColor = UIColor.green
+        addTextButton.setTitle("Text", for: .normal)
+        view.addSubview(addTextButton)
+        addTextButton.snp.makeConstraints { (make) in
+            make.height.equalTo(playPauseButton.snp.height)
+            make.width.equalTo(playPauseButton.snp.width)
+            make.centerX.equalToSuperview()
+            make.bottomMargin.equalTo(addOverlayButton.snp.topMargin).offset(-20)
+        }
+        addTextButton.addTarget(self, action: #selector(self.addTextToVideo), for: .touchUpInside)
     }
 }

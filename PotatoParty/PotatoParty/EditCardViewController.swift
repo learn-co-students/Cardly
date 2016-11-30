@@ -8,8 +8,9 @@
 
 import UIKit
 import AVFoundation
+import AVKit
 
-class EditCardViewController: UIViewController {
+class EditCardViewController: UIViewController, UITextFieldDelegate{
 
     static let assetKeysRequiredToPlay = ["playable", "hasProtectedContent"]
     
@@ -18,10 +19,12 @@ class EditCardViewController: UIViewController {
     var playPauseButton = UIButton()
     var addOverlayButton = UIButton()
     var stopButton = UIButton()
+    var addTextButton = UIButton()
     
     let player = AVPlayer()
     var asset: AVURLAsset? {
         didSet {
+            print("new asset created \(asset)")
             guard let newAsset = asset else { return }
             loadURLAsset(newAsset)
         }
@@ -31,8 +34,12 @@ class EditCardViewController: UIViewController {
     }
     var playerItem: AVPlayerItem? {
         didSet {
+            
+            //self.addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: nil)
             player.replaceCurrentItem(with: playerItem)
             player.actionAtItemEnd = .none
+            player.play()
+            player.pause()
         }
     }
     
@@ -48,13 +55,9 @@ class EditCardViewController: UIViewController {
         playerView.playerLayer.player = player
         playerView.playerLayer.frame = view.bounds
         
-        navigationController?.navigationBar.isTranslucent = true
-        navigationController?.navigationBar.backgroundColor = UIColor.clear
-        navigationController?.navigationBar.alpha = 0.0
-        
-        addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.playerReachedEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
-        
+        //addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: nil)
+        //NotificationCenter.default.addObserver(self, selector: #selector(self.playerReachedEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
+        //player.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions(), context: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -62,15 +65,13 @@ class EditCardViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        removeObserver(self, forKeyPath: "player.currentItem.status")
+        //removeObserver(self, forKeyPath: "player.currentItem.status")
     }
     
     // MARK: - Main
     func loadURLAsset(_ asset: AVURLAsset) {
         asset.loadValuesAsynchronously(forKeys: EditCardViewController.assetKeysRequiredToPlay, completionHandler: {
-            DispatchQueue.main.async {
-                guard asset == self.asset else { return }
-                
+            
                 for key in EditCardViewController.assetKeysRequiredToPlay {
                     var error: NSError?
                     
@@ -84,16 +85,12 @@ class EditCardViewController: UIViewController {
                         let message = "Failed to load"
                         self.showAlert(title: "Error", message: message, dismiss: false)
                     }
-        
                 }
                 self.playerItem = AVPlayerItem(asset: asset)
-            }
         })
     }
     
-    func exportWithWatermark() {
-        
-        playerView.playerLayer.contentsGravity = AVLayerVideoGravityResizeAspect
+    func exportWithFrameLayer() {
         let composition = AVMutableComposition()
         let asset = AVURLAsset(url: fileLocation!)
         
@@ -121,19 +118,6 @@ class EditCardViewController: UIViewController {
             }
         }
         
-//        let watermark = UIImage(named: "watermark.png")
-//        let watermarklayer = CALayer()
-//        watermarklayer.contents = watermark?.cgImage
-//        watermarklayer.frame = CGRect(x: 10, y: 10, width: 180, height: 180)
-//        watermarklayer.opacity = 0.5
-//            
-//        let textLayer = CATextLayer()
-//        textLayer.string = "DOWNLOAD POTATO PARTY OR DIE"
-//        textLayer.font = UIFont(name: "Helvetica", size: 65.0)
-//        textLayer.shadowOpacity = 0.5
-//        textLayer.alignmentMode = kCAAlignmentCenter
-//        textLayer.frame = CGRect(x: 0, y: 50, width: size.width, height: size.height/6)
-        
         let overlayImage = UIImage(named: "thankYou")
         let overlayLayer = CALayer()
         overlayLayer.contents = overlayImage?.cgImage
@@ -155,7 +139,7 @@ class EditCardViewController: UIViewController {
         
         let instruction = AVMutableVideoCompositionInstruction()
         instruction.timeRange = CMTimeRangeMake(kCMTimeZero, composition.duration)
-        let layerInstr = videoCompositionInstructionForTrack(track: compositionVideoTrack, asset: asset)
+        let layerInstr = videoCompositionInstructionForTrack(track: compositionVideoTrack, assetTrack: videoTrack)
         instruction.layerInstructions = [layerInstr]
         layercomposition.instructions = [instruction]
         
@@ -166,29 +150,129 @@ class EditCardViewController: UIViewController {
         assetExport.videoComposition = layercomposition
         assetExport.outputFileType = AVFileTypeQuickTimeMovie
         assetExport.outputURL = movieUrl
-            
+
         assetExport.exportAsynchronously {
-            switch assetExport.status {
-            case .completed:
-                print("Success")
-                self.fileLocation = movieUrl
-                break
-            case.cancelled:
-                print("Canceled")
-                break
-            case .exporting:
-                print("Exporting")
-                break
-            case .failed:
-                print("Failed \(assetExport.error)")
-                break
-            case.unknown:
-                print("Unknown error")
-                break
-            case.waiting:
-                print("Waiting")
+            DispatchQueue.main.async {
+                switch assetExport.status {
+                case .completed:
+                    print("Success")
+                    self.fileLocation = movieUrl
+                    let player2 = AVPlayer(url: movieUrl)
+                    let playerViewController = AVPlayerViewController()
+                    playerViewController.player = player2
+                    self.present(playerViewController, animated: true) { () -> Void in
+                        player2.play()
+                    }
+                    break
+                case.cancelled:
+                    print("Canceled")
+                    break
+                case .exporting:
+                    print("Exporting")
+                    break
+                case .failed:
+                    print("Failed \(assetExport.error)")
+                    break
+                case.unknown:
+                    print("Unknown error")
+                    break
+                case.waiting:
+                    print("Waiting")
+                }
+
             }
         }
+        
+    }
+    
+    func overlayText(_ text: String) {
+        let composition = AVMutableComposition()
+        let asset = AVURLAsset(url: fileLocation!)
+        
+        let track = asset.tracks(withMediaType: AVMediaTypeVideo)
+        let videoTrack: AVAssetTrack = track[0] as AVAssetTrack
+        let timerange = CMTimeRangeMake(kCMTimeZero, asset.duration)
+        
+        let compositionVideoTrack: AVMutableCompositionTrack = composition.addMutableTrack(withMediaType: AVMediaTypeVideo, preferredTrackID: CMPersistentTrackID())
+        
+        do {
+            try compositionVideoTrack.insertTimeRange(timerange, of: videoTrack, at: kCMTimeZero)
+        } catch  {
+            print("composing video track error")
+            print(error)
+        }
+        
+        let compositionAudioTrack: AVMutableCompositionTrack = composition.addMutableTrack(withMediaType: AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
+        
+        for audioTrack in asset.tracks(withMediaType: AVMediaTypeAudio) {
+            do {
+                try compositionAudioTrack.insertTimeRange(audioTrack.timeRange, of: audioTrack, at: kCMTimeZero)
+            } catch {
+                print("composing audio track error")
+                print(error)
+            }
+        }
+        
+        let textLayer = CATextLayer()
+        textLayer.string = text
+        textLayer.font = UIFont(name: "Helvetica", size: 15.0)
+        textLayer.shadowOpacity = 0.5
+        textLayer.alignmentMode = kCAAlignmentCenter
+        textLayer.frame = CGRect(x: 0, y: 50, width: playerView.playerLayer.bounds.width, height: playerView.playerLayer.bounds.height/8)
+        
+        let videoLayer = CALayer()
+        videoLayer.backgroundColor = UIColor.blue.cgColor
+        videoLayer.frame = CGRect(x: 0, y: 0, width: playerView.playerLayer.bounds.width, height: playerView.playerLayer.bounds.height)
+        
+        let parentLayer = CALayer()
+        parentLayer.frame = playerView.playerLayer.bounds
+        parentLayer.addSublayer(videoLayer)
+        parentLayer.addSublayer(textLayer)
+        
+        let layercomposition = AVMutableVideoComposition()
+        layercomposition.frameDuration = CMTimeMake(1, 30)
+        layercomposition.renderSize = view.frame.size
+        layercomposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer:videoLayer, in: parentLayer)
+        
+        let instruction = AVMutableVideoCompositionInstruction()
+        instruction.timeRange = CMTimeRangeMake(kCMTimeZero, composition.duration)
+        let layerInstr = videoCompositionInstructionForTrack(track: compositionVideoTrack, assetTrack: videoTrack)
+        instruction.layerInstructions = [layerInstr]
+        layercomposition.instructions = [instruction]
+        
+        let filePath = NSTemporaryDirectory() + fileName()
+        let movieUrl = URL(fileURLWithPath: filePath)
+        
+        guard let assetExport = AVAssetExportSession(asset: composition, presetName:AVAssetExportPresetHighestQuality) else { return }
+        assetExport.videoComposition = layercomposition
+        assetExport.outputFileType = AVFileTypeQuickTimeMovie
+        assetExport.outputURL = movieUrl
+        
+        assetExport.exportAsynchronously {
+            DispatchQueue.main.async(execute: {
+                switch assetExport.status {
+                case .completed:
+                    print("Success")
+                    self.fileLocation = movieUrl
+                    break
+                case.cancelled:
+                    print("Canceled")
+                    break
+                case .exporting:
+                    print("Exporting")
+                    break
+                case .failed:
+                    print("Failed \(assetExport.error)")
+                    break
+                case.unknown:
+                    print("Unknown error")
+                    break
+                case.waiting:
+                    print("Waiting")
+                }
+
+            })
+                    }
     }
     
     // MARK: - Correct video orientation
@@ -210,9 +294,9 @@ class EditCardViewController: UIViewController {
         return (assetOrientation, isPortrait)
     }
     
-    func videoCompositionInstructionForTrack(track: AVCompositionTrack, asset: AVAsset) -> AVMutableVideoCompositionLayerInstruction {
+    func videoCompositionInstructionForTrack(track: AVCompositionTrack, assetTrack: AVAssetTrack) -> AVMutableVideoCompositionLayerInstruction {
         let instruction = AVMutableVideoCompositionLayerInstruction(assetTrack: track)
-        let assetTrack = asset.tracks(withMediaType: AVMediaTypeVideo)[0]
+        let assetTrack = assetTrack
         let transform = assetTrack.preferredTransform
         let assetInfo = orientationFromTransform(transform: transform)
         var scaleToFitRatio = playerView.playerLayer.bounds.width / assetTrack.naturalSize.width
@@ -243,9 +327,15 @@ class EditCardViewController: UIViewController {
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "player.currentItem.status" {
-            playPauseButton.isHidden = false
-            saveButton.isHidden = false
+            print("observer is triggered")
+            //playPauseButton.isHidden = false
+            //saveButton.isHidden = false
+            if player.status == AVPlayerStatus.readyToPlay {
+                print("goes into if of observer for readyToPlayer")
+                playPauseButton.isEnabled = true
+            }
         }
+
     }
     
     // MARK: - Actions
@@ -280,6 +370,23 @@ class EditCardViewController: UIViewController {
             player.play()
             playPauseButton.setTitle("Pause", for: .normal)
         }
+    }
+    
+    func addTextToVideo() {
+        let alertController = UIAlertController(title: "Text to overlay", message: "Must be 15 characters or less", preferredStyle: .alert)
+        alertController.addTextField { (textField) in
+            textField.delegate = self
+        }
+        let submitAction = UIAlertAction(title: "Submit", style: .default) { (action) in
+            self.overlayText((alertController.textFields?[0].text!)!)
+        }
+        alertController.addAction(submitAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string)
+        return newString.characters.count <= 15
     }
     
     func showAlert(title:String, message:String, dismiss:Bool) {
