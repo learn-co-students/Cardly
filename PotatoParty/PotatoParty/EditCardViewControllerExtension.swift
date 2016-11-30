@@ -30,7 +30,7 @@ extension EditCardViewController {
             make.bottomMargin.equalToSuperview().offset(-20)
             make.leadingMargin.equalToSuperview()
         }
-        playPauseButton.isEnabled = false
+//        playPauseButton.isEnabled = false
         playPauseButton.addTarget(self, action: #selector(self.playPauseButtonPressed), for: .touchUpInside)
         
         saveButton.backgroundColor = UIColor.red

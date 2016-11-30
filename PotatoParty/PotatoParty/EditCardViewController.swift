@@ -104,6 +104,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         
         do {
             try compositionVideoTrack.insertTimeRange(timerange, of: videoTrack, at: kCMTimeZero)
+            compositionVideoTrack.preferredTransform = videoTrack.preferredTransform
         } catch  {
             print("composing video track error")
             print(error)
@@ -127,7 +128,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         
         let videoLayer = CALayer()
         videoLayer.backgroundColor = UIColor.blue.cgColor
-        //videoLayer.frame = overlayLayer.frame
+        videoLayer.frame = overlayLayer.frame
         videoLayer.frame = view.bounds
         
         let parentLayer = CALayer()
@@ -159,8 +160,10 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
                 switch assetExport.status {
                 case .completed:
                     print("Success")
-                    self.saveVideoToPhotoLibrary(movieUrl)
-//                    self.fileLocation = movieUrl
+                    print("start sleep")
+                    sleep(15)
+                    print("finish sleep")
+                    self.fileLocation = movieUrl
 //                    let player2 = AVPlayer(url: movieUrl)
 //                    let playerViewController = AVPlayerViewController()
 //                    playerViewController.player = player2
@@ -307,12 +310,13 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         var scaleToFitRatio = playerView.playerLayer.bounds.width / assetTrack.naturalSize.width
         
         if assetInfo.isPortrait {
-            scaleToFitRatio = playerView.playerLayer.bounds.width / assetTrack.naturalSize.height
+            scaleToFitRatio = playerView.playerLayer.frame.width / assetTrack.naturalSize.height
             let scaleFactor = CGAffineTransform(scaleX: scaleToFitRatio, y: scaleToFitRatio)
             instruction.setTransform(assetTrack.preferredTransform.concatenating(scaleFactor),
                                     at: kCMTimeZero)
         }
         else {
+            print("VideoComposition instructions for landscape mode")
             let scaleFactor = CGAffineTransform(scaleX: scaleToFitRatio, y: scaleToFitRatio)
             var concat = assetTrack.preferredTransform.concatenating(scaleFactor).concatenating(CGAffineTransform(translationX: 0, y: playerView.playerLayer.bounds.width / 2))
             if assetInfo.orientation == .down {
