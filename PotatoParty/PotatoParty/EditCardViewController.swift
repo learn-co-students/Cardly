@@ -9,6 +9,8 @@
 import UIKit
 import AVFoundation
 import AVKit
+import AssetsLibrary
+import Photos
 
 class EditCardViewController: UIViewController, UITextFieldDelegate{
 
@@ -53,7 +55,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         super.viewDidLoad()
         layoutViewElements()
         playerView.playerLayer.player = player
-        playerView.playerLayer.frame = view.bounds
+        //playerView.playerLayer.frame = view.bounds
         
         //addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: nil)
         //NotificationCenter.default.addObserver(self, selector: #selector(self.playerReachedEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
@@ -125,7 +127,8 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         
         let videoLayer = CALayer()
         videoLayer.backgroundColor = UIColor.blue.cgColor
-        videoLayer.frame = overlayLayer.frame
+        //videoLayer.frame = overlayLayer.frame
+        videoLayer.frame = view.bounds
         
         let parentLayer = CALayer()
         parentLayer.frame = playerView.playerLayer.bounds
@@ -156,13 +159,14 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
                 switch assetExport.status {
                 case .completed:
                     print("Success")
-                    self.fileLocation = movieUrl
-                    let player2 = AVPlayer(url: movieUrl)
-                    let playerViewController = AVPlayerViewController()
-                    playerViewController.player = player2
-                    self.present(playerViewController, animated: true) { () -> Void in
-                        player2.play()
-                    }
+                    self.saveVideoToPhotoLibrary(movieUrl)
+//                    self.fileLocation = movieUrl
+//                    let player2 = AVPlayer(url: movieUrl)
+//                    let playerViewController = AVPlayerViewController()
+//                    playerViewController.player = player2
+//                    self.present(playerViewController, animated: true) { () -> Void in
+//                        player2.play()
+//                    }
                     break
                 case.cancelled:
                     print("Canceled")
@@ -204,14 +208,15 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         
         let compositionAudioTrack: AVMutableCompositionTrack = composition.addMutableTrack(withMediaType: AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
         
-        for audioTrack in asset.tracks(withMediaType: AVMediaTypeAudio) {
+//        for audioTrack in asset.tracks(withMediaType: AVMediaTypeAudio) {
             do {
-                try compositionAudioTrack.insertTimeRange(audioTrack.timeRange, of: audioTrack, at: kCMTimeZero)
+                //try compositionAudioTrack.insertTimeRange(audioTrack.timeRange, of: audioTrack, at: kCMTimeZero)
+                try compositionAudioTrack.insertTimeRange(timerange, of: asset.tracks(withMediaType: AVMediaTypeAudio)[0], at: kCMTimeZero)
             } catch {
                 print("composing audio track error")
                 print(error)
             }
-        }
+//        }
         
         let textLayer = CATextLayer()
         textLayer.string = text
@@ -415,6 +420,35 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         let destVC = SendCardViewController()
         destVC.videoURL = fileLocation
         navigationController?.pushViewController(destVC, animated: true)
+    }
+    
+    // MARK: Save video to photo library
+    
+    func saveVideoToPhotoLibrary(_ videoUrl: URL) {
+        var videoAssetPlaceholder:PHObjectPlaceholder!
+
+        PHPhotoLibrary.requestAuthorization({ (authorizationStatus: PHAuthorizationStatus) -> Void in
+            // check if user authorized access photos for your app
+            if authorizationStatus == .authorized {
+                PHPhotoLibrary.shared().performChanges({
+                    PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoUrl)}) { completed, error in
+                        if completed {
+                            print("Video asset created")
+//                            let localID = videoAssetPlaceholder.localIdentifier
+//                            let assetID = localID.replacingOccurrences(of: "/.*", with: "", options: String.CompareOptions.regularExpression, range: nil)
+////                            let assetID = localID.stringByReplacingOccurrencesOfString("/.*", withString: "",
+////                                    options: NSString.CompareOptions.RegularExpressionSearch, range: nil)
+//                            let ext = "mp4"
+//                            let assetURLStr = "assets-library://asset/asset.\(ext)?id=\(assetID)&ext=\(ext)"
+                            
+                            
+                        } else {
+                            if let error = error { print(error) }
+                        }
+                }
+            }
+        })
+        
     }
 
 }
