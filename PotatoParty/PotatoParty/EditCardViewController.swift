@@ -16,6 +16,8 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
 
     static let assetKeysRequiredToPlay = ["playable", "hasProtectedContent"]
     
+    let HDVideoSize = CGSize(width: 1080.0, height: 1920.0)
+    
     var playerView = PlayerView()
     var saveButton: UIButton!
     var playPauseButton: UIButton!
@@ -124,21 +126,20 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         let overlayImage = UIImage(named: "thankYou")
         let overlayLayer = CALayer()
         overlayLayer.contents = overlayImage?.cgImage
-        overlayLayer.frame = playerView.playerLayer.bounds
+        overlayLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
         
         let videoLayer = CALayer()
         videoLayer.backgroundColor = UIColor.blue.cgColor
-        videoLayer.frame = overlayLayer.frame
-        videoLayer.frame = view.bounds
+        videoLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
         
         let parentLayer = CALayer()
-        parentLayer.frame = playerView.playerLayer.bounds
+        parentLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
         parentLayer.addSublayer(videoLayer)
         parentLayer.addSublayer(overlayLayer)
             
         let layercomposition = AVMutableVideoComposition()
         layercomposition.frameDuration = CMTimeMake(1, 30)
-        layercomposition.renderSize = view.frame.size
+        layercomposition.renderSize = HDVideoSize
         layercomposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer:videoLayer, in: parentLayer)
         
         let instruction = AVMutableVideoCompositionInstruction()
@@ -150,7 +151,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         let filePath = NSTemporaryDirectory() + fileName()
         let movieUrl = URL(fileURLWithPath: filePath)
             
-        guard let assetExport = AVAssetExportSession(asset: composition, presetName:AVAssetExportPresetHighestQuality) else { return }
+        guard let assetExport = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHighestQuality) else { return }
         assetExport.videoComposition = layercomposition
         assetExport.outputFileType = AVFileTypeQuickTimeMovie
         assetExport.outputURL = movieUrl
@@ -159,22 +160,13 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         activityIndicator.startAnimating()
         assetExport.exportAsynchronously {
             DispatchQueue.main.async {
-                
                 switch assetExport.status {
                 case .completed:
                     print("Success")
-                    print("start sleep")
                     sleep(5)
-                    print("finish sleep")
                     self.activityIndicator.stopAnimating()
                     self.fileLocation = movieUrl
                     self.enableAllButtons()
-//                    let player2 = AVPlayer(url: movieUrl)
-//                    let playerViewController = AVPlayerViewController()
-//                    playerViewController.player = player2
-//                    self.present(playerViewController, animated: true) { () -> Void in
-//                        player2.play()
-//                    }
                     break
                 case.cancelled:
                     print("Canceled")
@@ -228,20 +220,20 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         textLayer.font = UIFont(name: "Helvetica", size: 15.0)
         textLayer.shadowOpacity = 0.5
         textLayer.alignmentMode = kCAAlignmentCenter
-        textLayer.frame = CGRect(x: 0, y: 50, width: playerView.playerLayer.bounds.width, height: playerView.playerLayer.bounds.height/8)
+        textLayer.frame = CGRect(x: 0, y: 50, width: HDVideoSize.width, height: HDVideoSize.height / 2)
         
         let videoLayer = CALayer()
         videoLayer.backgroundColor = UIColor.blue.cgColor
-        videoLayer.frame = CGRect(x: 0, y: 0, width: playerView.playerLayer.bounds.width, height: playerView.playerLayer.bounds.height)
+        videoLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
         
         let parentLayer = CALayer()
-        parentLayer.frame = playerView.playerLayer.bounds
+        parentLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
         parentLayer.addSublayer(videoLayer)
         parentLayer.addSublayer(textLayer)
         
         let layercomposition = AVMutableVideoComposition()
         layercomposition.frameDuration = CMTimeMake(1, 30)
-        layercomposition.renderSize = view.frame.size
+        layercomposition.renderSize = HDVideoSize
         layercomposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer:videoLayer, in: parentLayer)
         
         let instruction = AVMutableVideoCompositionInstruction()
@@ -316,10 +308,9 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         let assetTrack = assetTrack
         let transform = assetTrack.preferredTransform
         let assetInfo = orientationFromTransform(transform: transform)
-        var scaleToFitRatio = playerView.playerLayer.bounds.width / assetTrack.naturalSize.width
+        let scaleToFitRatio = HDVideoSize.width / HDVideoSize.width
         
         if assetInfo.isPortrait {
-            scaleToFitRatio = playerView.playerLayer.frame.width / assetTrack.naturalSize.height
             let scaleFactor = CGAffineTransform(scaleX: scaleToFitRatio, y: scaleToFitRatio)
             instruction.setTransform(assetTrack.preferredTransform.concatenating(scaleFactor),
                                     at: kCMTimeZero)
@@ -351,7 +342,6 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     }
     
     // MARK: - Actions
-    
     
     func playerReachedEnd(notification: NSNotification) {
         asset = AVURLAsset(url: fileLocation!)
@@ -445,7 +435,6 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     
     func saveVideoToPhotoLibrary(_ videoUrl: URL) {
         PHPhotoLibrary.requestAuthorization({ (authorizationStatus: PHAuthorizationStatus) -> Void in
-            // check if user authorized access photos for your app
             if authorizationStatus == .authorized {
                 PHPhotoLibrary.shared().performChanges({
                     PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoUrl)}) { completed, error in
