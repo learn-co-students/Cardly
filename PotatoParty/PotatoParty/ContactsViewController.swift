@@ -252,20 +252,13 @@ extension ContactsViewController: BottomNavBarDelegate {
         presentationAnimator.animationDelegate = destVC as? GuillotineAnimationDelegate
         //presentationAnimator.supportView = navigationController!.navigationBar
         presentationAnimator.presentButton = view
-        present(destVC, animated: true, completion: nil)
-
-        
-        
-        
+        present(destVC, animated: true, completion: nil)     
     }
     
     func selectBtnClicked() {
         let destVC = ContactsViewController()
         navigationController?.pushViewController(destVC, animated: false)
         print("\n\n Select Button Clicked Working")
-        
-        
-        
     }
 
     func goToAddContact(){
@@ -275,9 +268,13 @@ extension ContactsViewController: BottomNavBarDelegate {
         //send to ADD contacts view controller
     }
     
-    func addContactButtonPressed() {
+    func deleteButtonPressed() {
         
-        navToAddContactBtnVC()
+        
+        //delete contact 
+        //delete in firebase and delete from array
+        //delete from group?
+        //reload data
     }
     
     func sendToButtonPressed() {
@@ -285,10 +282,6 @@ extension ContactsViewController: BottomNavBarDelegate {
         navToRecordCardVC()
     }
     
-    func navToAddContactBtnVC() {
-        let destVC = AddContactViewController()
-        navigationController?.pushViewController(destVC, animated: false)
-    }
     
     func navToRecordCardVC() {
         let _ = startCameraFromViewController(self, withDelegate: self)
@@ -313,10 +306,17 @@ extension ContactsViewController {
         })
     }
     
-    
-    
+    func deleteContacts() {
+        
+        let path = "\(uid)/\(group.lowercased())/"
+        let contactBucketRef = ref.child(path)
+        for contact in shared.selectedContacts {
+            contactBucketRef.removeValue()
+        }
+    }
     
 }
+
 
 // MARK: - Show Camera VC
 extension ContactsViewController {
