@@ -336,7 +336,6 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "player.currentItem.status" {
             if player.status == AVPlayerStatus.readyToPlay {
-                print("goes into if of observer for readyToPlayer")
                 playPauseButton.isEnabled = true
             }
         }
