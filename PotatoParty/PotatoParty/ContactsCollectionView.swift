@@ -122,14 +122,7 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     }
     
     
-//    func cellSelected() {
-//        print("go to Add Contact function")
-//        
-//        contactDelegate?.goToAddContact()
-    
-//        let destVC = AddContactViewController()
-//        navigationController?.pushViewController(destVC, animated: false)
-//    }
+
     
 }
 

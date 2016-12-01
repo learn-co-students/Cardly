@@ -11,13 +11,19 @@ import SnapKit
 extension EditCardViewController {
     
     func layoutViewElements() {
+        // Main view setup
         view.backgroundColor = UIColor.clear
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.navigationBar.backgroundColor = UIColor.clear
+        navigationController?.navigationBar.alpha = 0.0
         
+        // Player view
         view.addSubview(playerView)
         playerView.frame = self.view.frame
-        playerView.backgroundColor = UIColor.yellow
+        playerView.backgroundColor = UIColor.clear
         playerView.playerLayer.frame = playerView.bounds
         
+        // Play+pause button
         playPauseButton.setTitle("Play", for: .normal)
         playPauseButton.backgroundColor = UIColor.red
         view.addSubview(playPauseButton)
@@ -27,8 +33,10 @@ extension EditCardViewController {
             make.bottomMargin.equalToSuperview().offset(-20)
             make.leadingMargin.equalToSuperview()
         }
+//        playPauseButton.isEnabled = false
         playPauseButton.addTarget(self, action: #selector(self.playPauseButtonPressed), for: .touchUpInside)
         
+        // Save button
         saveButton.backgroundColor = UIColor.red
         saveButton.setTitle("Save", for: .normal)
         view.addSubview(saveButton)
@@ -40,15 +48,35 @@ extension EditCardViewController {
         }
         saveButton.addTarget(self, action: #selector(self.navToSendCardVC), for: .touchUpInside)
         
-        addOverlayButton.backgroundColor = UIColor.orange
-        addOverlayButton.setTitle("Overlay", for: .normal)
-        view.addSubview(addOverlayButton)
-        addOverlayButton.snp.makeConstraints { (make) in
+        // Text button
+        addTextButton.backgroundColor = UIColor.green
+        addTextButton.setTitle("Text", for: .normal)
+        view.addSubview(addTextButton)
+        addTextButton.snp.makeConstraints { (make) in
             make.height.equalTo(playPauseButton.snp.height)
             make.width.equalTo(playPauseButton.snp.width)
             make.centerX.equalToSuperview()
             make.bottomMargin.equalToSuperview().offset(-20)
         }
-        addOverlayButton.addTarget(self, action: #selector(self.exportWithWatermark), for: .touchUpInside)
+        addTextButton.addTarget(self, action: #selector(self.addTextToVideo), for: .touchUpInside)
+        
+        // Activity indicator
+        playerView.addSubview(activityIndicator)
+        activityIndicator.snp.makeConstraints { (make) in
+            make.size.equalTo(CGSize(width: 30, height: 30))
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+        self.activityIndicator.isHidden = true
+        activityIndicator.hidesWhenStopped = true
     }
+    
+    
+    func instantiateButtons() {
+        saveButton = UIButton()
+        playPauseButton = UIButton()
+        addTextButton = UIButton()
+        activityIndicator = UIActivityIndicatorView()
+    }
+    
 }
