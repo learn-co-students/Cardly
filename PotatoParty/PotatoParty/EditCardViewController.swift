@@ -27,7 +27,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     // Player
     var playerView = PlayerView()
     let player = AVPlayer()
-    var asset: AzVURLAsset? {
+    var asset: AVURLAsset? {
         didSet {
             guard let newAsset = asset else { return }
             loadURLAsset(newAsset)
