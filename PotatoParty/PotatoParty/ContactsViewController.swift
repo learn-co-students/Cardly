@@ -21,20 +21,17 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate{
     var bottomNavBar: BottomNavBarView!
     var navigationBarMenu: DropDownMenu!
     var titleView: DropDownTitleView!
-  //  var contactsBackgroundImage: UIImage = #imageLiteral(resourceName: "contactsAndSettingsVCBackgroundImage")
     var dismissButton: UIButton?
     var titleLabel: UILabel?
+    var timer = Timer()
     
     fileprivate let cellHeight: CGFloat = 210
     fileprivate let cellSpacing: CGFloat = 20
     
-    
     fileprivate lazy var presentationAnimator = GuillotineTransitionAnimation()
-    
     
     let ref = FIRDatabase.database().reference(withPath: "contacts")
     let uid = User.shared.uid
-    
     
     var shared = User.shared
     
@@ -326,13 +323,52 @@ extension ContactsViewController {
         }
         
         let cameraController = UIImagePickerController()
+        var labelTrailingConstraint: Constraint? = nil
         cameraController.sourceType = .camera
         cameraController.mediaTypes = [kUTTypeMovie as NSString as String]
         cameraController.allowsEditing = true //allow video editing
         cameraController.cameraCaptureMode = .video
         cameraController.delegate = delegate
         cameraController.videoQuality = .typeHigh
-        present(cameraController, animated: true, completion: nil)
+        cameraController.videoMaximumDuration = 20.0
+        
+        let maxRecordTime = "Max Record Time is 20 sec"
+        let maxTimeLabel = UILabel()
+        maxTimeLabel.text = maxRecordTime
+        maxTimeLabel.textAlignment = .center
+        maxTimeLabel.textColor = UIColor.red
+        cameraController.view.addSubview(maxTimeLabel)
+        maxTimeLabel.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalToSuperview().offset(50)
+            make.width.equalTo(300)
+            make.height.equalTo(20)
+        }
+//        maxTimeLabel.snp.makeConstraints { (make) in
+//            make.centerY.equalToSuperview()
+//            make.trailingMargin.equalToSuperview()
+//            make.leadingMargin.equalToSuperview()
+//            make.width.equalTo(300)
+//            make.height.equalTo(20)
+//        }
+        //cameraController.cameraOverlayView = overlay
+        present(cameraController, animated: true, completion: {
+//            cameraController.view.layoutIfNeeded()
+//            UIView.animate(withDuration: 3, delay: 0.5, options: .curveEaseInOut, animations: {
+//                print("In animation")
+//                maxTimeLabel.snp.updateConstraints({ (make) in
+//                    //make.centerY.equalToSuperview()
+//                    //make.trailingMargin.equalToSuperview().offset(800)
+//                    make.leadingMargin.equalToSuperview().offset(800)
+//
+//                    cameraController.view.layoutIfNeeded()
+//
+//                    //make.width.equalTo(300)
+//                    //make.height.equalTo(20)
+//                })
+//            }, completion: nil)
+//            maxTimeLabel.isHidden = true
+        })
         return true
     }
 }
@@ -342,6 +378,7 @@ extension ContactsViewController {
 extension ContactsViewController: UIImagePickerControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        print("In did finish picking media")
         let mediaType = info[UIImagePickerControllerMediaType] as! NSString
         dismiss(animated: true, completion: nil)
         // Handle a movie capture
@@ -352,11 +389,9 @@ extension ContactsViewController: UIImagePickerControllerDelegate {
             let editVideoVC = EditCardViewController()
             editVideoVC.fileLocation = unwrappedURL
             navigationController?.pushViewController(editVideoVC, animated: true)
-            //            if UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(path) {
-            //                UISaveVideoAtPathToSavedPhotosAlbum(path, self, #selector(RecordCardViewController.video(_:didFinishSavingWithError:contextInfo:)), nil)
-            //            }
         }
     }
+    
     
 }
 
