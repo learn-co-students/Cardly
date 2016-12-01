@@ -11,7 +11,7 @@ import FirebaseDatabase
 import Contacts
 import ContactsUI
 
-class AddContactViewController: UIViewController, CNContactViewControllerDelegate, CNContactPickerDelegate, UITextFieldDelegate  {
+class AddContactViewController: UIViewController, CNContactViewControllerDelegate, CNContactPickerDelegate, UITextFieldDelegate, UICollectionViewDelegate  {
     let uid = User.shared.uid
     let groups = User.shared.groups
     
@@ -33,14 +33,13 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         
         super.viewDidLoad()
         layoutElements()
+        
         emailTextField.delegate = self
         phoneTextField.delegate = self
         nameTextField.delegate = self
         addButton.isEnabled = false
         print("Group selected: \(groupSelected)")
-        authorizeAddressBook { (accessGranted) in
-            print(accessGranted)
-        }
+        
         
     }
     
@@ -58,6 +57,9 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     }
     
     func importContactButtonTapped () {
+        authorizeAddressBook { (accessGranted) in
+            print(accessGranted)
+        }
         self.pickAContact()
         print ("import Contact Button Tapped")
     }
@@ -177,49 +179,6 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     
     //Validating Fields
     
-//    func validate(phoneTextField: UITextField) -> Bool {
-//        
-//        let text = phoneTextField.text ?? ""
-//        
-//        if text.characters.count == 10 {
-//            
-//            return true
-//            
-//        } else {
-//            
-//            shake(textfield: phoneTextField)
-//            
-//            return false
-//        }
-//        
-//    }
-//    
-//    func validate(nameTextField: UITextField) -> Bool {
-//        
-//        let text = nameTextField.text ?? ""
-//        
-//        if text.characters.count >= 1 {
-//            
-//            return true
-//            
-//        } else {
-//            
-//            shake(textfield: nameTextField)
-//            
-//            return false
-//        }
-//    }
-//    
-//    func validate(emailTextField: UITextField) -> Bool {
-//        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}"
-//        if NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: emailTextField) {
-//            return true
-//        } else {
-//            shake(textfield: emailTextField)
-//            return false
-//        }
-//        
-//    }
         func validateEmail(email: String) -> Bool {
             let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}"
             return NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: email)

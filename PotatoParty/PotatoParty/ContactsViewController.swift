@@ -14,7 +14,7 @@ import SnapKit
 import MobileCoreServices
 
 
-class ContactsViewController: UIViewController, DropDownMenuDelegate{
+class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContactsDelegate  {
     
     // MARK: - Views
     var collectionView: ContactsCollectionView!
@@ -24,6 +24,8 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate{
     var dismissButton: UIButton?
     var titleLabel: UILabel?
     var timer = Timer()
+    
+    
     
     fileprivate let cellHeight: CGFloat = 210
     fileprivate let cellSpacing: CGFloat = 20
@@ -38,10 +40,9 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = false
-        
         // MARK: - Setup Views
         setupViews()
-        
+        collectionView.contactDelegate = self
         self.restorationIdentifier = "contactsVC"
         
         self.navigationBarMenu = DropDownMenu()
@@ -71,6 +72,8 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate{
         
         
     }
+    
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -147,7 +150,9 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate{
         for list in arrayofWeddingLists {
             let firstCell = DropDownMenuCell()
             firstCell.textLabel!.text = list
+
             firstCell.menuAction = #selector(selectGroup(_:))
+
             firstCell.menuTarget = self
             if currentChoice == list {
                 firstCell.accessoryType = .checkmark
@@ -262,6 +267,13 @@ extension ContactsViewController: BottomNavBarDelegate {
         
         
     }
+
+    func goToAddContact(){
+        print("go to Add Contact function")
+        let destVC = AddContactViewController()
+        navigationController?.pushViewController(destVC, animated: false)
+        //send to ADD contacts view controller
+    }
     
     func addContactButtonPressed() {
         
@@ -275,7 +287,7 @@ extension ContactsViewController: BottomNavBarDelegate {
     
     func navToAddContactBtnVC() {
         let destVC = AddContactViewController()
-        navigationController?.pushViewController(destVC, animated: true)
+        navigationController?.pushViewController(destVC, animated: false)
     }
     
     func navToRecordCardVC() {
@@ -427,6 +439,11 @@ extension ContactsViewController: UIViewControllerTransitioningDelegate {
 //    }
 //}
 //
+
+
+protocol AddContactsDelegate: class {
+   func goToAddContact()
+}
 
 
 
