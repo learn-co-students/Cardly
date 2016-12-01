@@ -63,14 +63,15 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.playerReachedEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
     }
+    
+    deinit {
+        removeObserver(self, forKeyPath: "player.currentItem.status")
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        removeObserver(self, forKeyPath: "player.currentItem.status")
-    }
     
     // MARK: - Main
     func loadURLAsset(_ asset: AVURLAsset) {
