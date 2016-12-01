@@ -349,11 +349,11 @@ extension ContactsViewController {
             
             cameraController.view.setNeedsUpdateConstraints()
             
-            UIView.animate(withDuration: 3, delay: 0.5, options: .curveEaseInOut, animations: {
+            UIView.animate(withDuration: 3, delay: 0, options: .curveEaseInOut, animations: {
                 print("In animation")
                 cameraController.view.layoutIfNeeded()
             }, completion: { (complete) in
-                UIView.animate(withDuration: 1.5, animations: {
+                UIView.animate(withDuration: 2, animations: {
                     maxTimeLabel.alpha = 0
                 })
             })

@@ -16,6 +16,10 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
 
     static let assetKeysRequiredToPlay = ["playable", "hasProtectedContent"]
     
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
     var fileLocation: URL? {
         didSet {
             asset = AVURLAsset(url: fileLocation!)
@@ -49,8 +53,9 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     var playPauseButton: UIButton!
     var addTextButton: UIButton!
     lazy var buttons: [UIButton] = [self.saveButton, self.playPauseButton, self.addTextButton]
-
+    
     // MARK: - Init
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         instantiateButtons()
@@ -62,13 +67,17 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.playerReachedEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.isHidden = true
+    }
+    
+    deinit {
+        removeObserver(self, forKeyPath: "player.currentItem.status")
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        removeObserver(self, forKeyPath: "player.currentItem.status")
     }
     
     // MARK: - Main
@@ -263,10 +272,6 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
             DispatchQueue.main.async(execute: {
                 switch assetExport.status {
                 case .completed:
-                    print("Success")
-                    print("start sleep")
-                    sleep(5)
-                    print("finish sleep")
                     self.activityIndicator.stopAnimating()
                     self.fileLocation = movieUrl
                     self.enableAllButtons()
@@ -351,7 +356,6 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "player.currentItem.status" {
             if player.status == AVPlayerStatus.readyToPlay {
-                print("goes into if of observer for readyToPlayer")
                 playPauseButton.isEnabled = true
             }
         }
