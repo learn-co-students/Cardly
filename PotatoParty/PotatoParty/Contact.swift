@@ -12,6 +12,7 @@ import FirebaseDatabase
 
 struct Contact {
     
+    
     let key: String
     let fullName: String
     let email: String
