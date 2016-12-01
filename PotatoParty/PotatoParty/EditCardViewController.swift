@@ -16,19 +16,18 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
 
     static let assetKeysRequiredToPlay = ["playable", "hasProtectedContent"]
     
+    var fileLocation: URL? {
+        didSet {
+            asset = AVURLAsset(url: fileLocation!)
+        }
+    }
+
     let HDVideoSize = CGSize(width: 1080.0, height: 1920.0)
-    
+
+    // Player
     var playerView = PlayerView()
-    var saveButton: UIButton!
-    var playPauseButton: UIButton!
-    var addOverlayButton: UIButton!
-    var addTextButton: UIButton!
-    var activityIndicator: UIActivityIndicatorView!
-    
-    lazy var buttons: [UIButton] = [self.saveButton, self.playPauseButton, self.addOverlayButton, self.addTextButton]
-    
     let player = AVPlayer()
-    var asset: AVURLAsset? {
+    var asset: AzVURLAsset? {
         didSet {
             guard let newAsset = asset else { return }
             loadURLAsset(newAsset)
@@ -44,20 +43,20 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         }
     }
     
-    var fileLocation: URL? {
-        didSet {
-            asset = AVURLAsset(url: fileLocation!)
-        }
-    }
-    
+    // Buttons
+    var saveButton: UIButton!
+    var playPauseButton: UIButton!
+    var addTextButton: UIButton!
+    var activityIndicator: UIActivityIndicatorView!
+    lazy var buttons: [UIButton] = [self.saveButton, self.playPauseButton, self.addTextButton]
+
+    // MARK: - Init
     override func viewDidLoad() {
         super.viewDidLoad()
-        saveButton = UIButton()
-        playPauseButton = UIButton()
-        addOverlayButton = UIButton()
-        addTextButton = UIButton()
-        activityIndicator = UIActivityIndicatorView()
+        instantiateButtons()
         layoutViewElements()
+        exportWithFrameLayer()
+        
         playerView.playerLayer.player = player
         
         addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: nil)
@@ -95,7 +94,11 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         })
     }
     
+    
+    // MARK: - Add overlay methods
+    
     func exportWithFrameLayer() {
+        // Composition
         let composition = AVMutableComposition()
         let asset = AVURLAsset(url: fileLocation!)
         
@@ -124,6 +127,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
             }
         }
         
+        // Layers
         let overlayImage = UIImage(named: "thankYou")
         let overlayLayer = CALayer()
         overlayLayer.contents = overlayImage?.cgImage
@@ -131,7 +135,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         
         let videoLayer = CALayer()
         videoLayer.backgroundColor = UIColor.blue.cgColor
-        videoLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
+        videoLayer.frame = CGRect(x: 120, y: 230, width: HDVideoSize.width * 0.78, height: HDVideoSize.height * 0.78)
         
         let parentLayer = CALayer()
         parentLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
@@ -148,10 +152,11 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         let layerInstr = videoCompositionInstructionForTrack(track: compositionVideoTrack, assetTrack: videoTrack)
         instruction.layerInstructions = [layerInstr]
         layercomposition.instructions = [instruction]
-        
+    
+        // Export
         let filePath = NSTemporaryDirectory() + fileName()
         let movieUrl = URL(fileURLWithPath: filePath)
-            
+    
         guard let assetExport = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHighestQuality) else { return }
         assetExport.videoComposition = layercomposition
         assetExport.outputFileType = AVFileTypeQuickTimeMovie
@@ -165,8 +170,8 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
                 case .completed:
                     print("Success")
                     sleep(5)
-                    self.activityIndicator.stopAnimating()
                     self.fileLocation = movieUrl
+                    self.activityIndicator.stopAnimating()
                     self.enableAllButtons()
                     break
                 case.cancelled:
@@ -184,13 +189,12 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
                 case.waiting:
                     print("Waiting")
                 }
-
             }
         }
-        
     }
     
     func overlayText(_ text: String) {
+        // Composition
         let composition = AVMutableComposition()
         let asset = AVURLAsset(url: fileLocation!)
         
@@ -216,6 +220,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
             print(error)
         }
         
+        // Layers
         let textLayer = CATextLayer()
         textLayer.string = text
         textLayer.font = UIFont(name: "Helvetica", size: 15.0)
@@ -243,6 +248,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         instruction.layerInstructions = [layerInstr]
         layercomposition.instructions = [instruction]
         
+        // Export
         let filePath = NSTemporaryDirectory() + fileName()
         let movieUrl = URL(fileURLWithPath: filePath)
         
@@ -423,7 +429,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         return formatter.string(from: Date()) + ".mp4"
     }
     
-    // MARK: Navigation
+    // MARK: - Navigation
     
     func navToSendCardVC() {
         let destVC = SendCardViewController()
@@ -431,7 +437,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         navigationController?.pushViewController(destVC, animated: true)
     }
     
-    // MARK: Save video to photo library
+    // MARK: - Save video to photo library
     
     func saveVideoToPhotoLibrary(_ videoUrl: URL) {
         PHPhotoLibrary.requestAuthorization({ (authorizationStatus: PHAuthorizationStatus) -> Void in

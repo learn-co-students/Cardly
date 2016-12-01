@@ -147,7 +147,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate{
         for list in arrayofWeddingLists {
             let firstCell = DropDownMenuCell()
             firstCell.textLabel!.text = list
-            firstCell.menuAction = #selector(dropDownAction(_:)) // Changed from selectGroup(_:) so dropdown will hide
+            firstCell.menuAction = #selector(selectGroup(_:))
             firstCell.menuTarget = self
             if currentChoice == list {
                 firstCell.accessoryType = .checkmark
@@ -166,21 +166,13 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate{
         navigationBarMenu.backgroundAlpha = 0.7
     }
     
-    
-    func dropDownAction(_ sender: AnyObject) {
-        
-        print("\n\ndrop down action\n\n")
-        navigationBarMenu.hide()
-    }
-    
-    
     func selectGroup(_ sender: UITableViewCell) {
         guard let group = sender.textLabel?.text?.lowercased() else { return }
         self.retrieveContacts(for: group, completion: { contacts in
             self.collectionView.contacts = contacts
             self.collectionView.reloadData()
         })
-        
+        navigationBarMenu.hide()
     }
     
     override func didReceiveMemoryWarning() {
