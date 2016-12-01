@@ -11,16 +11,19 @@ import SnapKit
 extension EditCardViewController {
     
     func layoutViewElements() {
+        // Main view setup
         view.backgroundColor = UIColor.clear
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.backgroundColor = UIColor.clear
         navigationController?.navigationBar.alpha = 0.0
         
+        // Player view
         view.addSubview(playerView)
         playerView.frame = self.view.frame
         playerView.backgroundColor = UIColor.clear
         playerView.playerLayer.frame = playerView.bounds
         
+        // Play+pause button
         playPauseButton.setTitle("Play", for: .normal)
         playPauseButton.backgroundColor = UIColor.red
         view.addSubview(playPauseButton)
@@ -33,6 +36,7 @@ extension EditCardViewController {
 //        playPauseButton.isEnabled = false
         playPauseButton.addTarget(self, action: #selector(self.playPauseButtonPressed), for: .touchUpInside)
         
+        // Save button
         saveButton.backgroundColor = UIColor.red
         saveButton.setTitle("Save", for: .normal)
         view.addSubview(saveButton)
@@ -44,17 +48,7 @@ extension EditCardViewController {
         }
         saveButton.addTarget(self, action: #selector(self.navToSendCardVC), for: .touchUpInside)
         
-        addOverlayButton.backgroundColor = UIColor.orange
-        addOverlayButton.setTitle("Overlay", for: .normal)
-        view.addSubview(addOverlayButton)
-        addOverlayButton.snp.makeConstraints { (make) in
-            make.height.equalTo(playPauseButton.snp.height)
-            make.width.equalTo(playPauseButton.snp.width)
-            make.centerX.equalToSuperview()
-            make.bottomMargin.equalToSuperview().offset(-20)
-        }
-        addOverlayButton.addTarget(self, action: #selector(self.exportWithFrameLayer), for: .touchUpInside)
-        
+        // Text button
         addTextButton.backgroundColor = UIColor.green
         addTextButton.setTitle("Text", for: .normal)
         view.addSubview(addTextButton)
@@ -62,10 +56,11 @@ extension EditCardViewController {
             make.height.equalTo(playPauseButton.snp.height)
             make.width.equalTo(playPauseButton.snp.width)
             make.centerX.equalToSuperview()
-            make.bottomMargin.equalTo(addOverlayButton.snp.topMargin).offset(-20)
+            make.bottomMargin.equalToSuperview().offset(-20)
         }
         addTextButton.addTarget(self, action: #selector(self.addTextToVideo), for: .touchUpInside)
         
+        // Activity indicator
         playerView.addSubview(activityIndicator)
         activityIndicator.snp.makeConstraints { (make) in
             make.size.equalTo(CGSize(width: 30, height: 30))
@@ -75,4 +70,13 @@ extension EditCardViewController {
         self.activityIndicator.isHidden = true
         activityIndicator.hidesWhenStopped = true
     }
+    
+    
+    func instantiateButtons() {
+        saveButton = UIButton()
+        playPauseButton = UIButton()
+        addTextButton = UIButton()
+        activityIndicator = UIActivityIndicatorView()
+    }
+    
 }
