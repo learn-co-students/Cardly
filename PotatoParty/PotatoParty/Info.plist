@@ -24,6 +24,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>To Record Video</string>
+	<key>NSContactsUsageDescription</key>
+	<string>To Import into App</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>To Record Video Audio</string>
 	<key>UILaunchStoryboardName</key>
@@ -35,8 +37,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 </dict>
 </plist>

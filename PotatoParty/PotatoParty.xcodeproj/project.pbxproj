@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		316A6DB41DEE290900BF9B9A /* GuillotineMenuTransitionAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316A6DB31DEE290900BF9B9A /* GuillotineMenuTransitionAnimation.swift */; };
+		3173A1C41DECC36F003385B6 /* AnimatedSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3173A1C31DECC36F003385B6 /* AnimatedSettingsViewController.swift */; };
+		3182D5191DEF706B0090AB2E /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3182D5131DEF706B0090AB2E /* ContactsViewController.swift */; };
+		3182D51A1DEF706B0090AB2E /* EditCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3182D5141DEF706B0090AB2E /* EditCardViewController.swift */; };
+		3182D51D1DEF706B0090AB2E /* SendCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3182D5171DEF706B0090AB2E /* SendCardViewController.swift */; };
+		3182D51E1DEF706B0090AB2E /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3182D5181DEF706B0090AB2E /* SettingsViewController.swift */; };
+		3182D5201DEF71E70090AB2E /* ic_menu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3182D51F1DEF71E70090AB2E /* ic_menu@3x.png */; };
+		3182D5221DEF72990090AB2E /* AddContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3182D5211DEF72990090AB2E /* AddContactViewController.swift */; };
 		31D78BA41DDE77BD00FA855B /* DropDownMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D78BA01DDE77BD00FA855B /* DropDownMenu.swift */; };
 		31D78BA51DDE77BD00FA855B /* DropDownMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D78BA11DDE77BD00FA855B /* DropDownMenuCell.swift */; };
 		31D78BA61DDE77BD00FA855B /* DropDownMenuKit.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 31D78BA21DDE77BD00FA855B /* DropDownMenuKit.xcassets */; };
@@ -16,11 +24,6 @@
 		3F0BE68C1DDCB1F5007E4FD0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F0BE68A1DDCB1F5007E4FD0 /* Main.storyboard */; };
 		3F0BE68E1DDCB1F5007E4FD0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F0BE68D1DDCB1F5007E4FD0 /* Assets.xcassets */; };
 		3F0BE6911DDCB1F5007E4FD0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F0BE68F1DDCB1F5007E4FD0 /* LaunchScreen.storyboard */; };
-		3F0BE6991DDCB30F007E4FD0 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0BE6981DDCB30F007E4FD0 /* ContactsViewController.swift */; };
-		3F0BE69C1DDCB78E007E4FD0 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0BE69B1DDCB78E007E4FD0 /* SettingsViewController.swift */; };
-		3F0BE6A21DDCB879007E4FD0 /* AddContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0BE6A11DDCB879007E4FD0 /* AddContactViewController.swift */; };
-		3F0BE6A61DDCB913007E4FD0 /* EditCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0BE6A51DDCB913007E4FD0 /* EditCardViewController.swift */; };
-		3F0BE6A81DDCB92D007E4FD0 /* SendCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0BE6A71DDCB92D007E4FD0 /* SendCardViewController.swift */; };
 		3F196C4E1DDE147100497BDD /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F196C4D1DDE147100497BDD /* Contact.swift */; };
 		3F196C501DDE154000497BDD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F196C4F1DDE154000497BDD /* User.swift */; };
 		3F196C521DDE30CA00497BDD /* ThankYou.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F196C511DDE30CA00497BDD /* ThankYou.swift */; };
@@ -39,6 +42,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		316A6DB31DEE290900BF9B9A /* GuillotineMenuTransitionAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GuillotineMenuTransitionAnimation.swift; sourceTree = "<group>"; };
+		3173A1C31DECC36F003385B6 /* AnimatedSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatedSettingsViewController.swift; sourceTree = "<group>"; };
+		3182D5131DEF706B0090AB2E /* ContactsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
+		3182D5141DEF706B0090AB2E /* EditCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditCardViewController.swift; sourceTree = "<group>"; };
+		3182D5171DEF706B0090AB2E /* SendCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendCardViewController.swift; sourceTree = "<group>"; };
+		3182D5181DEF706B0090AB2E /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		3182D51F1DEF71E70090AB2E /* ic_menu@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_menu@3x.png"; path = "PotatoParty/ic_menu@3x.png"; sourceTree = "<group>"; };
+		3182D5211DEF72990090AB2E /* AddContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AddContactViewController.swift; path = PotatoParty/AddContactViewController.swift; sourceTree = "<group>"; };
 		31D78BA01DDE77BD00FA855B /* DropDownMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDownMenu.swift; sourceTree = "<group>"; };
 		31D78BA11DDE77BD00FA855B /* DropDownMenuCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDownMenuCell.swift; sourceTree = "<group>"; };
 		31D78BA21DDE77BD00FA855B /* DropDownMenuKit.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DropDownMenuKit.xcassets; sourceTree = "<group>"; };
@@ -50,11 +61,6 @@
 		3F0BE68D1DDCB1F5007E4FD0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3F0BE6901DDCB1F5007E4FD0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3F0BE6921DDCB1F5007E4FD0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3F0BE6981DDCB30F007E4FD0 /* ContactsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
-		3F0BE69B1DDCB78E007E4FD0 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		3F0BE6A11DDCB879007E4FD0 /* AddContactViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddContactViewController.swift; sourceTree = "<group>"; };
-		3F0BE6A51DDCB913007E4FD0 /* EditCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditCardViewController.swift; sourceTree = "<group>"; };
-		3F0BE6A71DDCB92D007E4FD0 /* SendCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendCardViewController.swift; sourceTree = "<group>"; };
 		3F196C4D1DDE147100497BDD /* Contact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		3F196C4F1DDE154000497BDD /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		3F196C511DDE30CA00497BDD /* ThankYou.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThankYou.swift; sourceTree = "<group>"; };
@@ -90,6 +96,8 @@
 		3F0BE67A1DDCB1F5007E4FD0 = {
 			isa = PBXGroup;
 			children = (
+				3182D5211DEF72990090AB2E /* AddContactViewController.swift */,
+				3182D51F1DEF71E70090AB2E /* ic_menu@3x.png */,
 				3F0BE6851DDCB1F5007E4FD0 /* PotatoParty */,
 				3F0BE6841DDCB1F5007E4FD0 /* Products */,
 				56E8ECD7B8E59573CE52C295 /* Pods */,
@@ -111,6 +119,7 @@
 				31D78BA01DDE77BD00FA855B /* DropDownMenu.swift */,
 				31D78BA11DDE77BD00FA855B /* DropDownMenuCell.swift */,
 				31D78BA21DDE77BD00FA855B /* DropDownMenuKit.xcassets */,
+				316A6DB31DEE290900BF9B9A /* GuillotineMenuTransitionAnimation.swift */,
 				31D78BA31DDE77BD00FA855B /* DropDownTitleView.swift */,
 				3FD6DB2E1DDCEB760078CA45 /* PotatoParty.entitlements */,
 				3F0BE6A01DDCB82D007E4FD0 /* Storyboard */,
@@ -128,12 +137,11 @@
 		3F0BE69A1DDCB323007E4FD0 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				3182D5131DEF706B0090AB2E /* ContactsViewController.swift */,
+				3182D5141DEF706B0090AB2E /* EditCardViewController.swift */,
+				3182D5171DEF706B0090AB2E /* SendCardViewController.swift */,
+				3182D5181DEF706B0090AB2E /* SettingsViewController.swift */,
 				3F0BE6881DDCB1F5007E4FD0 /* LoginViewController.swift */,
-				3F0BE6981DDCB30F007E4FD0 /* ContactsViewController.swift */,
-				3F0BE6A51DDCB913007E4FD0 /* EditCardViewController.swift */,
-				3F0BE6A71DDCB92D007E4FD0 /* SendCardViewController.swift */,
-				3F0BE6A11DDCB879007E4FD0 /* AddContactViewController.swift */,
-				3F0BE69B1DDCB78E007E4FD0 /* SettingsViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -150,6 +158,7 @@
 				E49BA3A61DE3443A0010A7A4 /* Constants.swift */,
 				3F37150A1DE49D1B006B3EAD /* PlayerView.swift */,
 				3F37150C1DE4A21B006B3EAD /* EditCardViewControllerExtension.swift */,
+				3173A1C31DECC36F003385B6 /* AnimatedSettingsViewController.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -234,7 +243,7 @@
 				TargetAttributes = {
 					3F0BE6821DDCB1F5007E4FD0 = {
 						CreatedOnToolsVersion = 8.1;
-						DevelopmentTeam = H2562XJSGY;
+						DevelopmentTeam = KXY9EDFTF5;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Keychain = {
@@ -267,6 +276,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3182D5201DEF71E70090AB2E /* ic_menu@3x.png in Resources */,
 				3F0BE6911DDCB1F5007E4FD0 /* LaunchScreen.storyboard in Resources */,
 				3FD6DB2D1DDCEA5F0078CA45 /* GoogleService-Info.plist in Resources */,
 				31D78BA61DDE77BD00FA855B /* DropDownMenuKit.xcassets in Resources */,
@@ -330,28 +340,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3182D5221DEF72990090AB2E /* AddContactViewController.swift in Sources */,
 				E4ED56171DDD3C6700EB97D4 /* BottomNavBarView.swift in Sources */,
 				3F196C521DDE30CA00497BDD /* ThankYou.swift in Sources */,
-				3F0BE6A21DDCB879007E4FD0 /* AddContactViewController.swift in Sources */,
 				3F37150B1DE49D1B006B3EAD /* PlayerView.swift in Sources */,
 				31D78BA71DDE77BD00FA855B /* DropDownTitleView.swift in Sources */,
+				3182D51D1DEF706B0090AB2E /* SendCardViewController.swift in Sources */,
 				3F37150D1DE4A21B006B3EAD /* EditCardViewControllerExtension.swift in Sources */,
 				31D78BA41DDE77BD00FA855B /* DropDownMenu.swift in Sources */,
 				31D78BA51DDE77BD00FA855B /* DropDownMenuCell.swift in Sources */,
 				3F70B6C61DE351BD0051B349 /* SettingsViewControllerExtension.swift in Sources */,
+				3182D51A1DEF706B0090AB2E /* EditCardViewController.swift in Sources */,
+				3182D5191DEF706B0090AB2E /* ContactsViewController.swift in Sources */,
 				E4974AF01DDE1C3700698B81 /* ContactsCollectionViewCell.swift in Sources */,
 				3F0BE6891DDCB1F5007E4FD0 /* LoginViewController.swift in Sources */,
-				3F0BE6A81DDCB92D007E4FD0 /* SendCardViewController.swift in Sources */,
+				3173A1C41DECC36F003385B6 /* AnimatedSettingsViewController.swift in Sources */,
 				3F0BE6871DDCB1F5007E4FD0 /* AppDelegate.swift in Sources */,
-				3F0BE6991DDCB30F007E4FD0 /* ContactsViewController.swift in Sources */,
 				E49BA3A71DE3443B0010A7A4 /* Constants.swift in Sources */,
 				3F196C541DDE3AFE00497BDD /* Group.swift in Sources */,
-				3F0BE6A61DDCB913007E4FD0 /* EditCardViewController.swift in Sources */,
 				E4974AEE1DDE0FE100698B81 /* ContactsCollectionView.swift in Sources */,
 				3FD6DB301DDCFD7A0078CA45 /* LoginViewControllerExtension.swift in Sources */,
 				F30919EC1DDE147800479633 /* AddContactViewControllerExtension.swift in Sources */,
-				3F0BE69C1DDCB78E007E4FD0 /* SettingsViewController.swift in Sources */,
 				3F196C4E1DDE147100497BDD /* Contact.swift in Sources */,
+				3182D51E1DEF706B0090AB2E /* SettingsViewController.swift in Sources */,
+				316A6DB41DEE290900BF9B9A /* GuillotineMenuTransitionAnimation.swift in Sources */,
 				3F196C501DDE154000497BDD /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -478,11 +490,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = PotatoParty/PotatoParty.entitlements;
-				DEVELOPMENT_TEAM = H2562XJSGY;
+				DEVELOPMENT_TEAM = KXY9EDFTF5;
 				INFOPLIST_FILE = PotatoParty/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.ForrestApps.PotatoParty;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.flatironschool.team-potato-party";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -495,11 +507,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = PotatoParty/PotatoParty.entitlements;
-				DEVELOPMENT_TEAM = H2562XJSGY;
+				DEVELOPMENT_TEAM = KXY9EDFTF5;
 				INFOPLIST_FILE = PotatoParty/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.ForrestApps.PotatoParty;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.flatironschool.team-potato-party";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};

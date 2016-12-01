@@ -7,21 +7,21 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>655643500544-3j2jm5q98oenq4v7lndk6ig1iq57l689.apps.googleusercontent.com</string>
+	<string>210869186711-m2dodsfo21hq89hf4767hvm14noi9d8c.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.655643500544-3j2jm5q98oenq4v7lndk6ig1iq57l689</string>
+	<string>com.googleusercontent.apps.210869186711-m2dodsfo21hq89hf4767hvm14noi9d8c</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBDgSoZHW162KcsMqzD83mWX7l3Kx8wxAs</string>
+	<string>AIzaSyCtor0XTQsz5XTalbilOv13Z1F9zGoHGnY</string>
 	<key>GCM_SENDER_ID</key>
-	<string>655643500544</string>
+	<string>210869186711</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.ForrestApps.PotatoParty</string>
+	<string>com.flatironschool.team-potato-party</string>
 	<key>PROJECT_ID</key>
-	<string>potatoparty-9ac99</string>
+	<string>cardly-5166a</string>
 	<key>STORAGE_BUCKET</key>
-	<string>potatoparty-9ac99.appspot.com</string>
+	<string>cardly-5166a.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<true/>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -33,8 +33,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:655643500544:ios:a1b276d1fe4561a9</string>
+	<string>1:210869186711:ios:dcc55e6fa9e77780</string>
 	<key>DATABASE_URL</key>
-	<string>https://potatoparty-9ac99.firebaseio.com</string>
+	<string>https://cardly-5166a.firebaseio.com</string>
 </dict>
 </plist>

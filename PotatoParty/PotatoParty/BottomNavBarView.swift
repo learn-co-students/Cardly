@@ -23,7 +23,8 @@ class BottomNavBarView: UIView {
     var leftIconView = BottomNavBarLeftView()
     var middleIconView = BottomNavBarMiddleView()
     var rightIconView = BottomNavBarRightView()
-    
+  //  var addContactBtnImage: UIImage = #imageLiteral(resourceName: "addContactImage")
+        
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -65,8 +66,9 @@ class BottomNavBarLeftView: UIView {
         
         
         
-        // Change background
+        // Change background from color to image
         self.backgroundColor = UIColor.green
+      //  self.backgroundColor = UIColor.init(patternImage: #imageLiteral(resourceName: "addContactImage"))
     }
     
     func addContactButtonTapped(_ sender: UIButton) {

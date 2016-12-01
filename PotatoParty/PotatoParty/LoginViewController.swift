@@ -33,6 +33,8 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutViewAndContraints()
+        let tapGesture = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        view.addGestureRecognizer(tapGesture)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -63,6 +65,7 @@ extension LoginViewController {
         let submitAction = UIAlertAction(title: "Submit", style: .default) { (action) in
             let emailField = alertController.textFields![0]
             let passwordField = alertController.textFields![1]
+
             if let unwrappedEmail = emailField.text, let unwrappedPassword = passwordField.text {
                 FIRAuth.auth()!.createUser(withEmail: unwrappedEmail, password: unwrappedPassword, completion: { (user, error) in
                     if error == nil {
@@ -108,9 +111,15 @@ extension LoginViewController {
         })
     }
     
+    func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
 }
 
-// MARK: - Navigation methods 
+
+
+// MARK: - Navigation methods
 
 extension LoginViewController {
     
