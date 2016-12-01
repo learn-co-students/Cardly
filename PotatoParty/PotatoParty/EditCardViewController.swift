@@ -27,7 +27,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     // Player
     var playerView = PlayerView()
     let player = AVPlayer()
-    var asset: AzVURLAsset? {
+    var asset: AVURLAsset? {
         didSet {
             guard let newAsset = asset else { return }
             loadURLAsset(newAsset)
@@ -42,12 +42,12 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
             player.actionAtItemEnd = .none
         }
     }
-    
+    var activityIndicator: UIActivityIndicatorView!
+
     // Buttons
     var saveButton: UIButton!
     var playPauseButton: UIButton!
     var addTextButton: UIButton!
-    var activityIndicator: UIActivityIndicatorView!
     lazy var buttons: [UIButton] = [self.saveButton, self.playPauseButton, self.addTextButton]
 
     // MARK: - Init
@@ -199,6 +199,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         
         let track = asset.tracks(withMediaType: AVMediaTypeVideo)
         let videoTrack: AVAssetTrack = track[0] as AVAssetTrack
+        
         let timerange = CMTimeRangeMake(kCMTimeZero, asset.duration)
         
         let compositionVideoTrack: AVMutableCompositionTrack = composition.addMutableTrack(withMediaType: AVMediaTypeVideo, preferredTrackID: CMPersistentTrackID())
@@ -225,7 +226,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         textLayer.font = UIFont(name: "Helvetica", size: 15.0)
         textLayer.shadowOpacity = 0.5
         textLayer.alignmentMode = kCAAlignmentCenter
-        textLayer.frame = CGRect(x: 0, y: 50, width: HDVideoSize.width, height: HDVideoSize.height / 2)
+        textLayer.frame = CGRect(x: 0, y: 60, width: HDVideoSize.width, height: HDVideoSize.height / 2)
         
         let videoLayer = CALayer()
         videoLayer.backgroundColor = UIColor.blue.cgColor
@@ -235,15 +236,15 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         parentLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
         parentLayer.addSublayer(videoLayer)
         parentLayer.addSublayer(textLayer)
-        
+
         let layercomposition = AVMutableVideoComposition()
         layercomposition.frameDuration = CMTimeMake(1, 30)
         layercomposition.renderSize = HDVideoSize
-        layercomposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer:videoLayer, in: parentLayer)
+        layercomposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videoLayer, in: parentLayer)
         
         let instruction = AVMutableVideoCompositionInstruction()
         instruction.timeRange = CMTimeRangeMake(kCMTimeZero, composition.duration)
-        let layerInstr = videoCompositionInstructionForTrack(track: compositionVideoTrack, assetTrack: videoTrack)
+        let layerInstr = videoCompositionInstructionForText(track: compositionVideoTrack, assetTrack: videoTrack)
         instruction.layerInstructions = [layerInstr]
         layercomposition.instructions = [instruction]
         
@@ -251,7 +252,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         let filePath = NSTemporaryDirectory() + fileName()
         let movieUrl = URL(fileURLWithPath: filePath)
         
-        guard let assetExport = AVAssetExportSession(asset: composition, presetName:AVAssetExportPresetHighestQuality) else { return }
+        guard let assetExport = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHighestQuality) else { return }
         assetExport.videoComposition = layercomposition
         assetExport.outputFileType = AVFileTypeQuickTimeMovie
         assetExport.outputURL = movieUrl
@@ -309,6 +310,8 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         return (assetOrientation, isPortrait)
     }
     
+    
+    // MARK: - Composition instructions
     func videoCompositionInstructionForTrack(track: AVCompositionTrack, assetTrack: AVAssetTrack) -> AVMutableVideoCompositionLayerInstruction {
         let instruction = AVMutableVideoCompositionLayerInstruction(assetTrack: track)
         let assetTrack = assetTrack
@@ -333,6 +336,13 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
             }
             instruction.setTransform(concat, at: kCMTimeZero)
         }
+        return instruction
+    }
+    
+    func videoCompositionInstructionForText(track: AVCompositionTrack, assetTrack: AVAssetTrack) -> AVMutableVideoCompositionLayerInstruction {
+        let instruction = AVMutableVideoCompositionLayerInstruction(assetTrack: track)
+        let scaleFactor = CGAffineTransform(scaleX: 1, y: 1)
+        instruction.setTransform(assetTrack.preferredTransform.concatenating(scaleFactor), at: kCMTimeZero)
         return instruction
     }
     
