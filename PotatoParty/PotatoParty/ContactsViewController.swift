@@ -323,7 +323,6 @@ extension ContactsViewController {
         }
         
         let cameraController = UIImagePickerController()
-        var labelTrailingConstraint: Constraint? = nil
         cameraController.sourceType = .camera
         cameraController.mediaTypes = [kUTTypeMovie as NSString as String]
         cameraController.allowsEditing = true //allow video editing
@@ -338,36 +337,34 @@ extension ContactsViewController {
         maxTimeLabel.textAlignment = .center
         maxTimeLabel.textColor = UIColor.red
         cameraController.view.addSubview(maxTimeLabel)
+
         maxTimeLabel.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
             make.topMargin.equalToSuperview().offset(50)
+            make.leadingMargin.equalToSuperview().offset(-300)
             make.width.equalTo(300)
             make.height.equalTo(20)
         }
-//        maxTimeLabel.snp.makeConstraints { (make) in
-//            make.centerY.equalToSuperview()
-//            make.trailingMargin.equalToSuperview()
-//            make.leadingMargin.equalToSuperview()
-//            make.width.equalTo(300)
-//            make.height.equalTo(20)
-//        }
-        //cameraController.cameraOverlayView = overlay
+        
         present(cameraController, animated: true, completion: {
-//            cameraController.view.layoutIfNeeded()
-//            UIView.animate(withDuration: 3, delay: 0.5, options: .curveEaseInOut, animations: {
-//                print("In animation")
-//                maxTimeLabel.snp.updateConstraints({ (make) in
-//                    //make.centerY.equalToSuperview()
-//                    //make.trailingMargin.equalToSuperview().offset(800)
-//                    make.leadingMargin.equalToSuperview().offset(800)
-//
-//                    cameraController.view.layoutIfNeeded()
-//
-//                    //make.width.equalTo(300)
-//                    //make.height.equalTo(20)
-//                })
-//            }, completion: nil)
-//            maxTimeLabel.isHidden = true
+            cameraController.view.layoutIfNeeded()
+            
+            maxTimeLabel.snp.remakeConstraints({ (make) in
+                make.topMargin.equalToSuperview().offset(50)
+                make.centerX.equalToSuperview()
+                make.width.equalTo(300)
+                make.height.equalTo(20)
+            })
+            
+            cameraController.view.setNeedsUpdateConstraints()
+            
+            UIView.animate(withDuration: 3, delay: 0.5, options: .curveEaseInOut, animations: {
+                print("In animation")
+                cameraController.view.layoutIfNeeded()
+            }, completion: { (complete) in
+                UIView.animate(withDuration: 1.5, animations: {
+                    maxTimeLabel.alpha = 0
+                })
+            })
         })
         return true
     }
