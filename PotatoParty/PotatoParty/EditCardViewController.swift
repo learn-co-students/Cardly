@@ -47,6 +47,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         }
     }
     var activityIndicator: UIActivityIndicatorView!
+    var selectedImageIndex: Int?
 
     // Buttons
     var saveButton: UIButton!
@@ -77,7 +78,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         
         layoutViewElements()
         
-        exportWithFrameLayer()
+        //exportWithFrameLayer()
         
         playerView.playerLayer.player = player
         
@@ -153,7 +154,9 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         }
         
         // Layers
-        let overlayImage = UIImage(named: "thankYou")
+        //let overlayImage = UIImage(named: "thankYou")
+        guard let index = selectedImageIndex else { return }
+        let overlayImage = frameImagesList[index].image
         let overlayLayer = CALayer()
         overlayLayer.contents = overlayImage?.cgImage
         overlayLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
@@ -463,6 +466,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     // MARK: - Navigation
     
     func navToSendCardVC() {
+        exportWithFrameLayer()
         let destVC = SendCardViewController()
         destVC.videoURL = fileLocation
         navigationController?.pushViewController(destVC, animated: true)
@@ -499,6 +503,7 @@ extension EditCardViewController: UIScrollViewDelegate {
             index -= 1
         }
         print("Selected frame list index is \(index)")
+        selectedImageIndex = index
     }
     
 }
