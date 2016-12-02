@@ -270,11 +270,14 @@ extension ContactsViewController: BottomNavBarDelegate {
     
     func deleteButtonPressed() {
         
-        
-        //delete contact 
-        //delete in firebase and delete from array
-        //delete from group?
-        //reload data
+        deleteContacts {
+            retrieveContacts(for: User.shared.groups[0], completion: { contacts in
+                self.collectionView.contacts = contacts
+                self.collectionView.reloadData()
+            })
+            collectionView.reloadData()
+        }
+    
     }
     
     func sendToButtonPressed() {
@@ -306,13 +309,30 @@ extension ContactsViewController {
         })
     }
     
-    func deleteContacts() {
+    func deleteContacts(completion: ()->()) {
         
-        let path = "\(uid)/\(group.lowercased())/"
-        let contactBucketRef = ref.child(path)
-        for contact in shared.selectedContacts {
-            contactBucketRef.removeValue()
+        for contact in shared.selectedContacts{
+            removeFromAllGroupsinFB(contact: contact)
+            shared.selectedContacts.removeAll()
+            shared.contacts.removeAll()
+           
         }
+        
+        completion()
+    }
+    
+    func removeFromAllGroupsinFB(contact: Contact) {
+        let allPath = "\(uid)/all/\(contact.key)"
+        let familyPath = "\(uid)/family/\(contact.key)"
+        let friendsPath = "\(uid)/friends/\(contact.key)"
+        let coworkersPath = "\(uid)/coworkers/\(contact.key)"
+        let otherPath = "\(uid)/other/\(contact.key)"
+        ref.child(allPath).removeValue()
+        ref.child(familyPath).removeValue()
+        ref.child(friendsPath).removeValue()
+        ref.child(coworkersPath).removeValue()
+        ref.child(otherPath).removeValue()
+        
     }
     
 }

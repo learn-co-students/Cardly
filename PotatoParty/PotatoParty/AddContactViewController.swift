@@ -93,6 +93,8 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
                 groupContactsRef.setValue(appContact.toAny())
             }
         }
+        let destVC = ContactsViewController()
+        navigationController?.pushViewController(destVC, animated: true)
         
     }
     
