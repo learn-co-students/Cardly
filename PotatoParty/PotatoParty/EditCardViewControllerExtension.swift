@@ -13,9 +13,6 @@ extension EditCardViewController {
     func layoutViewElements() {
         // Main view setup
         view.backgroundColor = UIColor.clear
-        navigationController?.navigationBar.isTranslucent = true
-        navigationController?.navigationBar.backgroundColor = UIColor.clear
-        navigationController?.navigationBar.alpha = 0.0
         
         // Player view
         view.addSubview(playerView)
@@ -69,6 +66,7 @@ extension EditCardViewController {
         }
         self.activityIndicator.isHidden = true
         activityIndicator.hidesWhenStopped = true
+        
     }
     
     
