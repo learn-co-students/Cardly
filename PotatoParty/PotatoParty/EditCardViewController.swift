@@ -12,7 +12,7 @@ import AVKit
 import AssetsLibrary
 import Photos
 
-class EditCardViewController: UIViewController, UITextFieldDelegate{
+class EditCardViewController: UIViewController, UITextFieldDelegate {
 
     static let assetKeysRequiredToPlay = ["playable", "hasProtectedContent"]
     
@@ -440,14 +440,17 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     
     // MARK: - Navigation
     
-    func navToSendCardVC(isExportSuccessful: Bool) {
+    func navToSendCardVC(sender: UIButton, isExportSuccessful: Bool) {
         
         exportWithFrameLayer { (success) in
             if success {
                 self.player.pause()
+                
                 let destVC = SendCardViewController()
                 destVC.videoURL = self.fileLocation
-                self.navigationController?.pushViewController(destVC, animated: true)
+                destVC.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
+                destVC.view.backgroundColor = UIColor.clear
+                self.present(destVC, animated: true, completion: nil)
             }
         }
     }
