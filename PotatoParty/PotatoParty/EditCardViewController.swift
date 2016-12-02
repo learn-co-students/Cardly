@@ -59,8 +59,9 @@ class EditCardViewController: UIViewController {
     var bottomTextField: UITextField!
     
     
-    
-    
+    // Text for render method
+    var topTextString: String?
+    var bottomTextString: String?
     
     // MARK: - Init
     
@@ -68,11 +69,11 @@ class EditCardViewController: UIViewController {
         super.viewDidLoad()
         instantiateButtons()
         layoutViewElements()
-        exportWithFrameLayer()
+        exportWithFrameLayer { 
+            self.setupText()
+        }
         
         playerView.playerLayer.player = player
-        
-        setupText()
         
         addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.playerReachedEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
@@ -115,7 +116,7 @@ class EditCardViewController: UIViewController {
     
     // MARK: - Add overlay methods
     
-    func exportWithFrameLayer() {
+    func exportWithFrameLayer(completion: @escaping () -> Void) {
         // Composition
         let composition = AVMutableComposition()
         let asset = AVURLAsset(url: fileLocation!)
@@ -191,6 +192,7 @@ class EditCardViewController: UIViewController {
                     self.fileLocation = movieUrl
                     self.activityIndicator.stopAnimating()
                     self.enableAllButtons()
+                    completion()
                     break
                 case.cancelled:
                     print("Canceled")
@@ -211,7 +213,9 @@ class EditCardViewController: UIViewController {
         }
     }
     
-    func overlayText(_ text: String) {
+    func overlayText() {
+        guard let text = topTextString else { return }
+        
         // Composition
         let composition = AVMutableComposition()
         let asset = AVURLAsset(url: fileLocation!)
@@ -240,13 +244,24 @@ class EditCardViewController: UIViewController {
         }
         
         // Layers
-        let textLayer = CATextLayer()
-        textLayer.string = text
-        textLayer.font = UIFont(name: "Helvetica", size: 15.0)
-        textLayer.shadowOpacity = 0.5
-        textLayer.alignmentMode = kCAAlignmentCenter
-        textLayer.frame = CGRect(x: 0, y: 60, width: HDVideoSize.width, height: HDVideoSize.height / 2)
         
+        // Text layer
+        let textLayer = CATextLayer()
+        textLayer.frame = CGRect(x: 30, y: -10, width: HDVideoSize.width, height: HDVideoSize.height)
+        // Text attributes
+        textLayer.string = text
+        textLayer.font = CTFontCreateWithName(Font.nameForCard as CFString, 0.0, nil)
+        textLayer.fontSize = Font.Size.cardVideo
+        textLayer.foregroundColor = UIColor.white.cgColor
+        textLayer.alignmentMode = kCAAlignmentLeft
+        textLayer.backgroundColor = UIColor.clear.cgColor
+        textLayer.contentsScale = 1
+        // Drop shadow
+        textLayer.shadowColor = UIColor.black.cgColor
+        textLayer.shadowOffset = CGSize(width: 4, height: 4)
+        textLayer.shadowRadius = 0
+        textLayer.shadowOpacity = 1
+
         let videoLayer = CALayer()
         videoLayer.backgroundColor = UIColor.blue.cgColor
         videoLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
@@ -285,6 +300,10 @@ class EditCardViewController: UIViewController {
                     self.activityIndicator.stopAnimating()
                     self.fileLocation = movieUrl
                     self.enableAllButtons()
+                    sleep(3)
+                    self.topTextField.isHidden = true
+                    self.topTextField.isEnabled = false
+                    
                     break
                 case.cancelled:
                     print("Canceled")
@@ -402,25 +421,28 @@ class EditCardViewController: UIViewController {
         }
     }
     
-    func addTextToVideo() {
-        let alertController = UIAlertController(title: "Text to overlay", message: "Must be 15 characters or less", preferredStyle: .alert)
-        alertController.addTextField { (textField) in
-            textField.delegate = self
-        }
-        let submitAction = UIAlertAction(title: "Submit", style: .default) { (action) in
-            self.overlayText((alertController.textFields?[0].text!)!)
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alertController.addAction(submitAction)
-        alertController.addAction(cancelAction)
-        present(alertController, animated: true, completion: nil)
-    }
+    // Text
+//    func addTextToVideo() {
+//        let alertController = UIAlertController(title: "Text to overlay", message: "Must be 15 characters or less", preferredStyle: .alert)
+//        alertController.addTextField { (textField) in
+//            textField.delegate = self
+//        }
+//        let submitAction = UIAlertAction(title: "Submit", style: .default) { (action) in
+//            self.overlayText((alertController.textFields?[0].text!)!)
+//        }
+//        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+//        alertController.addAction(submitAction)
+//        alertController.addAction(cancelAction)
+//        present(alertController, animated: true, completion: nil)
+//    }
+//    
+//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//        let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string)
+//        return newString.characters.count <= 15
+//    }
+//    
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string)
-        return newString.characters.count <= 15
-    }
-    
+    // Alert
     func showAlert(title:String, message:String, dismiss:Bool) {
         let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
         

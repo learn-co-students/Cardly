@@ -54,7 +54,9 @@ extension EditCardViewController {
             make.centerX.equalToSuperview()
             make.bottomMargin.equalToSuperview().offset(-20)
         }
-        addTextButton.addTarget(self, action: #selector(self.addTextToVideo), for: .touchUpInside)
+        
+        
+        addTextButton.addTarget(self, action: #selector(self.overlayText), for: .touchUpInside)
         
         // Activity indicator
         playerView.addSubview(activityIndicator)
@@ -78,7 +80,7 @@ extension EditCardViewController {
 
 extension EditCardViewController: UITextFieldDelegate {
     func setupText() {
-        let font = UIFont(name: Font.nameForCard, size: Font.Size.card)
+        let font = UIFont(name: Font.nameForCard, size: Font.Size.cardView)
         
         // Top text field
         topTextField = UITextField()
@@ -100,6 +102,8 @@ extension EditCardViewController: UITextFieldDelegate {
         topTextField.layer.shadowOffset = CGSize(width: 2, height: 2)
         topTextField.layer.shadowRadius = 0
         topTextField.layer.shadowOpacity = 1
+        // Set string for export layer
+        topTextString = topTextField.text
         
         
         // Bottom text field
@@ -110,6 +114,7 @@ extension EditCardViewController: UITextFieldDelegate {
 //        view.addSubview(bottomTextField)
 //        bottomTextField.snp.makeConstraints { (make) in
 //            make.right.equalToSuperview().offset(-30)
+//            make.left.equalToSuperview()
 //            make.bottom.equalToSuperview()
 //        }
         
@@ -124,10 +129,17 @@ extension EditCardViewController: UITextFieldDelegate {
         bottomTextField.layer.shadowOffset = CGSize(width: 2, height: 2)
         bottomTextField.layer.shadowRadius = 0
         bottomTextField.layer.shadowOpacity = 1
+        // Set string for export layer
+        bottomTextString = bottomTextField.text
     }
     
     // Press enter to hide keyboard
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField.hasText {
+            topTextString = textField.text!
+        } else {
+            topTextString = nil
+        }
         textField.resignFirstResponder()
         return true
     }
