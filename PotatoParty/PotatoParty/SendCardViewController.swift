@@ -19,6 +19,24 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
     var videoURL: URL!
     var shared = User.shared
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        layoutElements()
+        //        if let unwrappedVideoURL = videoURL {
+        //            print("Passed video url is \(unwrappedVideoURL)")
+        //        }
+        //        else {
+        //            print("Video url is nil!!!!")
+        //        }
+        // Do any additional setup after loading the view.
+        
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
     func layoutElements() {
         view.addSubview(sendEmail)
         sendEmail.snp.makeConstraints { (make) in
@@ -142,11 +160,6 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
         
     }
     
-    //Let user know e-mail was sent successfully - alert controller? 
-    func successSent() {
-        print("You've sent your video successfully")
-    }
-    
     //PULLING VIDEO FROM FIREBASE _ FOR TESTING
     
 //    func downloadVideoURL() {
@@ -180,26 +193,6 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
             userContactsRef.setValue(true)
         }
         completion()
-    }
-    
-    
-        
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        layoutElements()
-//        if let unwrappedVideoURL = videoURL {
-//            print("Passed video url is \(unwrappedVideoURL)")
-//        }
-//        else {
-//            print("Video url is nil!!!!")
-//        }
-        // Do any additional setup after loading the view.
-        
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
 

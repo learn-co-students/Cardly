@@ -12,12 +12,53 @@ extension EditCardViewController {
     func layoutViewElements() {
         // Main view setup
         view.backgroundColor = UIColor.clear
+
+        //frame image views
+        frame1View = UIImageView(image: #imageLiteral(resourceName: "thankYou"))
+        frame2View = UIImageView(image: #imageLiteral(resourceName: "thankYou2"))
+        frameImagesList.append(frame1View)
+        frameImagesList.append(frame2View)
+        frame1View.contentMode = .scaleAspectFit
+        frame2View.contentMode = .scaleAspectFit
+        
+        // Frame scrollview
+        frameScrollview = UIScrollView()
+        frameScrollview.delegate = self
+        view.addSubview(frameScrollview)
+        frameScrollview.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.height.equalToSuperview()
+            make.width.equalToSuperview()
+        }
+        frameScrollview.bounces = false
+        frameScrollview.decelerationRate = UIScrollViewDecelerationRateFast
+        frameScrollview.isPagingEnabled = true
+        
+        //frame stack view
+        frameStackview = UIStackView(arrangedSubviews: frameImagesList)
+        frameStackview.axis = .horizontal
+        frameStackview.distribution = .fillEqually
+        frameStackview.alignment = .fill
+        frameStackview.contentMode = .scaleAspectFit
+        frameScrollview.addSubview(frameStackview)
+        frameStackview.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.height.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(Double(frameImagesList.count))
+        }
         
         // Player view
         view.addSubview(playerView)
         playerView.frame = self.view.frame
         playerView.backgroundColor = UIColor.clear
         playerView.playerLayer.frame = playerView.bounds
+        view.sendSubview(toBack: playerView)
         
         // Play+pause button
         playPauseButton.setTitle("Play", for: .normal)
@@ -29,7 +70,6 @@ extension EditCardViewController {
             make.bottomMargin.equalToSuperview().offset(-20)
             make.leadingMargin.equalToSuperview()
         }
-//        playPauseButton.isEnabled = false
         playPauseButton.addTarget(self, action: #selector(self.playPauseButtonPressed), for: .touchUpInside)
         
         // Save button
@@ -44,19 +84,6 @@ extension EditCardViewController {
         }
         saveButton.addTarget(self, action: #selector(self.navToSendCardVC), for: .touchUpInside)
         
-        // Text button
-        addTextButton.backgroundColor = UIColor.green
-        addTextButton.setTitle("Text", for: .normal)
-        view.addSubview(addTextButton)
-        addTextButton.snp.makeConstraints { (make) in
-            make.height.equalTo(playPauseButton.snp.height)
-            make.width.equalTo(playPauseButton.snp.width)
-            make.centerX.equalToSuperview()
-            make.bottomMargin.equalToSuperview().offset(-20)
-        }
-        
-        
-        addTextButton.addTarget(self, action: #selector(self.overlayText), for: .touchUpInside)
         
         // Activity indicator
         playerView.addSubview(activityIndicator)
@@ -118,13 +145,13 @@ extension EditCardViewController: UITextFieldDelegate {
 //            make.bottom.equalToSuperview()
 //        }
         
-        // Text
+        // Text attributes
         bottomTextField.text = "Love, Forrest"
         bottomTextField.font = font
         bottomTextField.textAlignment = .right
         bottomTextField.textColor = UIColor.white
         bottomTextField.backgroundColor = UIColor.clear
-        // Drop shadow
+        // Text drop shadow
         bottomTextField.layer.shadowColor = UIColor.black.cgColor
         bottomTextField.layer.shadowOffset = CGSize(width: 2, height: 2)
         bottomTextField.layer.shadowRadius = 0

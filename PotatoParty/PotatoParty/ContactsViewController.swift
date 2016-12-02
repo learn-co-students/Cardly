@@ -252,20 +252,13 @@ extension ContactsViewController: BottomNavBarDelegate {
         presentationAnimator.animationDelegate = destVC as? GuillotineAnimationDelegate
         //presentationAnimator.supportView = navigationController!.navigationBar
         presentationAnimator.presentButton = view
-        present(destVC, animated: true, completion: nil)
-
-        
-        
-        
+        present(destVC, animated: true, completion: nil)     
     }
     
     func selectBtnClicked() {
         let destVC = ContactsViewController()
         navigationController?.pushViewController(destVC, animated: false)
         print("\n\n Select Button Clicked Working")
-        
-        
-        
     }
 
     func goToAddContact(){
@@ -275,9 +268,16 @@ extension ContactsViewController: BottomNavBarDelegate {
         //send to ADD contacts view controller
     }
     
-    func addContactButtonPressed() {
+    func deleteButtonPressed() {
         
-        navToAddContactBtnVC()
+        deleteContacts {
+            retrieveContacts(for: User.shared.groups[0], completion: { contacts in
+                self.collectionView.contacts = contacts
+                self.collectionView.reloadData()
+            })
+            collectionView.reloadData()
+        }
+    
     }
     
     func sendToButtonPressed() {
@@ -285,10 +285,6 @@ extension ContactsViewController: BottomNavBarDelegate {
         navToRecordCardVC()
     }
     
-    func navToAddContactBtnVC() {
-        let destVC = AddContactViewController()
-        navigationController?.pushViewController(destVC, animated: false)
-    }
     
     func navToRecordCardVC() {
         let _ = startCameraFromViewController(self, withDelegate: self)
@@ -313,10 +309,34 @@ extension ContactsViewController {
         })
     }
     
+    func deleteContacts(completion: ()->()) {
+        
+        for contact in shared.selectedContacts{
+            removeFromAllGroupsinFB(contact: contact)
+            shared.selectedContacts.removeAll()
+            shared.contacts.removeAll()
+           
+        }
+        
+        completion()
+    }
     
-    
+    func removeFromAllGroupsinFB(contact: Contact) {
+        let allPath = "\(uid)/all/\(contact.key)"
+        let familyPath = "\(uid)/family/\(contact.key)"
+        let friendsPath = "\(uid)/friends/\(contact.key)"
+        let coworkersPath = "\(uid)/coworkers/\(contact.key)"
+        let otherPath = "\(uid)/other/\(contact.key)"
+        ref.child(allPath).removeValue()
+        ref.child(familyPath).removeValue()
+        ref.child(friendsPath).removeValue()
+        ref.child(coworkersPath).removeValue()
+        ref.child(otherPath).removeValue()
+        
+    }
     
 }
+
 
 // MARK: - Show Camera VC
 extension ContactsViewController {
