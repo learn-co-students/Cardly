@@ -444,6 +444,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         
         exportWithFrameLayer { (success) in
             if success {
+                self.player.pause()
                 let destVC = SendCardViewController()
                 destVC.videoURL = self.fileLocation
                 self.navigationController?.pushViewController(destVC, animated: true)
