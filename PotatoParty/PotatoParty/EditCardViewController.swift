@@ -53,12 +53,29 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     var playPauseButton: UIButton!
     var addTextButton: UIButton!
     lazy var buttons: [UIButton] = [self.saveButton, self.playPauseButton, self.addTextButton]
+    var frameScrollview: UIScrollView!
+    var frameStackview: UIStackView!
+    var frame1View: UIImageView!
+    var frame2View: UIImageView!
+    var frameImagesList: [UIImageView] = []
     
     // MARK: - Init
     
     override func viewDidLoad() {
         super.viewDidLoad()
         instantiateButtons()
+        
+        frame1View = UIImageView(image: #imageLiteral(resourceName: "thankYou"))
+        frame2View = UIImageView(image: #imageLiteral(resourceName: "thankYou2"))
+        frameImagesList.append(frame1View)
+        frameImagesList.append(frame2View)
+        frame1View.contentMode = .scaleAspectFit
+        frame2View.contentMode = .scaleAspectFit
+        frameScrollview = UIScrollView()
+        frameScrollview.delegate = self
+        frameStackview = UIStackView(arrangedSubviews: frameImagesList)
+        
+        
         layoutViewElements()
         exportWithFrameLayer()
         
@@ -468,4 +485,8 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         })
     }
 
+}
+
+extension EditCardViewController: UIScrollViewDelegate {
+    
 }

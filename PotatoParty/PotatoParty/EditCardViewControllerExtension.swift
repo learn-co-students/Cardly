@@ -13,12 +13,41 @@ extension EditCardViewController {
     func layoutViewElements() {
         // Main view setup
         view.backgroundColor = UIColor.clear
+
+        
+        // Frame scrollview
+        view.addSubview(frameScrollview)
+        frameScrollview.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.height.equalToSuperview()
+            make.width.equalToSuperview()
+        }
+        
+        //frame stack view
+        frameStackview.axis = .horizontal
+        frameStackview.distribution = .fillEqually
+        frameStackview.alignment = .fill
+        frameStackview.contentMode = .scaleAspectFit
+        //frameStackview.translatesAutoresizingMaskIntoConstraints = false
+        frameScrollview.addSubview(frameStackview)
+        frameStackview.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.height.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(Double(frameImagesList.count))
+        }
         
         // Player view
         view.addSubview(playerView)
         playerView.frame = self.view.frame
         playerView.backgroundColor = UIColor.clear
         playerView.playerLayer.frame = playerView.bounds
+        view.sendSubview(toBack: playerView)
         
         // Play+pause button
         playPauseButton.setTitle("Play", for: .normal)
