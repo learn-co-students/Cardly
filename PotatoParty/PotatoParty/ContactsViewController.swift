@@ -14,7 +14,7 @@ import SnapKit
 import MobileCoreServices
 
 
-class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContactsDelegate  {
+class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContactsDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
     // MARK: - Views
     var collectionView: ContactsCollectionView!
@@ -24,9 +24,9 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     var dismissButton: UIButton?
     var titleLabel: UILabel?
     var timer = Timer()
-    
-    
-    
+    var pickGroup = UIPickerView()
+    var pickerData = ["All", "Family", "Friends", "Coworkers", "Other"]
+
     fileprivate let cellHeight: CGFloat = 210
     fileprivate let cellSpacing: CGFloat = 20
     
@@ -47,6 +47,9 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
         
         self.navigationBarMenu = DropDownMenu()
         
+        pickGroup.delegate = self
+        pickGroup.dataSource = self
+
         let title = prepareNavigationBarMenuTitleView()
         prepareNavigationBarMenu(title)
         
@@ -184,6 +187,31 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
         super.didReceiveMemoryWarning()
     }
     
+    // AlertConroller & UIPicker View
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return pickerData.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return pickerData[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+    }
+    
+    func showPickerInAlert() {
+    let alert = UIAlertController(title: "Group", message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        //set up pickGroup frame
+        alert.view.addSubview(pickGroup)
+    
+        self.present(alert, animated: true, completion: nil)
+    }
 }
 
 // MARK: - Layout view elements
@@ -213,6 +241,7 @@ extension ContactsViewController {
         bottomNavBar = BottomNavBarView()
         bottomNavBar.leftIconView.delegate = self
         bottomNavBar.rightIconView.delegate = self
+        bottomNavBar.middleIconView.delegate = self
         self.view.addSubview(bottomNavBar)
         bottomNavBar.snp.makeConstraints { (make) in
             make.left.equalToSuperview()
@@ -280,6 +309,12 @@ extension ContactsViewController: BottomNavBarDelegate {
     
     }
     
+    func editGroupButtonPressed(){
+        
+        showPickerInAlert()
+        print("edit group button pressed")
+    }
+    
     func sendToButtonPressed() {
         
         navToRecordCardVC()
@@ -289,6 +324,10 @@ extension ContactsViewController: BottomNavBarDelegate {
     func navToRecordCardVC() {
         let _ = startCameraFromViewController(self, withDelegate: self)
     }
+    
+    
+    
+    
 }
 
 // MARK: - Firebase methods
