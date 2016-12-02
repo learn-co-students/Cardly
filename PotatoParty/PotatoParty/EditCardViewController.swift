@@ -75,8 +75,8 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         frameScrollview.delegate = self
         frameStackview = UIStackView(arrangedSubviews: frameImagesList)
         
-        
         layoutViewElements()
+        
         exportWithFrameLayer()
         
         playerView.playerLayer.player = player

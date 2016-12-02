@@ -23,6 +23,9 @@ extension EditCardViewController {
             make.height.equalToSuperview()
             make.width.equalToSuperview()
         }
+        frameScrollview.bounces = false
+        frameScrollview.decelerationRate = UIScrollViewDecelerationRateFast
+        frameScrollview.isPagingEnabled = true
         
         //frame stack view
         frameStackview.axis = .horizontal
