@@ -9,7 +9,6 @@ import UIKit
 import SnapKit
 
 extension EditCardViewController {
-    
     func layoutViewElements() {
         // Main view setup
         view.backgroundColor = UIColor.clear
@@ -69,12 +68,68 @@ extension EditCardViewController {
         
     }
     
-    
     func instantiateButtons() {
         saveButton = UIButton()
         playPauseButton = UIButton()
         addTextButton = UIButton()
         activityIndicator = UIActivityIndicatorView()
     }
-    
 }
+
+extension EditCardViewController: UITextFieldDelegate {
+    func setupText() {
+        let font = UIFont(name: Font.nameForCard, size: Font.Size.card)
+        
+        // Top text field
+        topTextField = UITextField()
+        topTextField.delegate = self
+        view.addSubview(topTextField)
+        topTextField.snp.makeConstraints { (make) in
+            make.left.equalToSuperview().offset(30)
+            make.right.equalToSuperview()
+            make.top.equalToSuperview().offset(-10)
+        }
+        // Text
+        topTextField.text = "Hey Carl,"
+        topTextField.font = font
+        topTextField.textAlignment = .left
+        topTextField.textColor = UIColor.white
+        topTextField.backgroundColor = UIColor.clear
+        // Drop shadow
+        topTextField.layer.shadowColor = UIColor.black.cgColor
+        topTextField.layer.shadowOffset = CGSize(width: 2, height: 2)
+        topTextField.layer.shadowRadius = 0
+        topTextField.layer.shadowOpacity = 1
+        
+        
+        // Bottom text field
+        bottomTextField = UITextField()
+        bottomTextField.delegate = self
+        
+//        MARK: - Uncomment to enable bottom text field
+//        view.addSubview(bottomTextField)
+//        bottomTextField.snp.makeConstraints { (make) in
+//            make.right.equalToSuperview().offset(-30)
+//            make.bottom.equalToSuperview()
+//        }
+        
+        // Text
+        bottomTextField.text = "Love, Forrest"
+        bottomTextField.font = font
+        bottomTextField.textAlignment = .right
+        bottomTextField.textColor = UIColor.white
+        bottomTextField.backgroundColor = UIColor.clear
+        // Drop shadow
+        bottomTextField.layer.shadowColor = UIColor.black.cgColor
+        bottomTextField.layer.shadowOffset = CGSize(width: 2, height: 2)
+        bottomTextField.layer.shadowRadius = 0
+        bottomTextField.layer.shadowOpacity = 1
+    }
+    
+    // Press enter to hide keyboard
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+}
+

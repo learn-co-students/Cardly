@@ -12,7 +12,7 @@ import AVKit
 import AssetsLibrary
 import Photos
 
-class EditCardViewController: UIViewController, UITextFieldDelegate{
+class EditCardViewController: UIViewController {
 
     static let assetKeysRequiredToPlay = ["playable", "hasProtectedContent"]
     
@@ -54,6 +54,14 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     var addTextButton: UIButton!
     lazy var buttons: [UIButton] = [self.saveButton, self.playPauseButton, self.addTextButton]
     
+    // Custom text
+    var topTextField: UITextField!
+    var bottomTextField: UITextField!
+    
+    
+    
+    
+    
     // MARK: - Init
     
     override func viewDidLoad() {
@@ -63,6 +71,8 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         exportWithFrameLayer()
         
         playerView.playerLayer.player = player
+        
+        setupText()
         
         addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.playerReachedEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
