@@ -13,7 +13,7 @@ import SnapKit
 // MARK: - Bottom Nav Bar Protocol
 
 protocol BottomNavBarDelegate: class {
-    func addContactButtonPressed()
+    func deleteButtonPressed()
     func sendToButtonPressed()
 }
 
@@ -39,7 +39,7 @@ class BottomNavBarView: UIView {
 // MARK: - Nav Bar Individual Views
 
 class BottomNavBarLeftView: UIView {
-    var addContactBtn = UIButton()
+    var deleteContactBtn = UIButton()
     weak var delegate: BottomNavBarDelegate?
     
     override init(frame: CGRect) {
@@ -53,14 +53,14 @@ class BottomNavBarLeftView: UIView {
     
     func setupView() {
         // Add button
-        addContactBtn.setTitle("+", for: .normal)
-        addContactBtn.setTitleColor(UIColor.black, for: .normal)
-        addContactBtn.titleLabel?.font = UIFont(name: "Helvetica", size: 32)
-        addContactBtn.frame = CGRect()
-        addContactBtn.isEnabled = true
-        addContactBtn.addTarget(self, action: #selector(addContactButtonTapped(_:)), for: .touchUpInside)
-        addSubview(addContactBtn)
-        addContactBtn.snp.makeConstraints { (make) in
+        deleteContactBtn.setTitle("🗑", for: .normal)
+        deleteContactBtn.setTitleColor(UIColor.black, for: .normal)
+        deleteContactBtn.titleLabel?.font = UIFont(name: "Helvetica", size: 32)
+        deleteContactBtn.frame = CGRect()
+        deleteContactBtn.isEnabled = true
+        deleteContactBtn.addTarget(self, action: #selector(deleteButtonTapped(_:)), for: .touchUpInside)
+        addSubview(deleteContactBtn)
+        deleteContactBtn.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
         }
         
@@ -71,10 +71,10 @@ class BottomNavBarLeftView: UIView {
       //  self.backgroundColor = UIColor.init(patternImage: #imageLiteral(resourceName: "addContactImage"))
     }
     
-    func addContactButtonTapped(_ sender: UIButton) {
+    func deleteButtonTapped(_ sender: UIButton) {
         
         print("\n\nadd contact button pressed\n\n")
-        delegate?.addContactButtonPressed()
+        delegate?.deleteButtonPressed()
         
     }
     
