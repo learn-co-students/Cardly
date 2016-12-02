@@ -65,21 +65,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         instantiateButtons()
-        
-        frame1View = UIImageView(image: #imageLiteral(resourceName: "thankYou"))
-        frame2View = UIImageView(image: #imageLiteral(resourceName: "thankYou2"))
-        frameImagesList.append(frame1View)
-        frameImagesList.append(frame2View)
-        frame1View.contentMode = .scaleAspectFit
-        frame2View.contentMode = .scaleAspectFit
-        frameScrollview = UIScrollView()
-        frameScrollview.delegate = self
-        frameStackview = UIStackView(arrangedSubviews: frameImagesList)
-        
         layoutViewElements()
-        
-        //exportWithFrameLayer()
-        
         playerView.playerLayer.player = player
         
         addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: nil)
@@ -123,7 +109,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     
     // MARK: - Add overlay methods
     
-    func exportWithFrameLayer() {
+    func exportWithFrameLayer(completion: @escaping (Bool) -> Void) {
         // Composition
         let composition = AVMutableComposition()
         let asset = AVURLAsset(url: fileLocation!)
@@ -154,7 +140,6 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         }
         
         // Layers
-        //let overlayImage = UIImage(named: "thankYou")
         guard let index = selectedImageIndex else { return }
         let overlayImage = frameImagesList[index].image
         let overlayLayer = CALayer()
@@ -201,21 +186,11 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
                     self.fileLocation = movieUrl
                     self.activityIndicator.stopAnimating()
                     self.enableAllButtons()
-                    break
-                case.cancelled:
-                    print("Canceled")
-                    break
-                case .exporting:
-                    print("Exporting")
-                    break
+                    completion(true)
                 case .failed:
-                    print("Failed \(assetExport.error)")
-                    break
-                case.unknown:
-                    print("Unknown error")
-                    break
-                case.waiting:
-                    print("Waiting")
+                    fatalError("Image export failed!")
+                default:
+                    fatalError("Failed to export image")
                 }
             }
         }
@@ -465,11 +440,15 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     
     // MARK: - Navigation
     
-    func navToSendCardVC() {
-        exportWithFrameLayer()
-        let destVC = SendCardViewController()
-        destVC.videoURL = fileLocation
-        navigationController?.pushViewController(destVC, animated: true)
+    func navToSendCardVC(isExportSuccessful: Bool) {
+        
+        exportWithFrameLayer { (success) in
+            if success {
+                let destVC = SendCardViewController()
+                destVC.videoURL = self.fileLocation
+                self.navigationController?.pushViewController(destVC, animated: true)
+            }
+        }
     }
     
     // MARK: - Save video to photo library
@@ -502,7 +481,6 @@ extension EditCardViewController: UIScrollViewDelegate {
         if index >= frameImagesList.count {
             index -= 1
         }
-        print("Selected frame list index is \(index)")
         selectedImageIndex = index
     }
     

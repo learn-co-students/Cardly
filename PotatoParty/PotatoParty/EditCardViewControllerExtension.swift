@@ -14,8 +14,17 @@ extension EditCardViewController {
         // Main view setup
         view.backgroundColor = UIColor.clear
 
+        //frame image views
+        frame1View = UIImageView(image: #imageLiteral(resourceName: "thankYou"))
+        frame2View = UIImageView(image: #imageLiteral(resourceName: "thankYou2"))
+        frameImagesList.append(frame1View)
+        frameImagesList.append(frame2View)
+        frame1View.contentMode = .scaleAspectFit
+        frame2View.contentMode = .scaleAspectFit
         
         // Frame scrollview
+        frameScrollview = UIScrollView()
+        frameScrollview.delegate = self
         view.addSubview(frameScrollview)
         frameScrollview.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
@@ -28,11 +37,11 @@ extension EditCardViewController {
         frameScrollview.isPagingEnabled = true
         
         //frame stack view
+        frameStackview = UIStackView(arrangedSubviews: frameImagesList)
         frameStackview.axis = .horizontal
         frameStackview.distribution = .fillEqually
         frameStackview.alignment = .fill
         frameStackview.contentMode = .scaleAspectFit
-        //frameStackview.translatesAutoresizingMaskIntoConstraints = false
         frameScrollview.addSubview(frameStackview)
         frameStackview.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
@@ -62,7 +71,6 @@ extension EditCardViewController {
             make.bottomMargin.equalToSuperview().offset(-20)
             make.leadingMargin.equalToSuperview()
         }
-//        playPauseButton.isEnabled = false
         playPauseButton.addTarget(self, action: #selector(self.playPauseButtonPressed), for: .touchUpInside)
         
         // Save button
@@ -100,7 +108,6 @@ extension EditCardViewController {
         activityIndicator.hidesWhenStopped = true
         
     }
-    
     
     func instantiateButtons() {
         saveButton = UIButton()

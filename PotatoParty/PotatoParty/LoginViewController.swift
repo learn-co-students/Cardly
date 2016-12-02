@@ -33,7 +33,7 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutViewAndContraints()
-        let tapGesture = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
     }
     
