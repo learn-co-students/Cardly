@@ -47,7 +47,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         }
     }
     var activityIndicator: UIActivityIndicatorView!
-    var selectedImageIndex: Int?
+    var selectedImageIndex: Int = 0
 
     // Buttons
     var saveButton: UIButton!
@@ -67,7 +67,6 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         instantiateButtons()
         layoutViewElements()
         playerView.playerLayer.player = player
-        
         addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.playerReachedEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
     }
@@ -140,8 +139,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         }
         
         // Layers
-        guard let index = selectedImageIndex else { return }
-        let overlayImage = frameImagesList[index].image
+        let overlayImage = frameImagesList[selectedImageIndex].image
         let overlayLayer = CALayer()
         overlayLayer.contents = overlayImage?.cgImage
         overlayLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
