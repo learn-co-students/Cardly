@@ -12,7 +12,7 @@ import AVKit
 import AssetsLibrary
 import Photos
 
-class EditCardViewController: UIViewController, UITextFieldDelegate{
+class EditCardViewController: UIViewController {
 
     static let assetKeysRequiredToPlay = ["playable", "hasProtectedContent"]
     
@@ -60,12 +60,21 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     var frame2View: UIImageView!
     var frameImagesList: [UIImageView] = []
     
-    // MARK: - Init
+    // Custom text fields
+    var topTextField: UITextField!
+    var bottomTextField: UITextField!
     
+    // Text strings for export method
+    var topTextString: String?
+    var bottomTextString: String?
+    
+    // MARK: - Init
     override func viewDidLoad() {
         super.viewDidLoad()
         instantiateButtons()
         layoutViewElements()
+        setupText()
+
         playerView.playerLayer.player = player
         addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.playerReachedEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
@@ -106,8 +115,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     }
     
     
-    // MARK: - Add overlay methods
-    
+    // MARK: - Overlay export methods
     func exportWithFrameLayer(completion: @escaping (Bool) -> Void) {
         // Composition
         let composition = AVMutableComposition()
@@ -158,6 +166,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         layercomposition.renderSize = HDVideoSize
         layercomposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer:videoLayer, in: parentLayer)
         
+        // Export instructions
         let instruction = AVMutableVideoCompositionInstruction()
         instruction.timeRange = CMTimeRangeMake(kCMTimeZero, composition.duration)
         let layerInstr = videoCompositionInstructionForTrack(track: compositionVideoTrack, assetTrack: videoTrack)
@@ -194,7 +203,12 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         }
     }
     
-    func overlayText(_ text: String) {
+    func exportWithTextLayer(completion: @escaping (Bool) -> Void) {
+        guard let text = topTextString else {
+            print("Top text field empty - abandoning text export layer")
+            return
+        }
+        
         // Composition
         let composition = AVMutableComposition()
         let asset = AVURLAsset(url: fileLocation!)
@@ -223,13 +237,25 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         }
         
         // Layers
-        let textLayer = CATextLayer()
-        textLayer.string = text
-        textLayer.font = UIFont(name: "Helvetica", size: 15.0)
-        textLayer.shadowOpacity = 0.5
-        textLayer.alignmentMode = kCAAlignmentCenter
-        textLayer.frame = CGRect(x: 0, y: 60, width: HDVideoSize.width, height: HDVideoSize.height / 2)
         
+        // Text layer
+        let textLayer = CATextLayer()
+        textLayer.frame = CGRect(x: 30, y: -10, width: HDVideoSize.width, height: HDVideoSize.height)
+        // Text attributes
+        textLayer.string = text
+        textLayer.font = CTFontCreateWithName(Font.nameForCard as CFString, 0.0, nil)
+        textLayer.fontSize = Font.Size.cardVideo
+        textLayer.foregroundColor = UIColor.white.cgColor
+        textLayer.alignmentMode = kCAAlignmentLeft
+        textLayer.backgroundColor = UIColor.clear.cgColor
+        textLayer.contentsScale = 1
+        // Text drop shadow
+        // TODO: - Fix drop shadow to match TextField perceived Offset
+        textLayer.shadowColor = UIColor.black.cgColor
+        textLayer.shadowOffset = CGSize(width: 4, height: 4)
+        textLayer.shadowRadius = 0
+        textLayer.shadowOpacity = 1
+
         let videoLayer = CALayer()
         videoLayer.backgroundColor = UIColor.blue.cgColor
         videoLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
@@ -244,6 +270,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         layercomposition.renderSize = HDVideoSize
         layercomposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videoLayer, in: parentLayer)
         
+        // Export instructions
         let instruction = AVMutableVideoCompositionInstruction()
         instruction.timeRange = CMTimeRangeMake(kCMTimeZero, composition.duration)
         let layerInstr = videoCompositionInstructionForText(track: compositionVideoTrack, assetTrack: videoTrack)
@@ -268,6 +295,12 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
                     self.activityIndicator.stopAnimating()
                     self.fileLocation = movieUrl
                     self.enableAllButtons()
+                    // Hide text labels once video exports
+                    self.topTextField.isHidden = true
+                    self.topTextField.isEnabled = false
+                    //
+                    sleep(3)
+                    completion(true)
                     break
                 case.cancelled:
                     print("Canceled")
@@ -310,6 +343,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     
     
     // MARK: - Composition instructions
+
     func videoCompositionInstructionForTrack(track: AVCompositionTrack, assetTrack: AVAssetTrack) -> AVMutableVideoCompositionLayerInstruction {
         let instruction = AVMutableVideoCompositionLayerInstruction(assetTrack: track)
         let assetTrack = assetTrack
@@ -385,25 +419,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         }
     }
     
-    func addTextToVideo() {
-        let alertController = UIAlertController(title: "Text to overlay", message: "Must be 15 characters or less", preferredStyle: .alert)
-        alertController.addTextField { (textField) in
-            textField.delegate = self
-        }
-        let submitAction = UIAlertAction(title: "Submit", style: .default) { (action) in
-            self.overlayText((alertController.textFields?[0].text!)!)
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alertController.addAction(submitAction)
-        alertController.addAction(cancelAction)
-        present(alertController, animated: true, completion: nil)
-    }
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string)
-        return newString.characters.count <= 15
-    }
-    
+    // Alert
     func showAlert(title:String, message:String, dismiss:Bool) {
         let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
@@ -442,10 +458,22 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         
         exportWithFrameLayer { (success) in
             if success {
-                self.player.pause()
-                let destVC = SendCardViewController()
-                destVC.videoURL = self.fileLocation
-                self.navigationController?.pushViewController(destVC, animated: true)
+                if self.topTextString != nil || self.bottomTextString != nil {
+                    self.exportWithTextLayer(completion: { (success) in
+                        if success {
+                            self.player.pause()
+                            let destVC = SendCardViewController()
+                            destVC.videoURL = self.fileLocation
+                            self.navigationController?.pushViewController(destVC, animated: true)
+                        }
+                    })
+                } else {
+                    self.player.pause()
+                    let destVC = SendCardViewController()
+                    destVC.videoURL = self.fileLocation
+                    self.navigationController?.pushViewController(destVC, animated: true)
+
+                }
             }
         }
     }
@@ -466,7 +494,6 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
             }
         })
     }
-
 }
 
 // MARK: - ScrollView delegate methods

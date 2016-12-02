@@ -34,6 +34,7 @@
 		3FD6DB2D1DDCEA5F0078CA45 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3FD6DB2C1DDCEA5F0078CA45 /* GoogleService-Info.plist */; };
 		3FD6DB301DDCFD7A0078CA45 /* LoginViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD6DB2F1DDCFD7A0078CA45 /* LoginViewControllerExtension.swift */; };
 		920F301338A9FC2B9FE55804 /* Pods_PotatoParty.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9928D9D1244326D898295D /* Pods_PotatoParty.framework */; };
+		E44E5A161DF1BAB900273456 /* Qwigley-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E44E5A151DF1BAB900273456 /* Qwigley-Regular.ttf */; };
 		E4974AEE1DDE0FE100698B81 /* ContactsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4974AED1DDE0FE100698B81 /* ContactsCollectionView.swift */; };
 		E4974AF01DDE1C3700698B81 /* ContactsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4974AEF1DDE1C3700698B81 /* ContactsCollectionViewCell.swift */; };
 		E49BA3A71DE3443B0010A7A4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49BA3A61DE3443A0010A7A4 /* Constants.swift */; };
@@ -74,6 +75,7 @@
 		5E9928D9D1244326D898295D /* Pods_PotatoParty.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PotatoParty.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D97A54290B19A4EFAF3ACD4 /* Pods-PotatoParty.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PotatoParty.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PotatoParty/Pods-PotatoParty.debug.xcconfig"; sourceTree = "<group>"; };
 		7E3660AC3B4B277712493117 /* Pods-PotatoParty.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PotatoParty.release.xcconfig"; path = "Pods/Target Support Files/Pods-PotatoParty/Pods-PotatoParty.release.xcconfig"; sourceTree = "<group>"; };
+		E44E5A151DF1BAB900273456 /* Qwigley-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Qwigley-Regular.ttf"; sourceTree = "<group>"; };
 		E4974AED1DDE0FE100698B81 /* ContactsCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsCollectionView.swift; sourceTree = "<group>"; };
 		E4974AEF1DDE1C3700698B81 /* ContactsCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsCollectionViewCell.swift; sourceTree = "<group>"; };
 		E49BA3A61DE3443A0010A7A4 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -126,7 +128,7 @@
 				3F0BE69E1DDCB7FE007E4FD0 /* Models */,
 				3F0BE69D1DDCB7C1007E4FD0 /* Views */,
 				3F0BE69A1DDCB323007E4FD0 /* ViewControllers */,
-				3F0BE68D1DDCB1F5007E4FD0 /* Assets.xcassets */,
+				E44E5A121DF1BA7500273456 /* Assets */,
 				3FD6DB2C1DDCEA5F0078CA45 /* GoogleService-Info.plist */,
 				3F0BE6921DDCB1F5007E4FD0 /* Info.plist */,
 			);
@@ -208,6 +210,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		E44E5A121DF1BA7500273456 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				E44E5A151DF1BAB900273456 /* Qwigley-Regular.ttf */,
+				3F0BE68D1DDCB1F5007E4FD0 /* Assets.xcassets */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -278,6 +289,7 @@
 			files = (
 				3182D5201DEF71E70090AB2E /* ic_menu@3x.png in Resources */,
 				3F0BE6911DDCB1F5007E4FD0 /* LaunchScreen.storyboard in Resources */,
+				E44E5A161DF1BAB900273456 /* Qwigley-Regular.ttf in Resources */,
 				3FD6DB2D1DDCEA5F0078CA45 /* GoogleService-Info.plist in Resources */,
 				31D78BA61DDE77BD00FA855B /* DropDownMenuKit.xcassets in Resources */,
 				3F0BE68E1DDCB1F5007E4FD0 /* Assets.xcassets in Resources */,
