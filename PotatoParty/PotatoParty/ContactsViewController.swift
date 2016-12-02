@@ -14,37 +14,35 @@ import SnapKit
 import MobileCoreServices
 
 
-class ContactsViewController: UIViewController, DropDownMenuDelegate{
+class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContactsDelegate  {
     
     // MARK: - Views
     var collectionView: ContactsCollectionView!
     var bottomNavBar: BottomNavBarView!
     var navigationBarMenu: DropDownMenu!
     var titleView: DropDownTitleView!
-  //  var contactsBackgroundImage: UIImage = #imageLiteral(resourceName: "contactsAndSettingsVCBackgroundImage")
     var dismissButton: UIButton?
     var titleLabel: UILabel?
+    var timer = Timer()
+    
+    
     
     fileprivate let cellHeight: CGFloat = 210
     fileprivate let cellSpacing: CGFloat = 20
     
-    
     fileprivate lazy var presentationAnimator = GuillotineTransitionAnimation()
-    
     
     let ref = FIRDatabase.database().reference(withPath: "contacts")
     let uid = User.shared.uid
-    
     
     var shared = User.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = false
-        
         // MARK: - Setup Views
         setupViews()
-        
+        collectionView.contactDelegate = self
         self.restorationIdentifier = "contactsVC"
         
         self.navigationBarMenu = DropDownMenu()
@@ -74,6 +72,8 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate{
         
         
     }
+    
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -150,7 +150,9 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate{
         for list in arrayofWeddingLists {
             let firstCell = DropDownMenuCell()
             firstCell.textLabel!.text = list
-            firstCell.menuAction = #selector(dropDownAction(_:)) // Changed from selectGroup(_:) so dropdown will hide
+
+            firstCell.menuAction = #selector(selectGroup(_:))
+
             firstCell.menuTarget = self
             if currentChoice == list {
                 firstCell.accessoryType = .checkmark
@@ -169,21 +171,13 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate{
         navigationBarMenu.backgroundAlpha = 0.7
     }
     
-    
-    func dropDownAction(_ sender: AnyObject) {
-        
-        print("\n\ndrop down action\n\n")
-        navigationBarMenu.hide()
-    }
-    
-    
     func selectGroup(_ sender: UITableViewCell) {
         guard let group = sender.textLabel?.text?.lowercased() else { return }
         self.retrieveContacts(for: group, completion: { contacts in
             self.collectionView.contacts = contacts
             self.collectionView.reloadData()
         })
-        
+        navigationBarMenu.hide()
     }
     
     override func didReceiveMemoryWarning() {
@@ -258,25 +252,32 @@ extension ContactsViewController: BottomNavBarDelegate {
         presentationAnimator.animationDelegate = destVC as? GuillotineAnimationDelegate
         //presentationAnimator.supportView = navigationController!.navigationBar
         presentationAnimator.presentButton = view
-        present(destVC, animated: true, completion: nil)
-
-        
-        
-        
+        present(destVC, animated: true, completion: nil)     
     }
     
     func selectBtnClicked() {
         let destVC = ContactsViewController()
         navigationController?.pushViewController(destVC, animated: false)
         print("\n\n Select Button Clicked Working")
-        
-        
-        
+    }
+
+    func goToAddContact(){
+        print("go to Add Contact function")
+        let destVC = AddContactViewController()
+        navigationController?.pushViewController(destVC, animated: false)
+        //send to ADD contacts view controller
     }
     
-    func addContactButtonPressed() {
+    func deleteButtonPressed() {
         
-        navToAddContactBtnVC()
+        deleteContacts {
+            retrieveContacts(for: User.shared.groups[0], completion: { contacts in
+                self.collectionView.contacts = contacts
+                self.collectionView.reloadData()
+            })
+            collectionView.reloadData()
+        }
+    
     }
     
     func sendToButtonPressed() {
@@ -284,10 +285,6 @@ extension ContactsViewController: BottomNavBarDelegate {
         navToRecordCardVC()
     }
     
-    func navToAddContactBtnVC() {
-        let destVC = AddContactViewController()
-        navigationController?.pushViewController(destVC, animated: true)
-    }
     
     func navToRecordCardVC() {
         let _ = startCameraFromViewController(self, withDelegate: self)
@@ -312,10 +309,34 @@ extension ContactsViewController {
         })
     }
     
+    func deleteContacts(completion: ()->()) {
+        
+        for contact in shared.selectedContacts{
+            removeFromAllGroupsinFB(contact: contact)
+            shared.selectedContacts.removeAll()
+            shared.contacts.removeAll()
+           
+        }
+        
+        completion()
+    }
     
-    
+    func removeFromAllGroupsinFB(contact: Contact) {
+        let allPath = "\(uid)/all/\(contact.key)"
+        let familyPath = "\(uid)/family/\(contact.key)"
+        let friendsPath = "\(uid)/friends/\(contact.key)"
+        let coworkersPath = "\(uid)/coworkers/\(contact.key)"
+        let otherPath = "\(uid)/other/\(contact.key)"
+        ref.child(allPath).removeValue()
+        ref.child(familyPath).removeValue()
+        ref.child(friendsPath).removeValue()
+        ref.child(coworkersPath).removeValue()
+        ref.child(otherPath).removeValue()
+        
+    }
     
 }
+
 
 // MARK: - Show Camera VC
 extension ContactsViewController {
@@ -332,7 +353,43 @@ extension ContactsViewController {
         cameraController.cameraCaptureMode = .video
         cameraController.delegate = delegate
         cameraController.videoQuality = .typeHigh
-        present(cameraController, animated: true, completion: nil)
+        cameraController.videoMaximumDuration = 20.0
+        
+        let maxRecordTime = "Max Record Time is 20 sec"
+        let maxTimeLabel = UILabel()
+        maxTimeLabel.text = maxRecordTime
+        maxTimeLabel.textAlignment = .center
+        maxTimeLabel.textColor = UIColor.red
+        cameraController.view.addSubview(maxTimeLabel)
+
+        maxTimeLabel.snp.makeConstraints { (make) in
+            make.topMargin.equalToSuperview().offset(50)
+            make.leadingMargin.equalToSuperview().offset(-300)
+            make.width.equalTo(300)
+            make.height.equalTo(20)
+        }
+        
+        present(cameraController, animated: true, completion: {
+            cameraController.view.layoutIfNeeded()
+            
+            maxTimeLabel.snp.remakeConstraints({ (make) in
+                make.topMargin.equalToSuperview().offset(50)
+                make.centerX.equalToSuperview()
+                make.width.equalTo(300)
+                make.height.equalTo(20)
+            })
+            
+            cameraController.view.setNeedsUpdateConstraints()
+            
+            UIView.animate(withDuration: 3, delay: 0, options: .curveEaseInOut, animations: {
+                print("In animation")
+                cameraController.view.layoutIfNeeded()
+            }, completion: { (complete) in
+                UIView.animate(withDuration: 2, animations: {
+                    maxTimeLabel.alpha = 0
+                })
+            })
+        })
         return true
     }
 }
@@ -342,6 +399,7 @@ extension ContactsViewController {
 extension ContactsViewController: UIImagePickerControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        print("In did finish picking media")
         let mediaType = info[UIImagePickerControllerMediaType] as! NSString
         dismiss(animated: true, completion: nil)
         // Handle a movie capture
@@ -352,11 +410,9 @@ extension ContactsViewController: UIImagePickerControllerDelegate {
             let editVideoVC = EditCardViewController()
             editVideoVC.fileLocation = unwrappedURL
             navigationController?.pushViewController(editVideoVC, animated: true)
-            //            if UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(path) {
-            //                UISaveVideoAtPathToSavedPhotosAlbum(path, self, #selector(RecordCardViewController.video(_:didFinishSavingWithError:contextInfo:)), nil)
-            //            }
         }
     }
+    
     
 }
 
@@ -403,6 +459,11 @@ extension ContactsViewController: UIViewControllerTransitioningDelegate {
 //    }
 //}
 //
+
+
+protocol AddContactsDelegate: class {
+   func goToAddContact()
+}
 
 
 

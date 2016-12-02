@@ -8,17 +8,28 @@
 
 import UIKit
 import AVFoundation
+import AVKit
+import AssetsLibrary
+import Photos
 
-class EditCardViewController: UIViewController {
+class EditCardViewController: UIViewController, UITextFieldDelegate{
 
     static let assetKeysRequiredToPlay = ["playable", "hasProtectedContent"]
     
-    var playerView = PlayerView()
-    var saveButton = UIButton()
-    var playPauseButton = UIButton()
-    var addOverlayButton = UIButton()
-    var stopButton = UIButton()
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
     
+    var fileLocation: URL? {
+        didSet {
+            asset = AVURLAsset(url: fileLocation!)
+        }
+    }
+
+    let HDVideoSize = CGSize(width: 1080.0, height: 1920.0)
+
+    // Player
+    var playerView = PlayerView()
     let player = AVPlayer()
     var asset: AVURLAsset? {
         didSet {
@@ -35,42 +46,47 @@ class EditCardViewController: UIViewController {
             player.actionAtItemEnd = .none
         }
     }
+    var activityIndicator: UIActivityIndicatorView!
+    var selectedImageIndex: Int = 0
+
+    // Buttons
+    var saveButton: UIButton!
+    var playPauseButton: UIButton!
+    var addTextButton: UIButton!
+    lazy var buttons: [UIButton] = [self.saveButton, self.playPauseButton, self.addTextButton]
+    var frameScrollview: UIScrollView!
+    var frameStackview: UIStackView!
+    var frame1View: UIImageView!
+    var frame2View: UIImageView!
+    var frameImagesList: [UIImageView] = []
     
-    var fileLocation: URL? {
-        didSet {
-            asset = AVURLAsset(url: fileLocation!)
-        }
-    }
+    // MARK: - Init
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        instantiateButtons()
         layoutViewElements()
         playerView.playerLayer.player = player
-        playerView.playerLayer.frame = view.bounds
-        
-        navigationController?.navigationBar.isTranslucent = true
-        navigationController?.navigationBar.backgroundColor = UIColor.clear
-        navigationController?.navigationBar.alpha = 0.0
-        
         addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.playerReachedEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.isHidden = true
+    }
+    
+    deinit {
+        removeObserver(self, forKeyPath: "player.currentItem.status")
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        removeObserver(self, forKeyPath: "player.currentItem.status")
-    }
-    
     // MARK: - Main
     func loadURLAsset(_ asset: AVURLAsset) {
         asset.loadValuesAsynchronously(forKeys: EditCardViewController.assetKeysRequiredToPlay, completionHandler: {
-            DispatchQueue.main.async {
-                guard asset == self.asset else { return }
-                
+            
                 for key in EditCardViewController.assetKeysRequiredToPlay {
                     var error: NSError?
                     
@@ -84,16 +100,16 @@ class EditCardViewController: UIViewController {
                         let message = "Failed to load"
                         self.showAlert(title: "Error", message: message, dismiss: false)
                     }
-        
                 }
                 self.playerItem = AVPlayerItem(asset: asset)
-            }
         })
     }
     
-    func exportWithWatermark() {
-        
-        playerView.playerLayer.contentsGravity = AVLayerVideoGravityResizeAspect
+    
+    // MARK: - Add overlay methods
+    
+    func exportWithFrameLayer(completion: @escaping (Bool) -> Void) {
+        // Composition
         let composition = AVMutableComposition()
         let asset = AVURLAsset(url: fileLocation!)
         
@@ -105,6 +121,7 @@ class EditCardViewController: UIViewController {
         
         do {
             try compositionVideoTrack.insertTimeRange(timerange, of: videoTrack, at: kCMTimeZero)
+            compositionVideoTrack.preferredTransform = videoTrack.preferredTransform
         } catch  {
             print("composing video track error")
             print(error)
@@ -121,73 +138,154 @@ class EditCardViewController: UIViewController {
             }
         }
         
-//        let watermark = UIImage(named: "watermark.png")
-//        let watermarklayer = CALayer()
-//        watermarklayer.contents = watermark?.cgImage
-//        watermarklayer.frame = CGRect(x: 10, y: 10, width: 180, height: 180)
-//        watermarklayer.opacity = 0.5
-//            
-//        let textLayer = CATextLayer()
-//        textLayer.string = "DOWNLOAD POTATO PARTY OR DIE"
-//        textLayer.font = UIFont(name: "Helvetica", size: 65.0)
-//        textLayer.shadowOpacity = 0.5
-//        textLayer.alignmentMode = kCAAlignmentCenter
-//        textLayer.frame = CGRect(x: 0, y: 50, width: size.width, height: size.height/6)
-        
-        let overlayImage = UIImage(named: "thankYou")
+        // Layers
+        let overlayImage = frameImagesList[selectedImageIndex].image
         let overlayLayer = CALayer()
         overlayLayer.contents = overlayImage?.cgImage
-        overlayLayer.frame = playerView.playerLayer.bounds
+        overlayLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
         
         let videoLayer = CALayer()
         videoLayer.backgroundColor = UIColor.blue.cgColor
-        videoLayer.frame = overlayLayer.frame
+        videoLayer.frame = CGRect(x: 120, y: 230, width: HDVideoSize.width * 0.78, height: HDVideoSize.height * 0.78)
         
         let parentLayer = CALayer()
-        parentLayer.frame = playerView.playerLayer.bounds
+        parentLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
         parentLayer.addSublayer(videoLayer)
         parentLayer.addSublayer(overlayLayer)
             
         let layercomposition = AVMutableVideoComposition()
         layercomposition.frameDuration = CMTimeMake(1, 30)
-        layercomposition.renderSize = view.frame.size
+        layercomposition.renderSize = HDVideoSize
         layercomposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer:videoLayer, in: parentLayer)
         
         let instruction = AVMutableVideoCompositionInstruction()
         instruction.timeRange = CMTimeRangeMake(kCMTimeZero, composition.duration)
-        let layerInstr = videoCompositionInstructionForTrack(track: compositionVideoTrack, asset: asset)
+        let layerInstr = videoCompositionInstructionForTrack(track: compositionVideoTrack, assetTrack: videoTrack)
         instruction.layerInstructions = [layerInstr]
         layercomposition.instructions = [instruction]
-        
+    
+        // Export
         let filePath = NSTemporaryDirectory() + fileName()
         let movieUrl = URL(fileURLWithPath: filePath)
-            
-        guard let assetExport = AVAssetExportSession(asset: composition, presetName:AVAssetExportPresetHighestQuality) else { return }
+    
+        guard let assetExport = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHighestQuality) else { return }
         assetExport.videoComposition = layercomposition
         assetExport.outputFileType = AVFileTypeQuickTimeMovie
         assetExport.outputURL = movieUrl
-            
+        disableAllButtons()
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
         assetExport.exportAsynchronously {
-            switch assetExport.status {
-            case .completed:
-                print("Success")
-                self.fileLocation = movieUrl
-                break
-            case.cancelled:
-                print("Canceled")
-                break
-            case .exporting:
-                print("Exporting")
-                break
-            case .failed:
-                print("Failed \(assetExport.error)")
-                break
-            case.unknown:
-                print("Unknown error")
-                break
-            case.waiting:
-                print("Waiting")
+            DispatchQueue.main.async {
+                switch assetExport.status {
+                case .completed:
+                    print("Success")
+                    sleep(5)
+                    self.fileLocation = movieUrl
+                    self.activityIndicator.stopAnimating()
+                    self.enableAllButtons()
+                    completion(true)
+                case .failed:
+                    fatalError("Image export failed!")
+                default:
+                    fatalError("Failed to export image")
+                }
             }
+        }
+    }
+    
+    func overlayText(_ text: String) {
+        // Composition
+        let composition = AVMutableComposition()
+        let asset = AVURLAsset(url: fileLocation!)
+        
+        let track = asset.tracks(withMediaType: AVMediaTypeVideo)
+        let videoTrack: AVAssetTrack = track[0] as AVAssetTrack
+        
+        let timerange = CMTimeRangeMake(kCMTimeZero, asset.duration)
+        
+        let compositionVideoTrack: AVMutableCompositionTrack = composition.addMutableTrack(withMediaType: AVMediaTypeVideo, preferredTrackID: CMPersistentTrackID())
+        
+        do {
+            try compositionVideoTrack.insertTimeRange(timerange, of: videoTrack, at: kCMTimeZero)
+        } catch  {
+            print("composing video track error")
+            print(error)
+        }
+        
+        let compositionAudioTrack: AVMutableCompositionTrack = composition.addMutableTrack(withMediaType: AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
+        
+        do {
+            try compositionAudioTrack.insertTimeRange(timerange, of: asset.tracks(withMediaType: AVMediaTypeAudio)[0], at: kCMTimeZero)
+        } catch {
+            print("composing audio track error")
+            print(error)
+        }
+        
+        // Layers
+        let textLayer = CATextLayer()
+        textLayer.string = text
+        textLayer.font = UIFont(name: "Helvetica", size: 15.0)
+        textLayer.shadowOpacity = 0.5
+        textLayer.alignmentMode = kCAAlignmentCenter
+        textLayer.frame = CGRect(x: 0, y: 60, width: HDVideoSize.width, height: HDVideoSize.height / 2)
+        
+        let videoLayer = CALayer()
+        videoLayer.backgroundColor = UIColor.blue.cgColor
+        videoLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
+        
+        let parentLayer = CALayer()
+        parentLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
+        parentLayer.addSublayer(videoLayer)
+        parentLayer.addSublayer(textLayer)
+
+        let layercomposition = AVMutableVideoComposition()
+        layercomposition.frameDuration = CMTimeMake(1, 30)
+        layercomposition.renderSize = HDVideoSize
+        layercomposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videoLayer, in: parentLayer)
+        
+        let instruction = AVMutableVideoCompositionInstruction()
+        instruction.timeRange = CMTimeRangeMake(kCMTimeZero, composition.duration)
+        let layerInstr = videoCompositionInstructionForText(track: compositionVideoTrack, assetTrack: videoTrack)
+        instruction.layerInstructions = [layerInstr]
+        layercomposition.instructions = [instruction]
+        
+        // Export
+        let filePath = NSTemporaryDirectory() + fileName()
+        let movieUrl = URL(fileURLWithPath: filePath)
+        
+        guard let assetExport = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHighestQuality) else { return }
+        assetExport.videoComposition = layercomposition
+        assetExport.outputFileType = AVFileTypeQuickTimeMovie
+        assetExport.outputURL = movieUrl
+        disableAllButtons()
+        self.activityIndicator.isHidden = false
+        self.activityIndicator.startAnimating()
+        assetExport.exportAsynchronously {
+            DispatchQueue.main.async(execute: {
+                switch assetExport.status {
+                case .completed:
+                    self.activityIndicator.stopAnimating()
+                    self.fileLocation = movieUrl
+                    self.enableAllButtons()
+                    break
+                case.cancelled:
+                    print("Canceled")
+                    break
+                case .exporting:
+                    print("Exporting")
+                    break
+                case .failed:
+                    print("Failed \(assetExport.error)")
+                    break
+                case.unknown:
+                    print("Unknown error")
+                    break
+                case.waiting:
+                    print("Waiting")
+                }
+
+            })
         }
     }
     
@@ -210,15 +308,16 @@ class EditCardViewController: UIViewController {
         return (assetOrientation, isPortrait)
     }
     
-    func videoCompositionInstructionForTrack(track: AVCompositionTrack, asset: AVAsset) -> AVMutableVideoCompositionLayerInstruction {
+    
+    // MARK: - Composition instructions
+    func videoCompositionInstructionForTrack(track: AVCompositionTrack, assetTrack: AVAssetTrack) -> AVMutableVideoCompositionLayerInstruction {
         let instruction = AVMutableVideoCompositionLayerInstruction(assetTrack: track)
-        let assetTrack = asset.tracks(withMediaType: AVMediaTypeVideo)[0]
+        let assetTrack = assetTrack
         let transform = assetTrack.preferredTransform
         let assetInfo = orientationFromTransform(transform: transform)
-        var scaleToFitRatio = playerView.playerLayer.bounds.width / assetTrack.naturalSize.width
+        let scaleToFitRatio = HDVideoSize.width / HDVideoSize.width
         
         if assetInfo.isPortrait {
-            scaleToFitRatio = playerView.playerLayer.bounds.width / assetTrack.naturalSize.height
             let scaleFactor = CGAffineTransform(scaleX: scaleToFitRatio, y: scaleToFitRatio)
             instruction.setTransform(assetTrack.preferredTransform.concatenating(scaleFactor),
                                     at: kCMTimeZero)
@@ -235,7 +334,13 @@ class EditCardViewController: UIViewController {
             }
             instruction.setTransform(concat, at: kCMTimeZero)
         }
-      
+        return instruction
+    }
+    
+    func videoCompositionInstructionForText(track: AVCompositionTrack, assetTrack: AVAssetTrack) -> AVMutableVideoCompositionLayerInstruction {
+        let instruction = AVMutableVideoCompositionLayerInstruction(assetTrack: track)
+        let scaleFactor = CGAffineTransform(scaleX: 1, y: 1)
+        instruction.setTransform(assetTrack.preferredTransform.concatenating(scaleFactor), at: kCMTimeZero)
         return instruction
     }
     
@@ -243,13 +348,13 @@ class EditCardViewController: UIViewController {
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "player.currentItem.status" {
-            playPauseButton.isHidden = false
-            saveButton.isHidden = false
+            if player.status == AVPlayerStatus.readyToPlay {
+                playPauseButton.isEnabled = true
+            }
         }
     }
     
     // MARK: - Actions
-    
     
     func playerReachedEnd(notification: NSNotification) {
         asset = AVURLAsset(url: fileLocation!)
@@ -272,14 +377,31 @@ class EditCardViewController: UIViewController {
     
     func updatePlayPauseButtonTitle() {
         if player.rate > 0 {
-            //playing
             player.pause()
             playPauseButton.setTitle("Play", for: .normal)
         } else {
-            //paused / stopped
             player.play()
             playPauseButton.setTitle("Pause", for: .normal)
         }
+    }
+    
+    func addTextToVideo() {
+        let alertController = UIAlertController(title: "Text to overlay", message: "Must be 15 characters or less", preferredStyle: .alert)
+        alertController.addTextField { (textField) in
+            textField.delegate = self
+        }
+        let submitAction = UIAlertAction(title: "Submit", style: .default) { (action) in
+            self.overlayText((alertController.textFields?[0].text!)!)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(submitAction)
+        alertController.addAction(cancelAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string)
+        return newString.characters.count <= 15
     }
     
     func showAlert(title:String, message:String, dismiss:Bool) {
@@ -296,18 +418,69 @@ class EditCardViewController: UIViewController {
         self.present(controller, animated: true, completion: nil)
     }
     
+    func disableAllButtons() {
+        for button in self.buttons {
+            button.isEnabled = false
+        }
+    }
+    
+    func enableAllButtons() {
+        for button in self.buttons {
+            button.isEnabled = true
+        }
+    }
+    
     func fileName() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMddyyhhmmss"
         return formatter.string(from: Date()) + ".mp4"
     }
     
-    // MARK: Navigation
+    // MARK: - Navigation
     
-    func navToSendCardVC() {
-        let destVC = SendCardViewController()
-        destVC.videoURL = fileLocation
-        navigationController?.pushViewController(destVC, animated: true)
+    func navToSendCardVC(isExportSuccessful: Bool) {
+        
+        exportWithFrameLayer { (success) in
+            if success {
+                self.player.pause()
+                let destVC = SendCardViewController()
+                destVC.videoURL = self.fileLocation
+                self.navigationController?.pushViewController(destVC, animated: true)
+            }
+        }
+    }
+    
+    // MARK: - Save video to photo library
+    
+    func saveVideoToPhotoLibrary(_ videoUrl: URL) {
+        PHPhotoLibrary.requestAuthorization({ (authorizationStatus: PHAuthorizationStatus) -> Void in
+            if authorizationStatus == .authorized {
+                PHPhotoLibrary.shared().performChanges({
+                    PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoUrl)}) { completed, error in
+                        if completed {
+                            print("Video asset created")
+                        } else {
+                            if let error = error { print(error) }
+                        }
+                }
+            }
+        })
     }
 
+}
+
+// MARK: - ScrollView delegate methods
+
+extension EditCardViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let currentStackViewWidthValue = frameStackview.frame.width
+        let widthMarker = currentStackViewWidthValue / CGFloat(frameImagesList.count)
+        var index = Int(scrollView.contentOffset.x / widthMarker)
+        if index >= frameImagesList.count {
+            index -= 1
+        }
+        selectedImageIndex = index
+    }
+    
 }
