@@ -487,6 +487,18 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
 
 }
 
+// MARK: - ScrollView delegate methods
+
 extension EditCardViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let currentStackViewWidthValue = frameStackview.frame.width
+        let widthMarker = currentStackViewWidthValue / CGFloat(frameImagesList.count)
+        var index = Int(scrollView.contentOffset.x / widthMarker)
+        if index >= frameImagesList.count {
+            index -= 1
+        }
+        print("Selected frame list index is \(index)")
+    }
     
 }
