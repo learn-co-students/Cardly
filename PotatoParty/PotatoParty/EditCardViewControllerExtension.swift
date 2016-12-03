@@ -60,6 +60,7 @@ extension EditCardViewController {
         playerView.backgroundColor = UIColor.clear
         playerView.playerLayer.frame = playerView.bounds
         view.sendSubview(toBack: playerView)
+        playerView.playerLayer.player = player
         
         // Play+pause button
         playPauseButton.setTitle("Play", for: .normal)

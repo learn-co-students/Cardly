@@ -66,7 +66,6 @@ class EditCardViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         instantiateButtons()
         layoutViewElements()
-        playerView.playerLayer.player = player
         
         addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.playerReachedEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
@@ -447,9 +446,9 @@ class EditCardViewController: UIViewController, UITextFieldDelegate {
                 self.player.pause()
                 
                 let destVC = SendCardViewController()
-                destVC.videoURL = self.fileLocation
+                destVC.fileLocation = self.fileLocation
                 destVC.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
-                destVC.view.backgroundColor = UIColor.clear
+                destVC.modalTransitionStyle = UIModalTransitionStyle.flipHorizontal
                 self.present(destVC, animated: true, completion: nil)
             }
         }

@@ -11,38 +11,105 @@ import MessageUI
 import Firebase
 import FirebaseStorage
 import SnapKit
+import AVFoundation
+
 
 class SendCardViewController: UIViewController, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate {
-   
+    
+    static let assetKeysRequiredToPlay = ["playable", "hasProtectedContent"]
+
     var sendEmail = UIButton()
     var sendText = UIButton()
     var videoURL: URL!
     var shared = User.shared
+    let player = AVPlayer()
+    
+    var fileLocation: URL? {
+        didSet {
+            print("set file location is \(fileLocation)")
+            asset = AVURLAsset(url: fileLocation!)
+        }
+    }
+    
+    var playerView = PlayerView()
+    
+    var asset: AVURLAsset? {
+        didSet {
+            guard let newAsset = asset else { return }
+            loadURLAsset(newAsset)
+        }
+    }
+    
+    var playerLayer: AVPlayerLayer? {
+        return playerView.playerLayer
+    }
+    
+    var playerItem: AVPlayerItem? {
+        didSet {
+            player.replaceCurrentItem(with: playerItem)
+            player.actionAtItemEnd = .none
+            player.play()
+        }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = UIColor.clear
+        layoutElements()
+        NotificationCenter.default.addObserver(self, selector: #selector(self.playerReachedEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
+        
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+    
+    // MARK: - View layout
     
     func layoutElements() {
+        view.addSubview(playerView)
+        playerView.snp.makeConstraints { (make) in
+            make.height.equalToSuperview().multipliedBy(0.7)
+            make.width.equalToSuperview().multipliedBy(0.7)
+            make.topMargin.equalToSuperview().offset(70)
+            make.centerX.equalToSuperview()
+        }
+        playerView.backgroundColor = UIColor.clear
+        playerView.playerLayer.frame = playerView.bounds
+        view.sendSubview(toBack: playerView)
+        
+        playerView.playerLayer.player = player
+        
         view.addSubview(sendEmail)
         sendEmail.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.topMargin.equalToSuperview().offset(20)
-            make.width.equalTo(view.snp.width).multipliedBy(0.5)
-            make.height.equalTo(view.snp.height).multipliedBy(0.25)
+            make.leadingMargin.equalTo(playerView.snp.leadingMargin)
+            make.topMargin.equalTo(playerView.snp.bottomMargin).offset(20)
+            make.width.equalTo(playerView.snp.width).multipliedBy(0.5).offset(5)
+            make.height.equalTo(20)
         }
     
         sendEmail.backgroundColor = UIColor.blue
-        sendEmail.setTitle("SEND E-MAIL", for: .normal)
+        sendEmail.setTitle("E-MAIL", for: .normal)
         sendEmail.addTarget(self, action: #selector(sendEmailButtonTapped), for: .touchUpInside)
         
         view.addSubview(sendText)
         sendText.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.topMargin.equalTo(sendEmail.snp.bottomMargin).offset(0.5)
+            make.leadingMargin.equalTo(sendEmail.snp.trailingMargin)
+            make.topMargin.equalTo(playerView.snp.bottomMargin).offset(20)
             make.width.equalTo(sendEmail)
             make.height.equalTo(sendEmail)
         }
         
         sendText.backgroundColor = UIColor.blue
-        sendText.setTitle("SEND TEXT", for: .normal)
+        sendText.setTitle("TEXT", for: .normal)
         sendText.addTarget(self, action: #selector(sendTextButtonTapped), for: .touchUpInside)
+        
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = self.view.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(blurEffectView)
+        view.sendSubview(toBack: blurEffectView)
     }
     
     func sendTextButtonTapped() {
@@ -70,6 +137,8 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
         }
     }
     
+    // MARK: - Email and Message integration methods
+    
     public func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
         switch result {
         case .sent:
@@ -87,6 +156,7 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
     func sendEmailButtonTapped(){
         print("send e-mail button tapped")
         print("selected contacts: \(shared.selectedContacts)")
+        
         if MFMailComposeViewController.canSendMail() {
             let mail = MFMailComposeViewController()
             mail.mailComposeDelegate = self
@@ -105,24 +175,12 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
             mail.addAttachmentData(unwrappedData as Data, mimeType: "MOV", fileName: "50161176453__6435040D-0DF3-426D-8A73-122E678A3663.MOV")
             mail.setMessageBody("<p>You're so awesome! <p>", isHTML: true)
             
-            //if we go the route of embedding in html:
-            //            let url = URL(string: "https://firebasestorage.googleapis.com/v0/b/potatoparty-9ac99.appspot.com/o/Videos%2FIMG_4278.MOV?alt=media&token=e357c274-d2d0-460d-87fe-84840eb70ec3")
-            //            let type = "mov"
-            //            let height = "200"
-            //            let width = "100"
-            //            let controls = "controls"
-            //            let name = "IMG_4278.MOV"
-            //            mail.setMessageBody("<p>You're so awesome! <p>You've received a Video!&nbsp;</p><p><a href=\(unwrappedVideoURL)>Click Here to See your Video hyperlink</a></p></p><video controls=\(controls)width=\(width) height=\(height) name=\(name) src=\(unwrappedVideoURL)></video> <p> <p>&nbsp;</p> <p>Love,&nbsp;</p> <p>&nbsp;</p><p>The M </p>", isHTML: true)
-            
             present(mail, animated: true)
-            
-            
             
         } else {
             // show failure alert
             print("error: MAIL compose view controller canNOT send mail")
         }
-        
     }
     
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
@@ -138,34 +196,7 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
         default:
             controller.dismiss(animated: true)
         }
-        
-        
     }
-    
-    //Let user know e-mail was sent successfully - alert controller? 
-    func successSent() {
-        print("You've sent your video successfully")
-    }
-    
-    //PULLING VIDEO FROM FIREBASE _ FOR TESTING
-    
-//    func downloadVideoURL() {
-//        let storage = FIRStorage.storage()
-//        let videoRef = storage.reference(forURL: "gs://potatoparty-9ac99.appspot.com")
-//        let metaData = FIRStorageMetadata()
-//        metaData.contentType = "video/quicktime"
-//        let url = videoRef.child("Video").child("IMG_4278.MOV")
-//        let task = url.put(url, metadata: nil) { (metadata, error) in
-//            if (error != nil) {
-//                print("got an error: \(error)")
-//            } else {
-//                print ("upload complete! HEre's some metadata: \(metadata)")
-//                print ("donwload URL is \(metadata.downloadURL())")
-//            let downloadURL = metaData.downloadURL()?.absoluteString
-//
-//            }
-//        }
-//    }
     
     func videoWasSent(completion:() -> ()) {
         
@@ -182,35 +213,44 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
         completion()
     }
     
+    // MARK: - Helper methods
     
-        
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        layoutElements()
-//        if let unwrappedVideoURL = videoURL {
-//            print("Passed video url is \(unwrappedVideoURL)")
-//        }
-//        else {
-//            print("Video url is nil!!!!")
-//        }
-        // Do any additional setup after loading the view.
-        
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func playerReachedEnd(notification: NSNotification) {
+        asset = AVURLAsset(url: fileLocation!)
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func loadURLAsset(_ asset: AVURLAsset) {
+        asset.loadValuesAsynchronously(forKeys: SendCardViewController.assetKeysRequiredToPlay, completionHandler: {
+            
+            for key in EditCardViewController.assetKeysRequiredToPlay {
+                var error: NSError?
+                
+                if !asset.isPlayable || asset.hasProtectedContent {
+                    let message = "Video is not playable"
+                    self.showAlert(title: "Error", message: message, dismiss: false)
+                    return
+                }
+                
+                if asset.statusOfValue(forKey: key, error: &error) == .failed {
+                    let message = "Failed to load"
+                    self.showAlert(title: "Error", message: message, dismiss: false)
+                }
+            }
+            self.playerItem = AVPlayerItem(asset: asset)
+        })
     }
-    */
-
+    
+    func showAlert(title:String, message:String, dismiss:Bool) {
+        let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        if dismiss {
+            controller.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                self.dismiss(animated: true, completion: nil)
+            }))
+        } else {
+            controller.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        }
+        
+        self.present(controller, animated: true, completion: nil)
+    }
 }
