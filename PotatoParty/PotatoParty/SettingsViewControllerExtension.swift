@@ -37,7 +37,7 @@ extension SettingsViewController {
         newPasswordTextField = UITextField(frame: CGRect(x: self.view.bounds.width * -0.6, y: self.view.bounds.height * 0.55, width: self.view.bounds.width * 0.6, height: self.view.bounds.height * 0.06))
         newPasswordTextField.isHidden = true
         
-        confirmNewPasswordTextField = UITextField(frame: CGRect(x: self.view.bounds.width * -0.6, y: self.view.bounds.height * 0.60, width: self.view.bounds.width * 0.6, height: self.view.bounds.height * 0.06))
+        confirmNewPasswordTextField = UITextField(frame: CGRect(x: self.view.bounds.width * -0.6, y: self.view.bounds.height * 0.65, width: self.view.bounds.width * 0.6, height: self.view.bounds.height * 0.06))
         confirmNewPasswordTextField.isHidden = true
         
         currentPasswordTextField.textColor = UIColor.black
@@ -88,14 +88,14 @@ extension SettingsViewController {
         
         changeEmailButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(-200)
+            make.centerY.equalToSuperview().offset(-215)
             make.height.equalToSuperview().multipliedBy(0.05)
             make.width.equalToSuperview().dividedBy(2)
         }
         
         changePasswordButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
+            make.centerY.equalToSuperview().offset(-175)
             make.height.equalToSuperview().multipliedBy(0.05)
             make.width.equalToSuperview().dividedBy(2)
         }
