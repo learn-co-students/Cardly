@@ -12,13 +12,30 @@ import FirebaseAuth
 
 class SettingsViewController: UIViewController {
     
+    // Buttons
     var changeEmailButton = UIButton()
     var changePasswordButton = UIButton()
     var logoutButton = UIButton()
     var dismissButton: UIButton?
     var titleLabel: UILabel?
-//  var settingsBackgroundImage: UIImage = #imageLiteral(resourceName: "contactsAndSettingsVCBackgroundImage")
-      
+    
+    // Textfields
+    var newEmailTextField: UITextField!
+    var newEmailLabel: UILabel!
+    let newEmailText: String = "New Email Address"
+    var currentPasswordTextField: UITextField!
+    var currentPasswordLabel: UILabel!
+    var currentPasswordText: String = "Current Password"
+    var newPasswordTextField: UITextField!
+    var newPasswordLabel: UILabel!
+    var newPasswordText: String = "New Password"
+    var confirmNewPasswordTextField: UITextField!
+    var confirmNewPasswordLabel: UILabel!
+    var confirmNewPasswordText = "Confirm New Password"
+    
+    
+    //  var settingsBackgroundImage: UIImage = #imageLiteral(resourceName: "contactsAndSettingsVCBackgroundImage")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -36,13 +53,13 @@ class SettingsViewController: UIViewController {
             make.height.equalTo(20)
         }
         
-//        dismissButton = {
-//            let button = UIButton(frame: .zero)
-//            button.setImage(UIImage(named: "ic_menu"), for: .normal)
-//            button.addTarget(self, action: #selector(dismissButtonTapped(_:)), for: .touchUpInside)
-//            return button
-//        }()
-
+        //        dismissButton = {
+        //            let button = UIButton(frame: .zero)
+        //            button.setImage(UIImage(named: "ic_menu"), for: .normal)
+        //            button.addTarget(self, action: #selector(dismissButtonTapped(_:)), for: .touchUpInside)
+        //            return button
+        //        }()
+        
         titleLabel = {
             let label = UILabel()
             label.numberOfLines = 1;
@@ -52,16 +69,53 @@ class SettingsViewController: UIViewController {
             label.sizeToFit()
             return label
         }()
+        
     }
     
-
+    // MARK - Textfield aimations
     
-    // MARK - Methods (mostly buttons)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        newEmailTextField.isHidden = false
+            UIView.animate(withDuration: 0.3, delay: 0.1, options: .transitionCurlDown, animations: {
+                self.newEmailTextField.center.x = self.view.bounds.width * 0.5
+            }) { (success) in
+                
+        }
+        
+        currentPasswordTextField.isHidden = false
+        UIView.animate(withDuration: 0.3, delay: 0.2, options: .curveEaseIn, animations: {
+            self.currentPasswordTextField.center.x = self.view.bounds.width * 0.5
+        }) { (success) in
+            
+        }
+        
+        newPasswordTextField.isHidden = false
+        UIView.animate(withDuration: 0.3, delay: 0.3, options: .transitionCrossDissolve, animations: {
+            self.newPasswordTextField.center.x = self.view.bounds.width * 0.5
+            
+        }) { (success) in
+            
+        }
+        
+        
+        confirmNewPasswordTextField.isHidden = false
+        
+        UIView.animate(withDuration: 0.3, delay: 0.2, options: .transitionCrossDissolve, animations: {
+            self.confirmNewPasswordTextField.center.x = self.view.bounds.width * 0.5
+        }) { (success) in
+            
+        }
+        
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    // MARK - Background Methods
     
     func addBlurEffect() {
         let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.extraLight)
@@ -70,6 +124,8 @@ class SettingsViewController: UIViewController {
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(blurEffectView)
     }
+    
+    // MARK - Button Methods
     
     func logout() {
         do {
@@ -99,6 +155,35 @@ class SettingsViewController: UIViewController {
     }
     
     
+    // MARK - Textfield Methods
+    
+    func textFieldDidBeginEditing(textField: UITextField) {
+        
+        //Color #2 - While selecting the text field
+        view.backgroundColor = UIColor.purple
+    }
+    
+    func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        
+        //Color #3 - While touching outside the textField.
+        view.backgroundColor = UIColor.cyan
+        
+        //Hide the keyboard
+        newEmailTextField.resignFirstResponder()
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        
+        //Display the result.
+        //      newEmailLabel.text = str+textField.text
+        
+        //Color #4 - After pressing the return button
+        view.backgroundColor = UIColor.orange
+        
+        newEmailTextField.resignFirstResponder() //Hide the keyboard
+        return true
+    }
+    
 }
 
 // MARK - Settings Animation
@@ -119,6 +204,7 @@ extension SettingsViewController: GuillotineAnimationDelegate {
     func animatorWillStartDismissal(_ animator: GuillotineTransitionAnimation) {
         print("willStartDismissal")
     }
+    
 }
 
 
