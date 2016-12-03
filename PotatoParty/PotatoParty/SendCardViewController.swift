@@ -20,6 +20,7 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
 
     var sendEmail = UIButton()
     var sendText = UIButton()
+    var cancelButton = UIButton()
     var videoURL: URL!
     var shared = User.shared
     let player = AVPlayer()
@@ -67,6 +68,7 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
     // MARK: - View layout
     
     func layoutElements() {
+        
         view.addSubview(playerView)
         playerView.snp.makeConstraints { (make) in
             make.height.equalToSuperview().multipliedBy(0.7)
@@ -76,6 +78,12 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
         }
         playerView.backgroundColor = UIColor.clear
         playerView.playerLayer.frame = playerView.bounds
+        playerView.layer.masksToBounds = true
+        playerView.layer.cornerRadius = 10
+        playerView.layer.shadowColor = UIColor.black.cgColor
+        playerView.layer.shadowOpacity = 0.8
+        playerView.layer.shadowOffset = CGSize.zero
+        playerView.layer.shadowRadius = 30
         view.sendSubview(toBack: playerView)
         
         playerView.playerLayer.player = player
@@ -84,8 +92,8 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
         sendEmail.snp.makeConstraints { (make) in
             make.leadingMargin.equalTo(playerView.snp.leadingMargin)
             make.topMargin.equalTo(playerView.snp.bottomMargin).offset(20)
-            make.width.equalTo(playerView.snp.width).multipliedBy(0.5).offset(5)
-            make.height.equalTo(20)
+            make.width.equalTo(playerView.snp.width).multipliedBy(1.0/3.0).offset(5)
+            make.height.equalTo(40)
         }
     
         sendEmail.backgroundColor = UIColor.blue
@@ -99,10 +107,22 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
             make.width.equalTo(sendEmail)
             make.height.equalTo(sendEmail)
         }
-        
         sendText.backgroundColor = UIColor.blue
         sendText.setTitle("TEXT", for: .normal)
         sendText.addTarget(self, action: #selector(sendTextButtonTapped), for: .touchUpInside)
+        
+        view.addSubview(cancelButton)
+        cancelButton.snp.makeConstraints { (make) in
+            make.leadingMargin.equalTo(sendText.snp.trailingMargin)
+            make.topMargin.equalTo(playerView.snp.bottomMargin).offset(20)
+            make.width.equalTo(sendEmail)
+            make.height.equalTo(sendEmail)
+        }
+        cancelButton.backgroundColor = UIColor.blue
+        cancelButton.setTitle("CANCEL", for: .normal)
+        cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+        
+
         
         let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
@@ -110,31 +130,6 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(blurEffectView)
         view.sendSubview(toBack: blurEffectView)
-    }
-    
-    func sendTextButtonTapped() {
-        
-        if MFMessageComposeViewController.canSendText() && MFMessageComposeViewController.canSendAttachments()  {
-    
-            let message = MFMessageComposeViewController()
-            message.messageComposeDelegate = self
-            var phoneNumberArray: [String] = []
-            for contact in shared.selectedContacts {
-                let phoneNumber = contact.phone
-                phoneNumberArray.append(phoneNumber)
-            }
-            message.recipients = phoneNumberArray
-            print("phone number array: \(phoneNumberArray)")
-            message.subject = "Thank You Video"
-            
-            message.addAttachmentURL(videoURL, withAlternateFilename: nil)
-            message.body = "Thank You so much!"
-            
-            present(message, animated: true, completion: nil)
-           
-        } else {
-            print("error: MAIL compose view controller canNOT send mail")
-        }
     }
     
     // MARK: - Email and Message integration methods
@@ -150,6 +145,31 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
             navigationController?.pushViewController(destVC, animated: true)
         default:
             controller.dismiss(animated: true)
+        }
+    }
+    
+    func sendTextButtonTapped() {
+        
+        if MFMessageComposeViewController.canSendText() && MFMessageComposeViewController.canSendAttachments()  {
+            
+            let message = MFMessageComposeViewController()
+            message.messageComposeDelegate = self
+            var phoneNumberArray: [String] = []
+            for contact in shared.selectedContacts {
+                let phoneNumber = contact.phone
+                phoneNumberArray.append(phoneNumber)
+            }
+            message.recipients = phoneNumberArray
+            print("phone number array: \(phoneNumberArray)")
+            message.subject = "Thank You Video"
+            
+            message.addAttachmentURL(videoURL, withAlternateFilename: nil)
+            message.body = "Thank You so much!"
+            
+            present(message, animated: true, completion: nil)
+            
+        } else {
+            print("error: MAIL compose view controller canNOT send mail")
         }
     }
     
@@ -252,5 +272,9 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
         }
         
         self.present(controller, animated: true, completion: nil)
+    }
+    
+    func cancelButtonTapped() {
+        dismiss(animated: true, completion: nil)
     }
 }

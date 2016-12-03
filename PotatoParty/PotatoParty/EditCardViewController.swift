@@ -448,7 +448,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate {
                 let destVC = SendCardViewController()
                 destVC.fileLocation = self.fileLocation
                 destVC.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
-                destVC.modalTransitionStyle = UIModalTransitionStyle.flipHorizontal
+                destVC.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
                 self.present(destVC, animated: true, completion: nil)
             }
         }
