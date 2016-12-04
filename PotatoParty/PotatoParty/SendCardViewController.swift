@@ -24,7 +24,6 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
     var sendEmail = UIButton()
     var sendText = UIButton()
     var cancelButton = UIButton()
-    var videoURL: URL!
     var shared = User.shared
     let player = AVPlayer()
     var delegate: EditCardViewController?
@@ -167,7 +166,10 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
             print("phone number array: \(phoneNumberArray)")
             message.subject = "Thank You Video"
             
-            message.addAttachmentURL(videoURL, withAlternateFilename: nil)
+            guard let fileLocation = fileLocation else {
+                fatalError("File location does not exist!")
+            }
+            message.addAttachmentURL(fileLocation, withAlternateFilename: nil)
             message.body = "Thank You so much!"
             
             present(message, animated: true, completion: nil)
@@ -194,7 +196,10 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
             //insert user's e-mail in the "TO" field instead of arielaades@gmail.com
             mail.setToRecipients(["arielaades@gmail.com"])
             mail.setSubject("Thank You Video")
-            let data = NSData(contentsOf: videoURL )
+            guard let fileLocation = fileLocation else {
+                fatalError("File location does not exist!")
+            }
+            let data = NSData(contentsOf: fileLocation )
             guard let unwrappedData = data else { return }
             mail.addAttachmentData(unwrappedData as Data, mimeType: "MOV", fileName: "50161176453__6435040D-0DF3-426D-8A73-122E678A3663.MOV")
             mail.setMessageBody("<p>You're so awesome! <p>", isHTML: true)
