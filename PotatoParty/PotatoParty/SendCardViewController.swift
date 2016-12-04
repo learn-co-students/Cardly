@@ -17,7 +17,7 @@ protocol ModalViewControllerDelegate {
     func modalViewControllerDidCancel(completion: @escaping () -> Void)
 }
 
-class SendCardViewController: UIViewController, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate {
+class SendCardViewController: UIViewController {
     
     static let assetKeysRequiredToPlay = ["playable", "hasProtectedContent"]
 
@@ -30,7 +30,6 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
     
     var fileLocation: URL? {
         didSet {
-            print("set file location is \(fileLocation)")
             asset = AVURLAsset(url: fileLocation!)
         }
     }
@@ -125,8 +124,6 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
         cancelButton.setTitle("CANCEL", for: .normal)
         cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         
-
-        
         let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = self.view.bounds
@@ -136,20 +133,6 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
     }
     
     // MARK: - Email and Message integration methods
-    
-    public func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
-        switch result {
-        case .sent:
-            videoWasSent {
-                shared.selectedContacts.removeAll()
-            }
-            controller.dismiss(animated: true)
-            let destVC = ContactsViewController()
-            navigationController?.pushViewController(destVC, animated: true)
-        default:
-            controller.dismiss(animated: true)
-        }
-    }
     
     func sendTextButtonTapped() {
         
@@ -175,7 +158,11 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
             present(message, animated: true, completion: nil)
             
         } else {
-            print("error: MAIL compose view controller canNOT send mail")
+            let noTextAlertVC = UIAlertController(title: "Unable to send text", message: "Please check your account settings", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+            noTextAlertVC.addAction(okAction)
+            present(noTextAlertVC, animated: true, completion: nil)
+            print("error: Text compose view controller cannot send mail")
         }
     }
     
@@ -207,23 +194,11 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
             present(mail, animated: true)
             
         } else {
-            // show failure alert
-            print("error: MAIL compose view controller canNOT send mail")
-        }
-    }
-    
-    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-        
-        switch result {
-        case .sent:
-            videoWasSent {
-                shared.selectedContacts.removeAll()
-            }
-            controller.dismiss(animated: true)
-            let destVC = ContactsViewController()
-            navigationController?.pushViewController(destVC, animated: true)
-        default:
-            controller.dismiss(animated: true)
+            let noEmailAlertVC = UIAlertController(title: "No mail account found", message: "Please set up an account in order to send email", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+            noEmailAlertVC.addAction(okAction)
+            present(noEmailAlertVC, animated: true, completion: nil)
+            print("error: MAIL compose view controller cannot send mail")
         }
     }
     
@@ -232,11 +207,8 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
         for contactIndex in shared.selectedContacts.indices {
             shared.selectedContacts[contactIndex].is_sent = true
             print("was video sent: \(shared.selectedContacts[contactIndex].is_sent)")
-            
-            
             let contactsRef = FIRDatabase.database().reference(withPath: "contacts")
             let userContactsRef = contactsRef.child("\(User.shared.uid)/all/\(shared.selectedContacts[contactIndex].key)/is_sent")
-            
             userContactsRef.setValue(true)
         }
         completion()
@@ -300,4 +272,57 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
             print("Error clearing tmp cache \(error.localizedDescription)")
         }
     }
+}
+
+// MARK: - Email/Message framework delegate methods
+
+extension SendCardViewController: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        
+        switch result {
+        case .sent:
+            videoWasSent {
+                shared.selectedContacts.removeAll()
+            }
+            //do you want controller to dismiss and contacts VC to possibly show before contacts isSent is all finished being set???
+            controller.dismiss(animated: true, completion: {
+                self.clearTmpDirectory()
+                let destVC = ContactsViewController()
+                self.navigationController?.pushViewController(destVC, animated: true)
+            })
+        case .failed:
+            if let error = error{
+                print("Error sending email \(error.localizedDescription)")
+            } else {
+                print("Error sending email")
+            }
+            //need to handle error case
+        //need to implement some sort of alert to notify user if failed to send (no internet, bad email etc)
+        default:
+            controller.dismiss(animated: true)
+        }
+    }
+
+}
+
+extension SendCardViewController: MFMessageComposeViewControllerDelegate {
+    
+    public func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+        switch result {
+        case .sent:
+            videoWasSent {
+                shared.selectedContacts.removeAll()
+            }
+            controller.dismiss(animated: true, completion: {
+                self.clearTmpDirectory()
+                let destVC = ContactsViewController()
+                self.navigationController?.pushViewController(destVC, animated: true)
+            })
+        case .failed:
+            print("Could not send message")
+        default:
+            controller.dismiss(animated: true)
+        }
+    }
+
 }
