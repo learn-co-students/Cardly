@@ -47,7 +47,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate {
         }
     }
     var activityIndicator: UIActivityIndicatorView!
-    var selectedImageIndex: Int?
+    var selectedImageIndex = 0
 
     // Buttons
     var saveButton: UIButton!
@@ -139,8 +139,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate {
         }
         
         // Layers
-        guard let index = selectedImageIndex else { return }
-        let overlayImage = frameImagesList[index].image
+        let overlayImage = frameImagesList[selectedImageIndex].image
         let overlayLayer = CALayer()
         overlayLayer.contents = overlayImage?.cgImage
         overlayLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
