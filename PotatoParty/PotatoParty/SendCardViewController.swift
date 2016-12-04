@@ -14,7 +14,7 @@ import SnapKit
 import AVFoundation
 
 protocol ModalViewControllerDelegate {
-    func modalViewControllerDidCancel()
+    func modalViewControllerDidCancel(completion: @escaping () -> Void)
 }
 
 class SendCardViewController: UIViewController, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate {
@@ -279,6 +279,20 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
     }
     
     func cancelButtonTapped() {
-        delegate?.modalViewControllerDidCancel()
+        delegate?.modalViewControllerDidCancel(completion: {
+            self.clearTmpDirectory()
+        })
+    }
+    
+    func clearTmpDirectory() {
+        do {
+            let tmpDirectory = try FileManager.default.contentsOfDirectory(atPath: NSTemporaryDirectory())
+            try tmpDirectory.forEach { file in
+                let path = String.init(format: "%@%@", NSTemporaryDirectory(), file)
+                try FileManager.default.removeItem(atPath: path)
+            }
+        } catch {
+            print("Error clearing tmp cache \(error.localizedDescription)")
+        }
     }
 }

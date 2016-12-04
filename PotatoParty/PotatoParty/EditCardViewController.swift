@@ -23,6 +23,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate {
     var fileLocation: URL? {
         didSet {
             asset = AVURLAsset(url: fileLocation!)
+            print("imagePicker url is \(fileLocation!.absoluteString)")
         }
     }
 
@@ -182,6 +183,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate {
                     print("Success")
                     sleep(5)
                     self.fileLocation = movieUrl
+                    print("export  url is \(movieUrl)")
                     self.activityIndicator.stopAnimating()
                     self.enableAllButtons()
                     completion(true)
@@ -492,8 +494,9 @@ extension EditCardViewController: UIScrollViewDelegate {
 
 extension EditCardViewController: ModalViewControllerDelegate {
     
-    func modalViewControllerDidCancel() {
+    func modalViewControllerDidCancel(completion: @escaping () -> Void) {
         dismiss(animated: false, completion: nil)
         let _ = self.navigationController?.popToRootViewController(animated: true)
+        completion()
     }
 }
