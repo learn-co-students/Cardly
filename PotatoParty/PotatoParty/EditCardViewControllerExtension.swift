@@ -14,13 +14,7 @@ extension EditCardViewController {
         // Main view setup
         view.backgroundColor = UIColor.clear
 
-        //frame image views
-        frame1View = UIImageView(image: #imageLiteral(resourceName: "thankYou"))
-        frame2View = UIImageView(image: #imageLiteral(resourceName: "thankYou2"))
-        frameImagesList.append(frame1View)
-        frameImagesList.append(frame2View)
-        frame1View.contentMode = .scaleAspectFit
-        frame2View.contentMode = .scaleAspectFit
+        populateFramesImageViewList()
         
         // Frame scrollview
         frameScrollview = UIScrollView()
@@ -115,6 +109,16 @@ extension EditCardViewController {
         playPauseButton = UIButton()
         addTextButton = UIButton()
         activityIndicator = UIActivityIndicatorView()
+    }
+    
+    func populateFramesImageViewList() {
+        let frameImageList: [UIImage] = [#imageLiteral(resourceName: "frame1"), #imageLiteral(resourceName: "frame2"), #imageLiteral(resourceName: "frame3"), #imageLiteral(resourceName: "frame4"), #imageLiteral(resourceName: "frame5"), #imageLiteral(resourceName: "frame6"), #imageLiteral(resourceName: "frame7"), #imageLiteral(resourceName: "frame8"), #imageLiteral(resourceName: "frame9")]
+        
+        for frameImage in frameImageList {
+            let frameView = UIImageView(image: frameImage)
+            frameView.contentMode = .scaleAspectFit
+            frameImagesList.append(frameView)
+        }
     }
     
 }
