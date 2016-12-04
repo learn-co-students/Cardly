@@ -444,8 +444,8 @@ class EditCardViewController: UIViewController, UITextFieldDelegate {
         exportWithFrameLayer { (success) in
             if success {
                 self.player.pause()
-                
                 let destVC = SendCardViewController()
+                destVC.delegate = self
                 destVC.fileLocation = self.fileLocation
                 destVC.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
                 destVC.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
@@ -487,4 +487,14 @@ extension EditCardViewController: UIScrollViewDelegate {
         selectedImageIndex = index
     }
     
+}
+
+// MARK: - Modal VC handling
+
+extension EditCardViewController: ModalViewControllerDelegate {
+    
+    func modalViewControllerDidCancel() {
+        dismiss(animated: false, completion: nil)
+        let _ = self.navigationController?.popToRootViewController(animated: true)
+    }
 }

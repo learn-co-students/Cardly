@@ -13,6 +13,9 @@ import FirebaseStorage
 import SnapKit
 import AVFoundation
 
+protocol ModalViewControllerDelegate {
+    func modalViewControllerDidCancel()
+}
 
 class SendCardViewController: UIViewController, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate {
     
@@ -24,6 +27,7 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
     var videoURL: URL!
     var shared = User.shared
     let player = AVPlayer()
+    var delegate: EditCardViewController?
     
     var fileLocation: URL? {
         didSet {
@@ -275,6 +279,6 @@ class SendCardViewController: UIViewController, MFMailComposeViewControllerDeleg
     }
     
     func cancelButtonTapped() {
-        dismiss(animated: true, completion: nil)
+        delegate?.modalViewControllerDidCancel()
     }
 }
