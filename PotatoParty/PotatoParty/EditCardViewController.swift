@@ -494,7 +494,7 @@ extension EditCardViewController: UIScrollViewDelegate {
 
 extension EditCardViewController: ModalViewControllerDelegate {
     
-    func modalViewControllerDidCancel(completion: @escaping () -> Void) {
+    func modalViewControllerDidDisappear(completion: @escaping () -> Void) {
         dismiss(animated: false, completion: nil)
         let _ = self.navigationController?.popToRootViewController(animated: true)
         completion()

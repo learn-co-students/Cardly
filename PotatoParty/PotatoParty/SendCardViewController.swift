@@ -14,7 +14,7 @@ import SnapKit
 import AVFoundation
 
 protocol ModalViewControllerDelegate {
-    func modalViewControllerDidCancel(completion: @escaping () -> Void)
+    func modalViewControllerDidDisappear(completion: @escaping () -> Void)
 }
 
 class SendCardViewController: UIViewController {
@@ -256,7 +256,7 @@ class SendCardViewController: UIViewController {
     }
     
     func cancelButtonTapped() {
-        delegate?.modalViewControllerDidCancel(completion: {
+        delegate?.modalViewControllerDidDisappear(completion: {
             self.clearTmpDirectory()
         })
     }
@@ -286,9 +286,9 @@ extension SendCardViewController: MFMailComposeViewControllerDelegate {
             }
             //do you want controller to dismiss and contacts VC to possibly show before contacts isSent is all finished being set???
             controller.dismiss(animated: true, completion: {
-                self.clearTmpDirectory()
-                let destVC = ContactsViewController()
-                self.navigationController?.pushViewController(destVC, animated: true)
+                self.delegate?.modalViewControllerDidDisappear(completion: {
+                    self.clearTmpDirectory()
+                })
             })
         case .failed:
             if let error = error{
@@ -314,9 +314,9 @@ extension SendCardViewController: MFMessageComposeViewControllerDelegate {
                 shared.selectedContacts.removeAll()
             }
             controller.dismiss(animated: true, completion: {
-                self.clearTmpDirectory()
-                let destVC = ContactsViewController()
-                self.navigationController?.pushViewController(destVC, animated: true)
+                self.delegate?.modalViewControllerDidDisappear(completion: {
+                    self.clearTmpDirectory()
+                })
             })
         case .failed:
             print("Could not send message")
