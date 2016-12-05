@@ -155,6 +155,7 @@ extension EditCardViewController: UITextFieldDelegate {
         topTextField.text = "Hey Carl,"
         topTextField.font = font
         topTextField.textAlignment = .left
+        topTextField.clearsOnBeginEditing = true
         topTextField.textColor = UIColor.white
         topTextField.backgroundColor = UIColor.clear
         // Drop shadow
@@ -167,18 +168,18 @@ extension EditCardViewController: UITextFieldDelegate {
         bottomTextField = UITextField()
         bottomTextField.delegate = self
         
-//        MARK: - Uncomment to enable bottom text field
-//        view.addSubview(bottomTextField)
-//        bottomTextField.snp.makeConstraints { (make) in
-//            make.right.equalToSuperview().offset(-30)
-//            make.left.equalToSuperview()
-//            make.bottom.equalToSuperview()
-//        }
+        view.addSubview(bottomTextField)
+        bottomTextField.snp.makeConstraints { (make) in
+            make.right.equalToSuperview().offset(-30)
+            make.left.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
         
         // Text attributes
         bottomTextField.text = "Love, Forrest"
         bottomTextField.font = font
         bottomTextField.textAlignment = .right
+        bottomTextField.clearsOnBeginEditing = true
         bottomTextField.textColor = UIColor.white
         bottomTextField.backgroundColor = UIColor.clear
         // Text drop shadow

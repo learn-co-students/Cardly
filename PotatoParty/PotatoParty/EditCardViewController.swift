@@ -12,6 +12,7 @@ import AVKit
 import AssetsLibrary
 import Photos
 import MBProgressHUD
+import SnapKit
 
 class EditCardViewController: UIViewController {
 
@@ -180,6 +181,27 @@ class EditCardViewController: UIViewController {
             topTextLayer.shadowRadius = 0
             topTextLayer.shadowOpacity = 1
             parentLayer.addSublayer(topTextLayer)
+        }
+        
+        if let text = bottomTextField.text, !bottomTextField.text!.isEmpty{
+            // Text layer
+            let bottomTextLayer = CATextLayer()
+            bottomTextLayer.frame = CGRect(x: -30, y: -1710, width: HDVideoSize.width - 30, height: HDVideoSize.height)
+            // Text attributes
+            bottomTextLayer.string = text
+            bottomTextLayer.font = CTFontCreateWithName(Font.nameForCard as CFString, 0.0, nil)
+            bottomTextLayer.fontSize = Font.Size.cardVideo
+            bottomTextLayer.foregroundColor = UIColor.white.cgColor
+            bottomTextLayer.alignmentMode = kCAAlignmentRight
+            bottomTextLayer.backgroundColor = UIColor.clear.cgColor
+            bottomTextLayer.contentsScale = 1
+            // Text drop shadow
+            // TODO: - Fix drop shadow to match TextField perceived Offset
+            bottomTextLayer.shadowColor = UIColor.black.cgColor
+            bottomTextLayer.shadowOffset = CGSize(width: 4, height: 4)
+            bottomTextLayer.shadowRadius = 0
+            bottomTextLayer.shadowOpacity = 1
+            parentLayer.addSublayer(bottomTextLayer)
         }
         
         let layercomposition = AVMutableVideoComposition()
