@@ -24,7 +24,6 @@ class EditCardViewController: UIViewController, UITextFieldDelegate {
     var fileLocation: URL? {
         didSet {
             asset = AVURLAsset(url: fileLocation!)
-            print("imagePicker url is \(fileLocation!.absoluteString)")
         }
     }
 
