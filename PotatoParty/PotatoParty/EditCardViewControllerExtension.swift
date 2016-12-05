@@ -139,6 +139,7 @@ extension EditCardViewController {
 }
 
 // MARK: - Text field delegate & methods
+
 extension EditCardViewController: UITextFieldDelegate {
     func setupText() {
         let font = UIFont(name: Font.nameForCard, size: Font.Size.cardView)
@@ -188,6 +189,10 @@ extension EditCardViewController: UITextFieldDelegate {
         bottomTextField.layer.shadowOffset = CGSize(width: 2, height: 2)
         bottomTextField.layer.shadowRadius = 0
         bottomTextField.layer.shadowOpacity = 1
+        
+        //tap gesture for dismissing keyboard
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
     }
     
     // Press enter to hide keyboard
@@ -202,6 +207,10 @@ extension EditCardViewController: UITextFieldDelegate {
         let newStr =
             currentStr.replacingCharacters(in: range, with: string) as NSString
         return newStr.length <= maxLength
+    }
+    
+    func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
 

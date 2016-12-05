@@ -118,7 +118,6 @@ extension LoginViewController {
 }
 
 
-
 // MARK: - Navigation methods
 
 extension LoginViewController {
