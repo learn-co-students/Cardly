@@ -93,17 +93,6 @@ extension EditCardViewController {
         }
         addTextButton.addTarget(self, action: #selector(self.addTextToVideo), for: .touchUpInside)
         
-        // Activity indicator
-//        playerView.addSubview(activityIndicator)
-//        activityIndicator.snp.makeConstraints { (make) in
-//            make.size.equalTo(CGSize(width: 30, height: 30))
-//            make.centerX.equalToSuperview()
-//            make.centerY.equalToSuperview()
-//        }
-//        self.activityIndicator.isHidden = true
-//        activityIndicator.hidesWhenStopped = true
-        
-        //MBProgressHUD activity indicator
         initAndLayoutActivityIndicator()
         
     }
@@ -132,7 +121,7 @@ extension EditCardViewController {
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
         }
-        spinnerActivity.mode = .indeterminate
+        spinnerActivity.mode = .determinateHorizontalBar
         spinnerActivity.label.text = "Processing image ...";
         spinnerActivity.isUserInteractionEnabled = false;
     }
@@ -142,7 +131,20 @@ extension EditCardViewController {
     }
     
     func stopActivityIndicator() {
-        spinnerActivity.hide(animated: true)
+        DispatchQueue.main.async {
+            self.spinnerActivity.hide(animated: true)
+        }
+    }
+    
+    func doWorkWithProgress(progressHUD: MBProgressHUD) {
+        var progress: Float = 0.0
+        while progress < 1.0 {
+            progress += 0.01
+            DispatchQueue.main.async {
+                progressHUD.progress = progress
+            }
+            usleep(50000)
+        }
     }
     
 }

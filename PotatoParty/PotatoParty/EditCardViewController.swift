@@ -50,6 +50,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate {
     }
     var activityIndicator: UIActivityIndicatorView!
     var spinnerActivity: MBProgressHUD!
+    var progressObj: Progress!
     var selectedImageIndex = 0
 
     // Buttons
@@ -176,20 +177,19 @@ class EditCardViewController: UIViewController, UITextFieldDelegate {
         assetExport.outputFileType = AVFileTypeQuickTimeMovie
         assetExport.outputURL = movieUrl
         startActivityIndicator()
+
         assetExport.exportAsynchronously {
-            DispatchQueue.main.async {
-                switch assetExport.status {
-                case .completed:
-                    print("Success")
-                    sleep(5)
-                    self.fileLocation = movieUrl
-                    self.stopActivityIndicator()
-                    completion(true)
-                case .failed:
-                    fatalError("Image export failed!")
-                default:
-                    fatalError("Failed to export image")
-                }
+            switch assetExport.status {
+            case .completed:
+                print("Success")
+                self.doWorkWithProgress(progressHUD: self.spinnerActivity)
+                self.fileLocation = movieUrl
+                self.stopActivityIndicator()
+                completion(true)
+            case .failed:
+                fatalError("Image export failed!")
+            default:
+                fatalError("Failed to export image")
             }
         }
     }
@@ -260,29 +260,17 @@ class EditCardViewController: UIViewController, UITextFieldDelegate {
         assetExport.outputURL = movieUrl
         startActivityIndicator()
         assetExport.exportAsynchronously {
-            DispatchQueue.main.async(execute: {
-                switch assetExport.status {
-                case .completed:
-                    self.stopActivityIndicator()
-                    self.fileLocation = movieUrl
-                    break
-                case.cancelled:
-                    print("Canceled")
-                    break
-                case .exporting:
-                    print("Exporting")
-                    break
-                case .failed:
-                    print("Failed \(assetExport.error)")
-                    break
-                case.unknown:
-                    print("Unknown error")
-                    break
-                case.waiting:
-                    print("Waiting")
-                }
-
-            })
+            switch assetExport.status {
+            case .completed:
+                print("Success")
+                self.doWorkWithProgress(progressHUD: self.spinnerActivity)
+                self.fileLocation = movieUrl
+                self.stopActivityIndicator()
+            case .failed:
+                fatalError("Image export failed!")
+            default:
+                fatalError("Failed to export image")
+            }
         }
     }
     
