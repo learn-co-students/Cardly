@@ -152,7 +152,7 @@ extension EditCardViewController: UITextFieldDelegate {
             make.top.equalToSuperview().offset(-10)
         }
         // Text
-        topTextField.text = "Hey Carl,"
+        topTextField.text = "Enter some text"
         topTextField.font = font
         topTextField.textAlignment = .left
         topTextField.clearsOnBeginEditing = true
@@ -176,7 +176,7 @@ extension EditCardViewController: UITextFieldDelegate {
         }
         
         // Text attributes
-        bottomTextField.text = "Love, Forrest"
+        bottomTextField.text = "Enter some text"
         bottomTextField.font = font
         bottomTextField.textAlignment = .right
         bottomTextField.clearsOnBeginEditing = true
@@ -193,6 +193,14 @@ extension EditCardViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let maxLength = 16
+        let currentStr: NSString = textField.text! as NSString
+        let newStr =
+            currentStr.replacingCharacters(in: range, with: string) as NSString
+        return newStr.length <= maxLength
     }
 }
 
