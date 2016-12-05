@@ -50,32 +50,32 @@ extension EditCardViewController {
         
         // Player view
         view.addSubview(playerView)
-        playerView.frame = self.view.frame
+        playerView.frame = CGRect(x: self.view.frame.width * 0.12, y: self.view.frame.height * 0.11, width: self.view.frame.width * 0.77, height: self.view.frame.height * 0.77)
+        playerView.playerLayer.frame = playerView.frame
+
         playerView.backgroundColor = UIColor.clear
-        playerView.playerLayer.frame = playerView.bounds
         view.sendSubview(toBack: playerView)
         playerView.playerLayer.player = player
         
         // Play+pause button
         playPauseButton.setTitle("Play", for: .normal)
-        playPauseButton.backgroundColor = UIColor.red
+        playPauseButton.backgroundColor = UIColor.clear
         view.addSubview(playPauseButton)
         playPauseButton.snp.makeConstraints { (make) in
             make.width.equalToSuperview().dividedBy(3).offset(-40)
             make.height.equalTo(self.playPauseButton.snp.width).dividedBy(2)
-            make.bottomMargin.equalToSuperview().offset(-20)
-            make.leadingMargin.equalToSuperview()
+            make.center.equalToSuperview()
         }
         playPauseButton.addTarget(self, action: #selector(self.playPauseButtonPressed), for: .touchUpInside)
         
         // Save button
-        saveButton.backgroundColor = UIColor.red
+        saveButton.backgroundColor = UIColor.clear
         saveButton.setTitle("Save", for: .normal)
         view.addSubview(saveButton)
         saveButton.snp.makeConstraints { (make) in
-            make.height.equalTo(playPauseButton.snp.height)
-            make.width.equalTo(playPauseButton.snp.width)
-            make.bottomMargin.equalToSuperview().offset(-20)
+            make.width.equalToSuperview().dividedBy(3).offset(-40)
+            make.height.equalTo(self.saveButton.snp.width).dividedBy(2)
+            make.centerY.equalToSuperview()
             make.trailingMargin.equalToSuperview()
         }
         saveButton.addTarget(self, action: #selector(self.navToSendCardVC), for: .touchUpInside)
@@ -138,6 +138,7 @@ extension EditCardViewController {
     }
 }
 
+// MARK: - Text field delegate & methods
 extension EditCardViewController: UITextFieldDelegate {
     func setupText() {
         let font = UIFont(name: Font.nameForCard, size: Font.Size.cardView)
