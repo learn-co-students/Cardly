@@ -29,15 +29,15 @@ extension SettingsViewController {
     func changePassword() {
         let currentPasswordPlaceholder = NSAttributedString(string: "Current Password", attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
         let newPasswordPlaceholder = NSAttributedString(string: "New Password", attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
-        let confirmNewPasswordPlaceholder = NSAttributedString(string: "New Password", attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
+        let confirmNewPasswordPlaceholder = NSAttributedString(string: "Confirm New Password", attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
         
         currentPasswordTextField = UITextField(frame: CGRect(x: self.view.bounds.width * -0.6, y: self.view.bounds.height * 0.45, width: self.view.bounds.width * 0.6, height: self.view.bounds.height * 0.06))
         currentPasswordTextField.isHidden = true
         
-        newPasswordTextField = UITextField(frame: CGRect(x: self.view.bounds.width * -0.6, y: self.view.bounds.height * 0.55, width: self.view.bounds.width * 0.6, height: self.view.bounds.height * 0.06))
+        newPasswordTextField = UITextField(frame: CGRect(x: self.view.bounds.width * -0.6, y: self.view.bounds.height * 0.53, width: self.view.bounds.width * 0.6, height: self.view.bounds.height * 0.06))
         newPasswordTextField.isHidden = true
         
-        confirmNewPasswordTextField = UITextField(frame: CGRect(x: self.view.bounds.width * -0.6, y: self.view.bounds.height * 0.65, width: self.view.bounds.width * 0.6, height: self.view.bounds.height * 0.06))
+        confirmNewPasswordTextField = UITextField(frame: CGRect(x: self.view.bounds.width * -0.6, y: self.view.bounds.height * 0.60, width: self.view.bounds.width * 0.6, height: self.view.bounds.height * 0.06))
         confirmNewPasswordTextField.isHidden = true
         
         currentPasswordTextField.textColor = UIColor.black
@@ -49,8 +49,8 @@ extension SettingsViewController {
         confirmNewPasswordTextField.borderStyle = UITextBorderStyle.roundedRect
         
         currentPasswordLabel = UILabel(frame: .init(x: 100, y: 200, width: 200, height: 20))
-        newPasswordLabel = UILabel(frame: .init(x: 150, y: 250, width: 200, height: 20))
-        confirmNewPasswordLabel = UILabel(frame: .init(x: 200, y: 300, width: 200, height: 20))
+        newPasswordLabel = UILabel(frame: .init(x: 100, y: 250, width: 200, height: 20))
+        confirmNewPasswordLabel = UILabel(frame: .init(x: 100, y: 300, width: 200, height: 20))
         
         currentPasswordTextField.attributedPlaceholder = currentPasswordPlaceholder
         newPasswordTextField.attributedPlaceholder = newPasswordPlaceholder
@@ -88,14 +88,14 @@ extension SettingsViewController {
         
         changeEmailButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(-215)
+            make.centerY.equalToSuperview().offset(-230)
             make.height.equalToSuperview().multipliedBy(0.05)
             make.width.equalToSuperview().dividedBy(2)
         }
         
         changePasswordButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(-175)
+            make.centerY.equalToSuperview().offset(-60)
             make.height.equalToSuperview().multipliedBy(0.05)
             make.width.equalToSuperview().dividedBy(2)
         }

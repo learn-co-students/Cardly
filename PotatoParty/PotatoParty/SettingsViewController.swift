@@ -78,21 +78,21 @@ class SettingsViewController: UIViewController {
         super.viewDidAppear(animated)
         
         newEmailTextField.isHidden = false
-            UIView.animate(withDuration: 0.3, delay: 0.1, options: .transitionCurlDown, animations: {
+            UIView.animate(withDuration: 0.1, delay: 0.1, options: .transitionCurlDown, animations: {
                 self.newEmailTextField.center.x = self.view.bounds.width * 0.5
             }) { (success) in
                 
         }
         
         currentPasswordTextField.isHidden = false
-        UIView.animate(withDuration: 0.3, delay: 0.2, options: .curveEaseIn, animations: {
+        UIView.animate(withDuration: 0.1, delay: 0.2, options: .curveEaseIn, animations: {
             self.currentPasswordTextField.center.x = self.view.bounds.width * 0.5
         }) { (success) in
             
         }
         
         newPasswordTextField.isHidden = false
-        UIView.animate(withDuration: 0.3, delay: 0.3, options: .transitionCrossDissolve, animations: {
+        UIView.animate(withDuration: 0.1, delay: 0.2, options: .transitionCrossDissolve, animations: {
             self.newPasswordTextField.center.x = self.view.bounds.width * 0.5
             
         }) { (success) in
@@ -102,7 +102,7 @@ class SettingsViewController: UIViewController {
         
         confirmNewPasswordTextField.isHidden = false
         
-        UIView.animate(withDuration: 0.3, delay: 0.2, options: .transitionCrossDissolve, animations: {
+        UIView.animate(withDuration: 0.1, delay: 0.2, options: .transitionCrossDissolve, animations: {
             self.confirmNewPasswordTextField.center.x = self.view.bounds.width * 0.5
         }) { (success) in
             
