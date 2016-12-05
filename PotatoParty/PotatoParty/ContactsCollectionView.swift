@@ -61,40 +61,40 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         print(#function)
         
         var selectedContact = contacts[indexPath.row]
-        selectedContact.isChosen = !selectedContact.isChosen
-        selectedCellIndexPath = indexPath
+        
+        print("####before if: \(selectedContact.isChosen)########")
+//        selectedContact.isChosen = !selectedContact.isChosen
+        print("select contact before doing anything: \(shared.selectedContacts)")
+//        selectedCellIndexPath = indexPath
+        
         if indexPath.row == 0 {
             contactDelegate?.goToAddContact()
             
         } else {
-            if selectedContact.isChosen == false {
-                
-                print("deselecting cell")
-                collectionView.deselectItem(at: indexPath, animated: true)
-                
-                
+            if selectedContact.isChosen == true {
+//                collectionView.deselectItem(at: indexPath, animated: true)
                 let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
-                
                 selectedCell.handleTap()
-                shared.selectedContacts = shared.selectedContacts.filter { (contact) -> Bool in
-                    
-                    return contact.email != selectedContact.email
-                }
-
-               print("selected contacts array: \(shared.selectedContacts)")
+                contacts[indexPath.row].isChosen = false
+                shared.selectedContacts = shared.selectedContacts.filter({ (contact) -> Bool in
+                    return contact.email != contacts[indexPath.row].email
+                })
                 
+                print("deselected a cell")
+                print("\(shared.selectedContacts)")
             } else {
-                print("selecting cell")
                 shared.selectedContacts.append(selectedContact)
-                
                 let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
-                
                 selectedCell.handleTap()
-                print("selected contacts array: \(shared.selectedContacts)")
+                contacts[indexPath.row].isChosen = true
+                print("selected cell")
+                print("\(shared.selectedContacts)")
                 
             }
+            
         }
-        
+        print("####after if: \(selectedContact.isChosen)########")
+    
     }
     
     

@@ -81,6 +81,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
             let lastName = contact.familyName
             
             let appContact = Contact(fullName: firstName + lastName, email: emailAddress, phone: phoneNumber)
+
             
             let contactsRef = FIRDatabase.database().reference(withPath: "contacts")
             let userContactsRef = contactsRef.child("\(uid)/all/")
