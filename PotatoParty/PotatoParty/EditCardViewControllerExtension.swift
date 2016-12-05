@@ -7,6 +7,7 @@
 //
 import UIKit
 import SnapKit
+import MBProgressHUD
 
 extension EditCardViewController {
     
@@ -93,14 +94,17 @@ extension EditCardViewController {
         addTextButton.addTarget(self, action: #selector(self.addTextToVideo), for: .touchUpInside)
         
         // Activity indicator
-        playerView.addSubview(activityIndicator)
-        activityIndicator.snp.makeConstraints { (make) in
-            make.size.equalTo(CGSize(width: 30, height: 30))
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
-        }
-        self.activityIndicator.isHidden = true
-        activityIndicator.hidesWhenStopped = true
+//        playerView.addSubview(activityIndicator)
+//        activityIndicator.snp.makeConstraints { (make) in
+//            make.size.equalTo(CGSize(width: 30, height: 30))
+//            make.centerX.equalToSuperview()
+//            make.centerY.equalToSuperview()
+//        }
+//        self.activityIndicator.isHidden = true
+//        activityIndicator.hidesWhenStopped = true
+        
+        //MBProgressHUD activity indicator
+        initAndLayoutActivityIndicator()
         
     }
     
@@ -119,6 +123,26 @@ extension EditCardViewController {
             frameView.contentMode = .scaleAspectFit
             frameImagesList.append(frameView)
         }
+    }
+    
+    func initAndLayoutActivityIndicator() {
+        spinnerActivity = MBProgressHUD()
+        view.addSubview(spinnerActivity)
+        spinnerActivity.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+        spinnerActivity.mode = .indeterminate
+        spinnerActivity.label.text = "Processing image ...";
+        spinnerActivity.isUserInteractionEnabled = false;
+    }
+    
+    func startActivityIndicator() {
+        spinnerActivity.show(animated: true)
+    }
+    
+    func stopActivityIndicator() {
+        spinnerActivity.hide(animated: true)
     }
     
 }

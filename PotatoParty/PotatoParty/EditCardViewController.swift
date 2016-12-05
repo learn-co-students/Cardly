@@ -11,6 +11,7 @@ import AVFoundation
 import AVKit
 import AssetsLibrary
 import Photos
+import MBProgressHUD
 
 class EditCardViewController: UIViewController, UITextFieldDelegate {
 
@@ -48,6 +49,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate {
         }
     }
     var activityIndicator: UIActivityIndicatorView!
+    var spinnerActivity: MBProgressHUD!
     var selectedImageIndex = 0
 
     // Buttons
@@ -173,9 +175,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate {
         assetExport.videoComposition = layercomposition
         assetExport.outputFileType = AVFileTypeQuickTimeMovie
         assetExport.outputURL = movieUrl
-        disableAllButtons()
-        activityIndicator.isHidden = false
-        activityIndicator.startAnimating()
+        startActivityIndicator()
         assetExport.exportAsynchronously {
             DispatchQueue.main.async {
                 switch assetExport.status {
@@ -183,9 +183,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate {
                     print("Success")
                     sleep(5)
                     self.fileLocation = movieUrl
-                    print("export  url is \(movieUrl)")
-                    self.activityIndicator.stopAnimating()
-                    self.enableAllButtons()
+                    self.stopActivityIndicator()
                     completion(true)
                 case .failed:
                     fatalError("Image export failed!")
@@ -260,16 +258,13 @@ class EditCardViewController: UIViewController, UITextFieldDelegate {
         assetExport.videoComposition = layercomposition
         assetExport.outputFileType = AVFileTypeQuickTimeMovie
         assetExport.outputURL = movieUrl
-        disableAllButtons()
-        self.activityIndicator.isHidden = false
-        self.activityIndicator.startAnimating()
+        startActivityIndicator()
         assetExport.exportAsynchronously {
             DispatchQueue.main.async(execute: {
                 switch assetExport.status {
                 case .completed:
-                    self.activityIndicator.stopAnimating()
+                    self.stopActivityIndicator()
                     self.fileLocation = movieUrl
-                    self.enableAllButtons()
                     break
                 case.cancelled:
                     print("Canceled")
@@ -418,18 +413,6 @@ class EditCardViewController: UIViewController, UITextFieldDelegate {
         }
         
         self.present(controller, animated: true, completion: nil)
-    }
-    
-    func disableAllButtons() {
-        for button in self.buttons {
-            button.isEnabled = false
-        }
-    }
-    
-    func enableAllButtons() {
-        for button in self.buttons {
-            button.isEnabled = true
-        }
     }
     
     func fileName() -> String {
