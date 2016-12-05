@@ -26,6 +26,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     var timer = Timer()
     var pickGroup = UIPickerView()
     var pickerData = ["All", "Family", "Friends", "Coworkers", "Other"]
+    var chosenGroup = ""
 
     fileprivate let cellHeight: CGFloat = 210
     fileprivate let cellSpacing: CGFloat = 20
@@ -202,14 +203,63 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        
+        switch row {
+        case 0:
+            chosenGroup = "all"
+            updateGroup {
+                shared.selectedContacts.removeAll()
+                
+            }
+            self.dismiss(animated: true, completion: nil)
+            print( "all")
+        case 1:
+            chosenGroup = "family"
+            updateGroup {
+                
+                let selectedCell = collectionView.cellForItem(at: collectionView.selectedCellIndexPath!) as! ContactsCollectionViewCell
+                selectedCell.handleTap()
+                selectedCell.reflectUnsellectedState()
+                shared.selectedContacts.removeAll()
+                self.collectionView.reloadData()
+//                //removed red border/"selected state"
+//                contentView.layer.borderWidth = 0.0
+//                contentView.layer.borderColor = UIColor.clear.cgColor
+            }
+            self.dismiss(animated: true, completion: nil)
+            print("family")
+        case 2:
+            chosenGroup = "friends"
+            updateGroup {
+                shared.selectedContacts.removeAll()
+                self.collectionView.reloadData()
+            }
+            self.dismiss(animated: true, completion: nil)
+        case 3:
+            chosenGroup = "coworkers"
+            updateGroup {
+                shared.selectedContacts.removeAll()
+            }
+            self.dismiss(animated: true, completion: nil)
+        case 4:
+            chosenGroup = "other"
+            updateGroup {
+                shared.selectedContacts.removeAll()
+            }
+            self.dismiss(animated: true, completion: nil)
+            print("other")
+        default:
+            print("error")
+        }
     }
     
     func showPickerInAlert() {
-    let alert = UIAlertController(title: "Group", message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+    let alert = UIAlertController(title: "Choose Group", message: "\n\n\n\n", preferredStyle: UIAlertControllerStyle.actionSheet)
         //set up pickGroup frame
+       // var okayAction =  UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
+        //alert.addAction(okayAction)
         alert.view.addSubview(pickGroup)
-    
+        
+        
         self.present(alert, animated: true, completion: nil)
     }
 }
@@ -249,6 +299,7 @@ extension ContactsViewController {
             make.bottom.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(0.125)
         }
+        
     }
     
     func setupTopNavBarView() {
@@ -310,9 +361,34 @@ extension ContactsViewController: BottomNavBarDelegate {
     }
     
     func editGroupButtonPressed(){
-        
         showPickerInAlert()
         print("edit group button pressed")
+    }
+    
+    //Updates Contact Group property and reloaded Collection View
+    
+    func updateGroup(completion: () -> ()){
+        for (index, contact) in shared.selectedContacts.enumerated() {
+            shared.selectedContacts[index].group_key = chosenGroup
+       
+            //update group bucket
+            let groupsRef = FIRDatabase.database().reference(withPath: "groups")
+            let allGroupPath = groupsRef.child("\(uid)/\(chosenGroup)")
+            let groupItemRef = allGroupPath.child(contact.key)
+            groupItemRef.setValue(contact.toAny())
+
+           
+            //update contact group bucket
+                let contactsPath = ref.child("\(uid)/\(chosenGroup)")
+            let contactItemRef = contactsPath.child(contact.key)
+            contactItemRef.setValue(contact.toAny())
+            contactItemRef.setValue(contact.toAny())
+            }
+        
+    }
+    
+    func enableBottomNavButtons(){
+        
     }
     
     func sendToButtonPressed() {
@@ -372,6 +448,18 @@ extension ContactsViewController {
         ref.child(coworkersPath).removeValue()
         ref.child(otherPath).removeValue()
         
+        let groupsRef = FIRDatabase.database().reference(withPath: "groups")
+        let allGroupPath = "\(uid)/all/\(contact.key)"
+        let familyGroupPath = "\(uid)/family/\(contact.key)"
+        let friendsGroupPath = "\(uid)/friends/\(contact.key)"
+        let coworkersGroupPath = "\(uid)/coworkers/\(contact.key)"
+        let otherGroupPath = "\(uid)/other/\(contact.key)"
+        groupsRef.child(allGroupPath).removeValue()
+        groupsRef.child(familyGroupPath).removeValue()
+        groupsRef.child(friendsGroupPath).removeValue()
+        groupsRef.child(coworkersGroupPath).removeValue()
+        groupsRef.child(otherGroupPath).removeValue()
+      
     }
     
 }

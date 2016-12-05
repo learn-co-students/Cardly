@@ -86,17 +86,19 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
             let userContactsRef = contactsRef.child("\(uid)/all/")
             let contactItemRef = userContactsRef.childByAutoId()
             contactItemRef.setValue(appContact.toAny())
+         
+            let groupsRef = FIRDatabase.database().reference(withPath: "groups")
+            let groupsUserRef = groupsRef.child("\(uid)/all/")
+            let groupItemRef = groupsUserRef.child(contactItemRef.key)
+            groupItemRef.setValue(appContact.toAny())
             
-            if groupSelected != "All" {
-                let path = "\(uid)/\(groupSelected.lowercased())/\(contactItemRef.key)/"
-                let groupContactsRef = contactsRef.child(path)
-                groupContactsRef.setValue(appContact.toAny())
-            }
+
         }
         let destVC = ContactsViewController()
         navigationController?.pushViewController(destVC, animated: true)
         
     }
+
     
     
     
@@ -144,7 +146,8 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         guard validCheck() else { return }
         
         guard let email = emailTextField.text, let name = nameTextField.text, let phone = phoneTextField.text else { return }
-        let contact = Contact(fullName: name, email: email, phone: phone)
+//        let contact = Contact(fullName: name, email: email, phone: phone)
+        let contact = Contact(fullName: name, email: email, phone: phone, group_key: groupSelected)
         
         // Add to contacts bucket
         let contactsRef = FIRDatabase.database().reference(withPath: "contacts")
@@ -176,6 +179,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
             let path = "\(uid)/\(groupSelected.lowercased())/\(contactItemRef.key)/"
             let groupContactsRef = groupsRef.child(path)
             groupContactsRef.setValue(contact.toAny())
+            
         }
     }
     

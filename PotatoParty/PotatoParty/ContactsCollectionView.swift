@@ -19,6 +19,7 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     weak var contactDelegate: AddContactsDelegate?
   //  var contactsBackgroundImage: UIImage = #imageLiteral(resourceName: "contactsAndSettingsVCBackgroundImage")
     let shared = User.shared
+    var selectedCellIndexPath: IndexPath?
     
     
     // Inititalizers
@@ -61,35 +62,42 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         
         var selectedContact = contacts[indexPath.row]
         selectedContact.isChosen = !selectedContact.isChosen
-        
+        selectedCellIndexPath = indexPath
         if indexPath.row == 0 {
             contactDelegate?.goToAddContact()
             
-        }else {
+        } else {
             if selectedContact.isChosen == false {
+                
+                print("deselecting cell")
                 collectionView.deselectItem(at: indexPath, animated: true)
+                
+                
+                let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
+                
+                selectedCell.handleTap()
                 shared.selectedContacts = shared.selectedContacts.filter { (contact) -> Bool in
                     
                     return contact.email != selectedContact.email
                 }
-                let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
-                
-                selectedCell.handleTap()
+
+               print("selected contacts array: \(shared.selectedContacts)")
                 
             } else {
-                
+                print("selecting cell")
                 shared.selectedContacts.append(selectedContact)
-                
-                contacts[indexPath.row] = selectedContact
                 
                 let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
                 
                 selectedCell.handleTap()
+                print("selected contacts array: \(shared.selectedContacts)")
                 
             }
         }
         
     }
+    
+    
   
     // Setup view
     func setupView() {
