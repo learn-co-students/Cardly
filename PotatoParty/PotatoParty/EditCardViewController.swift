@@ -68,15 +68,15 @@ class EditCardViewController: UIViewController {
     // Custom text fields
     var topTextField: UITextField!
     var bottomTextField: UITextField!
+    var activeField: UITextField?
     
     // MARK: - Init
     override func viewDidLoad() {
         super.viewDidLoad()
         instantiateButtons()
         layoutViewElements()
-
         setupText()
-
+        registerForKeyboardNotifications()
         addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.playerReachedEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
     }
@@ -87,6 +87,7 @@ class EditCardViewController: UIViewController {
     
     deinit {
         removeObserver(self, forKeyPath: "player.currentItem.status")
+        deregisterFromKeyboardNotifications()
     }
 
     override func didReceiveMemoryWarning() {
@@ -419,5 +420,40 @@ extension EditCardViewController: ModalViewControllerDelegate {
         dismiss(animated: false, completion: nil)
         let _ = self.navigationController?.popToRootViewController(animated: true)
         completion()
+    }
+}
+
+// MARK: Handle keyboard notifications
+
+extension EditCardViewController {
+    
+    func registerForKeyboardNotifications(){
+        //Adding notifies on keyboard appearing
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    func deregisterFromKeyboardNotifications(){
+        //Removing notifies on keyboard appearing
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight = keyboardSize.height
+            if bottomTextField.isEditing{
+                self.view.window?.frame.origin.y = -1 * keyboardHeight
+            }
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight = keyboardSize.height
+            if self.view.window?.frame.origin.y != 0 {
+                self.view.window?.frame.origin.y += keyboardHeight
+            }
+        }
     }
 }
