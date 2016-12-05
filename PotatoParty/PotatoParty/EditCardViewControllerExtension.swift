@@ -10,7 +10,6 @@ import SnapKit
 import MBProgressHUD
 
 extension EditCardViewController {
-    
     func layoutViewElements() {
         // Main view setup
         view.backgroundColor = UIColor.clear
@@ -81,17 +80,6 @@ extension EditCardViewController {
         }
         saveButton.addTarget(self, action: #selector(self.navToSendCardVC), for: .touchUpInside)
         
-        // Text button
-        addTextButton.backgroundColor = UIColor.green
-        addTextButton.setTitle("Text", for: .normal)
-        view.addSubview(addTextButton)
-        addTextButton.snp.makeConstraints { (make) in
-            make.height.equalTo(playPauseButton.snp.height)
-            make.width.equalTo(playPauseButton.snp.width)
-            make.centerX.equalToSuperview()
-            make.bottomMargin.equalToSuperview().offset(-20)
-        }
-        addTextButton.addTarget(self, action: #selector(self.addTextToVideo), for: .touchUpInside)
         
         initAndLayoutActivityIndicator()
         
@@ -127,7 +115,9 @@ extension EditCardViewController {
     }
     
     func startActivityIndicator() {
-        spinnerActivity.show(animated: true)
+        DispatchQueue.main.async {
+            self.spinnerActivity.show(animated: true)
+        }
     }
     
     func stopActivityIndicator() {
@@ -146,5 +136,72 @@ extension EditCardViewController {
             usleep(50000)
         }
     }
-    
 }
+
+extension EditCardViewController: UITextFieldDelegate {
+    func setupText() {
+        let font = UIFont(name: Font.nameForCard, size: Font.Size.cardView)
+        
+        // Top text field
+        topTextField = UITextField()
+        topTextField.delegate = self
+        view.addSubview(topTextField)
+        topTextField.snp.makeConstraints { (make) in
+            make.left.equalToSuperview().offset(30)
+            make.right.equalToSuperview()
+            make.top.equalToSuperview().offset(-10)
+        }
+        // Text
+        topTextField.text = "Hey Carl,"
+        topTextField.font = font
+        topTextField.textAlignment = .left
+        topTextField.textColor = UIColor.white
+        topTextField.backgroundColor = UIColor.clear
+        // Drop shadow
+        topTextField.layer.shadowColor = UIColor.black.cgColor
+        topTextField.layer.shadowOffset = CGSize(width: 2, height: 2)
+        topTextField.layer.shadowRadius = 0
+        topTextField.layer.shadowOpacity = 1
+        // Set string for export layer
+        topTextString = topTextField.text
+        
+        
+        // Bottom text field
+        bottomTextField = UITextField()
+        bottomTextField.delegate = self
+        
+//        MARK: - Uncomment to enable bottom text field
+//        view.addSubview(bottomTextField)
+//        bottomTextField.snp.makeConstraints { (make) in
+//            make.right.equalToSuperview().offset(-30)
+//            make.left.equalToSuperview()
+//            make.bottom.equalToSuperview()
+//        }
+        
+        // Text attributes
+        bottomTextField.text = "Love, Forrest"
+        bottomTextField.font = font
+        bottomTextField.textAlignment = .right
+        bottomTextField.textColor = UIColor.white
+        bottomTextField.backgroundColor = UIColor.clear
+        // Text drop shadow
+        bottomTextField.layer.shadowColor = UIColor.black.cgColor
+        bottomTextField.layer.shadowOffset = CGSize(width: 2, height: 2)
+        bottomTextField.layer.shadowRadius = 0
+        bottomTextField.layer.shadowOpacity = 1
+        // Set string for export layer
+        bottomTextString = bottomTextField.text
+    }
+    
+    // Press enter to hide keyboard
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField.hasText {
+            topTextString = textField.text!
+        } else {
+            topTextString = nil
+        }
+        textField.resignFirstResponder()
+        return true
+    }
+}
+

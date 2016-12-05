@@ -67,8 +67,6 @@ class SendCardViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
-    // MARK: - View layout
-    
     func layoutElements() {
         
         view.addSubview(playerView)
@@ -200,6 +198,7 @@ class SendCardViewController: UIViewController {
             present(noEmailAlertVC, animated: true, completion: nil)
             print("error: MAIL compose view controller cannot send mail")
         }
+        
     }
     
     func videoWasSent(completion:() -> ()) {
