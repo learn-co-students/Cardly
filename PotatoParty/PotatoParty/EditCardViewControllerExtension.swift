@@ -50,9 +50,10 @@ extension EditCardViewController {
         
         // Player view
         view.addSubview(playerView)
-        playerView.frame = self.view.frame
+        playerView.frame = CGRect(x: self.view.frame.width * 0.12, y: self.view.frame.height * 0.12, width: self.view.frame.width * 0.77, height: self.view.frame.height * 0.77)
+        playerView.playerLayer.frame = playerView.frame
+
         playerView.backgroundColor = UIColor.clear
-        playerView.playerLayer.frame = playerView.bounds
         view.sendSubview(toBack: playerView)
         playerView.playerLayer.player = player
         
@@ -138,6 +139,7 @@ extension EditCardViewController {
     }
 }
 
+// MARK: - Text field delegate & methods
 extension EditCardViewController: UITextFieldDelegate {
     func setupText() {
         let font = UIFont(name: Font.nameForCard, size: Font.Size.cardView)

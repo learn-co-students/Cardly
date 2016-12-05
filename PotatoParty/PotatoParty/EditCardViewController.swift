@@ -162,7 +162,7 @@ class EditCardViewController: UIViewController {
         parentLayer.addSublayer(videoLayer)
         parentLayer.addSublayer(overlayLayer)
         
-        if let text = topTextField.text, !topTextField.text!.isEmpty{
+        if let text = topTextField.text, !topTextField.text!.isEmpty {
             // Text layer
             let topTextLayer = CATextLayer()
             topTextLayer.frame = CGRect(x: 30, y: -10, width: HDVideoSize.width, height: HDVideoSize.height)
@@ -183,7 +183,7 @@ class EditCardViewController: UIViewController {
             parentLayer.addSublayer(topTextLayer)
         }
         
-        if let text = bottomTextField.text, !bottomTextField.text!.isEmpty{
+        if let text = bottomTextField.text, !bottomTextField.text!.isEmpty {
             // Text layer
             let bottomTextLayer = CATextLayer()
             bottomTextLayer.frame = CGRect(x: -30, y: -1710, width: HDVideoSize.width - 30, height: HDVideoSize.height)
