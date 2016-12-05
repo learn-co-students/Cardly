@@ -68,10 +68,6 @@ class EditCardViewController: UIViewController {
     var topTextField: UITextField!
     var bottomTextField: UITextField!
     
-    // Text strings for export method
-    var topTextString: String?
-    var bottomTextString: String?
-    
     // MARK: - Init
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -120,7 +116,7 @@ class EditCardViewController: UIViewController {
     
     
     // MARK: - Overlay export methods
-    func exportWithFrameLayer(completion: @escaping (Bool) -> Void) {
+    func exportWithOverlays(completion: @escaping (Bool) -> Void) {
         // Composition
         let composition = AVMutableComposition()
         let asset = AVURLAsset(url: fileLocation!)
@@ -155,7 +151,7 @@ class EditCardViewController: UIViewController {
         let overlayLayer = CALayer()
         overlayLayer.contents = overlayImage?.cgImage
         overlayLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
-        
+
         let videoLayer = CALayer()
         videoLayer.backgroundColor = UIColor.blue.cgColor
         videoLayer.frame = CGRect(x: 120, y: 230, width: HDVideoSize.width * 0.78, height: HDVideoSize.height * 0.78)
@@ -164,7 +160,28 @@ class EditCardViewController: UIViewController {
         parentLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
         parentLayer.addSublayer(videoLayer)
         parentLayer.addSublayer(overlayLayer)
-            
+        
+        if let text = topTextField.text, !topTextField.text!.isEmpty{
+            // Text layer
+            let topTextLayer = CATextLayer()
+            topTextLayer.frame = CGRect(x: 30, y: -10, width: HDVideoSize.width, height: HDVideoSize.height)
+            // Text attributes
+            topTextLayer.string = text
+            topTextLayer.font = CTFontCreateWithName(Font.nameForCard as CFString, 0.0, nil)
+            topTextLayer.fontSize = Font.Size.cardVideo
+            topTextLayer.foregroundColor = UIColor.white.cgColor
+            topTextLayer.alignmentMode = kCAAlignmentLeft
+            topTextLayer.backgroundColor = UIColor.clear.cgColor
+            topTextLayer.contentsScale = 1
+            // Text drop shadow
+            // TODO: - Fix drop shadow to match TextField perceived Offset
+            topTextLayer.shadowColor = UIColor.black.cgColor
+            topTextLayer.shadowOffset = CGSize(width: 4, height: 4)
+            topTextLayer.shadowRadius = 0
+            topTextLayer.shadowOpacity = 1
+            parentLayer.addSublayer(topTextLayer)
+        }
+        
         let layercomposition = AVMutableVideoComposition()
         layercomposition.frameDuration = CMTimeMake(1, 30)
         layercomposition.renderSize = HDVideoSize
@@ -193,109 +210,6 @@ class EditCardViewController: UIViewController {
                 print("Success")
                 self.doWorkWithProgress(progressHUD: self.spinnerActivity)
                 self.fileLocation = movieUrl
-                self.stopActivityIndicator()
-                completion(true)
-            case .failed:
-                fatalError("Image export failed!")
-            default:
-                fatalError("Failed to export image")
-            }
-        }
-    }
-    
-    func exportWithTextLayer(completion: @escaping (Bool) -> Void) {
-        guard let text = topTextString else {
-            print("Top text field empty - abandoning text export layer")
-            return
-        }
-        
-        // Composition
-        let composition = AVMutableComposition()
-        let asset = AVURLAsset(url: fileLocation!)
-        
-        let track = asset.tracks(withMediaType: AVMediaTypeVideo)
-        let videoTrack: AVAssetTrack = track[0] as AVAssetTrack
-        
-        let timerange = CMTimeRangeMake(kCMTimeZero, asset.duration)
-        
-        let compositionVideoTrack: AVMutableCompositionTrack = composition.addMutableTrack(withMediaType: AVMediaTypeVideo, preferredTrackID: CMPersistentTrackID())
-        
-        do {
-            try compositionVideoTrack.insertTimeRange(timerange, of: videoTrack, at: kCMTimeZero)
-        } catch  {
-            print("composing video track error")
-            print(error)
-        }
-        
-        let compositionAudioTrack: AVMutableCompositionTrack = composition.addMutableTrack(withMediaType: AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
-        
-        do {
-            try compositionAudioTrack.insertTimeRange(timerange, of: asset.tracks(withMediaType: AVMediaTypeAudio)[0], at: kCMTimeZero)
-        } catch {
-            print("composing audio track error")
-            print(error)
-        }
-        
-        // Layers
-        
-        // Text layer
-        let textLayer = CATextLayer()
-        textLayer.frame = CGRect(x: 30, y: -10, width: HDVideoSize.width, height: HDVideoSize.height)
-        // Text attributes
-        textLayer.string = text
-        textLayer.font = CTFontCreateWithName(Font.nameForCard as CFString, 0.0, nil)
-        textLayer.fontSize = Font.Size.cardVideo
-        textLayer.foregroundColor = UIColor.white.cgColor
-        textLayer.alignmentMode = kCAAlignmentLeft
-        textLayer.backgroundColor = UIColor.clear.cgColor
-        textLayer.contentsScale = 1
-        // Text drop shadow
-        // TODO: - Fix drop shadow to match TextField perceived Offset
-        textLayer.shadowColor = UIColor.black.cgColor
-        textLayer.shadowOffset = CGSize(width: 4, height: 4)
-        textLayer.shadowRadius = 0
-        textLayer.shadowOpacity = 1
-
-        let videoLayer = CALayer()
-        videoLayer.backgroundColor = UIColor.blue.cgColor
-        videoLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
-        
-        let parentLayer = CALayer()
-        parentLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
-        parentLayer.addSublayer(videoLayer)
-        parentLayer.addSublayer(textLayer)
-
-        let layercomposition = AVMutableVideoComposition()
-        layercomposition.frameDuration = CMTimeMake(1, 30)
-        layercomposition.renderSize = HDVideoSize
-        layercomposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videoLayer, in: parentLayer)
-        
-        // Export instructions
-        let instruction = AVMutableVideoCompositionInstruction()
-        instruction.timeRange = CMTimeRangeMake(kCMTimeZero, composition.duration)
-        let layerInstr = videoCompositionInstructionForText(track: compositionVideoTrack, assetTrack: videoTrack)
-        instruction.layerInstructions = [layerInstr]
-        layercomposition.instructions = [instruction]
-        
-        // Export
-        let filePath = NSTemporaryDirectory() + fileName()
-        let movieUrl = URL(fileURLWithPath: filePath)
-        
-        guard let assetExport = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHighestQuality) else { return }
-        assetExport.videoComposition = layercomposition
-        assetExport.outputFileType = AVFileTypeQuickTimeMovie
-        assetExport.outputURL = movieUrl
-        startActivityIndicator()
-        assetExport.exportAsynchronously {
-            switch assetExport.status {
-            case .completed:
-                print("Success")
-                self.doWorkWithProgress(progressHUD: self.spinnerActivity)
-                self.fileLocation = movieUrl
-                // Hide text labels once video exports
-                self.topTextField.isHidden = true
-                self.topTextField.isEnabled = false
-                //
                 self.stopActivityIndicator()
                 completion(true)
             case .failed:
@@ -428,33 +342,15 @@ class EditCardViewController: UIViewController {
     
     func navToSendCardVC(sender: UIButton, isExportSuccessful: Bool) {
         
-        exportWithFrameLayer { (success) in
+        exportWithOverlays { (success) in
             if success {
-                if self.topTextString != "" || self.bottomTextString != "" {
-                    print("Goes into text not nil")
-                    self.exportWithTextLayer(completion: { (success) in
-                        if success {
-                            print("Goes into text overlay success")
-                            self.player.pause()
-                            let destVC = SendCardViewController()
-                            destVC.delegate = self
-                            destVC.fileLocation = self.fileLocation
-                            destVC.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
-                            destVC.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
-                            self.present(destVC, animated: true, completion: nil)
-                        }
-                    })
-                } else {
-                    print("Goes into text nil else")
-                    //if there is no text, don't add text layer, just show preview for exported frame layer video
-                    self.player.pause()
-                    let destVC = SendCardViewController()
-                    destVC.delegate = self
-                    destVC.fileLocation = self.fileLocation
-                    destVC.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
-                    destVC.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
-                    self.present(destVC, animated: true, completion: nil)
-                }
+                self.player.pause()
+                let destVC = SendCardViewController()
+                destVC.delegate = self
+                destVC.fileLocation = self.fileLocation
+                destVC.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
+                destVC.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
+                self.present(destVC, animated: true, completion: nil)
             }
         }
     }

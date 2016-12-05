@@ -162,9 +162,6 @@ extension EditCardViewController: UITextFieldDelegate {
         topTextField.layer.shadowOffset = CGSize(width: 2, height: 2)
         topTextField.layer.shadowRadius = 0
         topTextField.layer.shadowOpacity = 1
-        // Set string for export layer
-        topTextString = topTextField.text
-        
         
         // Bottom text field
         bottomTextField = UITextField()
@@ -189,17 +186,10 @@ extension EditCardViewController: UITextFieldDelegate {
         bottomTextField.layer.shadowOffset = CGSize(width: 2, height: 2)
         bottomTextField.layer.shadowRadius = 0
         bottomTextField.layer.shadowOpacity = 1
-        // Set string for export layer
-        bottomTextString = bottomTextField.text
     }
     
     // Press enter to hide keyboard
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if textField.hasText {
-            topTextString = textField.text!
-        } else {
-            topTextString = nil
-        }
         textField.resignFirstResponder()
         return true
     }
