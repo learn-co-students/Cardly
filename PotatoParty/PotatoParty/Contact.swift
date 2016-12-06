@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import FirebaseDatabase
 
-struct Contact {
+final class Contact {
     
     
     let key: String

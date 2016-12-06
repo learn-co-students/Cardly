@@ -15,7 +15,6 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     let reuseIdentifier = "cell"
     let layout = UICollectionViewFlowLayout()
     let defaultContact: Contact = Contact(fullName: "Add Contact", email: "", phone: "")
-    var contacts: [Contact] = []
     //  var contactsBackgroundImage: UIImage = #imageLiteral(resourceName: "contactsAndSettingsVCBackgroundImage")
     let shared = User.shared
     
@@ -38,15 +37,16 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        contacts.insert(defaultContact, at: 0)
-        return self.contacts.count
+        User.shared.contacts.insert(defaultContact, at: 0)
+        return User.shared.contacts.count
         
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        print(collectionView.subviews.count)
         let cell = dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ContactsCollectionViewCell
         
-        cell.contact = contacts[indexPath.row]
+        cell.contact = User.shared.contacts[indexPath.row]
         
         if cell.contact.is_sent == true {
             cell.alpha = 0.5

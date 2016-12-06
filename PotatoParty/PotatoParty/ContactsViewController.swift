@@ -32,7 +32,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     var pickGroup = UIPickerView()
     var pickerData = ["All", "Family", "Friends", "Coworkers", "Other"]
     var chosenGroup = ""
-
+    
     fileprivate let cellHeight: CGFloat = 210
     fileprivate let cellSpacing: CGFloat = 20
     fileprivate lazy var presentationAnimator = GuillotineTransitionAnimation()
@@ -49,7 +49,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
         retrieveContacts(for: User.shared.groups[0], completion: { contacts in
-            self.contactsCollectionView.contacts = contacts
+            User.shared.contacts = contacts
             self.contactsCollectionView.reloadData()
         })
     }
@@ -62,7 +62,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-
+    
 }
 
 // MARK: - Views
@@ -112,7 +112,7 @@ extension ContactsViewController {
         
         let title = prepareNavigationBarMenuTitleView()
         prepareNavigationBarMenu(title)
-
+        
         let rightBtn = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(self.selectBtnClicked))
         self.navigationItem.rightBarButtonItem = rightBtn
         
@@ -139,7 +139,7 @@ extension ContactsViewController {
         titleView.addTarget(self, action: #selector(self.didToggleNavigationBarMenu(_:)), for: .valueChanged)
         titleView.titleLabel.textColor = UIColor.black
         titleView.title = "Lists"
-
+        
         navigationItem.titleView = titleView
         
         return titleView.title!
@@ -155,9 +155,9 @@ extension ContactsViewController {
         for list in arrayofWeddingLists {
             let firstCell = DropDownMenuCell()
             firstCell.textLabel!.text = list
-
+            
             firstCell.menuAction = #selector(selectGroup(_:))
-
+            
             firstCell.menuTarget = self
             if currentChoice == list {
                 firstCell.accessoryType = .checkmark
@@ -182,7 +182,7 @@ extension ContactsViewController {
             navigationBarMenu.show()
         }
     }
-
+    
     // AlertConroller & UIPicker View
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -241,7 +241,7 @@ extension ContactsViewController {
     func showPickerInAlert() {
         print("show alert")
         let alert = UIAlertController(title: "Choose Group", message: "\n\n\n\n", preferredStyle: UIAlertControllerStyle.actionSheet)
-
+        
         alert.view.addSubview(pickGroup)
         
         self.present(alert, animated: true, completion: nil)
@@ -253,8 +253,8 @@ extension ContactsViewController {
 extension ContactsViewController {
     
     // Setup all views
-
-        
+    
+    
     func didToggleNavigationBarMenu(_ sender: DropDownTitleView) {
         
     }
@@ -271,7 +271,7 @@ extension ContactsViewController {
         // Retrieve from Firebase
         guard let group = sender.textLabel?.text?.lowercased() else { return }
         self.retrieveContacts(for: group, completion: { contacts in
-            self.contactsCollectionView.contacts = contacts
+            User.shared.contacts = contacts
             self.contactsCollectionView.reloadData()
         })
         // Hide Top Nav Bar after group is selected
@@ -297,7 +297,7 @@ extension ContactsViewController: BottomNavBarDelegate {
         //
         //        view.backgroundColor = UIColor.white
         //
-
+        
         presentationAnimator.animationDuration = 0.2
         presentationAnimator.animationDelegate = destVC as? GuillotineAnimationDelegate
         presentationAnimator.presentButton = view
@@ -305,8 +305,43 @@ extension ContactsViewController: BottomNavBarDelegate {
     }
     
     func selectBtnClicked() {
-        let destVC = ContactsViewController()
-        navigationController?.pushViewController(destVC, animated: false)
+        
+        print("YOLO!!!!")
+        
+        for contact in User.shared.contacts {
+            
+            print("Contact: \(contact.fullName)")
+            
+            contact.isChosen = true
+            
+            print("Contact is chosen: \(contact.isChosen ? "YES" : "NO")")
+            
+        }
+//        
+//        for (index, _) in shared.contacts.enumerated() {
+//            
+//            
+//            
+//            shared.contacts[index].isChosen = true
+//        }
+        enableCell()
+        contactsCollectionView.reloadData()
+        //        for indexPath in contactsCollectionView.indexPathsForVisibleItems {
+        //            let cell = contactsColl
+        //            if indexPath.row > 0 {
+        //                let selectedCell = contactsCollectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
+        //                selectedCell.handleTap()
+        //                shared.selectedContacts.append(contactsCollectionView.contacts[indexPath.row])
+        //                contactsCollectionView.contacts[indexPath.row].isChosen = true
+        //            }
+        //            enableCell()
+        //            contactsCollectionView.reloadData()
+        //            print("select button: selectedContacts array: \(shared.selectedContacts.count)")
+        //        }
+        //
+        //
+        //        let destVC = ContactsViewController()
+        //        navigationController?.pushViewController(destVC, animated: false)
     }
     
     func goToAddContact(){
@@ -317,7 +352,7 @@ extension ContactsViewController: BottomNavBarDelegate {
     func deleteButtonPressed() {
         deleteContacts {
             retrieveContacts(for: User.shared.groups[0], completion: { contacts in
-                self.contactsCollectionView.contacts = contacts
+                User.shared.contacts = contacts
                 self.contactsCollectionView.reloadData()
             })
             //collectionView.reloadData()
@@ -363,7 +398,7 @@ extension ContactsViewController: BottomNavBarDelegate {
     func navToRecordCardVC() {
         let _ = startCameraFromViewController(self, withDelegate: self)
     }
-
+    
     
 }
 
@@ -441,7 +476,7 @@ extension ContactsViewController {
         groupsRef.child(friendsGroupPath).removeValue()
         groupsRef.child(coworkersGroupPath).removeValue()
         groupsRef.child(otherGroupPath).removeValue()
-
+        
     }
     
 }
@@ -571,7 +606,7 @@ extension ContactsViewController: UICollectionViewDelegate {
         print("selected item")
         print(#function)
         
-        let selectedContact = contactsCollectionView.contacts[indexPath.row]
+        let selectedContact = User.shared.contacts[indexPath.row]
         
         
         
@@ -583,9 +618,9 @@ extension ContactsViewController: UICollectionViewDelegate {
                 
                 let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
                 selectedCell.handleTap()
-                contactsCollectionView.contacts[indexPath.row].isChosen = false
+                User.shared.contacts[indexPath.row].isChosen = false
                 shared.selectedContacts = shared.selectedContacts.filter({ (contact) -> Bool in
-                    return contact.email != contactsCollectionView.contacts[indexPath.row].email
+                    return contact.email != User.shared.contacts[indexPath.row].email
                 })
                 enableCell()
                 
@@ -597,13 +632,13 @@ extension ContactsViewController: UICollectionViewDelegate {
                 shared.selectedContacts.append(selectedContact)
                 let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
                 selectedCell.handleTap()
-                contactsCollectionView.contacts[indexPath.row].isChosen = true
+                User.shared.contacts[indexPath.row].isChosen = true
                 
                 enableCell()
                 
                 print("selected cell")
                 print("\(shared.selectedContacts)")
-               
+                
             }
             
         }
@@ -624,7 +659,7 @@ extension ContactsViewController: UICollectionViewDelegate {
         }
         
     }
-
+    
 }
 
 
