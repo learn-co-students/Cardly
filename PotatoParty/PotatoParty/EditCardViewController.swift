@@ -207,6 +207,18 @@ class EditCardViewController: UIViewController {
             parentLayer.addSublayer(bottomTextLayer)
         }
         
+        // Fade in and out
+        let fadeAnimation = CAKeyframeAnimation(keyPath:"opacity")
+        let duration = CMTimeGetSeconds(composition.duration)
+        fadeAnimation.beginTime = AVCoreAnimationBeginTimeAtZero
+        fadeAnimation.duration = duration
+        fadeAnimation.keyTimes = [0, 0.03, 0.96, 0.99]
+        fadeAnimation.values = [0.0, 1.0, 1.0, 0.0]
+        fadeAnimation.isRemovedOnCompletion = false
+        fadeAnimation.fillMode = kCAFillModeForwards
+        parentLayer.add(fadeAnimation, forKey: "fade")
+        
+        // Animation composition
         let layercomposition = AVMutableVideoComposition()
         layercomposition.frameDuration = CMTimeMake(1, 30)
         layercomposition.renderSize = HDVideoSize
@@ -223,7 +235,7 @@ class EditCardViewController: UIViewController {
         let filePath = NSTemporaryDirectory() + fileName()
         let movieUrl = URL(fileURLWithPath: filePath)
     
-        guard let assetExport = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHighestQuality) else { return }
+        guard let assetExport = AVAssetExportSession(asset: composition, presetName: AVAssetExportPreset1280x720) else { return }
         assetExport.videoComposition = layercomposition
         assetExport.outputFileType = AVFileTypeQuickTimeMovie
         assetExport.outputURL = movieUrl
