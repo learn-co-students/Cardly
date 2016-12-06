@@ -16,6 +16,8 @@ protocol BottomNavBarDelegate: class {
     func deleteButtonPressed()
     func sendToButtonPressed()
     func editGroupButtonPressed()
+    
+    
 }
 
 // MARK: - Bottom Nav Bar
@@ -58,20 +60,19 @@ class BottomNavBarLeftView: UIView {
         deleteContactBtn.setTitleColor(UIColor.black, for: .normal)
         deleteContactBtn.titleLabel?.font = UIFont(name: "Helvetica", size: 32)
         deleteContactBtn.frame = CGRect()
-        deleteContactBtn.isEnabled = true
+        deleteContactBtn.isEnabled = false
+        deleteContactBtn.isHidden = true
         deleteContactBtn.addTarget(self, action: #selector(deleteButtonTapped(_:)), for: .touchUpInside)
         addSubview(deleteContactBtn)
         deleteContactBtn.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
         }
-        
-        
-        
+
         // Change background from color to image
         self.backgroundColor = UIColor.green
       //  self.backgroundColor = UIColor.init(patternImage: #imageLiteral(resourceName: "addContactImage"))
     }
-    
+
     func deleteButtonTapped(_ sender: UIButton) {
         
         print("\n\nadd contact button pressed\n\n")
@@ -100,7 +101,8 @@ class BottomNavBarMiddleView: UIView{
         editGroupButton.setTitleColor(UIColor.black, for: .normal)
         editGroupButton.titleLabel?.font = UIFont(name: "Helvecta", size: 32)
         editGroupButton.frame = CGRect()
-        editGroupButton.isEnabled = true
+        editGroupButton.isEnabled = false
+        editGroupButton.isHidden = true
         editGroupButton.addTarget(self, action: #selector(editGroupButtonTapped(_sender:)), for: .touchUpInside)
         addSubview(editGroupButton)
         editGroupButton.snp.makeConstraints { (make) in
