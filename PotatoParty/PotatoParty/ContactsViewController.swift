@@ -305,43 +305,16 @@ extension ContactsViewController: BottomNavBarDelegate {
     }
     
     func selectBtnClicked() {
-        
-        print("YOLO!!!!")
-        
-        for contact in User.shared.contacts {
-            
-            print("Contact: \(contact.fullName)")
-            
-            contact.isChosen = true
-            
-            print("Contact is chosen: \(contact.isChosen ? "YES" : "NO")")
-            
+        for (index, contact) in User.shared.contacts.enumerated() {
+            if index > 0 {
+                contact.isChosen = true
+                User.shared.selectedContacts.append(contact)
+            }
         }
-//        
-//        for (index, _) in shared.contacts.enumerated() {
-//            
-//            
-//            
-//            shared.contacts[index].isChosen = true
-//        }
+        User.shared.contacts.remove(at: 0)
         enableCell()
         contactsCollectionView.reloadData()
-        //        for indexPath in contactsCollectionView.indexPathsForVisibleItems {
-        //            let cell = contactsColl
-        //            if indexPath.row > 0 {
-        //                let selectedCell = contactsCollectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
-        //                selectedCell.handleTap()
-        //                shared.selectedContacts.append(contactsCollectionView.contacts[indexPath.row])
-        //                contactsCollectionView.contacts[indexPath.row].isChosen = true
-        //            }
-        //            enableCell()
-        //            contactsCollectionView.reloadData()
-        //            print("select button: selectedContacts array: \(shared.selectedContacts.count)")
-        //        }
-        //
-        //
-        //        let destVC = ContactsViewController()
-        //        navigationController?.pushViewController(destVC, animated: false)
+        
     }
     
     func goToAddContact(){
