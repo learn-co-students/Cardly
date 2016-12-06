@@ -101,8 +101,6 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     }
 
     
-    
-    
     func contactPickerDidCancel(_ picker: CNContactPickerViewController) {
         print("Cancel Contact Picker")
     }

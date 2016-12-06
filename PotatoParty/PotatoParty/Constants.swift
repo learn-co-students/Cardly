@@ -24,8 +24,8 @@ struct Font {
         static let l: CGFloat = 24
         static let xl: CGFloat = 36
         static let xxl: CGFloat = 48
-        static let cardView: CGFloat = 72
-        static let cardVideo: CGFloat = 180
+        static let cardView: CGFloat = 64
+        static let cardVideo: CGFloat = 120
     }
     
 }

@@ -151,7 +151,7 @@ extension EditCardViewController: UITextFieldDelegate {
         topTextField.snp.makeConstraints { (make) in
             make.left.equalToSuperview().offset(30)
             make.right.equalToSuperview()
-            make.top.equalToSuperview().offset(-10)
+            make.top.equalToSuperview().offset(-4)
         }
         // Text
         topTextField.text = "Enter some text"
@@ -174,7 +174,7 @@ extension EditCardViewController: UITextFieldDelegate {
         bottomTextField.snp.makeConstraints { (make) in
             make.right.equalToSuperview().offset(-30)
             make.left.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.bottom.equalToSuperview().offset(10)
         }
         
         // Text attributes
