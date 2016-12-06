@@ -60,7 +60,7 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         print("selected item")
         print(#function)
         
-        var selectedContact = contacts[indexPath.row]
+        let selectedContact = contacts[indexPath.row]
         
         print("####before if: \(selectedContact.isChosen)########")
 //        selectedContact.isChosen = !selectedContact.isChosen

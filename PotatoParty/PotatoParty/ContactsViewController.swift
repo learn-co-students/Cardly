@@ -215,12 +215,8 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
         case 1:
             chosenGroup = "family"
             updateGroup {
-                
-                let selectedCell = collectionView.cellForItem(at: collectionView.selectedCellIndexPath!) as! ContactsCollectionViewCell
-                selectedCell.handleTap()
-                selectedCell.reflectUnsellectedState()
                 shared.selectedContacts.removeAll()
-                self.collectionView.reloadData()
+                //self.collectionView.reloadData()
 //                //removed red border/"selected state"
 //                contentView.layer.borderWidth = 0.0
 //                contentView.layer.borderColor = UIColor.clear.cgColor
@@ -355,7 +351,7 @@ extension ContactsViewController: BottomNavBarDelegate {
                 self.collectionView.contacts = contacts
                 self.collectionView.reloadData()
             })
-            collectionView.reloadData()
+            //collectionView.reloadData()
         }
     
     }
@@ -369,6 +365,9 @@ extension ContactsViewController: BottomNavBarDelegate {
     
     func updateGroup(completion: () -> ()){
         for (index, contact) in shared.selectedContacts.enumerated() {
+            
+            removeFromSomeGroupsinFB(contact: contact)
+            
             shared.selectedContacts[index].group_key = chosenGroup
        
             //update group bucket
@@ -379,10 +378,10 @@ extension ContactsViewController: BottomNavBarDelegate {
 
            
             //update contact group bucket
-                let contactsPath = ref.child("\(uid)/\(chosenGroup)")
+            let contactsPath = ref.child("\(uid)/\(chosenGroup)")
             let contactItemRef = contactsPath.child(contact.key)
             contactItemRef.setValue(contact.toAny())
-            contactItemRef.setValue(contact.toAny())
+            
             }
         
     }
@@ -434,6 +433,29 @@ extension ContactsViewController {
         }
         
         completion()
+    }
+    func removeFromSomeGroupsinFB(contact: Contact){
+        
+        let familyPath = "\(uid)/family/\(contact.key)"
+        let friendsPath = "\(uid)/friends/\(contact.key)"
+        let coworkersPath = "\(uid)/coworkers/\(contact.key)"
+        let otherPath = "\(uid)/other/\(contact.key)"
+        
+        ref.child(familyPath).removeValue()
+        ref.child(friendsPath).removeValue()
+        ref.child(coworkersPath).removeValue()
+        ref.child(otherPath).removeValue()
+        
+        let groupsRef = FIRDatabase.database().reference(withPath: "groups")
+        let familyGroupPath = "\(uid)/family/\(contact.key)"
+        let friendsGroupPath = "\(uid)/friends/\(contact.key)"
+        let coworkersGroupPath = "\(uid)/coworkers/\(contact.key)"
+        let otherGroupPath = "\(uid)/other/\(contact.key)"
+        
+        groupsRef.child(familyGroupPath).removeValue()
+        groupsRef.child(friendsGroupPath).removeValue()
+        groupsRef.child(coworkersGroupPath).removeValue()
+        groupsRef.child(otherGroupPath).removeValue()
     }
     
     func removeFromAllGroupsinFB(contact: Contact) {

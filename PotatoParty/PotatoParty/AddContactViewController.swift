@@ -173,7 +173,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         
         // Add to groups bucket
         let groupsRef = FIRDatabase.database().reference(withPath: "groups")
-        let groupsUserRef = groupsRef.child("\(uid)/all/")
+        let groupsUserRef = groupsRef.child("\(uid)/all/\(contactItemRef.key)")
         groupsUserRef.setValue(contact.toAny())
         
         if groupSelected != "All" {
