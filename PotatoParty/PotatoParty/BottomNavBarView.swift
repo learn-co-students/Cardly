@@ -112,8 +112,6 @@ class BottomNavBarMiddleView: UIView{
     func editGroupButtonTapped(_sender: UIButton) {
         delegate?.editGroupButtonPressed()
         print("editGroupButtonTapped")
-        
-        //present pop up/UIpickerView
     }
 }
 

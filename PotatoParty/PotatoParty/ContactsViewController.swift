@@ -93,6 +93,7 @@ extension ContactsViewController {
         bottomNavBar = BottomNavBarView()
         bottomNavBar.leftIconView.delegate = self
         bottomNavBar.rightIconView.delegate = self
+        bottomNavBar.middleIconView.delegate = self
         self.view.addSubview(bottomNavBar)
         bottomNavBar.snp.makeConstraints { (make) in
             make.left.equalToSuperview()
@@ -124,24 +125,6 @@ extension ContactsViewController {
         let leftBarButton = UIBarButtonItem()
         leftBarButton.customView = btnName
         self.navigationItem.leftBarButtonItem = leftBarButton
-    }
-    
-    
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        retrieveContacts(for: User.shared.groups[0], completion: { contacts in
-            self.collectionView.contacts = contacts
-            self.collectionView.reloadData()
-        })
-        
-        
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        navigationBarMenu.container = view
     }
     
 }
@@ -220,7 +203,6 @@ extension ContactsViewController {
             chosenGroup = "all"
             updateGroup {
                 shared.selectedContacts.removeAll()
-                
             }
             self.dismiss(animated: true, completion: nil)
             print( "all")
@@ -229,7 +211,6 @@ extension ContactsViewController {
             updateGroup {
                 shared.selectedContacts.removeAll()
                 //                removed red border/"selected state"
-               
             }
             self.dismiss(animated: true, completion: nil)
             print("family")
@@ -258,6 +239,7 @@ extension ContactsViewController {
     }
     
     func showPickerInAlert() {
+        print("show alert")
         let alert = UIAlertController(title: "Choose Group", message: "\n\n\n\n", preferredStyle: UIAlertControllerStyle.actionSheet)
 
         alert.view.addSubview(pickGroup)
@@ -271,50 +253,30 @@ extension ContactsViewController {
 extension ContactsViewController {
     
     // Setup all views
-    func setupViews() {
-        setupCollectionView()
-        setupTopNavBarView()
-        setupBottomNavBarView()
+
         
-        func didToggleNavigationBarMenu(_ sender: DropDownTitleView) {
-            
+    func didToggleNavigationBarMenu(_ sender: DropDownTitleView) {
+        
+    }
+    
+    func didTapInDropDownMenuBackground(_ menu: DropDownMenu) {
+        if menu == navigationBarMenu {
+            titleView.toggleMenu()
+        } else {
+            menu.hide()
         }
-        
-        func didTapInDropDownMenuBackground(_ menu: DropDownMenu) {
-            if menu == navigationBarMenu {
-                titleView.toggleMenu()
-            } else {
-                menu.hide()
-            }
-        }
-        
-        func setupBottomNavBarView() {
-            bottomNavBar = BottomNavBarView()
-            bottomNavBar.leftIconView.delegate = self
-            bottomNavBar.rightIconView.delegate = self
-            bottomNavBar.middleIconView.delegate = self
-            self.view.addSubview(bottomNavBar)
-            bottomNavBar.snp.makeConstraints { (make) in
-                make.left.equalToSuperview()
-                make.right.equalToSuperview()
-                make.bottom.equalToSuperview()
-                make.height.equalToSuperview().multipliedBy(0.125)
-                
-            }
-            
-        }
-        
-        func selectGroup(_ sender: UITableViewCell) {
-            // Retrieve from Firebase
-            guard let group = sender.textLabel?.text?.lowercased() else { return }
-            self.retrieveContacts(for: group, completion: { contacts in
-                self.collectionView.contacts = contacts
-                self.collectionView.reloadData()
-            })
-            // Hide Top Nav Bar after group is selected
-            if navigationBarMenu.container != nil {
-                titleView.toggleMenu()
-            }
+    }
+    
+    func selectGroup(_ sender: UITableViewCell) {
+        // Retrieve from Firebase
+        guard let group = sender.textLabel?.text?.lowercased() else { return }
+        self.retrieveContacts(for: group, completion: { contacts in
+            self.collectionView.contacts = contacts
+            self.collectionView.reloadData()
+        })
+        // Hide Top Nav Bar after group is selected
+        if navigationBarMenu.container != nil {
+            titleView.toggleMenu()
         }
     }
 }
