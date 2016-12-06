@@ -125,8 +125,6 @@ extension ContactsViewController {
 extension ContactsViewController {
     
     func prepareNavigationBarMenuTitleView() -> String {
-        print("Prepare navigation called")
-
         titleView = DropDownTitleView(frame: CGRect(x: 0, y: 0, width: 150, height: 40))
         titleView.addTarget(self, action: #selector(self.willToggleNavigationBarMenu(_:)), for: .touchUpInside)
         titleView.addTarget(self, action: #selector(self.didToggleNavigationBarMenu(_:)), for: .valueChanged)
@@ -136,34 +134,6 @@ extension ContactsViewController {
         navigationItem.titleView = titleView
         
         return titleView.title!
-    }
-    
-    func showToolbarMenu() {
-        if titleView.isUp {
-            titleView.toggleMenu()
-        }
-        navigationBarMenu.show()
-    }
-    
-    func willToggleNavigationBarMenu(_ sender: DropDownTitleView) {
-        if sender.isUp {
-            navigationBarMenu.hide()
-        }
-        else {
-            navigationBarMenu.show()
-        }
-    }
-    
-    func didToggleNavigationBarMenu(_ sender: DropDownTitleView) {
-    }
-    
-    func didTapInDropDownMenuBackground(_ menu: DropDownMenu) {
-        if menu == navigationBarMenu {
-            titleView.toggleMenu()
-        }
-        else {
-            menu.hide()
-        }
     }
     
     func prepareNavigationBarMenu(_ currentChoice: String) {
@@ -193,6 +163,27 @@ extension ContactsViewController {
         navigationBarMenu.backgroundAlpha = 0.7
     }
     
+    func willToggleNavigationBarMenu(_ sender: DropDownTitleView) {
+        if sender.isUp {
+            navigationBarMenu.hide()
+        }
+        else {
+            navigationBarMenu.show()
+        }
+    }
+    
+    func didToggleNavigationBarMenu(_ sender: DropDownTitleView) {
+    }
+    
+    func didTapInDropDownMenuBackground(_ menu: DropDownMenu) {
+        if menu == navigationBarMenu {
+            titleView.toggleMenu()
+        }
+        else {
+            menu.hide()
+        }
+    }
+
     func selectGroup(_ sender: UITableViewCell) {
         // Retrieve from Firebase
         guard let group = sender.textLabel?.text?.lowercased() else { return }
@@ -372,8 +363,6 @@ extension ContactsViewController: UIImagePickerControllerDelegate {
             navigationController?.pushViewController(editVideoVC, animated: true)
         }
     }
-    
-    
 }
 
 // MARK: - UINavigationControllerDelegate
