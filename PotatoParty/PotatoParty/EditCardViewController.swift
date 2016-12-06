@@ -11,8 +11,10 @@ import AVFoundation
 import AVKit
 import AssetsLibrary
 import Photos
+import MBProgressHUD
+import SnapKit
 
-class EditCardViewController: UIViewController, UITextFieldDelegate{
+class EditCardViewController: UIViewController {
 
     static let assetKeysRequiredToPlay = ["playable", "hasProtectedContent"]
     
@@ -47,23 +49,34 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         }
     }
     var activityIndicator: UIActivityIndicatorView!
+    var spinnerActivity: MBProgressHUD!
+    var progressObj: Progress!
+    
+    var selectedImageIndex = 0
 
     // Buttons
     var saveButton: UIButton!
     var playPauseButton: UIButton!
     var addTextButton: UIButton!
     lazy var buttons: [UIButton] = [self.saveButton, self.playPauseButton, self.addTextButton]
+    var frameScrollview: UIScrollView!
+    var frameStackview: UIStackView!
+    var frame1View: UIImageView!
+    var frame2View: UIImageView!
+    var frameImagesList: [UIImageView] = []
+    
+    // Custom text fields
+    var topTextField: UITextField!
+    var bottomTextField: UITextField!
+    var activeField: UITextField?
     
     // MARK: - Init
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         instantiateButtons()
         layoutViewElements()
-        exportWithFrameLayer()
-        
-        playerView.playerLayer.player = player
-        
+        setupText()
+        registerForKeyboardNotifications()
         addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.playerReachedEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
     }
@@ -74,6 +87,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     
     deinit {
         removeObserver(self, forKeyPath: "player.currentItem.status")
+        deregisterFromKeyboardNotifications()
     }
 
     override func didReceiveMemoryWarning() {
@@ -103,9 +117,8 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     }
     
     
-    // MARK: - Add overlay methods
-    
-    func exportWithFrameLayer() {
+    // MARK: - Overlay export methods
+    func exportWithOverlays(completion: @escaping (Bool) -> Void) {
         // Composition
         let composition = AVMutableComposition()
         let asset = AVURLAsset(url: fileLocation!)
@@ -136,11 +149,11 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         }
         
         // Layers
-        let overlayImage = UIImage(named: "thankYou")
+        let overlayImage = frameImagesList[selectedImageIndex].image
         let overlayLayer = CALayer()
         overlayLayer.contents = overlayImage?.cgImage
         overlayLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
-        
+
         let videoLayer = CALayer()
         videoLayer.backgroundColor = UIColor.blue.cgColor
         videoLayer.frame = CGRect(x: 120, y: 230, width: HDVideoSize.width * 0.78, height: HDVideoSize.height * 0.78)
@@ -149,12 +162,55 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         parentLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
         parentLayer.addSublayer(videoLayer)
         parentLayer.addSublayer(overlayLayer)
-            
+        
+        if let text = topTextField.text, !topTextField.text!.isEmpty {
+            // Text layer
+            let topTextLayer = CATextLayer()
+            topTextLayer.frame = CGRect(x: 30, y: -10, width: HDVideoSize.width, height: HDVideoSize.height)
+            // Text attributes
+            topTextLayer.string = text
+            topTextLayer.font = CTFontCreateWithName(Font.nameForCard as CFString, 0.0, nil)
+            topTextLayer.fontSize = Font.Size.cardVideo
+            topTextLayer.foregroundColor = UIColor.white.cgColor
+            topTextLayer.alignmentMode = kCAAlignmentLeft
+            topTextLayer.backgroundColor = UIColor.clear.cgColor
+            topTextLayer.contentsScale = 1
+            // Text drop shadow
+            // TODO: - Fix drop shadow to match TextField perceived Offset
+            topTextLayer.shadowColor = UIColor.black.cgColor
+            topTextLayer.shadowOffset = CGSize(width: 4, height: 4)
+            topTextLayer.shadowRadius = 0
+            topTextLayer.shadowOpacity = 1
+            parentLayer.addSublayer(topTextLayer)
+        }
+        
+        if let text = bottomTextField.text, !bottomTextField.text!.isEmpty {
+            // Text layer
+            let bottomTextLayer = CATextLayer()
+            bottomTextLayer.frame = CGRect(x: -30, y: -1710, width: HDVideoSize.width - 30, height: HDVideoSize.height)
+            // Text attributes
+            bottomTextLayer.string = text
+            bottomTextLayer.font = CTFontCreateWithName(Font.nameForCard as CFString, 0.0, nil)
+            bottomTextLayer.fontSize = Font.Size.cardVideo
+            bottomTextLayer.foregroundColor = UIColor.white.cgColor
+            bottomTextLayer.alignmentMode = kCAAlignmentRight
+            bottomTextLayer.backgroundColor = UIColor.clear.cgColor
+            bottomTextLayer.contentsScale = 1
+            // Text drop shadow
+            // TODO: - Fix drop shadow to match TextField perceived Offset
+            bottomTextLayer.shadowColor = UIColor.black.cgColor
+            bottomTextLayer.shadowOffset = CGSize(width: 4, height: 4)
+            bottomTextLayer.shadowRadius = 0
+            bottomTextLayer.shadowOpacity = 1
+            parentLayer.addSublayer(bottomTextLayer)
+        }
+        
         let layercomposition = AVMutableVideoComposition()
         layercomposition.frameDuration = CMTimeMake(1, 30)
         layercomposition.renderSize = HDVideoSize
         layercomposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer:videoLayer, in: parentLayer)
         
+        // Export instructions
         let instruction = AVMutableVideoCompositionInstruction()
         instruction.timeRange = CMTimeRangeMake(kCMTimeZero, composition.duration)
         let layerInstr = videoCompositionInstructionForTrack(track: compositionVideoTrack, assetTrack: videoTrack)
@@ -169,130 +225,21 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         assetExport.videoComposition = layercomposition
         assetExport.outputFileType = AVFileTypeQuickTimeMovie
         assetExport.outputURL = movieUrl
-        disableAllButtons()
-        activityIndicator.isHidden = false
-        activityIndicator.startAnimating()
+        startActivityIndicator()
+
         assetExport.exportAsynchronously {
-            DispatchQueue.main.async {
-                switch assetExport.status {
-                case .completed:
-                    print("Success")
-                    sleep(5)
-                    self.fileLocation = movieUrl
-                    self.activityIndicator.stopAnimating()
-                    self.enableAllButtons()
-                    break
-                case.cancelled:
-                    print("Canceled")
-                    break
-                case .exporting:
-                    print("Exporting")
-                    break
-                case .failed:
-                    print("Failed \(assetExport.error)")
-                    break
-                case.unknown:
-                    print("Unknown error")
-                    break
-                case.waiting:
-                    print("Waiting")
-                }
+            switch assetExport.status {
+            case .completed:
+                print("Success")
+                self.doWorkWithProgress(progressHUD: self.spinnerActivity)
+                self.fileLocation = movieUrl
+                self.stopActivityIndicator()
+                completion(true)
+            case .failed:
+                fatalError("Image export failed!")
+            default:
+                fatalError("Failed to export image")
             }
-        }
-    }
-    
-    func overlayText(_ text: String) {
-        // Composition
-        let composition = AVMutableComposition()
-        let asset = AVURLAsset(url: fileLocation!)
-        
-        let track = asset.tracks(withMediaType: AVMediaTypeVideo)
-        let videoTrack: AVAssetTrack = track[0] as AVAssetTrack
-        
-        let timerange = CMTimeRangeMake(kCMTimeZero, asset.duration)
-        
-        let compositionVideoTrack: AVMutableCompositionTrack = composition.addMutableTrack(withMediaType: AVMediaTypeVideo, preferredTrackID: CMPersistentTrackID())
-        
-        do {
-            try compositionVideoTrack.insertTimeRange(timerange, of: videoTrack, at: kCMTimeZero)
-        } catch  {
-            print("composing video track error")
-            print(error)
-        }
-        
-        let compositionAudioTrack: AVMutableCompositionTrack = composition.addMutableTrack(withMediaType: AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
-        
-        do {
-            try compositionAudioTrack.insertTimeRange(timerange, of: asset.tracks(withMediaType: AVMediaTypeAudio)[0], at: kCMTimeZero)
-        } catch {
-            print("composing audio track error")
-            print(error)
-        }
-        
-        // Layers
-        let textLayer = CATextLayer()
-        textLayer.string = text
-        textLayer.font = UIFont(name: "Helvetica", size: 15.0)
-        textLayer.shadowOpacity = 0.5
-        textLayer.alignmentMode = kCAAlignmentCenter
-        textLayer.frame = CGRect(x: 0, y: 60, width: HDVideoSize.width, height: HDVideoSize.height / 2)
-        
-        let videoLayer = CALayer()
-        videoLayer.backgroundColor = UIColor.blue.cgColor
-        videoLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
-        
-        let parentLayer = CALayer()
-        parentLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
-        parentLayer.addSublayer(videoLayer)
-        parentLayer.addSublayer(textLayer)
-
-        let layercomposition = AVMutableVideoComposition()
-        layercomposition.frameDuration = CMTimeMake(1, 30)
-        layercomposition.renderSize = HDVideoSize
-        layercomposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videoLayer, in: parentLayer)
-        
-        let instruction = AVMutableVideoCompositionInstruction()
-        instruction.timeRange = CMTimeRangeMake(kCMTimeZero, composition.duration)
-        let layerInstr = videoCompositionInstructionForText(track: compositionVideoTrack, assetTrack: videoTrack)
-        instruction.layerInstructions = [layerInstr]
-        layercomposition.instructions = [instruction]
-        
-        // Export
-        let filePath = NSTemporaryDirectory() + fileName()
-        let movieUrl = URL(fileURLWithPath: filePath)
-        
-        guard let assetExport = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHighestQuality) else { return }
-        assetExport.videoComposition = layercomposition
-        assetExport.outputFileType = AVFileTypeQuickTimeMovie
-        assetExport.outputURL = movieUrl
-        disableAllButtons()
-        self.activityIndicator.isHidden = false
-        self.activityIndicator.startAnimating()
-        assetExport.exportAsynchronously {
-            DispatchQueue.main.async(execute: {
-                switch assetExport.status {
-                case .completed:
-                    self.activityIndicator.stopAnimating()
-                    self.fileLocation = movieUrl
-                    self.enableAllButtons()
-                    break
-                case.cancelled:
-                    print("Canceled")
-                    break
-                case .exporting:
-                    print("Exporting")
-                    break
-                case .failed:
-                    print("Failed \(assetExport.error)")
-                    break
-                case.unknown:
-                    print("Unknown error")
-                    break
-                case.waiting:
-                    print("Waiting")
-                }
-
-            })
         }
     }
     
@@ -317,6 +264,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     
     
     // MARK: - Composition instructions
+
     func videoCompositionInstructionForTrack(track: AVCompositionTrack, assetTrack: AVAssetTrack) -> AVMutableVideoCompositionLayerInstruction {
         let instruction = AVMutableVideoCompositionLayerInstruction(assetTrack: track)
         let assetTrack = assetTrack
@@ -392,25 +340,7 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         }
     }
     
-    func addTextToVideo() {
-        let alertController = UIAlertController(title: "Text to overlay", message: "Must be 15 characters or less", preferredStyle: .alert)
-        alertController.addTextField { (textField) in
-            textField.delegate = self
-        }
-        let submitAction = UIAlertAction(title: "Submit", style: .default) { (action) in
-            self.overlayText((alertController.textFields?[0].text!)!)
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alertController.addAction(submitAction)
-        alertController.addAction(cancelAction)
-        present(alertController, animated: true, completion: nil)
-    }
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string)
-        return newString.characters.count <= 15
-    }
-    
+    // Alert
     func showAlert(title:String, message:String, dismiss:Bool) {
         let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
@@ -425,18 +355,6 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
         self.present(controller, animated: true, completion: nil)
     }
     
-    func disableAllButtons() {
-        for button in self.buttons {
-            button.isEnabled = false
-        }
-    }
-    
-    func enableAllButtons() {
-        for button in self.buttons {
-            button.isEnabled = true
-        }
-    }
-    
     func fileName() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMddyyhhmmss"
@@ -445,10 +363,19 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
     
     // MARK: - Navigation
     
-    func navToSendCardVC() {
-        let destVC = SendCardViewController()
-        destVC.videoURL = fileLocation
-        navigationController?.pushViewController(destVC, animated: true)
+    func navToSendCardVC(sender: UIButton, isExportSuccessful: Bool) {
+        
+        exportWithOverlays { (success) in
+            if success {
+                self.player.pause()
+                let destVC = SendCardViewController()
+                destVC.delegate = self
+                destVC.fileLocation = self.fileLocation
+                destVC.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
+                destVC.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
+                self.present(destVC, animated: true, completion: nil)
+            }
+        }
     }
     
     // MARK: - Save video to photo library
@@ -467,5 +394,66 @@ class EditCardViewController: UIViewController, UITextFieldDelegate{
             }
         })
     }
+}
 
+// MARK: - ScrollView delegate methods
+
+extension EditCardViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let currentStackViewWidthValue = frameStackview.frame.width
+        let widthMarker = currentStackViewWidthValue / CGFloat(frameImagesList.count)
+        var index = Int(scrollView.contentOffset.x / widthMarker)
+        if index >= frameImagesList.count {
+            index -= 1
+        }
+        selectedImageIndex = index
+    }
+    
+}
+
+// MARK: - Modal VC handling
+
+extension EditCardViewController: ModalViewControllerDelegate {
+    
+    func modalViewControllerDidDisappear(completion: @escaping () -> Void) {
+        dismiss(animated: false, completion: nil)
+        let _ = self.navigationController?.popToRootViewController(animated: true)
+        completion()
+    }
+}
+
+// MARK: Handle keyboard notifications
+
+extension EditCardViewController {
+    
+    func registerForKeyboardNotifications(){
+        //Adding notifies on keyboard appearing
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    func deregisterFromKeyboardNotifications(){
+        //Removing notifies on keyboard appearing
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight = keyboardSize.height
+            if bottomTextField.isEditing{
+                self.view.window?.frame.origin.y = -1 * keyboardHeight
+            }
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight = keyboardSize.height
+            if self.view.window?.frame.origin.y != 0 {
+                self.view.window?.frame.origin.y += keyboardHeight
+            }
+        }
+    }
 }

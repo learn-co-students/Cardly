@@ -16,7 +16,12 @@ import MobileCoreServices
 
 class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContactsDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
-    // MARK: - Views
+    // Current user
+    var shared = User.shared
+    let uid = User.shared.uid
+    let ref = FIRDatabase.database().reference(withPath: "contacts")
+    
+    // UI
     var collectionView: ContactsCollectionView!
     var bottomNavBar: BottomNavBarView!
     var navigationBarMenu: DropDownMenu!
@@ -27,25 +32,78 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     var pickGroup = UIPickerView()
     var pickerData = ["All", "Family", "Friends", "Coworkers", "Other"]
     var chosenGroup = ""
-    
+
     fileprivate let cellHeight: CGFloat = 210
     fileprivate let cellSpacing: CGFloat = 20
-    
     fileprivate lazy var presentationAnimator = GuillotineTransitionAnimation()
     
-    let ref = FIRDatabase.database().reference(withPath: "contacts")
-    let uid = User.shared.uid
-    
-    var shared = User.shared
-    
+    // MARK: - Init
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.isHidden = false
-        // MARK: - Setup Views
         setupViews()
         collectionView.contactDelegate = self
         self.restorationIdentifier = "contactsVC"
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = false
+        retrieveContacts(for: User.shared.groups[0], completion: { contacts in
+            self.collectionView.contacts = contacts
+            self.collectionView.reloadData()
+        })
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationBarMenu.container = view
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+
+}
+
+// MARK: - Views
+
+extension ContactsViewController {
+    
+    // Setup all views
+    func setupViews() {
+        setupCollectionView()
+        setupBottomNavBarView()
+        setupTopNavBarView()
+    }
+    
+    // Setup collection view
+    func setupCollectionView() {
+        collectionView = ContactsCollectionView(frame: self.view.frame)
+        self.view.addSubview(collectionView)
+        collectionView.snp.makeConstraints { (make) in
+            make.bottom.equalToSuperview()
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            make.height.equalToSuperview()
+        }
+    }
+    
+    // Setup bottom nav bar
+    func setupBottomNavBarView() {
+        bottomNavBar = BottomNavBarView()
+        bottomNavBar.leftIconView.delegate = self
+        bottomNavBar.rightIconView.delegate = self
+        self.view.addSubview(bottomNavBar)
+        bottomNavBar.snp.makeConstraints { (make) in
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(0.125)
+        }
+    }
+    
+    // Setup top nav bar
+    func setupTopNavBarView() {
         self.navigationBarMenu = DropDownMenu()
         
         pickGroup.delegate = self
@@ -53,13 +111,9 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
         
         let title = prepareNavigationBarMenuTitleView()
         prepareNavigationBarMenu(title)
-        
-        
-        
+
         let rightBtn = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(self.selectBtnClicked))
         self.navigationItem.rightBarButtonItem = rightBtn
-        
-        
         
         let btnName = UIButton()
         btnName.setTitle("Settings", for: .normal)
@@ -70,11 +124,6 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
         let leftBarButton = UIBarButtonItem()
         leftBarButton.customView = btnName
         self.navigationItem.leftBarButtonItem = leftBarButton
-        
-        //        let leftBtn = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(self.navToSettingsVC))
-        //        self.navigationItem.leftBarButtonItem = leftBtn
-        
-        
     }
     
     
@@ -95,57 +144,26 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
         navigationBarMenu.container = view
     }
     
-    // MARK: - Navigation Bar Dropdown
+}
+
+// MARK: - Top Navigation Bar Methods
+
+extension ContactsViewController {
     
     func prepareNavigationBarMenuTitleView() -> String {
         titleView = DropDownTitleView(frame: CGRect(x: 0, y: 0, width: 150, height: 40))
-        
         titleView.addTarget(self, action: #selector(self.willToggleNavigationBarMenu(_:)), for: .touchUpInside)
         titleView.addTarget(self, action: #selector(self.didToggleNavigationBarMenu(_:)), for: .valueChanged)
-        
         titleView.titleLabel.textColor = UIColor.black
         titleView.title = "Lists"
-        
+
         navigationItem.titleView = titleView
         
         return titleView.title!
     }
     
-    func showToolbarMenu() {
-        if titleView.isUp {
-            titleView.toggleMenu()
-        }
-        navigationBarMenu.show()
-    }
-    
-    func willToggleNavigationBarMenu(_ sender: DropDownTitleView) {
-        navigationBarMenu.hide()
-        
-        if sender.isUp {
-            navigationBarMenu.hide()
-        }
-        else {
-            navigationBarMenu.show()
-        }
-    }
-    
-    func didToggleNavigationBarMenu(_ sender: DropDownTitleView) {
-        print("Sent did toggle navigation bar menu action")
-    }
-    
-    func didTapInDropDownMenuBackground(_ menu: DropDownMenu) {
-        if menu == navigationBarMenu {
-            titleView.toggleMenu()
-        }
-        else {
-            menu.hide()
-        }
-    }
-    
-    
     func prepareNavigationBarMenu(_ currentChoice: String) {
         navigationBarMenu = DropDownMenu(frame: view.bounds)
-        
         navigationBarMenu.delegate = self
         
         let arrayofWeddingLists = User.shared.groups
@@ -154,9 +172,9 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
         for list in arrayofWeddingLists {
             let firstCell = DropDownMenuCell()
             firstCell.textLabel!.text = list
-            
+
             firstCell.menuAction = #selector(selectGroup(_:))
-            
+
             firstCell.menuTarget = self
             if currentChoice == list {
                 firstCell.accessoryType = .checkmark
@@ -167,27 +185,21 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
         
         navigationBarMenu.menuCells = menuCellArray
         navigationBarMenu.selectMenuCell(menuCellArray[0])
-        navigationBarMenu.visibleContentOffset = navigationController!.navigationBar.frame.size.height + 24
-        
-        // For a simple gray overlay in background
+        navigationBarMenu.visibleContentOffset = navigationController!.navigationBar.frame.height + 24
         navigationBarMenu.backgroundView = UIView(frame: navigationBarMenu.bounds)
         navigationBarMenu.backgroundView!.backgroundColor = UIColor.black
         navigationBarMenu.backgroundAlpha = 0.7
     }
     
-    func selectGroup(_ sender: UITableViewCell) {
-        guard let group = sender.textLabel?.text?.lowercased() else { return }
-        self.retrieveContacts(for: group, completion: { contacts in
-            self.collectionView.contacts = contacts
-            self.collectionView.reloadData()
-        })
-        navigationBarMenu.hide()
+    func willToggleNavigationBarMenu(_ sender: DropDownTitleView) {
+        if sender.isUp {
+            navigationBarMenu.hide()
+        }
+        else {
+            navigationBarMenu.show()
+        }
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
+
     // AlertConroller & UIPicker View
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -216,10 +228,8 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
             chosenGroup = "family"
             updateGroup {
                 shared.selectedContacts.removeAll()
-                //self.collectionView.reloadData()
-                //                //removed red border/"selected state"
-                //                contentView.layer.borderWidth = 0.0
-                //                contentView.layer.borderColor = UIColor.clear.cgColor
+                //                removed red border/"selected state"
+               
             }
             self.dismiss(animated: true, completion: nil)
             print("family")
@@ -227,7 +237,6 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
             chosenGroup = "friends"
             updateGroup {
                 shared.selectedContacts.removeAll()
-                self.collectionView.reloadData()
             }
             self.dismiss(animated: true, completion: nil)
         case 3:
@@ -250,11 +259,8 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     
     func showPickerInAlert() {
         let alert = UIAlertController(title: "Choose Group", message: "\n\n\n\n", preferredStyle: UIAlertControllerStyle.actionSheet)
-        //set up pickGroup frame
-        // var okayAction =  UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
-        //alert.addAction(okayAction)
+
         alert.view.addSubview(pickGroup)
-        
         
         self.present(alert, animated: true, completion: nil)
     }
@@ -269,39 +275,48 @@ extension ContactsViewController {
         setupCollectionView()
         setupTopNavBarView()
         setupBottomNavBarView()
-    }
-    
-    // Setup individual views
-    func setupCollectionView() {
-        collectionView = ContactsCollectionView(frame: self.view.frame)
-        self.view.addSubview(collectionView)
-        collectionView.snp.makeConstraints { (make) in
-            make.bottom.equalToSuperview()
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
-            make.height.equalToSuperview()
-        }
-    }
-    
-    func setupBottomNavBarView() {
-        bottomNavBar = BottomNavBarView()
-        bottomNavBar.leftIconView.delegate = self
-        bottomNavBar.rightIconView.delegate = self
-        bottomNavBar.middleIconView.delegate = self
-        self.view.addSubview(bottomNavBar)
-        bottomNavBar.snp.makeConstraints { (make) in
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.125)
+        
+        func didToggleNavigationBarMenu(_ sender: DropDownTitleView) {
+            
         }
         
-    }
-    
-    func setupTopNavBarView() {
+        func didTapInDropDownMenuBackground(_ menu: DropDownMenu) {
+            if menu == navigationBarMenu {
+                titleView.toggleMenu()
+            } else {
+                menu.hide()
+            }
+        }
         
+        func setupBottomNavBarView() {
+            bottomNavBar = BottomNavBarView()
+            bottomNavBar.leftIconView.delegate = self
+            bottomNavBar.rightIconView.delegate = self
+            bottomNavBar.middleIconView.delegate = self
+            self.view.addSubview(bottomNavBar)
+            bottomNavBar.snp.makeConstraints { (make) in
+                make.left.equalToSuperview()
+                make.right.equalToSuperview()
+                make.bottom.equalToSuperview()
+                make.height.equalToSuperview().multipliedBy(0.125)
+                
+            }
+            
+        }
+        
+        func selectGroup(_ sender: UITableViewCell) {
+            // Retrieve from Firebase
+            guard let group = sender.textLabel?.text?.lowercased() else { return }
+            self.retrieveContacts(for: group, completion: { contacts in
+                self.collectionView.contacts = contacts
+                self.collectionView.reloadData()
+            })
+            // Hide Top Nav Bar after group is selected
+            if navigationBarMenu.container != nil {
+                titleView.toggleMenu()
+            }
+        }
     }
-    
 }
 
 
@@ -310,10 +325,7 @@ extension ContactsViewController {
 extension ContactsViewController: BottomNavBarDelegate {
     
     func navToSettingsVC(_ sender: UIButton) {
-        print("hey im being pressed!!!")
         let destVC = SettingsViewController()
-        //navigationController?.pushViewController(destVC, animated: true)
-        
         
         destVC.modalPresentationStyle = .custom
         destVC.transitioningDelegate = self
@@ -323,10 +335,9 @@ extension ContactsViewController: BottomNavBarDelegate {
         //
         //        view.backgroundColor = UIColor.white
         //
+
         presentationAnimator.animationDuration = 0.2
-        //presentationAnimator.
         presentationAnimator.animationDelegate = destVC as? GuillotineAnimationDelegate
-        //presentationAnimator.supportView = navigationController!.navigationBar
         presentationAnimator.presentButton = view
         present(destVC, animated: true, completion: nil)
     }
@@ -334,18 +345,14 @@ extension ContactsViewController: BottomNavBarDelegate {
     func selectBtnClicked() {
         let destVC = ContactsViewController()
         navigationController?.pushViewController(destVC, animated: false)
-        print("\n\n Select Button Clicked Working")
     }
     
     func goToAddContact(){
-        print("go to Add Contact function")
         let destVC = AddContactViewController()
         navigationController?.pushViewController(destVC, animated: false)
-        //send to ADD contacts view controller
     }
     
     func deleteButtonPressed() {
-        
         deleteContacts {
             retrieveContacts(for: User.shared.groups[0], completion: { contacts in
                 self.collectionView.contacts = contacts
@@ -386,12 +393,7 @@ extension ContactsViewController: BottomNavBarDelegate {
         
     }
     
-    func enableBottomNavButtons(){
-        
-    }
-    
     func sendToButtonPressed() {
-        
         navToRecordCardVC()
     }
     
@@ -399,9 +401,7 @@ extension ContactsViewController: BottomNavBarDelegate {
     func navToRecordCardVC() {
         let _ = startCameraFromViewController(self, withDelegate: self)
     }
-    
-    
-    
+
     
 }
 
@@ -424,14 +424,11 @@ extension ContactsViewController {
     }
     
     func deleteContacts(completion: ()->()) {
-        
         for contact in shared.selectedContacts{
             removeFromAllGroupsinFB(contact: contact)
             shared.selectedContacts.removeAll()
             shared.contacts.removeAll()
-            
         }
-        
         completion()
     }
     
@@ -482,7 +479,7 @@ extension ContactsViewController {
         groupsRef.child(friendsGroupPath).removeValue()
         groupsRef.child(coworkersGroupPath).removeValue()
         groupsRef.child(otherGroupPath).removeValue()
-        
+
     }
     
 }
@@ -562,8 +559,6 @@ extension ContactsViewController: UIImagePickerControllerDelegate {
             navigationController?.pushViewController(editVideoVC, animated: true)
         }
     }
-    
-    
 }
 
 // MARK: - UINavigationControllerDelegate
@@ -574,7 +569,6 @@ extension ContactsViewController: UINavigationControllerDelegate {
 
 
 // MARK: - Animated Settings Button
-
 
 extension ContactsViewController: UIViewControllerTransitioningDelegate {
     
@@ -588,7 +582,6 @@ extension ContactsViewController: UIViewControllerTransitioningDelegate {
         return presentationAnimator
     }
 }
-
 
 
 //extension ContactsViewController: GuillotineAnimationDelegate {
@@ -610,12 +603,6 @@ extension ContactsViewController: UIViewControllerTransitioningDelegate {
 //}
 //
 
-
 protocol AddContactsDelegate: class {
     func goToAddContact()
 }
-
-
-
-
-
