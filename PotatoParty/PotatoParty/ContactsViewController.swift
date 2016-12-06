@@ -27,7 +27,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     var pickGroup = UIPickerView()
     var pickerData = ["All", "Family", "Friends", "Coworkers", "Other"]
     var chosenGroup = ""
-
+    
     fileprivate let cellHeight: CGFloat = 210
     fileprivate let cellSpacing: CGFloat = 20
     
@@ -50,11 +50,11 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
         
         pickGroup.delegate = self
         pickGroup.dataSource = self
-
+        
         let title = prepareNavigationBarMenuTitleView()
         prepareNavigationBarMenu(title)
         
-  
+        
         
         let rightBtn = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(self.selectBtnClicked))
         self.navigationItem.rightBarButtonItem = rightBtn
@@ -71,13 +71,13 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
         leftBarButton.customView = btnName
         self.navigationItem.leftBarButtonItem = leftBarButton
         
-//        let leftBtn = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(self.navToSettingsVC))
-//        self.navigationItem.leftBarButtonItem = leftBtn
+        //        let leftBtn = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(self.navToSettingsVC))
+        //        self.navigationItem.leftBarButtonItem = leftBtn
         
         
     }
     
-
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -154,9 +154,9 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
         for list in arrayofWeddingLists {
             let firstCell = DropDownMenuCell()
             firstCell.textLabel!.text = list
-
+            
             firstCell.menuAction = #selector(selectGroup(_:))
-
+            
             firstCell.menuTarget = self
             if currentChoice == list {
                 firstCell.accessoryType = .checkmark
@@ -217,9 +217,9 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
             updateGroup {
                 shared.selectedContacts.removeAll()
                 //self.collectionView.reloadData()
-//                //removed red border/"selected state"
-//                contentView.layer.borderWidth = 0.0
-//                contentView.layer.borderColor = UIColor.clear.cgColor
+                //                //removed red border/"selected state"
+                //                contentView.layer.borderWidth = 0.0
+                //                contentView.layer.borderColor = UIColor.clear.cgColor
             }
             self.dismiss(animated: true, completion: nil)
             print("family")
@@ -249,9 +249,9 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     }
     
     func showPickerInAlert() {
-    let alert = UIAlertController(title: "Choose Group", message: "\n\n\n\n", preferredStyle: UIAlertControllerStyle.actionSheet)
+        let alert = UIAlertController(title: "Choose Group", message: "\n\n\n\n", preferredStyle: UIAlertControllerStyle.actionSheet)
         //set up pickGroup frame
-       // var okayAction =  UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
+        // var okayAction =  UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
         //alert.addAction(okayAction)
         alert.view.addSubview(pickGroup)
         
@@ -318,17 +318,17 @@ extension ContactsViewController: BottomNavBarDelegate {
         destVC.modalPresentationStyle = .custom
         destVC.transitioningDelegate = self
         
-//        let view = UIView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
-//        
-//        
-//        view.backgroundColor = UIColor.white
-//       
+        //        let view = UIView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        //
+        //
+        //        view.backgroundColor = UIColor.white
+        //
         presentationAnimator.animationDuration = 0.2
         //presentationAnimator.
         presentationAnimator.animationDelegate = destVC as? GuillotineAnimationDelegate
         //presentationAnimator.supportView = navigationController!.navigationBar
         presentationAnimator.presentButton = view
-        present(destVC, animated: true, completion: nil)     
+        present(destVC, animated: true, completion: nil)
     }
     
     func selectBtnClicked() {
@@ -336,7 +336,7 @@ extension ContactsViewController: BottomNavBarDelegate {
         navigationController?.pushViewController(destVC, animated: false)
         print("\n\n Select Button Clicked Working")
     }
-
+    
     func goToAddContact(){
         print("go to Add Contact function")
         let destVC = AddContactViewController()
@@ -353,7 +353,7 @@ extension ContactsViewController: BottomNavBarDelegate {
             })
             //collectionView.reloadData()
         }
-    
+        
     }
     
     func editGroupButtonPressed(){
@@ -369,20 +369,20 @@ extension ContactsViewController: BottomNavBarDelegate {
             removeFromSomeGroupsinFB(contact: contact)
             
             shared.selectedContacts[index].group_key = chosenGroup
-       
+            
             //update group bucket
             let groupsRef = FIRDatabase.database().reference(withPath: "groups")
             let allGroupPath = groupsRef.child("\(uid)/\(chosenGroup)")
             let groupItemRef = allGroupPath.child(contact.key)
             groupItemRef.setValue(contact.toAny())
-
-           
+            
+            
             //update contact group bucket
             let contactsPath = ref.child("\(uid)/\(chosenGroup)")
             let contactItemRef = contactsPath.child(contact.key)
             contactItemRef.setValue(contact.toAny())
             
-            }
+        }
         
     }
     
@@ -429,11 +429,12 @@ extension ContactsViewController {
             removeFromAllGroupsinFB(contact: contact)
             shared.selectedContacts.removeAll()
             shared.contacts.removeAll()
-           
+            
         }
         
         completion()
     }
+    
     func removeFromSomeGroupsinFB(contact: Contact){
         
         let familyPath = "\(uid)/family/\(contact.key)"
@@ -481,7 +482,7 @@ extension ContactsViewController {
         groupsRef.child(friendsGroupPath).removeValue()
         groupsRef.child(coworkersGroupPath).removeValue()
         groupsRef.child(otherGroupPath).removeValue()
-      
+        
     }
     
 }
@@ -510,7 +511,7 @@ extension ContactsViewController {
         maxTimeLabel.textAlignment = .center
         maxTimeLabel.textColor = UIColor.red
         cameraController.view.addSubview(maxTimeLabel)
-
+        
         maxTimeLabel.snp.makeConstraints { (make) in
             make.topMargin.equalToSuperview().offset(50)
             make.leadingMargin.equalToSuperview().offset(-300)
@@ -591,18 +592,18 @@ extension ContactsViewController: UIViewControllerTransitioningDelegate {
 
 
 //extension ContactsViewController: GuillotineAnimationDelegate {
-//    
+//
 //    func animatorDidFinishPresentation(_ animator: GuillotineTransitionAnimation) {
 //        print("menuDidFinishPresentation")
 //    }
 //    func animatorDidFinishDismissal(_ animator: GuillotineTransitionAnimation) {
 //        print("menuDidFinishDismissal")
 //    }
-//    
+//
 //    func animatorWillStartPresentation(_ animator: GuillotineTransitionAnimation) {
 //        print("willStartPresentation")
 //    }
-//    
+//
 //    func animatorWillStartDismissal(_ animator: GuillotineTransitionAnimation) {
 //        print("willStartDismissal")
 //    }
@@ -611,7 +612,7 @@ extension ContactsViewController: UIViewControllerTransitioningDelegate {
 
 
 protocol AddContactsDelegate: class {
-   func goToAddContact()
+    func goToAddContact()
 }
 
 

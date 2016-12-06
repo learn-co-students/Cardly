@@ -17,7 +17,7 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     let defaultContact: Contact = Contact(fullName: "Add Contact", email: "", phone: "")
     var contacts: [Contact] = []
     weak var contactDelegate: AddContactsDelegate?
-  //  var contactsBackgroundImage: UIImage = #imageLiteral(resourceName: "contactsAndSettingsVCBackgroundImage")
+    //  var contactsBackgroundImage: UIImage = #imageLiteral(resourceName: "contactsAndSettingsVCBackgroundImage")
     let shared = User.shared
     var selectedCellIndexPath: IndexPath?
     
@@ -62,17 +62,12 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         
         let selectedContact = contacts[indexPath.row]
         
-        print("####before if: \(selectedContact.isChosen)########")
-//        selectedContact.isChosen = !selectedContact.isChosen
-        print("select contact before doing anything: \(shared.selectedContacts)")
-//        selectedCellIndexPath = indexPath
-        
         if indexPath.row == 0 {
             contactDelegate?.goToAddContact()
             
         } else {
             if selectedContact.isChosen == true {
-//                collectionView.deselectItem(at: indexPath, animated: true)
+                
                 let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
                 selectedCell.handleTap()
                 contacts[indexPath.row].isChosen = false
@@ -93,12 +88,11 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
             }
             
         }
-        print("####after if: \(selectedContact.isChosen)########")
-    
+        
     }
     
     
-  
+    
     // Setup view
     func setupView() {
         delegate = self
@@ -130,7 +124,7 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     }
     
     
-
+    
     
 }
 
