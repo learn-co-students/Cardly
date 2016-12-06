@@ -16,10 +16,9 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     let layout = UICollectionViewFlowLayout()
     let defaultContact: Contact = Contact(fullName: "Add Contact", email: "", phone: "")
     var contacts: [Contact] = []
-    weak var contactDelegate: AddContactsDelegate?
     //  var contactsBackgroundImage: UIImage = #imageLiteral(resourceName: "contactsAndSettingsVCBackgroundImage")
     let shared = User.shared
-    var selectedCellIndexPath: IndexPath?
+    
     
     
     // Inititalizers
@@ -55,44 +54,7 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         
         return cell
     }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("selected item")
-        print(#function)
-        
-        let selectedContact = contacts[indexPath.row]
-        
-        if indexPath.row == 0 {
-            contactDelegate?.goToAddContact()
-            
-        } else {
-            if selectedContact.isChosen == true {
-                
-                let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
-                selectedCell.handleTap()
-                contacts[indexPath.row].isChosen = false
-                shared.selectedContacts = shared.selectedContacts.filter({ (contact) -> Bool in
-                    return contact.email != contacts[indexPath.row].email
-                })
-                
-                print("deselected a cell")
-                print("\(shared.selectedContacts)")
-            } else {
-                shared.selectedContacts.append(selectedContact)
-                let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
-                selectedCell.handleTap()
-                contacts[indexPath.row].isChosen = true
-                print("selected cell")
-                print("\(shared.selectedContacts)")
-                
-            }
-            
-        }
-        
-    }
-    
-    
-    
+
     // Setup view
     func setupView() {
         delegate = self

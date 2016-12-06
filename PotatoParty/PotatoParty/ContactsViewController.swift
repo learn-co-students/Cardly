@@ -22,7 +22,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     let ref = FIRDatabase.database().reference(withPath: "contacts")
     
     // UI
-    var collectionView: ContactsCollectionView!
+    var contactsCollectionView: ContactsCollectionView!
     var bottomNavBar: BottomNavBarView!
     var navigationBarMenu: DropDownMenu!
     var titleView: DropDownTitleView!
@@ -41,7 +41,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-        collectionView.contactDelegate = self
+        contactsCollectionView.delegate = self
         self.restorationIdentifier = "contactsVC"
     }
     
@@ -49,8 +49,8 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
         retrieveContacts(for: User.shared.groups[0], completion: { contacts in
-            self.collectionView.contacts = contacts
-            self.collectionView.reloadData()
+            self.contactsCollectionView.contacts = contacts
+            self.contactsCollectionView.reloadData()
         })
     }
     
@@ -78,9 +78,9 @@ extension ContactsViewController {
     
     // Setup collection view
     func setupCollectionView() {
-        collectionView = ContactsCollectionView(frame: self.view.frame)
-        self.view.addSubview(collectionView)
-        collectionView.snp.makeConstraints { (make) in
+        contactsCollectionView = ContactsCollectionView(frame: self.view.frame)
+        self.view.addSubview(contactsCollectionView)
+        contactsCollectionView.snp.makeConstraints { (make) in
             make.bottom.equalToSuperview()
             make.left.equalToSuperview()
             make.right.equalToSuperview()
@@ -271,8 +271,8 @@ extension ContactsViewController {
         // Retrieve from Firebase
         guard let group = sender.textLabel?.text?.lowercased() else { return }
         self.retrieveContacts(for: group, completion: { contacts in
-            self.collectionView.contacts = contacts
-            self.collectionView.reloadData()
+            self.contactsCollectionView.contacts = contacts
+            self.contactsCollectionView.reloadData()
         })
         // Hide Top Nav Bar after group is selected
         if navigationBarMenu.container != nil {
@@ -317,8 +317,8 @@ extension ContactsViewController: BottomNavBarDelegate {
     func deleteButtonPressed() {
         deleteContacts {
             retrieveContacts(for: User.shared.groups[0], completion: { contacts in
-                self.collectionView.contacts = contacts
-                self.collectionView.reloadData()
+                self.contactsCollectionView.contacts = contacts
+                self.contactsCollectionView.reloadData()
             })
             //collectionView.reloadData()
         }
@@ -568,6 +568,69 @@ extension ContactsViewController: UIViewControllerTransitioningDelegate {
 //    }
 //}
 //
+
+extension ContactsViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("selected item")
+        print(#function)
+        
+        let selectedContact = contactsCollectionView.contacts[indexPath.row]
+        
+        
+        
+        if indexPath.row == 0 {
+            goToAddContact()
+            
+        } else {
+            if selectedContact.isChosen == true {
+                
+                let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
+                selectedCell.handleTap()
+                contactsCollectionView.contacts[indexPath.row].isChosen = false
+                shared.selectedContacts = shared.selectedContacts.filter({ (contact) -> Bool in
+                    return contact.email != contactsCollectionView.contacts[indexPath.row].email
+                })
+                enableCell()
+                
+                print("deselected a cell")
+                print("\(shared.selectedContacts)")
+                
+                
+            } else {
+                shared.selectedContacts.append(selectedContact)
+                let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
+                selectedCell.handleTap()
+                contactsCollectionView.contacts[indexPath.row].isChosen = true
+                
+                enableCell()
+                
+                print("selected cell")
+                print("\(shared.selectedContacts)")
+               
+            }
+            
+        }
+        
+    }
+    
+    func enableCell(){
+        if shared.selectedContacts.isEmpty == false {
+            bottomNavBar.leftIconView.deleteContactBtn.isEnabled = true
+            bottomNavBar.leftIconView.deleteContactBtn.isHidden = false
+            bottomNavBar.middleIconView.editGroupButton.isEnabled = true
+            bottomNavBar.middleIconView.editGroupButton.isHidden = false
+        } else {
+            bottomNavBar.leftIconView.deleteContactBtn.isEnabled = false
+            bottomNavBar.leftIconView.deleteContactBtn.isHidden = true
+            bottomNavBar.middleIconView.editGroupButton.isEnabled = false
+            bottomNavBar.middleIconView.editGroupButton.isHidden = true
+        }
+        
+    }
+
+}
+
 
 protocol AddContactsDelegate: class {
     func goToAddContact()
