@@ -115,13 +115,14 @@ open class DropDownTitleView : UIControl {
 		if toggling {
 			return
 		}
+
 		toggling = true
 		let viewToReplace = isUp ? menuUpImageView : menuDownImageView
 		let replacementView = isUp ? menuDownImageView : menuUpImageView
 		let options = isUp ? UIViewAnimationOptions.transitionFlipFromTop : UIViewAnimationOptions.transitionFlipFromBottom
-		
+		 
 		sendActions(for: .touchUpInside)
-
+        
 		UIView.transition(from: viewToReplace,
 		                  to: replacementView,
 		                duration: 0.4,

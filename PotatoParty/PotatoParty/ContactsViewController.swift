@@ -125,6 +125,8 @@ extension ContactsViewController {
 extension ContactsViewController {
     
     func prepareNavigationBarMenuTitleView() -> String {
+        print("Prepare navigation called")
+
         titleView = DropDownTitleView(frame: CGRect(x: 0, y: 0, width: 150, height: 40))
         titleView.addTarget(self, action: #selector(self.willToggleNavigationBarMenu(_:)), for: .touchUpInside)
         titleView.addTarget(self, action: #selector(self.didToggleNavigationBarMenu(_:)), for: .valueChanged)
@@ -144,8 +146,6 @@ extension ContactsViewController {
     }
     
     func willToggleNavigationBarMenu(_ sender: DropDownTitleView) {
-        navigationBarMenu.hide()
-        
         if sender.isUp {
             navigationBarMenu.hide()
         }
@@ -155,7 +155,6 @@ extension ContactsViewController {
     }
     
     func didToggleNavigationBarMenu(_ sender: DropDownTitleView) {
-        print("Sent did toggle navigation bar menu action")
     }
     
     func didTapInDropDownMenuBackground(_ menu: DropDownMenu) {
@@ -177,9 +176,7 @@ extension ContactsViewController {
         for list in arrayofWeddingLists {
             let firstCell = DropDownMenuCell()
             firstCell.textLabel!.text = list
-            
             firstCell.menuAction = #selector(selectGroup(_:))
-            
             firstCell.menuTarget = self
             if currentChoice == list {
                 firstCell.accessoryType = .checkmark
@@ -190,20 +187,23 @@ extension ContactsViewController {
         
         navigationBarMenu.menuCells = menuCellArray
         navigationBarMenu.selectMenuCell(menuCellArray[0])
-        navigationBarMenu.visibleContentOffset = navigationController!.navigationBar.frame.size.height + 24
-        
+        navigationBarMenu.visibleContentOffset = navigationController!.navigationBar.frame.height + 24
         navigationBarMenu.backgroundView = UIView(frame: navigationBarMenu.bounds)
         navigationBarMenu.backgroundView!.backgroundColor = UIColor.black
         navigationBarMenu.backgroundAlpha = 0.7
     }
     
     func selectGroup(_ sender: UITableViewCell) {
+        // Retrieve from Firebase
         guard let group = sender.textLabel?.text?.lowercased() else { return }
         self.retrieveContacts(for: group, completion: { contacts in
             self.collectionView.contacts = contacts
             self.collectionView.reloadData()
         })
-        navigationBarMenu.hide()
+        // Hide Top Nav Bar after group is selected
+        if navigationBarMenu.container != nil {
+            titleView.toggleMenu()
+        }
     }
 }
 

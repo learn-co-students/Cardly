@@ -215,6 +215,7 @@ open class DropDownMenu : UIView, UITableViewDataSource, UITableViewDelegate, UI
 				       completion: { (Bool) in
 			self.isHidden = true
 		})
+        
 	}
 	
 	// MARK: - Table View
