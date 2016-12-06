@@ -486,12 +486,15 @@ extension ContactsViewController {
         
         let cameraController = UIImagePickerController()
         cameraController.sourceType = .camera
+        cameraController.cameraDevice = .front
         cameraController.mediaTypes = [kUTTypeMovie as NSString as String]
         cameraController.allowsEditing = true //allow video editing
         cameraController.cameraCaptureMode = .video
         cameraController.delegate = delegate
-        cameraController.videoQuality = .typeHigh
         cameraController.videoMaximumDuration = 20.0
+        
+        //        cameraController.videoQuality = .typeHigh
+        cameraController.videoQuality = .typeIFrame1280x720
         
         let maxRecordTime = "Max Record Time is 20 sec"
         let maxTimeLabel = UILabel()
@@ -540,6 +543,7 @@ extension ContactsViewController: UIImagePickerControllerDelegate {
         print("In did finish picking media")
         let mediaType = info[UIImagePickerControllerMediaType] as! NSString
         dismiss(animated: true, completion: nil)
+        
         // Handle a movie capture
         if mediaType == kUTTypeMovie {
             guard let unwrappedURL = info[UIImagePickerControllerMediaURL] as? URL else { return }

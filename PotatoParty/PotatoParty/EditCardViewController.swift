@@ -28,7 +28,7 @@ class EditCardViewController: UIViewController {
         }
     }
 
-    let HDVideoSize = CGSize(width: 1080.0, height: 1920.0)
+    let HDVideoSize = CGSize(width: 720.0, height: 1280.0)
 
     // Player
     var playerView = PlayerView()
@@ -148,6 +148,8 @@ class EditCardViewController: UIViewController {
             }
         }
         
+        // Multipliers
+        
         // Layers
         let overlayImage = frameImagesList[selectedImageIndex].image
         let overlayLayer = CALayer()
@@ -156,7 +158,7 @@ class EditCardViewController: UIViewController {
 
         let videoLayer = CALayer()
         videoLayer.backgroundColor = UIColor.blue.cgColor
-        videoLayer.frame = CGRect(x: 120, y: 230, width: HDVideoSize.width * 0.78, height: HDVideoSize.height * 0.78)
+        videoLayer.frame = CGRect(x: 80, y: 154, width: HDVideoSize.width * 0.78, height: HDVideoSize.height * 0.78)
         
         let parentLayer = CALayer()
         parentLayer.frame = CGRect(x: 0, y: 0, width: HDVideoSize.width, height: HDVideoSize.height)
@@ -166,7 +168,7 @@ class EditCardViewController: UIViewController {
         if let text = topTextField.text, !topTextField.text!.isEmpty {
             // Text layer
             let topTextLayer = CATextLayer()
-            topTextLayer.frame = CGRect(x: 30, y: -10, width: HDVideoSize.width, height: HDVideoSize.height)
+            topTextLayer.frame = CGRect(x: 40, y: 20, width: HDVideoSize.width - 40, height: HDVideoSize.height - 20)
             // Text attributes
             topTextLayer.string = text
             topTextLayer.font = CTFontCreateWithName(Font.nameForCard as CFString, 0.0, nil)
@@ -187,7 +189,7 @@ class EditCardViewController: UIViewController {
         if let text = bottomTextField.text, !bottomTextField.text!.isEmpty {
             // Text layer
             let bottomTextLayer = CATextLayer()
-            bottomTextLayer.frame = CGRect(x: -30, y: -1710, width: HDVideoSize.width - 30, height: HDVideoSize.height)
+            bottomTextLayer.frame = CGRect(x: -20, y: -1145, width: HDVideoSize.width - 20, height: HDVideoSize.height)
             // Text attributes
             bottomTextLayer.string = text
             bottomTextLayer.font = CTFontCreateWithName(Font.nameForCard as CFString, 0.0, nil)
@@ -205,6 +207,18 @@ class EditCardViewController: UIViewController {
             parentLayer.addSublayer(bottomTextLayer)
         }
         
+        // Fade in and out
+        let fadeAnimation = CAKeyframeAnimation(keyPath:"opacity")
+        let duration = CMTimeGetSeconds(composition.duration)
+        fadeAnimation.beginTime = AVCoreAnimationBeginTimeAtZero
+        fadeAnimation.duration = duration
+        fadeAnimation.keyTimes = [0, 0.03, 0.96, 0.99]
+        fadeAnimation.values = [0.0, 1.0, 1.0, 0.0]
+        fadeAnimation.isRemovedOnCompletion = false
+        fadeAnimation.fillMode = kCAFillModeForwards
+        parentLayer.add(fadeAnimation, forKey: "fade")
+        
+        // Animation composition
         let layercomposition = AVMutableVideoComposition()
         layercomposition.frameDuration = CMTimeMake(1, 30)
         layercomposition.renderSize = HDVideoSize
@@ -221,7 +235,7 @@ class EditCardViewController: UIViewController {
         let filePath = NSTemporaryDirectory() + fileName()
         let movieUrl = URL(fileURLWithPath: filePath)
     
-        guard let assetExport = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHighestQuality) else { return }
+        guard let assetExport = AVAssetExportSession(asset: composition, presetName: AVAssetExportPreset1280x720) else { return }
         assetExport.videoComposition = layercomposition
         assetExport.outputFileType = AVFileTypeQuickTimeMovie
         assetExport.outputURL = movieUrl
