@@ -13,26 +13,21 @@ import FirebaseAuth
 class SettingsViewController: UIViewController {
     
     // Buttons
-    var changeEmailButton = UIButton()
-    var changePasswordButton = UIButton()
-    var logoutButton = UIButton()
+    var changeEmailButton: UIButton!
+    var changePasswordButton: UIButton!
+    var logoutButton: UIButton!
+    var forgotPasswordButton: UIButton!
     var dismissButton: UIButton?
     var titleLabel: UILabel?
     
     // Textfields
     var newEmailTextField: UITextField!
-    var newEmailLabel: UILabel!
-    let newEmailText: String = "New Email Address"
+    var confirmNewEmailTextField: UITextField!
     var currentPasswordTextField: UITextField!
-    var currentPasswordLabel: UILabel!
-    var currentPasswordText: String = "Current Password"
     var newPasswordTextField: UITextField!
-    var newPasswordLabel: UILabel!
-    var newPasswordText: String = "New Password"
     var confirmNewPasswordTextField: UITextField!
-    var confirmNewPasswordLabel: UILabel!
-    var confirmNewPasswordText = "Confirm New Password"
     
+    let currentUser = FIRAuth.auth()?.currentUser
     
     //  var settingsBackgroundImage: UIImage = #imageLiteral(resourceName: "contactsAndSettingsVCBackgroundImage")
     
@@ -76,38 +71,6 @@ class SettingsViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        newEmailTextField.isHidden = false
-            UIView.animate(withDuration: 0.1, delay: 0.1, options: .transitionCurlDown, animations: {
-                self.newEmailTextField.center.x = self.view.bounds.width * 0.5
-            }) { (success) in
-                
-        }
-        
-        currentPasswordTextField.isHidden = false
-        UIView.animate(withDuration: 0.1, delay: 0.2, options: .curveEaseIn, animations: {
-            self.currentPasswordTextField.center.x = self.view.bounds.width * 0.5
-        }) { (success) in
-            
-        }
-        
-        newPasswordTextField.isHidden = false
-        UIView.animate(withDuration: 0.1, delay: 0.2, options: .transitionCrossDissolve, animations: {
-            self.newPasswordTextField.center.x = self.view.bounds.width * 0.5
-            
-        }) { (success) in
-            
-        }
-        
-        
-        confirmNewPasswordTextField.isHidden = false
-        
-        UIView.animate(withDuration: 0.1, delay: 0.2, options: .transitionCrossDissolve, animations: {
-            self.confirmNewPasswordTextField.center.x = self.view.bounds.width * 0.5
-        }) { (success) in
-            
-        }
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -150,7 +113,9 @@ class SettingsViewController: UIViewController {
     
     
     func changePasswordButtonTapped(_sender: UIButton) {
-        // TO DO
+//        guard let confirmPassText = confirmNewPasswordTextField.text, let newPassText = newPasswordTextField.text else {
+//                //show error
+//        }
         
     }
     
@@ -161,6 +126,17 @@ class SettingsViewController: UIViewController {
         
         //Color #2 - While selecting the text field
         view.backgroundColor = UIColor.purple
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+//        switch textField {
+//        case newEmailTextField:
+//            break
+//        case currentPasswordTextField:
+//            break
+//        case confirmNewPasswordTextField:
+//            break
+//        }
     }
     
     func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -186,7 +162,7 @@ class SettingsViewController: UIViewController {
     
 }
 
-// MARK - Settings Animation
+// MARK: - Settings Animation
 
 extension SettingsViewController: GuillotineAnimationDelegate {
     
@@ -205,6 +181,15 @@ extension SettingsViewController: GuillotineAnimationDelegate {
         print("willStartDismissal")
     }
     
+}
+
+// MARK: - UITextField delegate methods
+
+extension SettingsViewController: UITextFieldDelegate {
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        
+    }
 }
 
 
