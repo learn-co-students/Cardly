@@ -22,10 +22,11 @@ class SettingsViewController: UIViewController {
     
     // Textfields
     var newEmailTextField: UITextField!
-    var confirmNewEmailTextField: UITextField!
     var currentPasswordTextField: UITextField!
     var newPasswordTextField: UITextField!
     var confirmNewPasswordTextField: UITextField!
+    
+    lazy var textFields: [UITextField] = [self.newEmailTextField, self.currentPasswordTextField, self.newPasswordTextField, self.confirmNewPasswordTextField]
     
     // validate textfield content
     var email: String?
@@ -235,6 +236,9 @@ class SettingsViewController: UIViewController {
             forgotPasswordButton.titleLabel?.textColor = UIColor.white
             forgotPasswordButton.addTarget(self, action: #selector(self.logout), for: .touchUpInside)
             
+            for textField in textFields {
+                textField.delegate = self
+            }
         }
     }
     
@@ -311,18 +315,21 @@ extension SettingsViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         switch textField {
         case newEmailTextField:
-//            if !validateEmail(text: newEmailTextField.text!){
-//                isEmailValid = false
-//            }
-//            else{
-//                isEmailValid = true
-//            }
+            //            if !validateEmail(text: newEmailTextField.text!){
+            //                isEmailValid = false
+            //            }
+            //            else{
+            //                isEmailValid = true
+            //            }
+            print("in case new email")
             validateEmail(text: textField.text!)
             break
         case currentPasswordTextField:
+            print("in case current password")
             isCurrentPasswordValid = validateCurrentPassword(password: textField.text!)
             break
         case newPasswordTextField:
+            print("in case new password")
             if !validateNewPassword(text: textField.text!){
                 isPasswordValid = false
             }
@@ -331,6 +338,7 @@ extension SettingsViewController: UITextFieldDelegate {
             }
             break
         case confirmNewPasswordTextField:
+            print("in case confirm new password")
             if !validatePasswordConfirm(text: textField.text!){
                 isConfirmPasswordValid = false
             }
@@ -341,7 +349,9 @@ extension SettingsViewController: UITextFieldDelegate {
         default:
             break
         }
+
     }
+    
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         switch textField {
