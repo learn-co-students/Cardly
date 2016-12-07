@@ -63,13 +63,6 @@ class SettingsViewController: UIViewController {
             make.height.equalTo(20)
         }
         
-        //        dismissButton = {
-        //            let button = UIButton(frame: .zero)
-        //            button.setImage(UIImage(named: "ic_menu"), for: .normal)
-        //            button.addTarget(self, action: #selector(dismissButtonTapped(_:)), for: .touchUpInside)
-        //            return button
-        //        }()
-        
         titleLabel = {
             let label = UILabel()
             label.numberOfLines = 1;
@@ -273,7 +266,6 @@ class SettingsViewController: UIViewController {
         presentingViewController!.dismiss(animated: true, completion: nil)
     }
     
-    
     func changeEmailButtonTapped() {
         print("Change email submit button tapped")
         if checkIfChangeEmailFieldsValid() {
@@ -281,33 +273,11 @@ class SettingsViewController: UIViewController {
         }
     }
     
-    
     func changePasswordButtonTapped() {
         print("Change password submit button tapped")
         if checkIfPasswordFieldsValid() {
             attemptPasswordChange()
         }
-    }
-    
-}
-
-// MARK: - Settings Animation
-
-extension SettingsViewController: GuillotineAnimationDelegate {
-    
-    func animatorDidFinishPresentation(_ animator: GuillotineTransitionAnimation) {
-        print("menuDidFinishPresentation")
-    }
-    func animatorDidFinishDismissal(_ animator: GuillotineTransitionAnimation) {
-        print("menuDidFinishDismissal")
-    }
-    
-    func animatorWillStartPresentation(_ animator: GuillotineTransitionAnimation) {
-        print("willStartPresentation")
-    }
-    
-    func animatorWillStartDismissal(_ animator: GuillotineTransitionAnimation) {
-        print("willStartDismissal")
     }
     
 }
@@ -501,7 +471,6 @@ extension SettingsViewController {
             })
         }
     }
-
 }
 
 // MARK: - Keyboard methods
