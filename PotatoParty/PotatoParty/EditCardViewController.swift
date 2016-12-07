@@ -457,6 +457,7 @@ extension EditCardViewController {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             let keyboardHeight = keyboardSize.height
             if bottomTextField.isEditing{
+                saveButton.isEnabled = false
                 self.view.window?.frame.origin.y = -1 * keyboardHeight
             }
         }
@@ -466,6 +467,7 @@ extension EditCardViewController {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             let keyboardHeight = keyboardSize.height
             if self.view.window?.frame.origin.y != 0 {
+                saveButton.isEnabled = true
                 self.view.window?.frame.origin.y += keyboardHeight
             }
         }

@@ -46,6 +46,5 @@ struct CustomNotification {
         let whistleAction = WhistleAction.show(2.0)
         
         Whisper.show(whistle: murmur, action: whistleAction)
-        
     }
 }
