@@ -54,6 +54,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
             User.shared.contacts = contacts
             self.contactsCollectionView.reloadData()
         })
+        shared.selectedContacts.removeAll()
         enableCell()
     }
     
