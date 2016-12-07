@@ -12,6 +12,7 @@ import Firebase
 import FirebaseStorage
 import SnapKit
 import AVFoundation
+import Whisper
 
 protocol ModalViewControllerDelegate {
     func modalViewControllerDidDisappear(completion: @escaping () -> Void)
@@ -271,6 +272,21 @@ class SendCardViewController: UIViewController {
             print("Error clearing tmp cache \(error.localizedDescription)")
         }
     }
+    
+    // Notification Success Alert
+    
+    func messageSuccessNotification(title: String) {
+        
+        var murmur = Murmur(title: title)
+        
+        murmur.titleColor = UIColor.black
+        murmur.backgroundColor = UIColor.cyan
+        
+        let whistleAction = WhistleAction.show(2.0)
+        
+        Whisper.show(whistle: murmur, action: whistleAction)
+        
+    }
 }
 
 // MARK: - Email/Message framework delegate methods
@@ -289,6 +305,7 @@ extension SendCardViewController: MFMailComposeViewControllerDelegate {
                     self.clearTmpDirectory()
                 })
             })
+            messageSuccessNotification(title: "E-mail sent successfully")
         case .failed:
             if let error = error{
                 print("Error sending email \(error.localizedDescription)")
@@ -317,11 +334,13 @@ extension SendCardViewController: MFMessageComposeViewControllerDelegate {
                     self.clearTmpDirectory()
                 })
             })
+            messageSuccessNotification(title: "Text sent successfully")
         case .failed:
             print("Could not send message")
         default:
             controller.dismiss(animated: true)
         }
     }
+    
 
 }

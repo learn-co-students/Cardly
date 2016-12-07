@@ -100,7 +100,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         let destVC = ContactsViewController()
         navigationController?.pushViewController(destVC, animated: true)
         
-        showImportContactSuccessNotification()  
+        showSuccessNotification(title: "Contacts were imported successfully")
     }
     
     
@@ -183,7 +183,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
             groupContactsRef.setValue(contact.toAny())
             
         }
-        showContactSuccessNotification(name: contact.fullName)
+        showSuccessNotification(title: "\(contact.fullName) was added successfully")
     }
     
     //Validating Fields
@@ -261,9 +261,9 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     
     // Using Whipser for user notification of successfully added contact
     
-    func showContactSuccessNotification(name: String) {
+    func showSuccessNotification(title: String) {
     
-        var murmur = Murmur(title: "\(name) added successfully.")
+        var murmur = Murmur(title: title)
        
         murmur.titleColor = UIColor.black
         murmur.backgroundColor = UIColor.cyan
@@ -273,22 +273,5 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         Whisper.show(whistle: murmur, action: whistleAction)
 
     }
-    
-    func showImportContactSuccessNotification () {
-        var murmur = Murmur(title: "Contacts imported successfully.")
-        
-        murmur.titleColor = UIColor.black
-        murmur.backgroundColor = UIColor.cyan
-        
-        let whistleAction = WhistleAction.show(2.0)
-        
-        Whisper.show(whistle: murmur, action: whistleAction)
-    }
-    
-    
-    
-    
-    
-    
-    
+
 }
