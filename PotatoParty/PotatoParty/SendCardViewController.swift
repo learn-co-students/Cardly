@@ -273,20 +273,6 @@ class SendCardViewController: UIViewController {
         }
     }
     
-    // Notification Success Alert
-    
-    func messageSuccessNotification(title: String) {
-        
-        var murmur = Murmur(title: title)
-        
-        murmur.titleColor = UIColor.black
-        murmur.backgroundColor = UIColor.cyan
-        
-        let whistleAction = WhistleAction.show(2.0)
-        
-        Whisper.show(whistle: murmur, action: whistleAction)
-        
-    }
 }
 
 // MARK: - Email/Message framework delegate methods
@@ -305,7 +291,7 @@ extension SendCardViewController: MFMailComposeViewControllerDelegate {
                     self.clearTmpDirectory()
                 })
             })
-            messageSuccessNotification(title: "E-mail sent successfully")
+            CustomNotification.show("E-mail sent successfully")
         case .failed:
             if let error = error{
                 print("Error sending email \(error.localizedDescription)")
@@ -334,7 +320,7 @@ extension SendCardViewController: MFMessageComposeViewControllerDelegate {
                     self.clearTmpDirectory()
                 })
             })
-            messageSuccessNotification(title: "Text sent successfully")
+            CustomNotification.show("Text sent successfully")
         case .failed:
             print("Could not send message")
         default:
