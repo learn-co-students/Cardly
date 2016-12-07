@@ -164,7 +164,6 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         emailTextField.placeholder = "example@serviceprovider"
         phoneTextField.placeholder = "2224446666"
         
-        
         if groupSelected != "All" {
             let path = "\(uid)/\(groupSelected.lowercased())/\(contactItemRef.key)/"
             let groupContactsRef = contactsRef.child(path)
