@@ -43,7 +43,7 @@ class SettingsViewController: UIViewController {
         super.viewDidLoad()
         
         layoutElements()
-        
+        registerForKeyboardNotifications()
         let closeBtn = UIButton()
         self.view.addSubview(closeBtn)
         closeBtn.setTitle("Close", for: .normal)
@@ -73,6 +73,10 @@ class SettingsViewController: UIViewController {
             return label
         }()
         
+    }
+    
+    deinit {
+        deregisterFromKeyboardNotifications()
     }
     
     // MARK - Textfield aimations
@@ -178,28 +182,33 @@ extension SettingsViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         switch textField {
         case newEmailTextField:
-            if !validateEmail(text: newEmailTextField.text!){
-                isEmailValid = false
-            }
-            else{
-                isEmailValid = true
-            }
+//            if !validateEmail(text: newEmailTextField.text!){
+//                isEmailValid = false
+//            }
+//            else{
+//                isEmailValid = true
+//            }
+            validateEmail(text: textField.text!)
+            break
         case currentPasswordTextField:
-            isCurrentPasswordValid = validateCurrentPassword(password: currentPasswordTextField.text!)
+            isCurrentPasswordValid = validateCurrentPassword(password: textField.text!)
+            break
         case newPasswordTextField:
-            if !validateNewPassword(text: newPasswordTextField.text!){
+            if !validateNewPassword(text: textField.text!){
                 isPasswordValid = false
             }
             else{
                 isPasswordValid = true
             }
+            break
         case confirmNewPasswordTextField:
-            if !validatePasswordConfirm(text: confirmNewPasswordTextField.text!){
+            if !validatePasswordConfirm(text: textField.text!){
                 isConfirmPasswordValid = false
             }
             else{
                 isConfirmPasswordValid = true
             }
+            break
         default:
             break
         }
@@ -210,16 +219,19 @@ extension SettingsViewController: UITextFieldDelegate {
 
 extension SettingsViewController {
     
-    func validateEmail(text: String) -> Bool {
+    func validateEmail(text: String) {
         if !(text.characters.count > 0) {
             //show cannot be empty error
+            changeEmailButton.isEnabled = false
             print("Email cannot be empty!")
         }
         if text.contains("@") && text.contains(".") {
             email = text
-            return true
+            changeEmailButton.isEnabled = true
         }
-        return false
+        else {
+            changeEmailButton.isEnabled = false
+        }
     }
     
     func validateCurrentPassword(password: String) -> Bool {
@@ -310,6 +322,41 @@ extension SettingsViewController {
         }
     }
 
+}
+
+// MARK: - Keyboard methods
+
+extension SettingsViewController {
+    
+    func registerForKeyboardNotifications(){
+        //Adding notifies on keyboard appearing
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    func deregisterFromKeyboardNotifications(){
+        //Removing notifies on keyboard appearing
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight = keyboardSize.height
+            if newPasswordTextField.isEditing || confirmNewPasswordTextField.isEditing {
+                self.view.window?.frame.origin.y = -1 * keyboardHeight
+            }
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight = keyboardSize.height
+            if self.view.window?.frame.origin.y != 0 {
+                self.view.window?.frame.origin.y += keyboardHeight
+            }
+        }
+    }
 }
 
 
