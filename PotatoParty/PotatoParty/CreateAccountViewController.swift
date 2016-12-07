@@ -28,6 +28,14 @@ class CreateAccountViewController: UIViewController {
     let submitButtonToTextFieldWidthMultipier = 1.0/3.0
     let submitButtonToTextFieldHeightMultiplier = 0.5
     let submitButtonTopOffset = 30
+    
+    //validating Email
+    
+    var email: String? = nil
+    var password: String? = nil
+    var isEmailValid: Bool = false
+    var isPasswordValid: Bool = false
+
 
     
     override func viewDidLoad() {
@@ -57,6 +65,28 @@ class CreateAccountViewController: UIViewController {
         }
         return true
     }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        switch textField {
+
+        case emailTextField:
+            isEmailValid = validateEmail(text: textField.text!)
+            break
+
+        case passwordTextField:
+            if !validatePassword(text: textField.text!){
+                isPasswordValid = false
+            }
+            else{
+                isPasswordValid = true
+            }
+            break
+    
+        default:
+            break
+        }
+    }
+
 
     
     func dismissKeyboard() {
@@ -69,11 +99,33 @@ class CreateAccountViewController: UIViewController {
             FIRAuth.auth()!.createUser(withEmail: unwrappedEmail, password: unwrappedPassword, completion: { (user, error) in
                 if error == nil {
                     self.firebaseSignIn(user: unwrappedEmail, password: unwrappedPassword)
+                    
+                } else {
+                    if let error = error {
+                        switch error {
+                        case FIRAuthErrorCode.errorCodeEmailAlreadyInUse:
+                            print("email already in use")
+                            DispatchQueue.main.async {
+                                CustomNotification.showError(SettingsErrorMessage.emailAlreadyInUse)
+                            }
+                        case FIRAuthErrorCode.errorCodeInvalidEmail:
+                            print("email is invalid")
+                            DispatchQueue.main.async {
+                                CustomNotification.showError(SettingsErrorMessage.invalidEmail)
+                            }
+                        default:
+                            print("Firebase create user error: \(error.localizedDescription)")
+                            DispatchQueue.main.async {
+                                CustomNotification.showError("Error: \(error.localizedDescription)")
+                            }
+                        }
+                    }
                 }
             })
         }
     }
     
+
     func firebaseSignIn(user: String, password: String) {
         FIRAuth.auth()!.signIn(withEmail: user, password: password, completion: { (user, error) in
             if error == nil {
@@ -137,7 +189,53 @@ class CreateAccountViewController: UIViewController {
         submitButton.backgroundColor = UIColor.blue
         submitButton.addTarget(self, action: #selector(self.submitButtonTapped), for: .touchUpInside)
     }
- 
+    // validating fields 
+    
+    
+    func validateEmail(text: String) -> Bool {
+        if !(text.characters.count > 0) {
+            CustomNotification.showError(SettingsErrorMessage.emailEmpty)
+            return false
+        }
+        
+        if text.contains("@") && text.contains(".") {
+         return true
+        } else {
+            CustomNotification.showError(SettingsErrorMessage.emailFormat)
+            return false
+        }
+    }
+
+    func validatePassword(text: String) -> Bool {
+        if !(text.characters.count > 0) {
+            CustomNotification.showError(SettingsErrorMessage.newPasswordEmpty)
+            return false
+        }
+        if text.characters.count >= 6 {
+            return true
+    }
+        CustomNotification.showError(SettingsErrorMessage.passwordLength)
+        return false
+    }
+
+    
+//    func checkIfPasswordFieldsValid() -> Bool{
+//        if  isPasswordValid {
+//            return true
+//        }
+//        CustomNotification.showError(SettingsErrorMessage.changePasswordFieldsNotCorrect)
+//        return false
+//    }
+//    
+//    func checkIfEmailFieldsValid() -> Bool {
+//        if isEmailValid {
+//            return true
+//        }
+//        CustomNotification.showError(SettingsErrorMessage.changeEmailFieldsNotCorrect)
+//        return false
+//    }
+
+
 }
 
 extension CreateAccountViewController {
