@@ -70,7 +70,8 @@ class CreateAccountViewController: UIViewController {
         switch textField {
 
         case emailTextField:
-            isEmailValid = validateEmail(text: textField.text!)
+        
+           isEmailValid = validateEmail(text: textField.text!)
             break
 
         case passwordTextField:
@@ -92,6 +93,9 @@ class CreateAccountViewController: UIViewController {
     func dismissKeyboard() {
         view.endEditing(true)
     }
+    
+    
+    // Firebase create account
     
     func submitButtonTapped(){
         print("submit button tapped")
@@ -116,7 +120,7 @@ class CreateAccountViewController: UIViewController {
                         default:
                             print("Firebase create user error: \(error.localizedDescription)")
                             DispatchQueue.main.async {
-                                CustomNotification.showError("Error: \(error.localizedDescription)")
+                                CustomNotification.showError("\(error.localizedDescription)")
                             }
                         }
                     }
@@ -189,6 +193,8 @@ class CreateAccountViewController: UIViewController {
         submitButton.backgroundColor = UIColor.blue
         submitButton.addTarget(self, action: #selector(self.submitButtonTapped), for: .touchUpInside)
     }
+    
+    
     // validating fields 
     
     
@@ -208,7 +214,7 @@ class CreateAccountViewController: UIViewController {
 
     func validatePassword(text: String) -> Bool {
         if !(text.characters.count > 0) {
-            CustomNotification.showError(SettingsErrorMessage.newPasswordEmpty)
+            CustomNotification.showError("Password cannot be empty")
             return false
         }
         if text.characters.count >= 6 {
