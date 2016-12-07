@@ -476,7 +476,6 @@ extension SettingsViewController {
                 else { //attempt to change password
                     self.currentUser?.updatePassword(newPassword, completion: { (error) in
                         if error != nil {
-                            //show change password error
                             print("Failed to update password!")
                         }
                         else {
