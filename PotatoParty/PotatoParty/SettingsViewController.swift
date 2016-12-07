@@ -32,6 +32,7 @@ class SettingsViewController: UIViewController {
     // validate textfield content
     var email: String?
     var emailPassword: String?
+    var currentPassword: String?
     var password: String?
     var isEmailPasswordValid: Bool = false
     var isEmailValid: Bool = false
@@ -413,6 +414,7 @@ extension SettingsViewController {
             print("Current password cannot be empty")
             return false
         }
+        currentPassword = text
         return true
     }
     
@@ -464,30 +466,31 @@ extension SettingsViewController {
     
     //call this function when submit button for password is clicked
     func attemptPasswordChange() {
-        let credential = FIREmailPasswordAuthProvider.credential(withEmail: (currentUser?.email)!, password: password!)
-        currentUser?.reauthenticate(with: credential, completion: { (error) in
-            if error != nil {
-                print("Reauth failed!!")
-                //display invalid authentication error
-            }
-            else { //attempt to change password
-                self.currentUser?.updatePassword(self.newPasswordTextField.text!, completion: { (error) in
-                    if error != nil {
-                        //show change password error
-                        print("Failed to update password!")
-                    }
-                    else {
-                        //show success error
-                        print("Password update success!")
-                    }
-                })
-            }
-        })
+        if let currentPassword = currentPassword, let newPassword = password {
+            let credential = FIREmailPasswordAuthProvider.credential(withEmail: (currentUser?.email)!, password: currentPassword)
+            currentUser?.reauthenticate(with: credential, completion: { (error) in
+                if error != nil {
+                    print("Reauth failed!!")
+                    //display invalid authentication error
+                }
+                else { //attempt to change password
+                    self.currentUser?.updatePassword(newPassword, completion: { (error) in
+                        if error != nil {
+                            //show change password error
+                            print("Failed to update password!")
+                        }
+                        else {
+                            //show success error
+                            print("Password update success!")
+                        }
+                    })
+                }
+            })
+        }
     }
     
     func attemptEmailChange() {
         if let email = email, let password = emailPassword {
-            print("current user email is \(FIRAuth.auth()?.currentUser?.email)")
             let credential = FIREmailPasswordAuthProvider.credential(withEmail: (currentUser?.email)!, password: password)
             currentUser?.reauthenticate(with: credential, completion: { (error) in
                 if error != nil {
