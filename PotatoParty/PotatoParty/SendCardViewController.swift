@@ -12,6 +12,7 @@ import Firebase
 import FirebaseStorage
 import SnapKit
 import AVFoundation
+import Whisper
 
 protocol ModalViewControllerDelegate {
     func modalViewControllerDidDisappear(completion: @escaping () -> Void)
@@ -271,6 +272,7 @@ class SendCardViewController: UIViewController {
             print("Error clearing tmp cache \(error.localizedDescription)")
         }
     }
+    
 }
 
 // MARK: - Email/Message framework delegate methods
@@ -289,6 +291,7 @@ extension SendCardViewController: MFMailComposeViewControllerDelegate {
                     self.clearTmpDirectory()
                 })
             })
+            CustomNotification.show("E-mail sent successfully")
         case .failed:
             if let error = error{
                 print("Error sending email \(error.localizedDescription)")
@@ -317,11 +320,13 @@ extension SendCardViewController: MFMessageComposeViewControllerDelegate {
                     self.clearTmpDirectory()
                 })
             })
+            CustomNotification.show("Text sent successfully")
         case .failed:
             print("Could not send message")
         default:
             controller.dismiss(animated: true)
         }
     }
+    
 
 }

@@ -6,28 +6,58 @@
 	<dict>
 		<key>GTMSessionFetcher.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<false/>
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>
 		<key>GoogleToolboxForMac.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<false/>
 			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
-		<key>Pods-PotatoParty.xcscheme</key>
+		<key>MBProgressHUD.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<false/>
 			<key>orderHint</key>
 			<integer>3</integer>
 		</dict>
-		<key>SnapKit.xcscheme</key>
+		<key>Pods-PotatoParty.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<false/>
 			<key>orderHint</key>
 			<integer>4</integer>
+		</dict>
+		<key>SnapKit.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>5</integer>
+		</dict>
+		<key>Whisper.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>6</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>0F68B8BA3650C30B35B12D3C47EE2CBF</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>107A9565F9DF88517DFD3E28C05B2B96</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>23BA9083ED0D2392A167A8AFA04427FA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -37,12 +67,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>443820B96EF697A9AE514ECDE344A6A4</key>
+		<key>7D04535608058A2FABC0D16935868FB9</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>594E7AB61B47EC86FE83248926D8A59E</key>
+		<key>7ECBEFB97E405E4DC66E50EA8DFC74AF</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A9EDFA783690B2FF4A970BFFC5B3A756</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -52,12 +87,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>DD2BC8504794335FAC06E461B24A85C1</key>
+		<key>DA38FF95E026593B46BEF9A2DA6F8939</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>DDAAF3B95187225EBA21DC1AA7D50094</key>
+		<key>DBA6001481CEA0EBA031CC5C94508FAA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E6C0EE706CFD77434B594C58ACB85FBC</key>
 		<dict>
 			<key>primary</key>
 			<true/>

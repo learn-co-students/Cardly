@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import FirebaseDatabase
 
-struct Contact {
+final class Contact {
     
     
     let key: String
@@ -30,7 +30,6 @@ struct Contact {
         self.email = email
         self.phone = phone
         self.is_sent = is_sent
-        self.group_key = group_key
         self.ref = nil
         self.photoUrl = photoUrl
     }

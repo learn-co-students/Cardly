@@ -15,10 +15,9 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     let reuseIdentifier = "cell"
     let layout = UICollectionViewFlowLayout()
     let defaultContact: Contact = Contact(fullName: "Add Contact", email: "", phone: "")
-    var contacts: [Contact] = []
-    weak var contactDelegate: AddContactsDelegate?
-  //  var contactsBackgroundImage: UIImage = #imageLiteral(resourceName: "contactsAndSettingsVCBackgroundImage")
+    //  var contactsBackgroundImage: UIImage = #imageLiteral(resourceName: "contactsAndSettingsVCBackgroundImage")
     let shared = User.shared
+    
     
     
     // Inititalizers
@@ -38,15 +37,16 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        contacts.insert(defaultContact, at: 0)
-        return self.contacts.count
+        User.shared.contacts.insert(defaultContact, at: 0)
+        return User.shared.contacts.count
         
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        print(collectionView.subviews.count)
         let cell = dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ContactsCollectionViewCell
         
-        cell.contact = contacts[indexPath.row]
+        cell.contact = User.shared.contacts[indexPath.row]
         
         if cell.contact.is_sent == true {
             cell.alpha = 0.5
@@ -54,43 +54,7 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         
         return cell
     }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("selected item")
-        print(#function)
-        
-        var selectedContact = contacts[indexPath.row]
-        selectedContact.isChosen = !selectedContact.isChosen
-        
-        if indexPath.row == 0 {
-            contactDelegate?.goToAddContact()
-            
-        }else {
-            if selectedContact.isChosen == false {
-                collectionView.deselectItem(at: indexPath, animated: true)
-                shared.selectedContacts = shared.selectedContacts.filter { (contact) -> Bool in
-                    
-                    return contact.email != selectedContact.email
-                }
-                let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
-                
-                selectedCell.handleTap()
-                
-            } else {
-                
-                shared.selectedContacts.append(selectedContact)
-                
-                contacts[indexPath.row] = selectedContact
-                
-                let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
-                
-                selectedCell.handleTap()
-                
-            }
-        }
-        
-    }
-  
+
     // Setup view
     func setupView() {
         delegate = self
@@ -122,7 +86,7 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     }
     
     
-
+    
     
 }
 

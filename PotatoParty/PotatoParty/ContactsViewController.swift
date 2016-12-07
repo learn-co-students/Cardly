@@ -14,7 +14,7 @@ import SnapKit
 import MobileCoreServices
 
 
-class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContactsDelegate  {
+class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContactsDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
     // Current user
     var shared = User.shared
@@ -22,12 +22,19 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     let ref = FIRDatabase.database().reference(withPath: "contacts")
     
     // UI
-    var collectionView: ContactsCollectionView!
+    var contactsCollectionView: ContactsCollectionView!
     var bottomNavBar: BottomNavBarView!
+    var navSelecAllButton: UIBarButtonItem!
     var navigationBarMenu: DropDownMenu!
     var titleView: DropDownTitleView!
     var dismissButton: UIButton?
     var titleLabel: UILabel?
+    var timer = Timer()
+    var pickGroup = UIPickerView()
+    var pickerData = ["All", "Family", "Friends", "Coworkers", "Other"]
+    var chosenGroup = ""
+    var allSelected: Bool = false
+    
     fileprivate let cellHeight: CGFloat = 210
     fileprivate let cellSpacing: CGFloat = 20
     fileprivate lazy var presentationAnimator = GuillotineTransitionAnimation()
@@ -36,7 +43,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-        collectionView.contactDelegate = self
+        contactsCollectionView.delegate = self
         self.restorationIdentifier = "contactsVC"
     }
     
@@ -44,9 +51,11 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
         retrieveContacts(for: User.shared.groups[0], completion: { contacts in
-            self.collectionView.contacts = contacts
-            self.collectionView.reloadData()
+            User.shared.contacts = contacts
+            self.contactsCollectionView.reloadData()
         })
+        shared.selectedContacts.removeAll()
+        enableCell()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -57,7 +66,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-
+    
 }
 
 // MARK: - Views
@@ -73,9 +82,9 @@ extension ContactsViewController {
     
     // Setup collection view
     func setupCollectionView() {
-        collectionView = ContactsCollectionView(frame: self.view.frame)
-        self.view.addSubview(collectionView)
-        collectionView.snp.makeConstraints { (make) in
+        contactsCollectionView = ContactsCollectionView(frame: self.view.frame)
+        self.view.addSubview(contactsCollectionView)
+        contactsCollectionView.snp.makeConstraints { (make) in
             make.bottom.equalToSuperview()
             make.left.equalToSuperview()
             make.right.equalToSuperview()
@@ -88,6 +97,7 @@ extension ContactsViewController {
         bottomNavBar = BottomNavBarView()
         bottomNavBar.leftIconView.delegate = self
         bottomNavBar.rightIconView.delegate = self
+        bottomNavBar.middleIconView.delegate = self
         self.view.addSubview(bottomNavBar)
         bottomNavBar.snp.makeConstraints { (make) in
             make.left.equalToSuperview()
@@ -101,11 +111,15 @@ extension ContactsViewController {
     func setupTopNavBarView() {
         self.navigationBarMenu = DropDownMenu()
         
+        pickGroup.delegate = self
+        pickGroup.dataSource = self
+        
         let title = prepareNavigationBarMenuTitleView()
         prepareNavigationBarMenu(title)
         
-        let rightBtn = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(self.selectBtnClicked))
+        let rightBtn = UIBarButtonItem(title: "Select All", style: .plain, target: self, action: #selector(self.selectBtnClicked))
         self.navigationItem.rightBarButtonItem = rightBtn
+        navSelecAllButton = rightBtn
         
         let btnName = UIButton()
         btnName.setTitle("Settings", for: .normal)
@@ -130,41 +144,10 @@ extension ContactsViewController {
         titleView.addTarget(self, action: #selector(self.didToggleNavigationBarMenu(_:)), for: .valueChanged)
         titleView.titleLabel.textColor = UIColor.black
         titleView.title = "Lists"
-
+        
         navigationItem.titleView = titleView
         
         return titleView.title!
-    }
-    
-    func showToolbarMenu() {
-        if titleView.isUp {
-            titleView.toggleMenu()
-        }
-        navigationBarMenu.show()
-    }
-    
-    func willToggleNavigationBarMenu(_ sender: DropDownTitleView) {
-        navigationBarMenu.hide()
-        
-        if sender.isUp {
-            navigationBarMenu.hide()
-        }
-        else {
-            navigationBarMenu.show()
-        }
-    }
-    
-    func didToggleNavigationBarMenu(_ sender: DropDownTitleView) {
-        print("Sent did toggle navigation bar menu action")
-    }
-    
-    func didTapInDropDownMenuBackground(_ menu: DropDownMenu) {
-        if menu == navigationBarMenu {
-            titleView.toggleMenu()
-        }
-        else {
-            menu.hide()
-        }
     }
     
     func prepareNavigationBarMenu(_ currentChoice: String) {
@@ -190,23 +173,120 @@ extension ContactsViewController {
         
         navigationBarMenu.menuCells = menuCellArray
         navigationBarMenu.selectMenuCell(menuCellArray[0])
-        navigationBarMenu.visibleContentOffset = navigationController!.navigationBar.frame.size.height + 24
-        
+        navigationBarMenu.visibleContentOffset = navigationController!.navigationBar.frame.height + 24
         navigationBarMenu.backgroundView = UIView(frame: navigationBarMenu.bounds)
         navigationBarMenu.backgroundView!.backgroundColor = UIColor.black
         navigationBarMenu.backgroundAlpha = 0.7
     }
     
-    func selectGroup(_ sender: UITableViewCell) {
-        guard let group = sender.textLabel?.text?.lowercased() else { return }
-        self.retrieveContacts(for: group, completion: { contacts in
-            self.collectionView.contacts = contacts
-            self.collectionView.reloadData()
-        })
-        navigationBarMenu.hide()
+    func willToggleNavigationBarMenu(_ sender: DropDownTitleView) {
+        if sender.isUp {
+            navigationBarMenu.hide()
+        }
+        else {
+            navigationBarMenu.show()
+        }
     }
+    
+    // AlertConroller & UIPicker View
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return pickerData.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return pickerData[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        switch row {
+        case 0:
+            chosenGroup = "all"
+            updateGroup {
+                shared.selectedContacts.removeAll()
+                contactsCollectionView.reloadData()
+            }
+            self.dismiss(animated: true, completion: nil)
+            print( "all")
+        case 1:
+            chosenGroup = "family"
+            updateGroup {
+                shared.selectedContacts.removeAll()
+                //                removed red border/"selected state"
+            }
+            self.dismiss(animated: true, completion: nil)
+            print("family")
+        case 2:
+            chosenGroup = "friends"
+            updateGroup {
+                shared.selectedContacts.removeAll()
+            }
+            self.dismiss(animated: true, completion: nil)
+        case 3:
+            chosenGroup = "coworkers"
+            updateGroup {
+                shared.selectedContacts.removeAll()
+            }
+            self.dismiss(animated: true, completion: nil)
+        case 4:
+            chosenGroup = "other"
+            updateGroup {
+                shared.selectedContacts.removeAll()
+            }
+            self.dismiss(animated: true, completion: nil)
+            print("other")
+        default:
+            print("error")
+        }
+    }
+    
+    func showPickerInAlert() {
+        print("show alert")
+        let alert = UIAlertController(title: "Choose Group", message: "\n\n\n\n", preferredStyle: UIAlertControllerStyle.actionSheet)
+        
+        alert.view.addSubview(pickGroup)
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
 }
 
+// MARK: - Layout view elements
+
+extension ContactsViewController {
+    
+    // Setup all views
+    
+    
+    func didToggleNavigationBarMenu(_ sender: DropDownTitleView) {
+        
+    }
+    
+    func didTapInDropDownMenuBackground(_ menu: DropDownMenu) {
+        if menu == navigationBarMenu {
+            titleView.toggleMenu()
+        } else {
+            menu.hide()
+        }
+    }
+    
+    func selectGroup(_ sender: UITableViewCell) {
+        // Retrieve from Firebase
+        guard let group = sender.textLabel?.text?.lowercased() else { return }
+        self.retrieveContacts(for: group, completion: { contacts in
+            User.shared.contacts = contacts
+            self.contactsCollectionView.reloadData()
+        })
+        // Hide Top Nav Bar after group is selected
+        if navigationBarMenu.container != nil {
+            titleView.toggleMenu()
+        }
+    }
+}
 
 
 // MARK: - Navigation methods (buttons)
@@ -219,30 +299,92 @@ extension ContactsViewController: BottomNavBarDelegate {
         destVC.modalPresentationStyle = .custom
         destVC.transitioningDelegate = self
         
+        //        let view = UIView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        //
+        //
+        //        view.backgroundColor = UIColor.white
+        //
+        
         presentationAnimator.animationDuration = 0.2
         presentationAnimator.animationDelegate = destVC as? GuillotineAnimationDelegate
         presentationAnimator.presentButton = view
-        present(destVC, animated: true, completion: nil)     
+        present(destVC, animated: true, completion: nil)
     }
     
     func selectBtnClicked() {
-        let destVC = ContactsViewController()
-        navigationController?.pushViewController(destVC, animated: false)
+        if allSelected == false {
+            for (index, contact) in User.shared.contacts.enumerated() {
+                if index > 0 {
+                    contact.isChosen = true
+                    User.shared.selectedContacts.append(contact)
+                }
+            }
+            User.shared.contacts.remove(at: 0)
+            enableCell()
+            contactsCollectionView.reloadData()
+            allSelected = true
+            
+        } else {
+            for (index, contact) in User.shared.contacts.enumerated() {
+                if index > 0 {
+                    contact.isChosen = false
+                }
+            }
+            User.shared.selectedContacts.removeAll()
+            User.shared.contacts.remove(at: 0)
+            enableCell()
+            contactsCollectionView.reloadData()
+            allSelected = false
+        }
+        
     }
-
+    
     func goToAddContact(){
         let destVC = AddContactViewController()
         navigationController?.pushViewController(destVC, animated: false)
+        shared.selectedContacts.removeAll()
     }
     
     func deleteButtonPressed() {
         deleteContacts {
             retrieveContacts(for: User.shared.groups[0], completion: { contacts in
-                self.collectionView.contacts = contacts
-                self.collectionView.reloadData()
+                User.shared.contacts = contacts
+                self.contactsCollectionView.reloadData()
             })
-            collectionView.reloadData()
+            enableCell()
+           contactsCollectionView.reloadData()
         }
+        
+    }
+    
+    func editGroupButtonPressed(){
+        showPickerInAlert()
+        print("edit group button pressed")
+    }
+    
+    //Updates Contact Group property and reloaded Collection View
+    
+    func updateGroup(completion: () -> ()){
+        for (index, contact) in shared.selectedContacts.enumerated() {
+            
+            removeFromSomeGroupsinFB(contact: contact)
+            
+            shared.selectedContacts[index].group_key = chosenGroup
+            
+            //update group bucket
+            let groupsRef = FIRDatabase.database().reference(withPath: "groups")
+            let allGroupPath = groupsRef.child("\(uid)/\(chosenGroup)")
+            let groupItemRef = allGroupPath.child(contact.key)
+            groupItemRef.setValue(contact.toAny())
+            
+            
+            //update contact group bucket
+            let contactsPath = ref.child("\(uid)/\(chosenGroup)")
+            let contactItemRef = contactsPath.child(contact.key)
+            contactItemRef.setValue(contact.toAny())
+            
+        }
+        
     }
     
     func sendToButtonPressed() {
@@ -253,6 +395,8 @@ extension ContactsViewController: BottomNavBarDelegate {
     func navToRecordCardVC() {
         let _ = startCameraFromViewController(self, withDelegate: self)
     }
+    
+    
 }
 
 // MARK: - Firebase methods
@@ -282,6 +426,30 @@ extension ContactsViewController {
         completion()
     }
     
+    func removeFromSomeGroupsinFB(contact: Contact){
+        
+        let familyPath = "\(uid)/family/\(contact.key)"
+        let friendsPath = "\(uid)/friends/\(contact.key)"
+        let coworkersPath = "\(uid)/coworkers/\(contact.key)"
+        let otherPath = "\(uid)/other/\(contact.key)"
+        
+        ref.child(familyPath).removeValue()
+        ref.child(friendsPath).removeValue()
+        ref.child(coworkersPath).removeValue()
+        ref.child(otherPath).removeValue()
+        
+        let groupsRef = FIRDatabase.database().reference(withPath: "groups")
+        let familyGroupPath = "\(uid)/family/\(contact.key)"
+        let friendsGroupPath = "\(uid)/friends/\(contact.key)"
+        let coworkersGroupPath = "\(uid)/coworkers/\(contact.key)"
+        let otherGroupPath = "\(uid)/other/\(contact.key)"
+        
+        groupsRef.child(familyGroupPath).removeValue()
+        groupsRef.child(friendsGroupPath).removeValue()
+        groupsRef.child(coworkersGroupPath).removeValue()
+        groupsRef.child(otherGroupPath).removeValue()
+    }
+    
     func removeFromAllGroupsinFB(contact: Contact) {
         let allPath = "\(uid)/all/\(contact.key)"
         let familyPath = "\(uid)/family/\(contact.key)"
@@ -293,6 +461,19 @@ extension ContactsViewController {
         ref.child(friendsPath).removeValue()
         ref.child(coworkersPath).removeValue()
         ref.child(otherPath).removeValue()
+        
+        let groupsRef = FIRDatabase.database().reference(withPath: "groups")
+        let allGroupPath = "\(uid)/all/\(contact.key)"
+        let familyGroupPath = "\(uid)/family/\(contact.key)"
+        let friendsGroupPath = "\(uid)/friends/\(contact.key)"
+        let coworkersGroupPath = "\(uid)/coworkers/\(contact.key)"
+        let otherGroupPath = "\(uid)/other/\(contact.key)"
+        groupsRef.child(allGroupPath).removeValue()
+        groupsRef.child(familyGroupPath).removeValue()
+        groupsRef.child(friendsGroupPath).removeValue()
+        groupsRef.child(coworkersGroupPath).removeValue()
+        groupsRef.child(otherGroupPath).removeValue()
+        
     }
     
 }
@@ -308,12 +489,15 @@ extension ContactsViewController {
         
         let cameraController = UIImagePickerController()
         cameraController.sourceType = .camera
+        cameraController.cameraDevice = .front
         cameraController.mediaTypes = [kUTTypeMovie as NSString as String]
         cameraController.allowsEditing = true //allow video editing
         cameraController.cameraCaptureMode = .video
         cameraController.delegate = delegate
-        cameraController.videoQuality = .typeHigh
         cameraController.videoMaximumDuration = 20.0
+        
+        //        cameraController.videoQuality = .typeHigh
+        cameraController.videoQuality = .typeIFrame1280x720
         
         let maxRecordTime = "Max Record Time is 20 sec"
         let maxTimeLabel = UILabel()
@@ -321,7 +505,7 @@ extension ContactsViewController {
         maxTimeLabel.textAlignment = .center
         maxTimeLabel.textColor = UIColor.red
         cameraController.view.addSubview(maxTimeLabel)
-
+        
         maxTimeLabel.snp.makeConstraints { (make) in
             make.topMargin.equalToSuperview().offset(50)
             make.leadingMargin.equalToSuperview().offset(-300)
@@ -362,6 +546,7 @@ extension ContactsViewController: UIImagePickerControllerDelegate {
         print("In did finish picking media")
         let mediaType = info[UIImagePickerControllerMediaType] as! NSString
         dismiss(animated: true, completion: nil)
+        
         // Handle a movie capture
         if mediaType == kUTTypeMovie {
             guard let unwrappedURL = info[UIImagePickerControllerMediaURL] as? URL else { return }
@@ -372,8 +557,6 @@ extension ContactsViewController: UIImagePickerControllerDelegate {
             navigationController?.pushViewController(editVideoVC, animated: true)
         }
     }
-    
-    
 }
 
 // MARK: - UINavigationControllerDelegate
@@ -399,6 +582,88 @@ extension ContactsViewController: UIViewControllerTransitioningDelegate {
 }
 
 
+//extension ContactsViewController: GuillotineAnimationDelegate {
+//
+//    func animatorDidFinishPresentation(_ animator: GuillotineTransitionAnimation) {
+//        print("menuDidFinishPresentation")
+//    }
+//    func animatorDidFinishDismissal(_ animator: GuillotineTransitionAnimation) {
+//        print("menuDidFinishDismissal")
+//    }
+//
+//    func animatorWillStartPresentation(_ animator: GuillotineTransitionAnimation) {
+//        print("willStartPresentation")
+//    }
+//
+//    func animatorWillStartDismissal(_ animator: GuillotineTransitionAnimation) {
+//        print("willStartDismissal")
+//    }
+//}
+//
+
+extension ContactsViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("selected item")
+        print(#function)
+        
+        let selectedContact = User.shared.contacts[indexPath.row]
+        
+        
+        
+        if indexPath.row == 0 {
+            goToAddContact()
+            
+        } else {
+            if selectedContact.isChosen == true {
+                
+                let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
+                selectedCell.handleTap()
+                User.shared.contacts[indexPath.row].isChosen = false
+                shared.selectedContacts = shared.selectedContacts.filter({ (contact) -> Bool in
+                    return contact.email != User.shared.contacts[indexPath.row].email
+                })
+                enableCell()
+                
+                print("deselected a cell")
+                print("\(shared.selectedContacts)")
+                
+                
+            } else {
+                shared.selectedContacts.append(selectedContact)
+                let selectedCell = collectionView.cellForItem(at: indexPath) as! ContactsCollectionViewCell
+                selectedCell.handleTap()
+                User.shared.contacts[indexPath.row].isChosen = true
+                
+                enableCell()
+                
+                print("selected cell")
+                print("\(shared.selectedContacts)")
+                
+            }
+            
+        }
+        
+    }
+    
+    func enableCell(){
+        if shared.selectedContacts.isEmpty == false {
+            bottomNavBar.leftIconView.deleteContactBtn.isEnabled = true
+            bottomNavBar.leftIconView.deleteContactBtn.isHidden = false
+            bottomNavBar.middleIconView.editGroupButton.isEnabled = true
+            bottomNavBar.middleIconView.editGroupButton.isHidden = false
+        } else {
+            bottomNavBar.leftIconView.deleteContactBtn.isEnabled = false
+            bottomNavBar.leftIconView.deleteContactBtn.isHidden = true
+            bottomNavBar.middleIconView.editGroupButton.isEnabled = false
+            bottomNavBar.middleIconView.editGroupButton.isHidden = true
+        }
+        
+    }
+    
+}
+
+
 protocol AddContactsDelegate: class {
-   func goToAddContact()
+    func goToAddContact()
 }

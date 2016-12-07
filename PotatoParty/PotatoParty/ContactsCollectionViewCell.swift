@@ -17,6 +17,8 @@ class ContactsCollectionViewCell: UICollectionViewCell {
     var isChosen: Bool = false {
         didSet {
             
+            print("iS ChoSEN SET!")
+            
             isChosen ? reflectSelectedState() : reflectUnsellectedState()
             
         }
@@ -25,7 +27,13 @@ class ContactsCollectionViewCell: UICollectionViewCell {
     var contact: Contact! {
         didSet {
             
+            print("\n")
+            
+            print("Getting called first?")
+            
             label.text = "\(contact.fullName)\n\(contact.email)"
+            
+            print("Contacts is chosen: \(contact.isChosen ? "YES" : "NO")")
             
             isChosen = contact.isChosen
     
@@ -77,6 +85,7 @@ class ContactsCollectionViewCell: UICollectionViewCell {
 extension ContactsCollectionViewCell {
     
     func reflectSelectedState() {
+        print("CHANGE STATE OF CELL!!")
         
         contentView.layer.borderColor = UIColor.red.cgColor
         contentView.layer.borderWidth = 4.0
