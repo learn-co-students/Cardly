@@ -54,6 +54,8 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
             User.shared.contacts = contacts
             self.contactsCollectionView.reloadData()
         })
+        shared.selectedContacts.removeAll()
+        enableCell()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -340,6 +342,7 @@ extension ContactsViewController: BottomNavBarDelegate {
     func goToAddContact(){
         let destVC = AddContactViewController()
         navigationController?.pushViewController(destVC, animated: false)
+        shared.selectedContacts.removeAll()
     }
     
     func deleteButtonPressed() {
