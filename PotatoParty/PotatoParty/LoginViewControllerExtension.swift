@@ -71,6 +71,7 @@ extension LoginViewController {
         }
         forgotPasswordButton.setTitle("Forgot password?", for: .normal)
         forgotPasswordButton.backgroundColor = UIColor.blue
+        forgotPasswordButton.addTarget(self, action: #selector(self.forgotPasswordButtonTapped), for: .touchUpInside)
         
     }
 

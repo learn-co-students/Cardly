@@ -111,9 +111,46 @@ extension LoginViewController {
         })
     }
     
+    func forgotPasswordButtonTapped() {
+        
+        let alertController = UIAlertController(title: "Enter E-Mail", message: "We'll send you a password reset e-mail", preferredStyle: .alert)
+       
+        let submitAction = UIAlertAction(title: "Send", style: .default) { (action) in
+            let emailField = alertController.textFields![0]
+            if let email = emailField.text {
+                
+                FIRAuth.auth()?.sendPasswordReset(withEmail: email, completion: { (error) in
+                    if error != nil {
+                        print("Firebase password reset error: \(error)")
+                    }
+                    
+                    // TODO: - Add notification Cocoapod to alert user e-mail sent successfully
+                    print("E-mail sent to \(email)")
+                    
+                })
+                
+            }
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default) { (action) in
+            self.dismiss(animated: true, completion: nil)
+        }
+        
+        alertController.addAction(submitAction)
+        alertController.addAction(cancelAction)
+        alertController.addTextField { (textfield) in
+            textfield.placeholder = "Enter E-mail"
+        }
+
+        self.present(alertController, animated: true, completion: nil)
+
+    }
+    
+    
     func dismissKeyboard() {
         view.endEditing(true)
     }
+
     
 }
 
@@ -129,4 +166,7 @@ extension LoginViewController {
     }
 
 }
+
+
+
 
