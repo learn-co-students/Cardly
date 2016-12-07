@@ -120,15 +120,23 @@ extension LoginViewController {
             if let email = emailField.text {
                 
                 FIRAuth.auth()?.sendPasswordReset(withEmail: email, completion: { (error) in
-                    if error != nil {
-                        print("Firebase password reset error: \(error)")
-                    }
-                    
+                    // Handle error
+                    if let error = error {
+                        
+                        let alertController = UIAlertController(title: "Error", message: "\(error.localizedDescription)", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "Ok", style: .default, handler: { (action) in
+                            self.dismiss(animated: true, completion: nil)
+                        })
+                        alertController.addAction(okAction)
+                        self.present(alertController, animated: true, completion: nil)
+                    // Success
                     // TODO: - Add notification Cocoapod to alert user e-mail sent successfully
-                    print("E-mail sent to \(email)")
-                    
+                    } else {
+                        
+                        print("E-mail sent to \(email)")
+
+                    }
                 })
-                
             }
         }
         
@@ -143,7 +151,6 @@ extension LoginViewController {
         }
 
         self.present(alertController, animated: true, completion: nil)
-
     }
     
     
