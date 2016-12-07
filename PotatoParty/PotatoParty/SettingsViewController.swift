@@ -41,14 +41,16 @@ class SettingsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         layoutElements()
         registerForKeyboardNotifications()
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
+        
         let closeBtn = UIButton()
         self.view.addSubview(closeBtn)
         closeBtn.setTitle("Close", for: .normal)
         closeBtn.addTarget(self, action: #selector(dismissButtonTapped(_:)), for: .touchUpInside)
-        
         closeBtn.snp.makeConstraints { (make) in
             make.left.equalTo(self.view).offset(20)
             make.top.equalTo(self.view).offset(35)
@@ -357,6 +359,16 @@ extension SettingsViewController {
             }
         }
     }
+}
+
+// MARK: - Tap gesture methods
+
+extension SettingsViewController {
+    
+    func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
 }
 
 
