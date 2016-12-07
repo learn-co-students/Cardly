@@ -336,10 +336,7 @@ extension SettingsViewController: UITextFieldDelegate {
         switch textField {
         case changeEmailPasswordTextField:
             print("in change email password case")
-            isEmailPasswordValid = validateCurrentPassword(text: textField.text!)
-            if isEmailPasswordValid {
-                emailPassword = textField.text!
-            }
+            isEmailPasswordValid = validateCurrentPasswordForChangeEmail(text: textField.text!)
             checkIfChangeEmailFieldsValid()
             break
         case newEmailTextField:
@@ -406,6 +403,16 @@ extension SettingsViewController {
             print("Invalid email")
             return false
         }
+    }
+    
+    func validateCurrentPasswordForChangeEmail(text: String) -> Bool {
+        if !(text.characters.count > 0) {
+            //show cannot be empty error
+            print("Current password cannot be empty")
+            return false
+        }
+        emailPassword = text
+        return true
     }
     
     func validateCurrentPassword(text: String) -> Bool {
