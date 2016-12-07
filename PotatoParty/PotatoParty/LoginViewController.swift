@@ -130,11 +130,8 @@ extension LoginViewController {
                         alertController.addAction(okAction)
                         self.present(alertController, animated: true, completion: nil)
                     // Success
-                    // TODO: - Add notification Cocoapod to alert user e-mail sent successfully
                     } else {
-                        
-                        print("E-mail sent to \(email)")
-
+                        CustomNotification.show("Password reset e-mail sent")
                     }
                 })
             }
@@ -157,7 +154,6 @@ extension LoginViewController {
     func dismissKeyboard() {
         view.endEditing(true)
     }
-
     
 }
 
@@ -173,7 +169,3 @@ extension LoginViewController {
     }
 
 }
-
-
-
-

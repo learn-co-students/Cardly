@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Whisper
 
 struct Styles {
     static let cornerRadius: CGFloat = 7
@@ -33,4 +34,18 @@ struct Font {
 struct Colors {
     static let orange = UIColor(red: 225.0/255.0, green: 50.0/255.0, blue: 29.0/255.0, alpha: 1)
     
+}
+
+struct CustomNotification {
+     static func show(_ notification: String) {
+        var murmur = Murmur(title: notification)
+        
+        murmur.titleColor = UIColor.black
+        murmur.backgroundColor = UIColor.cyan
+        
+        let whistleAction = WhistleAction.show(2.0)
+        
+        Whisper.show(whistle: murmur, action: whistleAction)
+        
+    }
 }

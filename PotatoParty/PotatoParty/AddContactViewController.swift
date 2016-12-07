@@ -100,7 +100,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         let destVC = ContactsViewController()
         navigationController?.pushViewController(destVC, animated: true)
         
-        showSuccessNotification(title: "Contacts were imported successfully")
+        CustomNotification.show("Contacts were imported successfully")
     }
     
     
@@ -183,7 +183,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
             groupContactsRef.setValue(contact.toAny())
             
         }
-        showSuccessNotification(title: "\(contact.fullName) was added successfully")
+        CustomNotification.show("Added successfully")
     }
     
     //Validating Fields
@@ -257,21 +257,6 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         animation.values = [-20.0, 20.0, -20.0, 20.0, -10.0, 10.0, -5.0, 5.0, 0.0 ]
         textfield.layer.add(animation, forKey: "shake")
         
-    }
-    
-    // Using Whipser for user notification of successfully added contact
-    
-    func showSuccessNotification(title: String) {
-    
-        var murmur = Murmur(title: title)
-       
-        murmur.titleColor = UIColor.black
-        murmur.backgroundColor = UIColor.cyan
-        
-        let whistleAction = WhistleAction.show(2.0)
-        
-        Whisper.show(whistle: murmur, action: whistleAction)
-
     }
 
 }
