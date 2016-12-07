@@ -13,7 +13,7 @@ extension SettingsViewController {
     func layoutElements() {
         
         addBlurEffect()
-        view.backgroundColor = UIColor.cyan
+        view.backgroundColor = UIColor.clear
         //  view.backgroundColor = UIColor.init(patternImage: settingsBackgroundImage)
         
         let emailLabel = UILabel()
@@ -55,6 +55,7 @@ extension SettingsViewController {
             changeEmailButton.setTitle("Submit", for: .normal)
             changeEmailButton.titleLabel?.textColor = UIColor.white
             changeEmailButton.addTarget(self, action: #selector(self.changeEmailButtonTapped(_sender:)), for: .touchUpInside)
+            changeEmailButton.isEnabled = false
             
             let passwordLabel = UILabel()
             view.addSubview(passwordLabel)
@@ -126,6 +127,7 @@ extension SettingsViewController {
             changePasswordButton.setTitle("Submit", for: .normal)
             changePasswordButton.titleLabel?.textColor = UIColor.white
             changePasswordButton.addTarget(self, action: #selector(self.changePasswordButtonTapped(_sender:)), for: .touchUpInside)
+            changePasswordButton.isEnabled = false
             
             logoutButton = UIButton()
             view.addSubview(logoutButton)

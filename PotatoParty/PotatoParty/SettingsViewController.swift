@@ -27,6 +27,14 @@ class SettingsViewController: UIViewController {
     var newPasswordTextField: UITextField!
     var confirmNewPasswordTextField: UITextField!
     
+    // validate textfield content
+    var email: String?
+    var password: String?
+    var isEmailValid: Bool = false
+    var isPasswordValid: Bool = false
+    var isCurrentPasswordValid: Bool = false
+    var isConfirmPasswordValid: Bool = false
+    
     let currentUser = FIRAuth.auth()?.currentUser
     
     //  var settingsBackgroundImage: UIImage = #imageLiteral(resourceName: "contactsAndSettingsVCBackgroundImage")
@@ -107,36 +115,12 @@ class SettingsViewController: UIViewController {
     
     
     func changeEmailButtonTapped(_sender: UIButton) {
-        // TO DO
-        
+        attemptEmailChange()
     }
     
     
     func changePasswordButtonTapped(_sender: UIButton) {
-//        guard let confirmPassText = confirmNewPasswordTextField.text, let newPassText = newPasswordTextField.text else {
-//                //show error
-//        }
-        
-    }
-    
-    
-    // MARK - Textfield Methods
-    
-    func textFieldDidBeginEditing(textField: UITextField) {
-        
-        //Color #2 - While selecting the text field
-        view.backgroundColor = UIColor.purple
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-//        switch textField {
-//        case newEmailTextField:
-//            break
-//        case currentPasswordTextField:
-//            break
-//        case confirmNewPasswordTextField:
-//            break
-//        }
+        attemptPasswordChange()
     }
     
     func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -190,6 +174,142 @@ extension SettingsViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         
     }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        switch textField {
+        case newEmailTextField:
+            if !validateEmail(text: newEmailTextField.text!){
+                isEmailValid = false
+            }
+            else{
+                isEmailValid = true
+            }
+        case currentPasswordTextField:
+            isCurrentPasswordValid = validateCurrentPassword(password: currentPasswordTextField.text!)
+        case newPasswordTextField:
+            if !validateNewPassword(text: newPasswordTextField.text!){
+                isPasswordValid = false
+            }
+            else{
+                isPasswordValid = true
+            }
+        case confirmNewPasswordTextField:
+            if !validatePasswordConfirm(text: confirmNewPasswordTextField.text!){
+                isConfirmPasswordValid = false
+            }
+            else{
+                isConfirmPasswordValid = true
+            }
+        default:
+            break
+        }
+    }
+}
+
+// MARK: - Form field validation helpers
+
+extension SettingsViewController {
+    
+    func validateEmail(text: String) -> Bool {
+        if !(text.characters.count > 0) {
+            //show cannot be empty error
+            print("Email cannot be empty!")
+        }
+        if text.contains("@") && text.contains(".") {
+            email = text
+            return true
+        }
+        return false
+    }
+    
+    func validateCurrentPassword(password: String) -> Bool {
+        if !(password.characters.count > 0) {
+            //show cannot be empty error
+            print("Current password cannot be empty")
+            return false
+        }
+        return true
+    }
+    
+    func validateNewPassword(text: String) -> Bool {
+        if !(password!.characters.count > 0) {
+            //show cannot be empty error
+            print("New password cannot by empty")
+        }
+        if text.characters.count >= 6{
+            password = text
+            return true
+        }
+        return false
+    }
+    
+    func validatePasswordConfirm(text: String) -> Bool {
+        if !(password!.characters.count > 0) {
+            print("Confirm password cannot be empty!")
+            //show cannot be empty error
+            return false
+        }
+        if let password = password {
+            return text == password
+        }
+        return false
+    }
+    
+    func checkIfPasswordFieldsValid(){
+        if isCurrentPasswordValid && isPasswordValid && isConfirmPasswordValid {
+            changePasswordButton.isEnabled = true
+            print("change password button enabled")
+        }
+        else{
+            changePasswordButton.isEnabled = false
+            print("change password button disabled")
+        }
+    }
+    
+    //call this function when submit button for password is clicked
+    func attemptPasswordChange() {
+        if let password = password, password.characters.count > 0{
+            let credential = FIREmailPasswordAuthProvider.credential(withEmail: (currentUser?.email)!, password: password)
+            currentUser?.reauthenticate(with: credential, completion: { (error) in
+                if error != nil {
+                    //display invalid authentication error
+                }
+                else { //attempt to change password
+                    self.currentUser?.updatePassword(self.newPasswordTextField.text!, completion: { (error) in
+                        if error != nil {
+                            //show change password error
+                            print("Failed to update password!")
+                        }
+                        else {
+                            //show success error
+                            print("Password update success!")
+                        }
+                    })
+                }
+            })
+        }
+        else{
+            //display no password entered error
+            print("No password entered!")
+        }
+        
+    }
+    
+    func attemptEmailChange() {
+        if let email = email {
+            currentUser?.updateEmail(email, completion: { (error) in
+                if error != nil {
+                    print("Unable to change email")
+                    //show change email error
+                }
+                else {
+                    print("Successfully changed email!")
+                    //show email success
+                }
+            })
+        }
+    }
+
 }
 
 
