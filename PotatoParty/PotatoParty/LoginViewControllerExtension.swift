@@ -35,6 +35,7 @@ extension LoginViewController {
         }
 
         passwordTextfield.placeholder = "Password"
+        passwordTextfield.isSecureTextEntry = true
         passwordTextfield.backgroundColor = UIColor.cyan
         passwordTextfield.textAlignment = .center
         passwordTextfield.autocapitalizationType = UITextAutocapitalizationType.none
