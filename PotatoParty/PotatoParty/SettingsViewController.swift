@@ -21,16 +21,19 @@ class SettingsViewController: UIViewController {
     var titleLabel: UILabel?
     
     // Textfields
+    var changeEmailPasswordTextField: UITextField!
     var newEmailTextField: UITextField!
     var currentPasswordTextField: UITextField!
     var newPasswordTextField: UITextField!
     var confirmNewPasswordTextField: UITextField!
     
-    lazy var textFields: [UITextField] = [self.newEmailTextField, self.currentPasswordTextField, self.newPasswordTextField, self.confirmNewPasswordTextField]
+    lazy var textFields: [UITextField] = [self.changeEmailPasswordTextField, self.newEmailTextField, self.currentPasswordTextField, self.newPasswordTextField, self.confirmNewPasswordTextField]
     
     // validate textfield content
     var email: String?
+    var emailPassword: String?
     var password: String?
+    var isEmailPasswordValid: Bool = false
     var isEmailValid: Bool = false
     var isPasswordValid: Bool = false
     var isCurrentPasswordValid: Bool = false
@@ -107,138 +110,154 @@ class SettingsViewController: UIViewController {
             make.height.equalTo(80)
             make.centerX.equalToSuperview()
             make.topMargin.equalToSuperview().offset(80)
-            emailLabel.text = "Change email address"
+            emailLabel.text = "Change email"
             emailLabel.textColor = UIColor.white
             emailLabel.textAlignment = .center
             emailLabel.font = UIFont(name: Font.nameForCard, size: 60)
-            
-            let newEmailText: String = "Enter new email address"
-            let newEmailPlaceholder = NSAttributedString(string: newEmailText, attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
-            newEmailTextField = UITextField()
-            view.addSubview(newEmailTextField)
-            newEmailTextField.snp.makeConstraints { (make) in
-                make.height.equalTo(50)
-                make.width.equalToSuperview().multipliedBy(0.6)
-                make.centerX.equalToSuperview()
-                make.topMargin.equalTo(emailLabel.snp.bottomMargin).offset(40)
-            }
-            newEmailTextField.textColor = UIColor.black
-            newEmailTextField.borderStyle = UITextBorderStyle.roundedRect
-            newEmailTextField.attributedPlaceholder = newEmailPlaceholder
-            newEmailTextField.textAlignment = .center
-            newEmailTextField.clearsOnBeginEditing = true
-            
-            changeEmailButton = UIButton()
-            view.addSubview(changeEmailButton)
-            changeEmailButton.snp.makeConstraints { (make) in
-                make.width.equalToSuperview().dividedBy(2)
-                make.height.equalTo(newEmailTextField.snp.height).offset(-5)
-                make.centerX.equalToSuperview()
-                make.topMargin.equalTo(newEmailTextField.snp.bottomMargin).offset(20)
-            }
-            changeEmailButton.setTitle("Submit", for: .normal)
-            changeEmailButton.titleLabel?.textColor = UIColor.white
-            changeEmailButton.addTarget(self, action: #selector(changeEmailButtonTapped), for: .touchUpInside)
-            changeEmailButton.isEnabled = false
-            
-            let passwordLabel = UILabel()
-            view.addSubview(passwordLabel)
-            passwordLabel.snp.makeConstraints { (make) in
-                make.size.equalTo(emailLabel.snp.size)
-                make.centerX.equalToSuperview()
-                make.topMargin.equalTo(changeEmailButton.snp.bottomMargin).offset(40)
-            }
-            passwordLabel.text = "Change password"
-            passwordLabel.textColor = UIColor.white
-            passwordLabel.textAlignment = .center
-            passwordLabel.font = UIFont(name: Font.nameForCard, size: 60)
-            
-            let currentPasswordText: String = "Enter current password"
-            let currentPasswordPlaceholder = NSAttributedString(string: currentPasswordText, attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
-            currentPasswordTextField = UITextField()
-            view.addSubview(currentPasswordTextField)
-            currentPasswordTextField.snp.makeConstraints { (make) in
-                make.size.equalTo(newEmailTextField.snp.size)
-                make.centerX.equalToSuperview()
-                make.topMargin.equalTo(passwordLabel.snp.bottomMargin).offset(40)
-            }
-            currentPasswordTextField.textColor = UIColor.black
-            currentPasswordTextField.borderStyle = UITextBorderStyle.roundedRect
-            currentPasswordTextField.attributedPlaceholder = currentPasswordPlaceholder
-            currentPasswordTextField.textAlignment = .center
-            currentPasswordTextField.clearsOnBeginEditing = true
-            currentPasswordTextField.isSecureTextEntry = true
-            
-            let newPasswordText: String = "Enter new password"
-            let newPasswordPlaceholder = NSAttributedString(string: newPasswordText, attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
-            newPasswordTextField = UITextField()
-            view.addSubview(newPasswordTextField)
-            newPasswordTextField.snp.makeConstraints { (make) in
-                make.size.equalTo(newEmailTextField.snp.size)
-                make.centerX.equalToSuperview()
-                make.topMargin.equalTo(currentPasswordTextField.snp.bottomMargin).offset(30)
-            }
-            newPasswordTextField.textColor = UIColor.black
-            newPasswordTextField.borderStyle = UITextBorderStyle.roundedRect
-            newPasswordTextField.attributedPlaceholder = newPasswordPlaceholder
-            newPasswordTextField.textAlignment = .center
-            newPasswordTextField.clearsOnBeginEditing = true
-            newPasswordTextField.isSecureTextEntry = true
-            
-            let confirmNewPasswordText = "Confirm new password"
-            let confirmNewPasswordPlaceholder = NSAttributedString(string: confirmNewPasswordText, attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
-            confirmNewPasswordTextField = UITextField()
-            view.addSubview(confirmNewPasswordTextField)
-            confirmNewPasswordTextField.snp.makeConstraints { (make) in
-                make.size.equalTo(newEmailTextField.snp.size)
-                make.centerX.equalToSuperview()
-                make.topMargin.equalTo(newPasswordTextField.snp.bottomMargin).offset(30)
-            }
-            confirmNewPasswordTextField.textColor = UIColor.black
-            confirmNewPasswordTextField.borderStyle = UITextBorderStyle.roundedRect
-            confirmNewPasswordTextField.attributedPlaceholder = confirmNewPasswordPlaceholder
-            confirmNewPasswordTextField.textAlignment = .center
-            confirmNewPasswordTextField.clearsOnBeginEditing = true
-            confirmNewPasswordTextField.isSecureTextEntry = true
-            
-            changePasswordButton = UIButton()
-            view.addSubview(changePasswordButton)
-            changePasswordButton.snp.makeConstraints { (make) in
-                make.size.equalTo(changeEmailButton.snp.size)
-                make.centerX.equalToSuperview()
-                make.topMargin.equalTo(confirmNewPasswordTextField.snp.bottomMargin).offset(20)
-            }
-            changePasswordButton.setTitle("Submit", for: .normal)
-            changePasswordButton.titleLabel?.textColor = UIColor.white
-            changePasswordButton.addTarget(self, action: #selector(changePasswordButtonTapped), for: .touchUpInside)
-            changePasswordButton.isEnabled = false
-            
-            logoutButton = UIButton()
-            view.addSubview(logoutButton)
-            logoutButton.snp.makeConstraints { (make) in
-                make.size.equalTo(changeEmailButton.snp.size)
-                make.centerX.equalToSuperview()
-                make.topMargin.equalTo(changePasswordButton.snp.bottomMargin).offset(40)
-            }
-            logoutButton.setTitle("Log out", for: .normal)
-            logoutButton.titleLabel?.textColor = UIColor.white
-            
-            logoutButton.addTarget(self, action: #selector(self.logout), for: .touchUpInside)
-            
-            forgotPasswordButton = UIButton()
-            view.addSubview(forgotPasswordButton)
-            forgotPasswordButton.snp.makeConstraints { (make) in
-                make.size.equalTo(changeEmailButton.snp.size)
-                make.centerX.equalToSuperview()
-                make.topMargin.equalTo(logoutButton.snp.bottomMargin).offset(5)
-            }
-            forgotPasswordButton.setTitle("Forgot password?", for: .normal)
-            forgotPasswordButton.titleLabel?.textColor = UIColor.white
-            forgotPasswordButton.addTarget(self, action: #selector(self.logout), for: .touchUpInside)
-            
-            for textField in textFields {
-                textField.delegate = self
-            }
+        }
+        
+        let changeEmailPasswordText: String = "Enter current password"
+        let changeEmailPasswordTextPlaceholder = NSAttributedString(string: changeEmailPasswordText, attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
+        changeEmailPasswordTextField = UITextField()
+        view.addSubview(changeEmailPasswordTextField)
+        changeEmailPasswordTextField.snp.makeConstraints { (make) in
+            make.height.equalTo(50)
+            make.width.equalToSuperview().multipliedBy(0.6)
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(emailLabel.snp.bottomMargin).offset(20)
+        }
+        changeEmailPasswordTextField.textColor = UIColor.black
+        changeEmailPasswordTextField.borderStyle = UITextBorderStyle.roundedRect
+        changeEmailPasswordTextField.attributedPlaceholder = changeEmailPasswordTextPlaceholder
+        changeEmailPasswordTextField.textAlignment = .center
+        changeEmailPasswordTextField.clearsOnBeginEditing = true
+        
+        let newEmailText: String = "Enter new email address"
+        let newEmailPlaceholder = NSAttributedString(string: newEmailText, attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
+        newEmailTextField = UITextField()
+        view.addSubview(newEmailTextField)
+        newEmailTextField.snp.makeConstraints { (make) in
+            make.height.equalTo(50)
+            make.width.equalToSuperview().multipliedBy(0.6)
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(changeEmailPasswordTextField.snp.bottomMargin).offset(30)
+        }
+        newEmailTextField.textColor = UIColor.black
+        newEmailTextField.borderStyle = UITextBorderStyle.roundedRect
+        newEmailTextField.attributedPlaceholder = newEmailPlaceholder
+        newEmailTextField.textAlignment = .center
+        newEmailTextField.clearsOnBeginEditing = true
+        
+        changeEmailButton = UIButton()
+        view.addSubview(changeEmailButton)
+        changeEmailButton.snp.makeConstraints { (make) in
+            make.width.equalToSuperview().dividedBy(2)
+            make.height.equalTo(newEmailTextField.snp.height).offset(-5)
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(newEmailTextField.snp.bottomMargin).offset(20)
+        }
+        changeEmailButton.setTitle("Submit", for: .normal)
+        changeEmailButton.titleLabel?.textColor = UIColor.white
+        changeEmailButton.addTarget(self, action: #selector(changeEmailButtonTapped), for: .touchUpInside)
+        changeEmailButton.isEnabled = false
+        
+        let passwordLabel = UILabel()
+        view.addSubview(passwordLabel)
+        passwordLabel.snp.makeConstraints { (make) in
+            make.size.equalTo(emailLabel.snp.size)
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(changeEmailButton.snp.bottomMargin).offset(20)
+        }
+        passwordLabel.text = "Change password"
+        passwordLabel.textColor = UIColor.white
+        passwordLabel.textAlignment = .center
+        passwordLabel.font = UIFont(name: Font.nameForCard, size: 60)
+        
+        let currentPasswordText: String = "Enter current password"
+        let currentPasswordPlaceholder = NSAttributedString(string: currentPasswordText, attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
+        currentPasswordTextField = UITextField()
+        view.addSubview(currentPasswordTextField)
+        currentPasswordTextField.snp.makeConstraints { (make) in
+            make.size.equalTo(newEmailTextField.snp.size)
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(passwordLabel.snp.bottomMargin).offset(20)
+        }
+        currentPasswordTextField.textColor = UIColor.black
+        currentPasswordTextField.borderStyle = UITextBorderStyle.roundedRect
+        currentPasswordTextField.attributedPlaceholder = currentPasswordPlaceholder
+        currentPasswordTextField.textAlignment = .center
+        currentPasswordTextField.clearsOnBeginEditing = true
+        currentPasswordTextField.isSecureTextEntry = true
+        
+        let newPasswordText: String = "Enter new password"
+        let newPasswordPlaceholder = NSAttributedString(string: newPasswordText, attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
+        newPasswordTextField = UITextField()
+        view.addSubview(newPasswordTextField)
+        newPasswordTextField.snp.makeConstraints { (make) in
+            make.size.equalTo(newEmailTextField.snp.size)
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(currentPasswordTextField.snp.bottomMargin).offset(30)
+        }
+        newPasswordTextField.textColor = UIColor.black
+        newPasswordTextField.borderStyle = UITextBorderStyle.roundedRect
+        newPasswordTextField.attributedPlaceholder = newPasswordPlaceholder
+        newPasswordTextField.textAlignment = .center
+        newPasswordTextField.clearsOnBeginEditing = true
+        newPasswordTextField.isSecureTextEntry = true
+        
+        let confirmNewPasswordText = "Confirm new password"
+        let confirmNewPasswordPlaceholder = NSAttributedString(string: confirmNewPasswordText, attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
+        confirmNewPasswordTextField = UITextField()
+        view.addSubview(confirmNewPasswordTextField)
+        confirmNewPasswordTextField.snp.makeConstraints { (make) in
+            make.size.equalTo(newEmailTextField.snp.size)
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(newPasswordTextField.snp.bottomMargin).offset(30)
+        }
+        confirmNewPasswordTextField.textColor = UIColor.black
+        confirmNewPasswordTextField.borderStyle = UITextBorderStyle.roundedRect
+        confirmNewPasswordTextField.attributedPlaceholder = confirmNewPasswordPlaceholder
+        confirmNewPasswordTextField.textAlignment = .center
+        confirmNewPasswordTextField.clearsOnBeginEditing = true
+        confirmNewPasswordTextField.isSecureTextEntry = true
+        
+        changePasswordButton = UIButton()
+        view.addSubview(changePasswordButton)
+        changePasswordButton.snp.makeConstraints { (make) in
+            make.size.equalTo(changeEmailButton.snp.size)
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(confirmNewPasswordTextField.snp.bottomMargin).offset(20)
+        }
+        changePasswordButton.setTitle("Submit", for: .normal)
+        changePasswordButton.titleLabel?.textColor = UIColor.white
+        changePasswordButton.addTarget(self, action: #selector(changePasswordButtonTapped), for: .touchUpInside)
+        changePasswordButton.isEnabled = false
+        
+        logoutButton = UIButton()
+        view.addSubview(logoutButton)
+        logoutButton.snp.makeConstraints { (make) in
+            make.size.equalTo(changeEmailButton.snp.size)
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(changePasswordButton.snp.bottomMargin).offset(40)
+        }
+        logoutButton.setTitle("Log out", for: .normal)
+        logoutButton.titleLabel?.textColor = UIColor.white
+        
+        logoutButton.addTarget(self, action: #selector(self.logout), for: .touchUpInside)
+        
+        forgotPasswordButton = UIButton()
+        view.addSubview(forgotPasswordButton)
+        forgotPasswordButton.snp.makeConstraints { (make) in
+            make.size.equalTo(changeEmailButton.snp.size)
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(logoutButton.snp.bottomMargin).offset(5)
+        }
+        forgotPasswordButton.setTitle("Forgot password?", for: .normal)
+        forgotPasswordButton.titleLabel?.textColor = UIColor.white
+        forgotPasswordButton.addTarget(self, action: #selector(self.logout), for: .touchUpInside)
+        
+        for textField in textFields {
+            textField.delegate = self
         }
     }
     
@@ -314,44 +333,44 @@ extension SettingsViewController: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         switch textField {
+        case changeEmailPasswordTextField:
+            print("in change email password case")
+            isEmailPasswordValid = validateCurrentPassword(text: textField.text!)
+            if isEmailPasswordValid {
+                emailPassword = textField.text!
+            }
+            checkIfChangeEmailFieldsValid()
+            break
         case newEmailTextField:
-            //            if !validateEmail(text: newEmailTextField.text!){
-            //                isEmailValid = false
-            //            }
-            //            else{
-            //                isEmailValid = true
-            //            }
-            print("in case new email")
-            validateEmail(text: textField.text!)
+            isEmailValid = validateEmail(text: textField.text!)
+            checkIfChangeEmailFieldsValid()
             break
         case currentPasswordTextField:
-            print("in case current password")
-            isCurrentPasswordValid = validateCurrentPassword(password: textField.text!)
+            isCurrentPasswordValid = validateCurrentPassword(text: textField.text!)
+            checkIfPasswordFieldsValid()
             break
         case newPasswordTextField:
-            print("in case new password")
             if !validateNewPassword(text: textField.text!){
                 isPasswordValid = false
             }
             else{
                 isPasswordValid = true
             }
+            checkIfPasswordFieldsValid()
             break
         case confirmNewPasswordTextField:
-            print("in case confirm new password")
             if !validatePasswordConfirm(text: textField.text!){
                 isConfirmPasswordValid = false
             }
             else{
                 isConfirmPasswordValid = true
             }
+            checkIfPasswordFieldsValid()
             break
         default:
             break
         }
-
     }
-    
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         switch textField {
@@ -372,23 +391,24 @@ extension SettingsViewController: UITextFieldDelegate {
 
 extension SettingsViewController {
     
-    func validateEmail(text: String) {
+    func validateEmail(text: String) -> Bool {
         if !(text.characters.count > 0) {
             //show cannot be empty error
-            changeEmailButton.isEnabled = false
             print("Email cannot be empty!")
+            return false
         }
         if text.contains("@") && text.contains(".") {
             email = text
-            changeEmailButton.isEnabled = true
+            return true
         }
         else {
-            changeEmailButton.isEnabled = false
+            print("Invalid email")
+            return false
         }
     }
     
-    func validateCurrentPassword(password: String) -> Bool {
-        if !(password.characters.count > 0) {
+    func validateCurrentPassword(text: String) -> Bool {
+        if !(text.characters.count > 0) {
             //show cannot be empty error
             print("Current password cannot be empty")
             return false
@@ -397,7 +417,7 @@ extension SettingsViewController {
     }
     
     func validateNewPassword(text: String) -> Bool {
-        if !(password!.characters.count > 0) {
+        if !(text.characters.count > 0) {
             //show cannot be empty error
             print("New password cannot by empty")
         }
@@ -409,7 +429,7 @@ extension SettingsViewController {
     }
     
     func validatePasswordConfirm(text: String) -> Bool {
-        if !(password!.characters.count > 0) {
+        if !(text.characters.count > 0) {
             print("Confirm password cannot be empty!")
             //show cannot be empty error
             return false
@@ -431,47 +451,71 @@ extension SettingsViewController {
         }
     }
     
+    func checkIfChangeEmailFieldsValid() {
+        if isEmailValid && isEmailPasswordValid {
+            print("change email button enabled")
+            changeEmailButton.isEnabled = true
+        }
+        else {
+            print("change email button disabled")
+            changeEmailButton.isEnabled = false
+        }
+    }
+    
     //call this function when submit button for password is clicked
     func attemptPasswordChange() {
-        if let password = password, password.characters.count > 0{
+        let credential = FIREmailPasswordAuthProvider.credential(withEmail: (currentUser?.email)!, password: password!)
+        currentUser?.reauthenticate(with: credential, completion: { (error) in
+            if error != nil {
+                print("Reauth failed!!")
+                //display invalid authentication error
+            }
+            else { //attempt to change password
+                self.currentUser?.updatePassword(self.newPasswordTextField.text!, completion: { (error) in
+                    if error != nil {
+                        //show change password error
+                        print("Failed to update password!")
+                    }
+                    else {
+                        //show success error
+                        print("Password update success!")
+                    }
+                })
+            }
+        })
+    }
+    
+    func attemptEmailChange() {
+        if let email = email, let password = emailPassword {
+            print("current user email is \(FIRAuth.auth()?.currentUser?.email)")
             let credential = FIREmailPasswordAuthProvider.credential(withEmail: (currentUser?.email)!, password: password)
             currentUser?.reauthenticate(with: credential, completion: { (error) in
                 if error != nil {
-                    //display invalid authentication error
+                    print("Firebase auth error \(error?.localizedDescription)")
                 }
-                else { //attempt to change password
-                    self.currentUser?.updatePassword(self.newPasswordTextField.text!, completion: { (error) in
-                        if error != nil {
-                            //show change password error
-                            print("Failed to update password!")
+                else {
+                    self.currentUser?.updateEmail(email, completion: { (error) in
+                        if let error = error {
+                            print("Unable to change email")
+                            switch error {
+                            case FIRAuthErrorCode.errorCodeEmailAlreadyInUse:
+                                print("email already in use")
+                            case FIRAuthErrorCode.errorCodeInvalidEmail:
+                                print("email is invalid")
+                            default:
+                                print("Error changing email \(error.localizedDescription)")
+                            }
                         }
                         else {
-                            //show success error
-                            print("Password update success!")
+                            print("Successfully changed email!")
+                            //show email success
                         }
                     })
                 }
             })
         }
-        else{
-            //display no password entered error
-            print("No password entered!")
-        }
-        
-    }
-    
-    func attemptEmailChange() {
-        if let email = email {
-            currentUser?.updateEmail(email, completion: { (error) in
-                if error != nil {
-                    print("Unable to change email")
-                    //show change email error
-                }
-                else {
-                    print("Successfully changed email!")
-                    //show email success
-                }
-            })
+        else {
+            print("email or password is nil")
         }
     }
 
