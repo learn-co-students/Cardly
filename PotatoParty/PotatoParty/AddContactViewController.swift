@@ -10,6 +10,8 @@ import UIKit
 import FirebaseDatabase
 import Contacts
 import ContactsUI
+import Whisper
+
 
 class AddContactViewController: UIViewController, CNContactViewControllerDelegate, CNContactPickerDelegate, UITextFieldDelegate, UICollectionViewDelegate  {
     let uid = User.shared.uid
@@ -81,25 +83,26 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
             let lastName = contact.familyName
             
             let appContact = Contact(fullName: firstName + lastName, email: emailAddress, phone: phoneNumber)
-
+            
             
             let contactsRef = FIRDatabase.database().reference(withPath: "contacts")
             let userContactsRef = contactsRef.child("\(uid)/all/")
             let contactItemRef = userContactsRef.childByAutoId()
             contactItemRef.setValue(appContact.toAny())
-         
+            
             let groupsRef = FIRDatabase.database().reference(withPath: "groups")
             let groupsUserRef = groupsRef.child("\(uid)/all/")
             let groupItemRef = groupsUserRef.child(contactItemRef.key)
             groupItemRef.setValue(appContact.toAny())
             
-
+            
         }
         let destVC = ContactsViewController()
         navigationController?.pushViewController(destVC, animated: true)
         
+        showImportContactSuccessNotification()  
     }
-
+    
     
     func contactPickerDidCancel(_ picker: CNContactPickerViewController) {
         print("Cancel Contact Picker")
@@ -139,13 +142,13 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     
     func addButtonTapped() {
         
-//        let validPhone = validate(phoneTextField: phoneTextField)
-//        let validName = validate(nameTextField: nameTextField)
-//        let validEmail = validate(emailTextField: emailTextField)
+        //        let validPhone = validate(phoneTextField: phoneTextField)
+        //        let validName = validate(nameTextField: nameTextField)
+        //        let validEmail = validate(emailTextField: emailTextField)
         guard validCheck() else { return }
         
         guard let email = emailTextField.text, let name = nameTextField.text, let phone = phoneTextField.text else { return }
-//        let contact = Contact(fullName: name, email: email, phone: phone)
+        //        let contact = Contact(fullName: name, email: email, phone: phone)
         let contact = Contact(fullName: name, email: email, phone: phone, group_key: groupSelected)
         
         // Add to contacts bucket
@@ -180,62 +183,63 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
             groupContactsRef.setValue(contact.toAny())
             
         }
+        showContactSuccessNotification(name: contact.fullName)
     }
     
     //Validating Fields
     
-        func validateEmail(email: String) -> Bool {
-            let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}"
-            return NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: email)
-        }
+    func validateEmail(email: String) -> Bool {
+        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}"
+        return NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: email)
+    }
     
-        func validatePhone(phone: String) -> Bool {
-            let characterArray = [Character](phone.characters)
-            return characterArray.count == 10
-        }
+    func validatePhone(phone: String) -> Bool {
+        let characterArray = [Character](phone.characters)
+        return characterArray.count == 10
+    }
     
-        func validateName(name: String) -> Bool {
-            return name.characters.count >= 1
-        }
+    func validateName(name: String) -> Bool {
+        return name.characters.count >= 1
+    }
     
-        func textFieldDidEndEditing(_ textField: UITextField) {
-    
-            switch textField {
-            case phoneTextField:
-                if validatePhone(phone: phoneTextField.text!){
-                    if validCheck() {
-                        enableAddButton()
-                    }
-                    print("valid phone")
-                } else {
-                    print("not valid phone")
-                    shake(textfield: phoneTextField)
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        
+        switch textField {
+        case phoneTextField:
+            if validatePhone(phone: phoneTextField.text!){
+                if validCheck() {
+                    enableAddButton()
                 }
-            case emailTextField:
-                if validateEmail(email: emailTextField.text!) {
-                    print("Valid Email")
-                    if validCheck() {
-                        enableAddButton()
-                    }
-                } else {
-                    shake(textfield: emailTextField)
-                    print ("non valid email")
-                }
-            case nameTextField:
-                if validateName(name: nameTextField.text!){
-                    if validCheck() {
-                        enableAddButton()
-                    }
-                    print("valid name")
-                } else {
-                    shake(textfield: nameTextField)
-                    print("enter your name")
-                }
-            default:
-                return
+                print("valid phone")
+            } else {
+                print("not valid phone")
+                shake(textfield: phoneTextField)
             }
-    
+        case emailTextField:
+            if validateEmail(email: emailTextField.text!) {
+                print("Valid Email")
+                if validCheck() {
+                    enableAddButton()
+                }
+            } else {
+                shake(textfield: emailTextField)
+                print ("non valid email")
+            }
+        case nameTextField:
+            if validateName(name: nameTextField.text!){
+                if validCheck() {
+                    enableAddButton()
+                }
+                print("valid name")
+            } else {
+                shake(textfield: nameTextField)
+                print("enter your name")
+            }
+        default:
+            return
         }
+        
+    }
     
     func validCheck() -> Bool {
         return validateName(name: nameTextField.text!) && validatePhone(phone: phoneTextField.text!) && validateEmail(email: emailTextField.text!)
@@ -254,4 +258,37 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         textfield.layer.add(animation, forKey: "shake")
         
     }
+    
+    // Using Whipser for user notification of successfully added contact
+    
+    func showContactSuccessNotification(name: String) {
+    
+        var murmur = Murmur(title: "\(name) added successfully.")
+       
+        murmur.titleColor = UIColor.black
+        murmur.backgroundColor = UIColor.cyan
+        
+        let whistleAction = WhistleAction.show(2.0)
+        
+        Whisper.show(whistle: murmur, action: whistleAction)
+
+    }
+    
+    func showImportContactSuccessNotification () {
+        var murmur = Murmur(title: "Contacts imported successfully.")
+        
+        murmur.titleColor = UIColor.black
+        murmur.backgroundColor = UIColor.cyan
+        
+        let whistleAction = WhistleAction.show(2.0)
+        
+        Whisper.show(whistle: murmur, action: whistleAction)
+    }
+    
+    
+    
+    
+    
+    
+    
 }

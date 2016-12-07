@@ -48,6 +48,7 @@ PODS:
   - GTMSessionFetcher/Core (1.1.7)
   - MBProgressHUD (1.0.0)
   - SnapKit (3.0.2)
+  - Whisper (4.0.0)
 
 DEPENDENCIES:
   - Firebase
@@ -57,6 +58,7 @@ DEPENDENCIES:
   - Firebase/Storage
   - MBProgressHUD (~> 1.0)
   - SnapKit (~> 3.0)
+  - Whisper
 
 SPEC CHECKSUMS:
   Firebase: fdbecadb7b5cbef2774852d4fa659b9daf11f2af
@@ -72,7 +74,8 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: a1f8ed39e4fe21c68957daed472c7afbcdf29166
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   SnapKit: 2e456761aa92d4d4067a7a5594c18769d451a8ad
+  Whisper: 08be92623311f8e53201e62e17f6d7b9599a4714
 
-PODFILE CHECKSUM: 78f0892d6dc1ecb0d061a5939d108883f4b1b9ac
+PODFILE CHECKSUM: 6cacf304c9f9d5a5aaed42e4f832385b188142f6
 
-COCOAPODS: 1.1.0.rc.3
+COCOAPODS: 1.1.1
