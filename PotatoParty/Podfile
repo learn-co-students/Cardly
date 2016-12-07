@@ -13,6 +13,7 @@ target 'PotatoParty' do
   pod 'Firebase/Storage'
   pod 'SnapKit', '~> 3.0'
   pod 'MBProgressHUD', '~> 1.0'
+  pod 'Whisper'
   # pod 'GuillotineMenu', '~> 3.0'
 
 end

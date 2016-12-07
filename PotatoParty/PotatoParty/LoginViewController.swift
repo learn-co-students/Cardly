@@ -112,6 +112,46 @@ extension LoginViewController {
         })
     }
     
+    func forgotPasswordButtonTapped() {
+        
+        let alertController = UIAlertController(title: "Enter E-Mail", message: "We'll send you a password reset e-mail", preferredStyle: .alert)
+       
+        let submitAction = UIAlertAction(title: "Send", style: .default) { (action) in
+            let emailField = alertController.textFields![0]
+            if let email = emailField.text {
+                
+                FIRAuth.auth()?.sendPasswordReset(withEmail: email, completion: { (error) in
+                    // Handle error
+                    if let error = error {
+                        
+                        let alertController = UIAlertController(title: "Error", message: "\(error.localizedDescription)", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "Ok", style: .default, handler: { (action) in
+                            self.dismiss(animated: true, completion: nil)
+                        })
+                        alertController.addAction(okAction)
+                        self.present(alertController, animated: true, completion: nil)
+                    // Success
+                    } else {
+                        CustomNotification.show("Password reset e-mail sent")
+                    }
+                })
+            }
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default) { (action) in
+            self.dismiss(animated: true, completion: nil)
+        }
+        
+        alertController.addAction(submitAction)
+        alertController.addAction(cancelAction)
+        alertController.addTextField { (textfield) in
+            textfield.placeholder = "Enter E-mail"
+        }
+
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    
     func dismissKeyboard() {
         view.endEditing(true)
     }
@@ -130,4 +170,3 @@ extension LoginViewController {
     }
 
 }
-

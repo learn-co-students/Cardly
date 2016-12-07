@@ -35,6 +35,7 @@ extension LoginViewController {
         }
 
         passwordTextfield.placeholder = "Password"
+        passwordTextfield.isSecureTextEntry = true
         passwordTextfield.backgroundColor = UIColor.cyan
         passwordTextfield.textAlignment = .center
         passwordTextfield.autocapitalizationType = UITextAutocapitalizationType.none
@@ -71,6 +72,7 @@ extension LoginViewController {
         }
         forgotPasswordButton.setTitle("Forgot password?", for: .normal)
         forgotPasswordButton.backgroundColor = UIColor.blue
+        forgotPasswordButton.addTarget(self, action: #selector(self.forgotPasswordButtonTapped), for: .touchUpInside)
         
     }
 
