@@ -186,7 +186,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     
     func setUpView() {
         
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = UIColor.init(patternImage: #imageLiteral(resourceName: "loginScreenBackground"))
         
         view.addSubview(emailTextField)
         emailTextField.snp.makeConstraints { (make) in
