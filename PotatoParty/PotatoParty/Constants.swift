@@ -15,8 +15,10 @@ struct Styles {
 }
 
 struct Font {
-    static let name = "Helvetica Neue UltraLight"
+    static let name = "Raleway-Regular"
     static let nameForCard = "Qwigley-Regular"
+    static let fancy = "Distant_Stroke_Medium.ttf"
+    
     
     struct Size {
         static let xs: CGFloat = 8
@@ -35,6 +37,25 @@ struct Colors {
     static let cardlyBlue = UIColor(red:0.44, green:0.89, blue:0.89, alpha:1.0)
     static let cardlyGold = UIColor(red:0.92, green:0.87, blue:0.71, alpha:1.0)
     static let cardlyGrey = UIColor(white:0.29, alpha:1.0)
+}
+
+struct Backgrounds {
+    static let loginScreenBackGround = UIImage(named: "loginScreenBackground")
+    static let divider = UIImage(named: "line")
+}
+
+struct Icons {
+    static let addContactButton = UIImage(named: "addContactIcon")
+    static let backButton = UIImage(named: "backIcon")
+    static let editGroupsButton = UIImage(named: "editGroupsIcon")
+    static let groupDropDownButton = UIImage(named: "groupDropDownIcon")
+    static let settingsButton = UIImage(named: "settingsIcon")
+    static let leftArrow = UIImage(named: "leftArrowIcon")
+    static let rightArrow = UIImage(named: "rightArrowIcon")
+    static let planeIcon = UIImage(named: "planeIcon")
+    static let recordVideoButton = UIImage(named: "recordVideoIcon")
+    static let selectAllContactsButton = UIImage(named: "selectAllIcon")
+    static let deleteButton = UIImage(named: "trashIcon")
 }
 
 struct CustomNotification {
