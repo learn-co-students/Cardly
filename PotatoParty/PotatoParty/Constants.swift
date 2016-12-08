@@ -59,7 +59,7 @@ struct Icons {
 }
 
 struct IconSize {
-    static let standardIconSize = // width height
+   // static let standardIconSize = 
 }
 
 struct CustomNotification {
