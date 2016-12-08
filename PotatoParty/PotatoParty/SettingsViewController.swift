@@ -82,7 +82,7 @@ class SettingsViewController: UIViewController {
         titleLabel.text = "Settings"
         titleLabel.textColor = UIColor.white
         titleLabel.textAlignment = .center
-        titleLabel.font = UIFont(name: Font.regular, size: Font.Size.xxl)
+        titleLabel.font = UIFont(name: Font.fancy, size: Font.Size.viewTitle)
         titleLabel.layer.shadowColor = UIColor.black.cgColor
         titleLabel.layer.shadowOffset = CGSize(width: 2, height: 2)
         titleLabel.layer.shadowRadius = 0
@@ -102,7 +102,7 @@ class SettingsViewController: UIViewController {
         emailLabel.sizeToFit()
         emailLabel.snp.makeConstraints { (make) in
             make.leadingMargin.equalToSuperview()
-            make.topMargin.equalTo(titleLabel.snp.bottomMargin).offset(40)
+            make.topMargin.equalTo(titleLabel.snp.bottomMargin).offset(20)
         }
         
         changeEmailPasswordTextField = UITextField()

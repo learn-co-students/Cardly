@@ -15,12 +15,16 @@ import FirebaseAuth
 
 class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     
+    //UI Elements
+    
     var emailTextField = UITextField()
     var passwordTextField = UITextField()
+    var confirmPasswordTextField = UITextField()
     var submitButton = UIButton()
     var cancelButton = UIButton()
     
     //Constraints Constants
+    
     let textFieldToSuperviewWidthMultiplier = 0.6
     let textFieldToSuperviewHeightMultiplier = 0.25
     let emailTextFieldTopOffset = 250
@@ -29,12 +33,14 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     let submitButtonToTextFieldHeightMultiplier = 0.5
     let submitButtonTopOffset = 30
     
-    //validating Email
+    //Validating Email Constants
     
     var email: String? = nil
     var password: String? = nil
+    var confirmPassword: String? = nil
     var isEmailValid: Bool = false
     var isPasswordValid: Bool = false
+    var isConfirmPasswordValid: Bool = false
     
     
     
@@ -43,6 +49,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
         setUpView()
         emailTextField.delegate = self
         passwordTextField.delegate = self
+        confirmPasswordTextField.delegate = self
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
         
@@ -86,7 +93,14 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
                 isPasswordValid = true
             }
             break
-            
+        case confirmPasswordTextField:
+            if !validatePasswordConfirm(text: textField.text!){
+                isConfirmPasswordValid = false
+            }
+            else{
+                isConfirmPasswordValid = true
+            }
+            break
         default:
             break
         }
@@ -109,6 +123,17 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     
     func submitButtonTapped() {
         print("submit button tapped")
+        if checkIfPasswordFieldsValid() && checkIfChangeEmailFieldValid() {
+            createUserAccount()
+        } else {
+            DispatchQueue.main.async {
+                CustomNotification.showError(SettingsErrorMessage.changeEmailFieldsNotCorrect)
+            }
+            
+        }
+    }
+    
+    func createUserAccount() {
         if let unwrappedEmail = emailTextField.text, let unwrappedPassword = passwordTextField.text {
             FIRAuth.auth()!.createUser(withEmail: unwrappedEmail, password: unwrappedPassword, completion: { (user, error) in
                 if error == nil {
@@ -137,8 +162,8 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
                 }
             })
         }
+        
     }
-    
     
     func firebaseSignIn(user: String, password: String) {
         FIRAuth.auth()!.signIn(withEmail: user, password: password, completion: { (user, error) in
@@ -189,14 +214,29 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
         passwordTextField.backgroundColor = UIColor.cyan
         passwordTextField.textAlignment = .center
         passwordTextField.autocapitalizationType = UITextAutocapitalizationType.none
+        passwordTextField.isSecureTextEntry = true
+        
+        view.addSubview(confirmPasswordTextField)
+        confirmPasswordTextField.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(passwordTextField.snp.bottomMargin).offset(passwordTextFieldTopOffset)
+            make.width.equalTo(passwordTextField)
+            make.height.equalTo(passwordTextField)
+        }
+        
+        confirmPasswordTextField.placeholder = "confirm password"
+        confirmPasswordTextField.backgroundColor = UIColor.cyan
+        confirmPasswordTextField.textAlignment = .center
+        confirmPasswordTextField.autocapitalizationType = UITextAutocapitalizationType.none
+        confirmPasswordTextField.isSecureTextEntry = true
         
         
         view.addSubview(submitButton)
         submitButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview().offset(50)
-            make.topMargin.equalTo(passwordTextField.snp.bottomMargin).offset(submitButtonTopOffset)
-            make.width.equalTo(passwordTextField.snp.width).multipliedBy(submitButtonToTextFieldWidthMultipier)
-            make.height.equalTo(passwordTextField.snp.height).multipliedBy(submitButtonToTextFieldHeightMultiplier)
+            make.topMargin.equalTo(confirmPasswordTextField.snp.bottomMargin).offset(submitButtonTopOffset)
+            make.width.equalTo(confirmPasswordTextField.snp.width).multipliedBy(submitButtonToTextFieldWidthMultipier)
+            make.height.equalTo(confirmPasswordTextField.snp.height).multipliedBy(submitButtonToTextFieldHeightMultiplier)
         }
         
         submitButton.setTitle("Submit", for: .normal)
@@ -206,7 +246,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
         view.addSubview(cancelButton)
         cancelButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview().offset(-50)
-            make.topMargin.equalTo(passwordTextField.snp.bottomMargin).offset(submitButtonTopOffset)
+            make.topMargin.equalTo(confirmPasswordTextField.snp.bottomMargin).offset(submitButtonTopOffset)
             make.width.equalTo(submitButton)
             make.height.equalTo(submitButton)
         }
@@ -245,7 +285,38 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
         CustomNotification.showError(SettingsErrorMessage.passwordLength)
         return false
     }
-   
+    
+    func validatePasswordConfirm(text: String) -> Bool {
+        if !(text.characters.count > 0) {
+            CustomNotification.showError(SettingsErrorMessage.confirmPasswordEmpty)
+            return false
+        }
+        if let password = password {
+            let isMatch = text == password
+            if !isMatch {
+                CustomNotification.showError(SettingsErrorMessage.confirmPasswordMatch)
+            }
+            return isMatch
+        }
+        return false
+    }
+    
+    func checkIfPasswordFieldsValid() -> Bool{
+        if isPasswordValid && isConfirmPasswordValid {
+            return true
+        }
+        CustomNotification.showError(SettingsErrorMessage.changePasswordFieldsNotCorrect)
+        return false
+    }
+    
+    func checkIfChangeEmailFieldValid() -> Bool {
+        if isEmailValid {
+            return true
+        }
+        CustomNotification.showError(SettingsErrorMessage.changeEmailFieldsNotCorrect)
+        return false
+    }
+    
 }
 
 extension CreateAccountViewController {
