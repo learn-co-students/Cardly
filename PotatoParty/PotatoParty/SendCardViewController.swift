@@ -64,6 +64,10 @@ class SendCardViewController: UIViewController {
         
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        player.replaceCurrentItem(with: nil)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
