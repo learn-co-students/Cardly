@@ -110,12 +110,13 @@ extension EditCardViewController {
             make.centerY.equalToSuperview()
         }
         spinnerActivity.mode = .determinateHorizontalBar
-        spinnerActivity.label.text = "Processing image ...";
+        spinnerActivity.label.text = "Processing video ...";
         spinnerActivity.isUserInteractionEnabled = false;
     }
     
     func startActivityIndicator() {
         DispatchQueue.main.async {
+            UIApplication.shared.beginIgnoringInteractionEvents()
             self.spinnerActivity.show(animated: true)
         }
     }
@@ -123,6 +124,7 @@ extension EditCardViewController {
     func stopActivityIndicator() {
         DispatchQueue.main.async {
             self.spinnerActivity.hide(animated: true)
+            UIApplication.shared.endIgnoringInteractionEvents()
         }
     }
     

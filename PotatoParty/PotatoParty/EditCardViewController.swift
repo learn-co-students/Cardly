@@ -456,20 +456,20 @@ extension EditCardViewController {
     func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             let keyboardHeight = keyboardSize.height
-            if bottomTextField.isEditing{
-                saveButton.isEnabled = false
+            if bottomTextField.isEditing {
                 self.view.window?.frame.origin.y = -1 * keyboardHeight
             }
         }
+        saveButton.isEnabled = false
     }
     
     func keyboardWillHide(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             let keyboardHeight = keyboardSize.height
             if self.view.window?.frame.origin.y != 0 {
-                saveButton.isEnabled = true
                 self.view.window?.frame.origin.y += keyboardHeight
             }
         }
+        saveButton.isEnabled = true
     }
 }

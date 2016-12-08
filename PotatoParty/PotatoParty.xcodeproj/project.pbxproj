@@ -46,6 +46,7 @@
 		E49BA3A71DE3443B0010A7A4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49BA3A61DE3443A0010A7A4 /* Constants.swift */; };
 		E4ED56171DDD3C6700EB97D4 /* BottomNavBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4ED56161DDD3C6700EB97D4 /* BottomNavBarView.swift */; };
 		F30919EC1DDE147800479633 /* AddContactViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30919EB1DDE147800479633 /* AddContactViewControllerExtension.swift */; };
+		F31EDE481DF898E80054CAD6 /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31EDE471DF898E80054CAD6 /* CreateAccountViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -93,6 +94,7 @@
 		E49BA3A61DE3443A0010A7A4 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		E4ED56161DDD3C6700EB97D4 /* BottomNavBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomNavBarView.swift; sourceTree = "<group>"; };
 		F30919EB1DDE147800479633 /* AddContactViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddContactViewControllerExtension.swift; sourceTree = "<group>"; };
+		F31EDE471DF898E80054CAD6 /* CreateAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,6 +154,7 @@
 			children = (
 				3182D5211DEF72990090AB2E /* AddContactViewController.swift */,
 				3182D5131DEF706B0090AB2E /* ContactsViewController.swift */,
+				F31EDE471DF898E80054CAD6 /* CreateAccountViewController.swift */,
 				3182D5141DEF706B0090AB2E /* EditCardViewController.swift */,
 				3182D5171DEF706B0090AB2E /* SendCardViewController.swift */,
 				3182D5181DEF706B0090AB2E /* SettingsViewController.swift */,
@@ -390,6 +393,7 @@
 				3182D5191DEF706B0090AB2E /* ContactsViewController.swift in Sources */,
 				E4974AF01DDE1C3700698B81 /* ContactsCollectionViewCell.swift in Sources */,
 				3F0BE6891DDCB1F5007E4FD0 /* LoginViewController.swift in Sources */,
+				F31EDE481DF898E80054CAD6 /* CreateAccountViewController.swift in Sources */,
 				3173A1C41DECC36F003385B6 /* AnimatedSettingsViewController.swift in Sources */,
 				3F0BE6871DDCB1F5007E4FD0 /* AppDelegate.swift in Sources */,
 				E49BA3A71DE3443B0010A7A4 /* Constants.swift in Sources */,
