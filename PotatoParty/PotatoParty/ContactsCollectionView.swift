@@ -14,10 +14,8 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     
     let reuseIdentifier = "cell"
     let layout = UICollectionViewFlowLayout()
-    let defaultContact: Contact = Contact(fullName: "Add Contact", email: "", phone: "")
+    let defaultContact = Contact(fullName: "", email: "", phone: "", image: UIImage(named: "addContactIcon"))
     let shared = User.shared
-    
-    
     
     // Inititalizers
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
