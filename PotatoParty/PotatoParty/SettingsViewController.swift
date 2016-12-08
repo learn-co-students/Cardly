@@ -50,15 +50,16 @@ class SettingsViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
         
-        let closeBtn = UIButton()
-        self.view.addSubview(closeBtn)
-        closeBtn.setTitle("Close", for: .normal)
-        closeBtn.addTarget(self, action: #selector(dismissButtonTapped(_:)), for: .touchUpInside)
-        closeBtn.snp.makeConstraints { (make) in
-            make.left.equalTo(self.view).offset(20)
-            make.top.equalTo(self.view).offset(35)
-            make.width.equalTo(80)
-            make.height.equalTo(20)
+        let closeButton = UIButton()
+        self.view.addSubview(closeButton)
+//        closeBtn.setTitle("Close", for: .normal)
+        closeButton.setImage(Icons.backButton, for: .normal)
+        closeButton.addTarget(self, action: #selector(dismissButtonTapped(_:)), for: .touchUpInside)
+        closeButton.snp.makeConstraints { (make) in
+            make.height.equalTo(30)
+            make.width.equalTo(30)
+            make.topMargin.equalToSuperview().offset(40)
+            make.leadingMargin.equalToSuperview()
         }
         
         titleLabel = {
@@ -100,11 +101,11 @@ class SettingsViewController: UIViewController {
         emailLabel.snp.makeConstraints { (make) in
             make.width.equalToSuperview().multipliedBy(0.8)
             make.height.equalTo(80)
-            make.centerX.equalToSuperview()
-            make.topMargin.equalToSuperview().offset(80)
+            make.leadingMargin.equalToSuperview()
+            make.topMargin.equalToSuperview().offset(60)
             emailLabel.text = "Change email"
             emailLabel.textColor = UIColor.white
-            emailLabel.textAlignment = .center
+            emailLabel.textAlignment = .left
             emailLabel.font = UIFont(name: Font.nameForCard, size: 60)
         }
         
@@ -112,7 +113,7 @@ class SettingsViewController: UIViewController {
         view.addSubview(changeEmailPasswordTextField)
         changeEmailPasswordTextField.snp.makeConstraints { (make) in
             make.height.equalTo(50)
-            make.width.equalToSuperview().multipliedBy(0.6)
+            make.width.equalToSuperview().multipliedBy(0.8)
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(emailLabel.snp.bottomMargin).offset(20)
         }
@@ -147,16 +148,24 @@ class SettingsViewController: UIViewController {
         changeEmailButton.titleLabel?.textColor = UIColor.white
         changeEmailButton.addTarget(self, action: #selector(changeEmailButtonTapped), for: .touchUpInside)
         
+        let changeEmailDivider = UIImageView(image: Backgrounds.divider)
+        view.addSubview(changeEmailDivider)
+        changeEmailDivider.snp.makeConstraints { (make) in
+            make.width.equalToSuperview().offset(-20)
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(changeEmailButton.snp.bottomMargin).offset(20)
+        }
+        
         let passwordLabel = UILabel()
         view.addSubview(passwordLabel)
         passwordLabel.snp.makeConstraints { (make) in
             make.size.equalTo(emailLabel.snp.size)
-            make.centerX.equalToSuperview()
-            make.topMargin.equalTo(changeEmailButton.snp.bottomMargin).offset(20)
+            make.leadingMargin.equalToSuperview().offset(20)
+            make.topMargin.equalTo(changeEmailDivider.snp.bottomMargin)
         }
         passwordLabel.text = "Change password"
         passwordLabel.textColor = UIColor.white
-        passwordLabel.textAlignment = .center
+        passwordLabel.textAlignment = .left
         passwordLabel.font = UIFont(name: Font.nameForCard, size: 60)
         
         currentPasswordTextField = UITextField()
@@ -209,26 +218,43 @@ class SettingsViewController: UIViewController {
         changePasswordButton.titleLabel?.textColor = UIColor.white
         changePasswordButton.addTarget(self, action: #selector(changePasswordButtonTapped), for: .touchUpInside)
         
+        let changePasswordDivider = UIImageView(image: Backgrounds.divider)
+        view.addSubview(changePasswordDivider)
+        changePasswordDivider.snp.makeConstraints { (make) in
+            make.width.equalToSuperview().offset(-20)
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(changePasswordButton.snp.bottomMargin).offset(20)
+        }
+        
         logoutButton = UIButton()
         view.addSubview(logoutButton)
         logoutButton.snp.makeConstraints { (make) in
             make.size.equalTo(changeEmailButton.snp.size)
-            make.centerX.equalToSuperview()
-            make.topMargin.equalTo(changePasswordButton.snp.bottomMargin).offset(40)
+            make.leadingMargin.equalToSuperview()
+            make.topMargin.equalTo(changePasswordDivider.snp.bottomMargin).offset(20)
         }
         logoutButton.setTitle("Log out", for: .normal)
+        logoutButton.titleLabel?.textAlignment = .left
         logoutButton.titleLabel?.textColor = UIColor.white
-        
         logoutButton.addTarget(self, action: #selector(self.logout), for: .touchUpInside)
+        
+        let logoutDivider = UIImageView(image: Backgrounds.divider)
+        view.addSubview(logoutDivider)
+        logoutDivider.snp.makeConstraints { (make) in
+            make.width.equalToSuperview().offset(-20)
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(logoutButton.snp.bottomMargin).offset(10)
+        }
         
         forgotPasswordButton = UIButton()
         view.addSubview(forgotPasswordButton)
         forgotPasswordButton.snp.makeConstraints { (make) in
             make.size.equalTo(changeEmailButton.snp.size)
-            make.centerX.equalToSuperview()
-            make.topMargin.equalTo(logoutButton.snp.bottomMargin).offset(5)
+            make.leadingMargin.equalToSuperview()
+            make.topMargin.equalTo(logoutDivider.snp.bottomMargin).offset(10)
         }
         forgotPasswordButton.setTitle("Forgot password?", for: .normal)
+        forgotPasswordButton.titleLabel?.textAlignment = .left
         forgotPasswordButton.titleLabel?.textColor = UIColor.white
         forgotPasswordButton.addTarget(self, action: #selector(self.logout), for: .touchUpInside)
         
