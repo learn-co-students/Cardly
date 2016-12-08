@@ -82,6 +82,7 @@ class SettingsViewController: UIViewController {
         titleLabel.text = "Settings"
         titleLabel.textColor = UIColor.white
         titleLabel.textAlignment = .center
+        titleLabel.minimumScaleFactor = 0.5
         titleLabel.font = UIFont(name: Font.fancy, size: Font.Size.viewTitle)
         titleLabel.layer.shadowColor = UIColor.black.cgColor
         titleLabel.layer.shadowOffset = CGSize(width: 2, height: 2)
@@ -96,6 +97,7 @@ class SettingsViewController: UIViewController {
         let emailLabel = UILabel()
         view.addSubview(emailLabel)
         emailLabel.text = "Change email"
+        emailLabel.minimumScaleFactor = 0.5
         emailLabel.textColor = Colors.cardlyGrey
         emailLabel.textAlignment = .left
         emailLabel.font = UIFont(name: Font.regular, size: Font.Size.xl)
@@ -108,7 +110,7 @@ class SettingsViewController: UIViewController {
         changeEmailPasswordTextField = UITextField()
         view.addSubview(changeEmailPasswordTextField)
         changeEmailPasswordTextField.snp.makeConstraints { (make) in
-            make.height.equalTo(50)
+            make.height.equalToSuperview().multipliedBy(0.05)
             make.width.equalToSuperview().multipliedBy(0.8)
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(emailLabel.snp.bottomMargin).offset(30)
@@ -137,6 +139,7 @@ class SettingsViewController: UIViewController {
         changeEmailButton.setTitle("Submit", for: .normal)
         changeEmailButton.titleLabel?.font = UIFont(name: Font.regular, size: Font.Size.l)
         changeEmailButton.titleLabel?.textColor = UIColor.white
+        changeEmailButton.titleLabel?.minimumScaleFactor = 0.5
         changeEmailButton.addTarget(self, action: #selector(changeEmailButtonTapped), for: .touchUpInside)
         changeEmailButton.sizeToFit()
         changeEmailButton.snp.makeConstraints { (make) in
@@ -208,6 +211,7 @@ class SettingsViewController: UIViewController {
         changePasswordButton.setTitle("Submit", for: .normal)
         changePasswordButton.titleLabel?.font = UIFont(name: Font.regular, size: Font.Size.l)
         changePasswordButton.titleLabel?.textColor = UIColor.white
+        changePasswordButton.titleLabel?.minimumScaleFactor = 0.5
         changePasswordButton.sizeToFit()
         changePasswordButton.addTarget(self, action: #selector(changePasswordButtonTapped), for: .touchUpInside)
         changePasswordButton.snp.makeConstraints { (make) in
