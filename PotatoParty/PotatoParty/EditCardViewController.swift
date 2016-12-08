@@ -59,6 +59,7 @@ class EditCardViewController: UIViewController {
     var playPauseButton: UIButton!
     var addTextButton: UIButton!
     lazy var buttons: [UIButton] = [self.saveButton, self.playPauseButton, self.addTextButton]
+    
     var frameScrollview: UIScrollView!
     var frameStackview: UIStackView!
     var frame1View: UIImageView!
@@ -140,13 +141,16 @@ class EditCardViewController: UIViewController {
         view.sendSubview(toBack: playerView)
         playerView.playerLayer.player = player
         
-        playPauseButton.setTitle("Play", for: .normal)
-        playPauseButton.backgroundColor = UIColor.clear
+        playPauseButton = UIButton()
+        playPauseButton.setImage(Icons.playButton, for: .normal)
+        playPauseButton.alpha = 0.3
         view.addSubview(playPauseButton)
         playPauseButton.snp.makeConstraints { (make) in
-            make.width.equalToSuperview().dividedBy(3).offset(-40)
-            make.height.equalTo(self.playPauseButton.snp.width).dividedBy(2)
+            
+            make.width.equalTo(view.snp.height).multipliedBy(0.3)
+            make.height.equalTo(view.snp.height).multipliedBy(0.3)
             make.center.equalToSuperview()
+            print("play button width is currently \(playPauseButton.frame.width)")
         }
         playPauseButton.addTarget(self, action: #selector(self.playPauseButtonPressed), for: .touchUpInside)
         
@@ -168,7 +172,6 @@ class EditCardViewController: UIViewController {
     
     func instantiateButtons() {
         saveButton = UIButton()
-        playPauseButton = UIButton()
         addTextButton = UIButton()
         activityIndicator = UIActivityIndicatorView()
     }
@@ -468,10 +471,10 @@ class EditCardViewController: UIViewController {
     func updatePlayPauseButtonTitle() {
         if player.rate > 0 {
             player.pause()
-            playPauseButton.setTitle("Play", for: .normal)
+            playPauseButton.setImage(Icons.playButton, for: .normal)
         } else {
             player.play()
-            playPauseButton.setTitle("Pause", for: .normal)
+            playPauseButton.setImage(Icons.pauseButton, for: .normal)
         }
     }
     
