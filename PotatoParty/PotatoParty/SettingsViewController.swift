@@ -18,7 +18,7 @@ class SettingsViewController: UIViewController {
     var logoutButton: UIButton!
     var forgotPasswordButton: UIButton!
     var dismissButton: UIButton?
-    var titleLabel: UILabel?
+    var closeButton: UIButton!
     
     // Textfields
     var changeEmailPasswordTextField: UITextField!
@@ -44,77 +44,74 @@ class SettingsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        addBlurEffect()
+        view.backgroundColor = Colors.cardlyBlue
         layoutElements()
         registerForKeyboardNotifications()
-        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
-        
-        let closeBtn = UIButton()
-        self.view.addSubview(closeBtn)
-        closeBtn.setTitle("Close", for: .normal)
-        closeBtn.addTarget(self, action: #selector(dismissButtonTapped(_:)), for: .touchUpInside)
-        closeBtn.snp.makeConstraints { (make) in
-            make.left.equalTo(self.view).offset(20)
-            make.top.equalTo(self.view).offset(35)
-            make.width.equalTo(80)
-            make.height.equalTo(20)
-        }
-        
-        titleLabel = {
-            let label = UILabel()
-            label.numberOfLines = 1;
-            label.text = ""
-            label.font = UIFont.boldSystemFont(ofSize: 17)
-            label.textColor = UIColor.white
-            label.sizeToFit()
-            return label
-        }()
-        
     }
     
     deinit {
         deregisterFromKeyboardNotifications()
     }
-    
-    // MARK - Textfield aimations
-    
+        
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     // MARK: - Layout view elements
     func layoutElements() {
+        closeButton = UIButton()
+        view.addSubview(closeButton)
+        closeButton.setImage(Icons.backButton, for: .normal)
+        closeButton.addTarget(self, action: #selector(dismissButtonTapped(_:)), for: .touchUpInside)
+        closeButton.snp.makeConstraints { (make) in
+            make.height.equalTo(30)
+            make.width.equalTo(30)
+            make.topMargin.equalToSuperview().offset(40)
+            make.leadingMargin.equalToSuperview()
+        }
         
-        addBlurEffect()
-        view.backgroundColor = UIColor.clear
-        //  view.backgroundColor = UIColor.init(patternImage: settingsBackgroundImage)
+        let titleLabel = UILabel()
+        view.addSubview(titleLabel)
+        titleLabel.text = "Settings"
+        titleLabel.textColor = UIColor.white
+        titleLabel.textAlignment = .center
+        titleLabel.font = UIFont(name: Font.fancy, size: Font.Size.viewTitle)
+        titleLabel.layer.shadowColor = UIColor.black.cgColor
+        titleLabel.layer.shadowOffset = CGSize(width: 2, height: 2)
+        titleLabel.layer.shadowRadius = 0
+        titleLabel.layer.shadowOpacity = 1
+        titleLabel.sizeToFit()
+        titleLabel.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(closeButton).offset(-10)
+        }
         
         let emailLabel = UILabel()
         view.addSubview(emailLabel)
+        emailLabel.text = "Change email"
+        emailLabel.textColor = Colors.cardlyGrey
+        emailLabel.textAlignment = .left
+        emailLabel.font = UIFont(name: Font.regular, size: Font.Size.xl)
+        emailLabel.sizeToFit()
         emailLabel.snp.makeConstraints { (make) in
-            make.width.equalToSuperview().multipliedBy(0.8)
-            make.height.equalTo(80)
-            make.centerX.equalToSuperview()
-            make.topMargin.equalToSuperview().offset(80)
-            emailLabel.text = "Change email"
-            emailLabel.textColor = UIColor.white
-            emailLabel.textAlignment = .center
-            emailLabel.font = UIFont(name: Font.nameForCard, size: 60)
+            make.leadingMargin.equalToSuperview()
+            make.topMargin.equalTo(titleLabel.snp.bottomMargin).offset(20)
         }
         
         changeEmailPasswordTextField = UITextField()
         view.addSubview(changeEmailPasswordTextField)
         changeEmailPasswordTextField.snp.makeConstraints { (make) in
             make.height.equalTo(50)
-            make.width.equalToSuperview().multipliedBy(0.6)
+            make.width.equalToSuperview().multipliedBy(0.8)
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(emailLabel.snp.bottomMargin).offset(20)
+            make.topMargin.equalTo(emailLabel.snp.bottomMargin).offset(30)
         }
         changeEmailPasswordTextField.placeholder = "Enter current password"
         changeEmailPasswordTextField.textColor = UIColor.black
@@ -125,8 +122,7 @@ class SettingsViewController: UIViewController {
         newEmailTextField = UITextField()
         view.addSubview(newEmailTextField)
         newEmailTextField.snp.makeConstraints { (make) in
-            make.height.equalTo(50)
-            make.width.equalToSuperview().multipliedBy(0.6)
+            make.size.equalTo(changeEmailPasswordTextField.snp.size)
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(changeEmailPasswordTextField.snp.bottomMargin).offset(30)
         }
@@ -138,34 +134,42 @@ class SettingsViewController: UIViewController {
         
         changeEmailButton = UIButton()
         view.addSubview(changeEmailButton)
+        changeEmailButton.setTitle("Submit", for: .normal)
+        changeEmailButton.titleLabel?.font = UIFont(name: Font.regular, size: Font.Size.l)
+        changeEmailButton.titleLabel?.textColor = UIColor.white
+        changeEmailButton.addTarget(self, action: #selector(changeEmailButtonTapped), for: .touchUpInside)
+        changeEmailButton.sizeToFit()
         changeEmailButton.snp.makeConstraints { (make) in
-            make.width.equalToSuperview().dividedBy(2)
-            make.height.equalTo(newEmailTextField.snp.height).offset(-5)
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(newEmailTextField.snp.bottomMargin).offset(20)
         }
-        changeEmailButton.setTitle("Submit", for: .normal)
-        changeEmailButton.titleLabel?.textColor = UIColor.white
-        changeEmailButton.addTarget(self, action: #selector(changeEmailButtonTapped), for: .touchUpInside)
         
-        let passwordLabel = UILabel()
-        view.addSubview(passwordLabel)
-        passwordLabel.snp.makeConstraints { (make) in
-            make.size.equalTo(emailLabel.snp.size)
+        let changeEmailDivider = UIImageView(image: Backgrounds.divider)
+        view.addSubview(changeEmailDivider)
+        changeEmailDivider.snp.makeConstraints { (make) in
+            make.width.equalToSuperview().offset(-20)
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(changeEmailButton.snp.bottomMargin).offset(20)
         }
+        
+        let passwordLabel = UILabel()
+        view.addSubview(passwordLabel)
         passwordLabel.text = "Change password"
-        passwordLabel.textColor = UIColor.white
-        passwordLabel.textAlignment = .center
-        passwordLabel.font = UIFont(name: Font.nameForCard, size: 60)
+        passwordLabel.textColor = Colors.cardlyGrey
+        passwordLabel.textAlignment = .left
+        passwordLabel.font = UIFont(name: Font.regular, size: Font.Size.xl)
+        passwordLabel.sizeToFit()
+        passwordLabel.snp.makeConstraints { (make) in
+            make.leadingMargin.equalToSuperview()
+            make.topMargin.equalTo(changeEmailDivider.snp.bottomMargin).offset(30)
+        }
         
         currentPasswordTextField = UITextField()
         view.addSubview(currentPasswordTextField)
         currentPasswordTextField.snp.makeConstraints { (make) in
-            make.size.equalTo(newEmailTextField.snp.size)
+            make.size.equalTo(changeEmailPasswordTextField.snp.size)
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(passwordLabel.snp.bottomMargin).offset(20)
+            make.topMargin.equalTo(passwordLabel.snp.bottomMargin).offset(30)
         }
         currentPasswordTextField.textColor = UIColor.black
         currentPasswordTextField.borderStyle = UITextBorderStyle.roundedRect
@@ -176,7 +180,7 @@ class SettingsViewController: UIViewController {
         newPasswordTextField = UITextField()
         view.addSubview(newPasswordTextField)
         newPasswordTextField.snp.makeConstraints { (make) in
-            make.size.equalTo(newEmailTextField.snp.size)
+            make.size.equalTo(changeEmailPasswordTextField.snp.size)
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(currentPasswordTextField.snp.bottomMargin).offset(30)
         }
@@ -189,7 +193,7 @@ class SettingsViewController: UIViewController {
         confirmNewPasswordTextField = UITextField()
         view.addSubview(confirmNewPasswordTextField)
         confirmNewPasswordTextField.snp.makeConstraints { (make) in
-            make.size.equalTo(newEmailTextField.snp.size)
+            make.size.equalTo(changeEmailPasswordTextField.snp.size)
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(newPasswordTextField.snp.bottomMargin).offset(30)
         }
@@ -201,37 +205,57 @@ class SettingsViewController: UIViewController {
         
         changePasswordButton = UIButton()
         view.addSubview(changePasswordButton)
+        changePasswordButton.setTitle("Submit", for: .normal)
+        changePasswordButton.titleLabel?.font = UIFont(name: Font.regular, size: Font.Size.l)
+        changePasswordButton.titleLabel?.textColor = UIColor.white
+        changePasswordButton.sizeToFit()
+        changePasswordButton.addTarget(self, action: #selector(changePasswordButtonTapped), for: .touchUpInside)
         changePasswordButton.snp.makeConstraints { (make) in
-            make.size.equalTo(changeEmailButton.snp.size)
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(confirmNewPasswordTextField.snp.bottomMargin).offset(20)
         }
-        changePasswordButton.setTitle("Submit", for: .normal)
-        changePasswordButton.titleLabel?.textColor = UIColor.white
-        changePasswordButton.addTarget(self, action: #selector(changePasswordButtonTapped), for: .touchUpInside)
+        
+        let changePasswordDivider = UIImageView(image: Backgrounds.divider)
+        view.addSubview(changePasswordDivider)
+        changePasswordDivider.snp.makeConstraints { (make) in
+            make.width.equalToSuperview().offset(-20)
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(changePasswordButton.snp.bottomMargin).offset(20)
+        }
         
         logoutButton = UIButton()
         view.addSubview(logoutButton)
-        logoutButton.snp.makeConstraints { (make) in
-            make.size.equalTo(changeEmailButton.snp.size)
-            make.centerX.equalToSuperview()
-            make.topMargin.equalTo(changePasswordButton.snp.bottomMargin).offset(40)
-        }
-        logoutButton.setTitle("Log out", for: .normal)
+        logoutButton.setTitle("Log out       ", for: .normal)
+        logoutButton.titleLabel?.textAlignment = .left
+        logoutButton.titleLabel?.font = UIFont(name: Font.regular, size: Font.Size.l)
         logoutButton.titleLabel?.textColor = UIColor.white
-        
+        logoutButton.sizeToFit()
         logoutButton.addTarget(self, action: #selector(self.logout), for: .touchUpInside)
+        logoutButton.snp.makeConstraints { (make) in
+            make.leadingMargin.equalToSuperview()
+            make.topMargin.equalTo(changePasswordDivider.snp.bottomMargin).offset(20)
+        }
+        
+        let logoutDivider = UIImageView(image: Backgrounds.divider)
+        view.addSubview(logoutDivider)
+        logoutDivider.snp.makeConstraints { (make) in
+            make.width.equalToSuperview().offset(-20)
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(logoutButton.snp.bottomMargin).offset(20)
+        }
         
         forgotPasswordButton = UIButton()
         view.addSubview(forgotPasswordButton)
-        forgotPasswordButton.snp.makeConstraints { (make) in
-            make.size.equalTo(changeEmailButton.snp.size)
-            make.centerX.equalToSuperview()
-            make.topMargin.equalTo(logoutButton.snp.bottomMargin).offset(5)
-        }
         forgotPasswordButton.setTitle("Forgot password?", for: .normal)
+        forgotPasswordButton.titleLabel?.textAlignment = .left
+        forgotPasswordButton.titleLabel?.font = UIFont(name: Font.regular, size: Font.Size.l)
         forgotPasswordButton.titleLabel?.textColor = UIColor.white
+        forgotPasswordButton.sizeToFit()
         forgotPasswordButton.addTarget(self, action: #selector(self.logout), for: .touchUpInside)
+        forgotPasswordButton.snp.makeConstraints { (make) in
+            make.leadingMargin.equalToSuperview()
+            make.topMargin.equalTo(logoutDivider.snp.bottomMargin).offset(20)
+        }
         
         for textField in textFields {
             textField.delegate = self
@@ -510,5 +534,3 @@ extension SettingsViewController {
     }
     
 }
-
-
