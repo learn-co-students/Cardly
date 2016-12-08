@@ -473,3 +473,79 @@ extension EditCardViewController {
         saveButton.isEnabled = true
     }
 }
+
+// MARK: - Text field delegate & methods
+
+extension EditCardViewController: UITextFieldDelegate {
+    func setupText() {
+        let font = UIFont(name: Font.nameForCard, size: Font.Size.cardView)
+        
+        // Top text field
+        topTextField = UITextField()
+        topTextField.delegate = self
+        view.addSubview(topTextField)
+        topTextField.snp.makeConstraints { (make) in
+            make.left.equalToSuperview().offset(30)
+            make.right.equalToSuperview()
+            make.top.equalToSuperview().offset(-4)
+        }
+        // Text
+        topTextField.text = "Enter some text"
+        topTextField.font = font
+        topTextField.textAlignment = .left
+        topTextField.clearsOnBeginEditing = true
+        topTextField.textColor = UIColor.white
+        topTextField.backgroundColor = UIColor.clear
+        // Drop shadow
+        topTextField.layer.shadowColor = UIColor.black.cgColor
+        topTextField.layer.shadowOffset = CGSize(width: 2, height: 2)
+        topTextField.layer.shadowRadius = 0
+        topTextField.layer.shadowOpacity = 1
+        
+        // Bottom text field
+        bottomTextField = UITextField()
+        bottomTextField.delegate = self
+        
+        view.addSubview(bottomTextField)
+        bottomTextField.snp.makeConstraints { (make) in
+            make.right.equalToSuperview().offset(-30)
+            make.left.equalToSuperview()
+            make.bottom.equalToSuperview().offset(10)
+        }
+        
+        // Text attributes
+        bottomTextField.text = "Enter some text"
+        bottomTextField.font = font
+        bottomTextField.textAlignment = .right
+        bottomTextField.clearsOnBeginEditing = true
+        bottomTextField.textColor = UIColor.white
+        bottomTextField.backgroundColor = UIColor.clear
+        // Text drop shadow
+        bottomTextField.layer.shadowColor = UIColor.black.cgColor
+        bottomTextField.layer.shadowOffset = CGSize(width: 2, height: 2)
+        bottomTextField.layer.shadowRadius = 0
+        bottomTextField.layer.shadowOpacity = 1
+        
+        //tap gesture for dismissing keyboard
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    // Press enter to hide keyboard
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let maxLength = 16
+        let currentStr: NSString = textField.text! as NSString
+        let newStr =
+            currentStr.replacingCharacters(in: range, with: string) as NSString
+        return newStr.length <= maxLength
+    }
+    
+    func dismissKeyboard() {
+        view.endEditing(true)
+    }
+}
