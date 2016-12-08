@@ -59,6 +59,7 @@ struct Icons {
     
     static let playButton = UIImage(named: "playButton")
     static let pauseButton = UIImage(named: "pauseButton")
+    static let saveButton = UIImage(named: "arrowIcon")
 }
 
 struct IconSize {

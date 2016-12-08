@@ -144,24 +144,29 @@ class EditCardViewController: UIViewController {
         playPauseButton = UIButton()
         playPauseButton.setImage(Icons.playButton, for: .normal)
         playPauseButton.alpha = 0.3
+        playPauseButton.contentMode = .scaleAspectFit
+        playPauseButton.contentVerticalAlignment = .fill
+        playPauseButton.contentHorizontalAlignment = .fill
         view.addSubview(playPauseButton)
         playPauseButton.snp.makeConstraints { (make) in
-            
-            make.width.equalTo(view.snp.height).multipliedBy(0.3)
-            make.height.equalTo(view.snp.height).multipliedBy(0.3)
+            make.width.equalTo(view.snp.width).multipliedBy(0.3)
+            make.height.equalTo(view.snp.width).multipliedBy(0.3)
             make.center.equalToSuperview()
             print("play button width is currently \(playPauseButton.frame.width)")
         }
         playPauseButton.addTarget(self, action: #selector(self.playPauseButtonPressed), for: .touchUpInside)
         
-        saveButton.backgroundColor = UIColor.clear
-        saveButton.setTitle("Save", for: .normal)
+        saveButton = UIButton()
+        saveButton.setImage(Icons.saveButton, for: .normal)
+        saveButton.contentMode = .scaleAspectFit
+        saveButton.contentVerticalAlignment = .fill
+        saveButton.contentHorizontalAlignment = .fill
         view.addSubview(saveButton)
         saveButton.snp.makeConstraints { (make) in
-            make.width.equalToSuperview().dividedBy(3).offset(-40)
-            make.height.equalTo(self.saveButton.snp.width).dividedBy(2)
+            make.width.equalTo(view.snp.width).multipliedBy(0.1)
+            make.height.equalTo(view.snp.width).multipliedBy(0.1)
             make.centerY.equalToSuperview()
-            make.trailingMargin.equalToSuperview()
+            make.trailing.equalToSuperview()
         }
         saveButton.addTarget(self, action: #selector(self.navToSendCardVC), for: .touchUpInside)
         
@@ -171,7 +176,6 @@ class EditCardViewController: UIViewController {
     }
     
     func instantiateButtons() {
-        saveButton = UIButton()
         addTextButton = UIButton()
         activityIndicator = UIActivityIndicatorView()
     }
@@ -502,7 +506,7 @@ class EditCardViewController: UIViewController {
     // MARK: - Navigation
     
     func navToSendCardVC(sender: UIButton, isExportSuccessful: Bool) {
-        
+        saveButton.isHidden = true
         exportWithOverlays { (success) in
             if success {
                 self.player.pause()
