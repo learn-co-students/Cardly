@@ -21,15 +21,11 @@ class ContactsCollectionViewCell: UICollectionViewCell {
         }
     }
     var addContactIconImageView = UIImageView()
+    var index = -1
     
     var contact: Contact! {
         didSet {
             label.text = "\(contact.fullName)\n\(contact.email)"
-            
-            if contact.image != nil {
-                addContactIconImageView.image = contact.image
-            }
-            
             isChosen = contact.isChosen
         }
     }
@@ -44,8 +40,15 @@ class ContactsCollectionViewCell: UICollectionViewCell {
         super.init(coder: aDecoder)
         setupView()
     }
-    
+
     // Setup view
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        addContactIconImageView.image = nil
+        label.text = nil
+        isChosen = false
+    }
+    
     func setupView() {
         // Background
         backgroundColor = UIColor.clear
@@ -72,7 +75,7 @@ class ContactsCollectionViewCell: UICollectionViewCell {
         
         // Add label
         label.frame = CGRect(x: 0, y: 0, width: contentView.frame.width, height: contentView.frame.height)
-        label.font = UIFont(name: Font.name, size: Font.Size.m)
+        label.font = UIFont(name: Font.regular, size: Font.Size.m)
         contentView.addSubview(label)
         label.isUserInteractionEnabled = true
         
@@ -92,13 +95,14 @@ class ContactsCollectionViewCell: UICollectionViewCell {
 extension ContactsCollectionViewCell {
     
     func reflectSelectedState() {
-        contentView.layer.borderColor = UIColor.red.cgColor
-        contentView.layer.borderWidth = 4.0
+        contentView.layer.shadowRadius = 6.0
+        contentView.layer.shadowColor = UIColor.white.cgColor
+        contentView.layer.shadowOffset = CGSize(width: 0, height: 0)
+        contentView.layer.shadowOpacity = 1
     }
     
     func reflectUnsellectedState() {
-        contentView.layer.borderWidth = 0.0
-        contentView.layer.borderColor = UIColor.clear.cgColor
+        contentView.layer.shadowOpacity = 0
     }
     
 }

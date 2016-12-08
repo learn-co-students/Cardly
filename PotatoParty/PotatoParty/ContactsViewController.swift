@@ -22,6 +22,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     let ref = FIRDatabase.database().reference(withPath: "contacts")
     
     // UI
+    let backgroundImageView = UIImageView()
     var contactsCollectionView: ContactsCollectionView!
     var bottomNavBar: BottomNavBarView!
     var navSelecAllButton: UIBarButtonItem!
@@ -49,22 +50,18 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = false
-        retrieveContacts(for: User.shared.groups[0], completion: { contacts in
-            User.shared.contacts = contacts
-            self.contactsCollectionView.reloadData()
-        })
-        shared.selectedContacts.removeAll()
-        enableCell()
+//        navigationController?.navigationBar.isHidden = false
+//        retrieveContacts(for: User.shared.groups[0], completion: { contacts in
+//            User.shared.contacts = contacts
+//            self.contactsCollectionView.reloadData()
+//        })
+//        shared.selectedContacts.removeAll()
+//        enableCell()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationBarMenu.container = view
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
     
 }
@@ -75,6 +72,10 @@ extension ContactsViewController {
     
     // Setup all views
     func setupViews() {
+        
+//        backgroundImageView.image = 
+        
+        
         setupCollectionView()
         setupBottomNavBarView()
         setupTopNavBarView()
@@ -312,6 +313,7 @@ extension ContactsViewController: BottomNavBarDelegate {
     }
     
     func selectBtnClicked() {
+        print(User.shared.contacts[0].fullName)
         if allSelected == false {
             for (index, contact) in User.shared.contacts.enumerated() {
                 if index > 0 {
@@ -319,7 +321,7 @@ extension ContactsViewController: BottomNavBarDelegate {
                     User.shared.selectedContacts.append(contact)
                 }
             }
-            User.shared.contacts.remove(at: 0)
+            // User.shared.contacts.remove(at: 0)
             enableCell()
             contactsCollectionView.reloadData()
             allSelected = true
@@ -331,7 +333,7 @@ extension ContactsViewController: BottomNavBarDelegate {
                 }
             }
             User.shared.selectedContacts.removeAll()
-            User.shared.contacts.remove(at: 0)
+          //  User.shared.contacts.remove(at: 0)
             enableCell()
             contactsCollectionView.reloadData()
             allSelected = false
@@ -341,7 +343,7 @@ extension ContactsViewController: BottomNavBarDelegate {
     
     func goToAddContact(){
         let destVC = AddContactViewController()
-        navigationController?.pushViewController(destVC, animated: false)
+        navigationController?.pushViewController(destVC, animated: true)
         shared.selectedContacts.removeAll()
     }
     

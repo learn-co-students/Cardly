@@ -81,7 +81,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
             let lastName = contact.familyName
             let fullName = ("\(firstName) \(lastName)")
             
-            let appContact = Contact(fullName: fullName, email: emailAddress, phone: phoneNumber)
+            let appContact = Contact(fullName: fullName, email: emailAddress, phone: phoneNumber, image: nil)
             
             print(appContact.fullName, appContact.email, appContact.phone)
             

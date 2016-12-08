@@ -13,13 +13,17 @@ import SnapKit
 class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     let reuseIdentifier = "cell"
-    let layout = UICollectionViewFlowLayout()
-    let defaultContact = Contact(fullName: "", email: "", phone: "", image: UIImage(named: "addContactIcon"))
+    let layout = UICollectionView   FlowLayout()
+    let defaultContact = Contact(fullName: "AddContact", email: "", phone: "")
     let shared = User.shared
+    
+    var firstTimeLoaded: Bool = true
     
     // Inititalizers
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: self.layout)
+        
+        print("Contacts")
         setupView()
     }
     
@@ -34,16 +38,39 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        User.shared.contacts.insert(defaultContact, at: 0)
+        
+        if firstTimeLoaded {
+            
+            User.shared.contacts.insert(defaultContact, at: 0)
+            firstTimeLoaded = false
+
+        }
+        
+        
+        
         return User.shared.contacts.count
         
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        print(collectionView.subviews.count)
+        
         let cell = dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ContactsCollectionViewCell
         
+        if indexPath.item == 0 {
+            
+            cell.addContactIconImageView.image = UIImage(named: "addContactIcon")
+            
+            cell.layer.borderWidth = 0.0
+            
+            return cell
+            
+        }
+        
+        print(collectionView.subviews.count)
+        
         cell.contact = User.shared.contacts[indexPath.row]
+        
+        cell.index = indexPath.row
         
         if cell.contact.is_sent == true {
             cell.alpha = 0.5
@@ -51,7 +78,7 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         
         return cell
     }
-
+    
     // Setup view
     func setupView() {
         delegate = self
@@ -59,7 +86,7 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         
         // Collection View properties
         backgroundColor = Colors.cardlyBlue
-       
+        
         
         // Create reuse cell
         register(ContactsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
