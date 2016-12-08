@@ -125,8 +125,7 @@ class SettingsViewController: UIViewController {
         newEmailTextField = UITextField()
         view.addSubview(newEmailTextField)
         newEmailTextField.snp.makeConstraints { (make) in
-            make.height.equalTo(50)
-            make.width.equalToSuperview().multipliedBy(0.6)
+            make.size.equalTo(changeEmailPasswordTextField.snp.size)
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(changeEmailPasswordTextField.snp.bottomMargin).offset(30)
         }
@@ -163,7 +162,7 @@ class SettingsViewController: UIViewController {
         currentPasswordTextField = UITextField()
         view.addSubview(currentPasswordTextField)
         currentPasswordTextField.snp.makeConstraints { (make) in
-            make.size.equalTo(newEmailTextField.snp.size)
+            make.size.equalTo(changeEmailPasswordTextField.snp.size)
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(passwordLabel.snp.bottomMargin).offset(20)
         }
@@ -176,7 +175,7 @@ class SettingsViewController: UIViewController {
         newPasswordTextField = UITextField()
         view.addSubview(newPasswordTextField)
         newPasswordTextField.snp.makeConstraints { (make) in
-            make.size.equalTo(newEmailTextField.snp.size)
+            make.size.equalTo(changeEmailPasswordTextField.snp.size)
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(currentPasswordTextField.snp.bottomMargin).offset(30)
         }
@@ -189,7 +188,7 @@ class SettingsViewController: UIViewController {
         confirmNewPasswordTextField = UITextField()
         view.addSubview(confirmNewPasswordTextField)
         confirmNewPasswordTextField.snp.makeConstraints { (make) in
-            make.size.equalTo(newEmailTextField.snp.size)
+            make.size.equalTo(changeEmailPasswordTextField.snp.size)
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(newPasswordTextField.snp.bottomMargin).offset(30)
         }
