@@ -15,8 +15,10 @@ struct Styles {
 }
 
 struct Font {
-    static let name = "Helvetica Neue UltraLight"
+    static let name = "Raleway-Regular"
     static let nameForCard = "Qwigley-Regular"
+    static let fancy = "Distant_Stroke_Medium.ttf"
+    
     
     struct Size {
         static let xs: CGFloat = 8
