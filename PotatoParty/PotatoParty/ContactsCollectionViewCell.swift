@@ -12,56 +12,48 @@ import SnapKit
 
 class ContactsCollectionViewCell: UICollectionViewCell {
     
+    var cellCircleImageView = UIImageView()
     var label = UILabel()
     var highlightedTextColor: UIColor?
     var isChosen: Bool = false {
         didSet {
-            
-            print("iS ChoSEN SET!")
-            
             isChosen ? reflectSelectedState() : reflectUnsellectedState()
-            
         }
     }
     
     var contact: Contact! {
         didSet {
-            
-            print("\n")
-            
-            print("Getting called first?")
-            
             label.text = "\(contact.fullName)\n\(contact.email)"
-            
-            print("Contacts is chosen: \(contact.isChosen ? "YES" : "NO")")
-            
             isChosen = contact.isChosen
-    
         }
     }
     
     // Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        commonInit()
+        setupView()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        commonInit()
-    }
-    
-    func commonInit() {
         setupView()
-        print(#function)
     }
     
     // Setup view
     func setupView() {
-        backgroundColor = UIColor.cyan
+        // Background
+        backgroundColor = UIColor.clear
         
+        // Add circle image
+        cellCircleImageView.image = UIImage(named: "contactsCellIcon")
+        contentView.addSubview(cellCircleImageView)
+        cellCircleImageView.snp.makeConstraints { (make) in
+            make.edges.equalTo(contentView)
+        }
+
+        // Add label
         label.frame = CGRect(x: 0, y: 0, width: contentView.frame.width, height: contentView.frame.height)
-        label.font = UIFont(name: "Helvetica", size: 20)
+        label.font = UIFont(name: Font.name, size: Font.Size.l)
         contentView.addSubview(label)
         label.isUserInteractionEnabled = true
         
@@ -72,12 +64,8 @@ class ContactsCollectionViewCell: UICollectionViewCell {
     }
     
     func handleTap() {
-        
-        print(#function)
         isChosen = !isChosen
-
     }
-    
     
 }
 
@@ -85,21 +73,14 @@ class ContactsCollectionViewCell: UICollectionViewCell {
 extension ContactsCollectionViewCell {
     
     func reflectSelectedState() {
-        print("CHANGE STATE OF CELL!!")
-        
         contentView.layer.borderColor = UIColor.red.cgColor
         contentView.layer.borderWidth = 4.0
-        
     }
     
-    
     func reflectUnsellectedState() {
-        
         contentView.layer.borderWidth = 0.0
         contentView.layer.borderColor = UIColor.clear.cgColor
         
     }
-    
-    
     
 }

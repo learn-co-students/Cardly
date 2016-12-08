@@ -26,8 +26,7 @@ class BottomNavBarView: UIView {
     var leftIconView = BottomNavBarLeftView()
     var middleIconView = BottomNavBarMiddleView()
     var rightIconView = BottomNavBarRightView()
-  //  var addContactBtnImage: UIImage = #imageLiteral(resourceName: "addContactImage")
-        
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -68,16 +67,15 @@ class BottomNavBarLeftView: UIView {
             make.center.equalToSuperview()
         }
 
-        // Change background from color to image
-        self.backgroundColor = UIColor.green
-      //  self.backgroundColor = UIColor.init(patternImage: #imageLiteral(resourceName: "addContactImage"))
+//        // Change background from color to image
+//        self.backgroundColor = UIColor.clear
+//        let blur = UIBlurEffect(style: .dark)
+//        let blurView = UIVisualEffectView(effect: blur)
+//        self.addSubview(blurView)
     }
 
     func deleteButtonTapped(_ sender: UIButton) {
-        
-        print("\n\nadd contact button pressed\n\n")
         delegate?.deleteButtonPressed()
-        
     }
     
 }
@@ -108,7 +106,7 @@ class BottomNavBarMiddleView: UIView{
         editGroupButton.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
         }
-        self.backgroundColor = UIColor.orange
+//        self.backgroundColor = UIColor.orange
     }
     
     func editGroupButtonTapped(_sender: UIButton) {
@@ -146,7 +144,7 @@ class BottomNavBarRightView: UIView {
             
         }
         
-        self.backgroundColor = UIColor.red
+//        self.backgroundColor = UIColor.red
     }
     
     func sendToContactButtonTapped(_ sender: UIButton) {
@@ -164,7 +162,14 @@ class BottomNavBarRightView: UIView {
 extension BottomNavBarView {
     
     func setupView() {
-        // Create stack view
+        // Background
+        let blur = UIBlurEffect(style: .light)
+        let blurView = UIVisualEffectView(effect: blur)
+        blurView.frame = self.bounds
+        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.addSubview(blurView)
+        
+        // Stack view
         let stackView = UIStackView()
         self.addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -176,9 +181,15 @@ extension BottomNavBarView {
         stackView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
-        
-        // Create background
-        self.backgroundColor = UIColor.black
+
     }
+
+//    func addBlurEffect() {
+//        self.backgroundColor = UIColor.clear
+//        let blur = UIBlurEffect(style: .dark)
+//        let blurView = UIVisualEffectView(effect: blur)
+//        self.addSubview(blurView)
+//    }
     
 }
+
