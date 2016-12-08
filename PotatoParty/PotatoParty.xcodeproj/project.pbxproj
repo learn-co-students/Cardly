@@ -15,6 +15,13 @@
 		3182D51E1DEF706B0090AB2E /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3182D5181DEF706B0090AB2E /* SettingsViewController.swift */; };
 		3182D5201DEF71E70090AB2E /* ic_menu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3182D51F1DEF71E70090AB2E /* ic_menu@3x.png */; };
 		3182D5221DEF72990090AB2E /* AddContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3182D5211DEF72990090AB2E /* AddContactViewController.swift */; };
+		31D1B42A1DF9C1EF00A72CA7 /* Distant_Stroke_Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 31D1B4231DF9C1EF00A72CA7 /* Distant_Stroke_Medium.ttf */; };
+		31D1B42B1DF9C1EF00A72CA7 /* Distant_Stroke.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 31D1B4241DF9C1EF00A72CA7 /* Distant_Stroke.ttf */; };
+		31D1B42C1DF9C1EF00A72CA7 /* Raleway-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 31D1B4251DF9C1EF00A72CA7 /* Raleway-Medium.ttf */; };
+		31D1B42D1DF9C1EF00A72CA7 /* Raleway-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 31D1B4261DF9C1EF00A72CA7 /* Raleway-Regular.ttf */; };
+		31D1B42E1DF9C1EF00A72CA7 /* Raleway-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 31D1B4271DF9C1EF00A72CA7 /* Raleway-Light.ttf */; };
+		31D1B42F1DF9C1EF00A72CA7 /* Raleway-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 31D1B4281DF9C1EF00A72CA7 /* Raleway-ExtraLight.ttf */; };
+		31D1B4301DF9C1EF00A72CA7 /* Raleway-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 31D1B4291DF9C1EF00A72CA7 /* Raleway-Thin.ttf */; };
 		31D78BA41DDE77BD00FA855B /* DropDownMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D78BA01DDE77BD00FA855B /* DropDownMenu.swift */; };
 		31D78BA51DDE77BD00FA855B /* DropDownMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D78BA11DDE77BD00FA855B /* DropDownMenuCell.swift */; };
 		31D78BA61DDE77BD00FA855B /* DropDownMenuKit.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 31D78BA21DDE77BD00FA855B /* DropDownMenuKit.xcassets */; };
@@ -39,6 +46,7 @@
 		E49BA3A71DE3443B0010A7A4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49BA3A61DE3443A0010A7A4 /* Constants.swift */; };
 		E4ED56171DDD3C6700EB97D4 /* BottomNavBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4ED56161DDD3C6700EB97D4 /* BottomNavBarView.swift */; };
 		F30919EC1DDE147800479633 /* AddContactViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30919EB1DDE147800479633 /* AddContactViewControllerExtension.swift */; };
+		F31EDE481DF898E80054CAD6 /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31EDE471DF898E80054CAD6 /* CreateAccountViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +58,13 @@
 		3182D5181DEF706B0090AB2E /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		3182D51F1DEF71E70090AB2E /* ic_menu@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_menu@3x.png"; path = "PotatoParty/ic_menu@3x.png"; sourceTree = "<group>"; };
 		3182D5211DEF72990090AB2E /* AddContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddContactViewController.swift; sourceTree = "<group>"; };
+		31D1B4231DF9C1EF00A72CA7 /* Distant_Stroke_Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Distant_Stroke_Medium.ttf; sourceTree = "<group>"; };
+		31D1B4241DF9C1EF00A72CA7 /* Distant_Stroke.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Distant_Stroke.ttf; sourceTree = "<group>"; };
+		31D1B4251DF9C1EF00A72CA7 /* Raleway-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Raleway-Medium.ttf"; sourceTree = "<group>"; };
+		31D1B4261DF9C1EF00A72CA7 /* Raleway-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Raleway-Regular.ttf"; sourceTree = "<group>"; };
+		31D1B4271DF9C1EF00A72CA7 /* Raleway-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Raleway-Light.ttf"; sourceTree = "<group>"; };
+		31D1B4281DF9C1EF00A72CA7 /* Raleway-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Raleway-ExtraLight.ttf"; sourceTree = "<group>"; };
+		31D1B4291DF9C1EF00A72CA7 /* Raleway-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Raleway-Thin.ttf"; sourceTree = "<group>"; };
 		31D78BA01DDE77BD00FA855B /* DropDownMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDownMenu.swift; sourceTree = "<group>"; };
 		31D78BA11DDE77BD00FA855B /* DropDownMenuCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDownMenuCell.swift; sourceTree = "<group>"; };
 		31D78BA21DDE77BD00FA855B /* DropDownMenuKit.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DropDownMenuKit.xcassets; sourceTree = "<group>"; };
@@ -79,6 +94,7 @@
 		E49BA3A61DE3443A0010A7A4 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		E4ED56161DDD3C6700EB97D4 /* BottomNavBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomNavBarView.swift; sourceTree = "<group>"; };
 		F30919EB1DDE147800479633 /* AddContactViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddContactViewControllerExtension.swift; sourceTree = "<group>"; };
+		F31EDE471DF898E80054CAD6 /* CreateAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,6 +154,7 @@
 			children = (
 				3182D5211DEF72990090AB2E /* AddContactViewController.swift */,
 				3182D5131DEF706B0090AB2E /* ContactsViewController.swift */,
+				F31EDE471DF898E80054CAD6 /* CreateAccountViewController.swift */,
 				3182D5141DEF706B0090AB2E /* EditCardViewController.swift */,
 				3182D5171DEF706B0090AB2E /* SendCardViewController.swift */,
 				3182D5181DEF706B0090AB2E /* SettingsViewController.swift */,
@@ -211,6 +228,13 @@
 			isa = PBXGroup;
 			children = (
 				E44E5A151DF1BAB900273456 /* Qwigley-Regular.ttf */,
+				31D1B4231DF9C1EF00A72CA7 /* Distant_Stroke_Medium.ttf */,
+				31D1B4241DF9C1EF00A72CA7 /* Distant_Stroke.ttf */,
+				31D1B4251DF9C1EF00A72CA7 /* Raleway-Medium.ttf */,
+				31D1B4261DF9C1EF00A72CA7 /* Raleway-Regular.ttf */,
+				31D1B4271DF9C1EF00A72CA7 /* Raleway-Light.ttf */,
+				31D1B4281DF9C1EF00A72CA7 /* Raleway-ExtraLight.ttf */,
+				31D1B4291DF9C1EF00A72CA7 /* Raleway-Thin.ttf */,
 				3F0BE68D1DDCB1F5007E4FD0 /* Assets.xcassets */,
 			);
 			name = Assets;
@@ -285,12 +309,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				3182D5201DEF71E70090AB2E /* ic_menu@3x.png in Resources */,
+				31D1B42B1DF9C1EF00A72CA7 /* Distant_Stroke.ttf in Resources */,
 				3F0BE6911DDCB1F5007E4FD0 /* LaunchScreen.storyboard in Resources */,
+				31D1B42E1DF9C1EF00A72CA7 /* Raleway-Light.ttf in Resources */,
 				E44E5A161DF1BAB900273456 /* Qwigley-Regular.ttf in Resources */,
+				31D1B42A1DF9C1EF00A72CA7 /* Distant_Stroke_Medium.ttf in Resources */,
 				3FD6DB2D1DDCEA5F0078CA45 /* GoogleService-Info.plist in Resources */,
 				31D78BA61DDE77BD00FA855B /* DropDownMenuKit.xcassets in Resources */,
+				31D1B42C1DF9C1EF00A72CA7 /* Raleway-Medium.ttf in Resources */,
 				3F0BE68E1DDCB1F5007E4FD0 /* Assets.xcassets in Resources */,
+				31D1B42D1DF9C1EF00A72CA7 /* Raleway-Regular.ttf in Resources */,
 				3F0BE68C1DDCB1F5007E4FD0 /* Main.storyboard in Resources */,
+				31D1B42F1DF9C1EF00A72CA7 /* Raleway-ExtraLight.ttf in Resources */,
+				31D1B4301DF9C1EF00A72CA7 /* Raleway-Thin.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -362,6 +393,7 @@
 				3182D5191DEF706B0090AB2E /* ContactsViewController.swift in Sources */,
 				E4974AF01DDE1C3700698B81 /* ContactsCollectionViewCell.swift in Sources */,
 				3F0BE6891DDCB1F5007E4FD0 /* LoginViewController.swift in Sources */,
+				F31EDE481DF898E80054CAD6 /* CreateAccountViewController.swift in Sources */,
 				3173A1C41DECC36F003385B6 /* AnimatedSettingsViewController.swift in Sources */,
 				3F0BE6871DDCB1F5007E4FD0 /* AppDelegate.swift in Sources */,
 				E49BA3A71DE3443B0010A7A4 /* Constants.swift in Sources */,

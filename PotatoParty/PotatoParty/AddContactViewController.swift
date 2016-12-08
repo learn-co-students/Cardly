@@ -79,8 +79,9 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
             
             let firstName = contact.givenName
             let lastName = contact.familyName
+            let fullName = ("\(firstName) \(lastName)")
             
-            let appContact = Contact(fullName: firstName + lastName, email: emailAddress, phone: phoneNumber)
+            let appContact = Contact(fullName: fullName, email: emailAddress, phone: phoneNumber)
             
             
             let contactsRef = FIRDatabase.database().reference(withPath: "contacts")
@@ -161,7 +162,6 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         nameTextField.placeholder = "Name"
         emailTextField.placeholder = "example@serviceprovider"
         phoneTextField.placeholder = "2224446666"
-        
         
         if groupSelected != "All" {
             let path = "\(uid)/\(groupSelected.lowercased())/\(contactItemRef.key)/"

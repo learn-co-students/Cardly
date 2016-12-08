@@ -110,7 +110,7 @@ extension EditCardViewController {
             make.centerY.equalToSuperview()
         }
         spinnerActivity.mode = .determinateHorizontalBar
-        spinnerActivity.label.text = "Processing image ...";
+        spinnerActivity.label.text = "Processing video ...";
         spinnerActivity.isUserInteractionEnabled = false;
     }
     
