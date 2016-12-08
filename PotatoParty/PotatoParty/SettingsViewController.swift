@@ -132,6 +132,7 @@ class SettingsViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(changeEmailPasswordTextField.snp.bottomMargin).offset(30)
         }
+        newEmailTextField.autocapitalizationType = .none
         newEmailTextField.textColor = UIColor.black
         newEmailTextField.borderStyle = UITextBorderStyle.roundedRect
         newEmailTextField.placeholder = "Enter new email address"
@@ -490,7 +491,7 @@ extension SettingsViewController {
     func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             let keyboardHeight = keyboardSize.height
-            if newPasswordTextField.isEditing || confirmNewPasswordTextField.isEditing {
+            if currentPasswordTextField.isEditing || newPasswordTextField.isEditing || confirmNewPasswordTextField.isEditing {
                 self.view.window?.frame.origin.y = -1 * keyboardHeight
             }
         }
