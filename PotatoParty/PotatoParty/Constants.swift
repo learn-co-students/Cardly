@@ -38,7 +38,8 @@ struct Colors {
 }
 
 struct Backgrounds {
-    static let loginSCreenBackGround = UIImage(named: "loginScreenBackground")
+    static let loginScreenBackGround = UIImage(named: "loginScreenBackground")
+    static let divider = UIImage(named: "line")
 }
 
 struct Icons {
