@@ -140,8 +140,6 @@ class SettingsViewController: UIViewController {
         changeEmailButton.addTarget(self, action: #selector(changeEmailButtonTapped), for: .touchUpInside)
         changeEmailButton.sizeToFit()
         changeEmailButton.snp.makeConstraints { (make) in
-//            make.width.equalToSuperview().dividedBy(2)
-//            make.height.equalTo(newEmailTextField.snp.height).offset(-5)
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(newEmailTextField.snp.bottomMargin).offset(20)
         }
