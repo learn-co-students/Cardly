@@ -362,7 +362,7 @@ extension ContactsViewController: BottomNavBarDelegate {
         print("edit group button pressed")
     }
     
-    //Updates Contact Group property and reloaded Collection View
+    // Updates Contact Group property and reloaded Collection View
     
     func updateGroup(completion: () -> ()){
         for (index, contact) in shared.selectedContacts.enumerated() {
@@ -495,8 +495,6 @@ extension ContactsViewController {
         cameraController.cameraCaptureMode = .video
         cameraController.delegate = delegate
         cameraController.videoMaximumDuration = 20.0
-        
-        //        cameraController.videoQuality = .typeHigh
         cameraController.videoQuality = .typeIFrame1280x720
         
         let maxRecordTime = "Max Record Time is 20 sec"

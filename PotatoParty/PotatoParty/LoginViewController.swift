@@ -23,6 +23,7 @@ class LoginViewController: UIViewController {
     let createAccountButtonTopOffset = 100
     let createAccountButtonWidthMultiplier = 0.8
     let forgotPasswordButtonTopOffset = 30
+    let loginBackgroundImage: UIImage = #imageLiteral(resourceName: "loginScreenBackground")
 
     var userTextfield = UITextField()
     var passwordTextfield = UITextField()

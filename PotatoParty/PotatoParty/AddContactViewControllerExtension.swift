@@ -16,7 +16,7 @@ extension AddContactViewController {
     
     func layoutElements() {
         
-        view.backgroundColor = UIColor.orange
+        view.backgroundColor = Colors.cardlyBlue
         
         // Name
         view.addSubview(nameTextField)
@@ -27,8 +27,11 @@ extension AddContactViewController {
             make.height.equalTo(nameTextField.snp.width).multipliedBy(0.25)
         }
         
-        nameTextField.backgroundColor = UIColor.blue
-        nameTextField.placeholder = "Name"
+        nameTextField.backgroundColor = UIColor.white
+        nameTextField.layer.borderColor = Colors.cardlyGold.cgColor
+        nameTextField.layer.borderWidth = 1
+        // Add cornerRadius to make edges round
+        nameTextField.placeholder = "Contact Name"
         nameTextField.textAlignment = .center
         nameTextField.autocapitalizationType = UITextAutocapitalizationType.none
         
@@ -42,9 +45,11 @@ extension AddContactViewController {
             make.height.equalTo(nameTextField)
         }
         
-        emailTextField.backgroundColor = UIColor.blue
-        emailTextField.placeholder = "example@serviceprovider"
-
+        emailTextField.backgroundColor = UIColor.white
+        emailTextField.placeholder = "Contact Email"
+        emailTextField.layer.borderColor = Colors.cardlyGold.cgColor
+        emailTextField.layer.borderWidth = 1
+        // Add cornerRadius to make edges round
         emailTextField.textAlignment = .center
         emailTextField.autocapitalizationType = UITextAutocapitalizationType.none
 
@@ -58,8 +63,11 @@ extension AddContactViewController {
             make.height.equalTo(nameTextField)
         }
         
-        phoneTextField.backgroundColor = UIColor.blue
-        phoneTextField.placeholder = "2224446666"
+        phoneTextField.backgroundColor = UIColor.white
+        phoneTextField.placeholder = "Contact Phone Number"
+        phoneTextField.layer.borderColor = Colors.cardlyGold.cgColor
+        phoneTextField.layer.borderWidth = 1
+        // Add cornerRadius to make edges round
         phoneTextField.textAlignment = .center
         phoneTextField.autocapitalizationType = UITextAutocapitalizationType.none
 
@@ -75,7 +83,7 @@ extension AddContactViewController {
             make.height.equalTo(phoneTextField)
         }
         
-        groupPickerView.backgroundColor = UIColor.blue
+        groupPickerView.backgroundColor = UIColor.white
         
         // Add button
         view.addSubview(addButton)
@@ -86,7 +94,7 @@ extension AddContactViewController {
             make.height.equalTo(nameTextField.snp.height).multipliedBy(0.5)
         }
         
-        addButton.backgroundColor = UIColor.gray
+        addButton.backgroundColor = UIColor.clear
         addButton.setTitle("Add", for: .normal)
         addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         
@@ -99,7 +107,7 @@ extension AddContactViewController {
             make.height.equalTo(addButton.snp.height)
         }
         
-        importContactsButton.backgroundColor = UIColor.blue
+        importContactsButton.backgroundColor = UIColor.clear
         importContactsButton.setTitle("Import from Contacts", for: .normal)
         importContactsButton.addTarget(self, action: #selector(self.importContactButtonTapped), for: .touchUpInside)
         
@@ -112,7 +120,7 @@ extension AddContactViewController {
             make.height.equalTo(addButton.snp.height)
         }
         
-        cancelButton.backgroundColor = UIColor.blue
+        cancelButton.backgroundColor = UIColor.clear
         cancelButton.setTitle("Cancel", for: .normal)
         cancelButton.addTarget(self, action: #selector(self.cancelButtonTapped), for: .touchUpInside)
     }
