@@ -15,9 +15,9 @@ struct Styles {
 }
 
 struct Font {
-    static let name = "Raleway-Regular"
+    static let regular = "Raleway-Regular"
     static let nameForCard = "Qwigley-Regular"
-    static let fancy = "Distant_Stroke_Medium.ttf"
+    static let fancy = "Distant_Stroke"
     
     
     struct Size {
@@ -30,6 +30,11 @@ struct Font {
         static let cardView: CGFloat = 64
         static let cardVideo: CGFloat = 120
     }
+    
+}
+
+struct TextFieldSize {
+    
     
 }
 

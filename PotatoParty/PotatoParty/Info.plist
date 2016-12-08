@@ -30,6 +30,7 @@
 	<string>to access customized video thank yous</string>
 	<key>UIAppFonts</key>
 	<array>
+		<string>Distant_Stroke.ttf</string>
 		<string>Qwigley-Regular.ttf</string>
 		<string>Raleway-Regular.ttf</string>
 		<string>Distant_Stroke_Medium.ttf</string>
