@@ -15,7 +15,6 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     let reuseIdentifier = "cell"
     let layout = UICollectionViewFlowLayout()
     let defaultContact: Contact = Contact(fullName: "Add Contact", email: "", phone: "")
-    //  var contactsBackgroundImage: UIImage = #imageLiteral(resourceName: "contactsAndSettingsVCBackgroundImage")
     let shared = User.shared
     
     
@@ -61,8 +60,8 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         dataSource = self
         
         // Collection View properties
-        backgroundColor = UIColor.brown
-        // backgroundColor = UIColor.init(patternImage: contactsBackgroundImage) // NOTE: maybe not pattern
+        backgroundColor = Colors.cardlyBlue
+       
         
         // Create reuse cell
         register(ContactsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)

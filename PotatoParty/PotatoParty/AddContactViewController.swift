@@ -17,6 +17,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     let uid = User.shared.uid
     let groups = User.shared.groups
     
+    
     var nameTextField = UITextField()
     var emailTextField = UITextField()
     var phoneTextField = UITextField()
@@ -24,11 +25,8 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     var groupPickerView = UIPickerView()
     var importContactsButton = UIButton()
     var cancelButton = UIButton()
-    
     var contactStore = CNContactStore()
-    
     var dataDict = [String: String] ()
-    
     var groupSelected: String = "All"
     
     override func viewDidLoad() {
@@ -247,7 +245,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     }
     func enableAddButton() {
         addButton.isEnabled = true
-        addButton.backgroundColor = UIColor.blue
+        addButton.backgroundColor = UIColor.white 
     }
     
     func shake(textfield: UITextField) {

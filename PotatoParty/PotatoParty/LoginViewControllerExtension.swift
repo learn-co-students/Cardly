@@ -11,7 +11,7 @@ extension LoginViewController {
     
     func layoutViewAndContraints() {
         
-        view.backgroundColor = UIColor.white
+       view.backgroundColor = UIColor.init(patternImage: #imageLiteral(resourceName: "loginScreenBackground"))
         
         view.addSubview(userTextfield)
         userTextfield.snp.makeConstraints { (make) in

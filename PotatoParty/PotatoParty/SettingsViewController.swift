@@ -42,8 +42,6 @@ class SettingsViewController: UIViewController {
     
     let currentUser = FIRAuth.auth()?.currentUser
     
-    //  var settingsBackgroundImage: UIImage = #imageLiteral(resourceName: "contactsAndSettingsVCBackgroundImage")
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutElements()
@@ -132,6 +130,7 @@ class SettingsViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(changeEmailPasswordTextField.snp.bottomMargin).offset(30)
         }
+        newEmailTextField.autocapitalizationType = .none
         newEmailTextField.textColor = UIColor.black
         newEmailTextField.borderStyle = UITextBorderStyle.roundedRect
         newEmailTextField.placeholder = "Enter new email address"
@@ -267,14 +266,12 @@ class SettingsViewController: UIViewController {
     }
     
     func changeEmailButtonTapped() {
-        print("Change email submit button tapped")
         if checkIfChangeEmailFieldsValid() {
             attemptEmailChange()
         }
     }
     
     func changePasswordButtonTapped() {
-        print("Change password submit button tapped")
         if checkIfPasswordFieldsValid() {
             attemptPasswordChange()
         }
@@ -441,23 +438,21 @@ extension SettingsViewController {
             currentUser?.reauthenticate(with: credential, completion: { (error) in
                 if error != nil {
                     print("Firebase auth error \(error?.localizedDescription)")
+                    CustomNotification.showError(SettingsErrorMessage.authFailed)
                 }
                 else {
                     self.currentUser?.updateEmail(email, completion: { (error) in
                         if let error = error {
                             switch error {
                             case FIRAuthErrorCode.errorCodeEmailAlreadyInUse:
-                                print("email already in use")
                                 DispatchQueue.main.async {
                                     CustomNotification.showError(SettingsErrorMessage.emailAlreadyInUse)
                                 }
                             case FIRAuthErrorCode.errorCodeInvalidEmail:
-                                print("email is invalid")
                                 DispatchQueue.main.async {
                                     CustomNotification.showError(SettingsErrorMessage.invalidEmail)
                                 }
                             default:
-                                print("Error changing email \(error.localizedDescription)")
                                 DispatchQueue.main.async {
                                     CustomNotification.showError(SettingsErrorMessage.generalEmail)
                                 }
@@ -490,7 +485,7 @@ extension SettingsViewController {
     func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             let keyboardHeight = keyboardSize.height
-            if newPasswordTextField.isEditing || confirmNewPasswordTextField.isEditing {
+            if currentPasswordTextField.isEditing || newPasswordTextField.isEditing || confirmNewPasswordTextField.isEditing {
                 self.view.window?.frame.origin.y = -1 * keyboardHeight
             }
         }
