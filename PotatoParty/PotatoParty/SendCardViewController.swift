@@ -154,7 +154,9 @@ class SendCardViewController: UIViewController {
             message.addAttachmentURL(fileLocation, withAlternateFilename: nil)
             message.body = "Thank You so much!"
             
-            present(message, animated: true, completion: nil)
+            DispatchQueue.main.async {
+                self.present(message, animated: true, completion: nil)
+            }
             
         } else {
             let noTextAlertVC = UIAlertController(title: "Unable to send text", message: "Please check your account settings", preferredStyle: .alert)
@@ -190,7 +192,9 @@ class SendCardViewController: UIViewController {
             mail.addAttachmentData(unwrappedData as Data, mimeType: "MOV", fileName: "50161176453__6435040D-0DF3-426D-8A73-122E678A3663.MOV")
             mail.setMessageBody("<p>You're so awesome! <p>", isHTML: true)
             
-            present(mail, animated: true)
+            DispatchQueue.main.async {
+                self.present(mail, animated: true)
+            }
             
         } else {
             let noEmailAlertVC = UIAlertController(title: "No mail account found", message: "Please set up an account in order to send email", preferredStyle: .alert)
@@ -293,13 +297,11 @@ extension SendCardViewController: MFMailComposeViewControllerDelegate {
             })
             CustomNotification.show("E-mail sent successfully")
         case .failed:
-            if let error = error{
-                print("Error sending email \(error.localizedDescription)")
+            if error != nil {
+                presentGenericErrorAlert()
             } else {
                 print("Error sending email")
-            }
-            //need to handle error case
-        //need to implement some sort of alert to notify user if failed to send (no internet, bad email etc)
+            }  
         default:
             controller.dismiss(animated: true)
         }
@@ -322,11 +324,23 @@ extension SendCardViewController: MFMessageComposeViewControllerDelegate {
             })
             CustomNotification.show("Text sent successfully")
         case .failed:
-            print("Could not send message")
+            presentGenericErrorAlert()
         default:
             controller.dismiss(animated: true)
         }
     }
     
+}
 
+extension SendCardViewController {
+    
+    func presentGenericErrorAlert() {
+        let errorAC = UIAlertController(title: "Error", message: "An unexpected error occured, please try again", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .default, handler: { _ in
+            self.dismiss(animated: true, completion: nil)
+        })
+        errorAC.addAction(okAction)
+        present(errorAC, animated: true, completion: nil)
+    }
+    
 }
