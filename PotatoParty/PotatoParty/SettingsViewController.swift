@@ -41,7 +41,7 @@ class SettingsViewController: UIViewController {
     var isConfirmPasswordValid: Bool = false
     
     let currentUser = FIRAuth.auth()?.currentUser
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutElements()
