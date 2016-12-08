@@ -58,6 +58,10 @@ struct Icons {
     static let deleteButton = UIImage(named: "trashIcon")
 }
 
+struct IconSize {
+   // static let standardIconSize = 
+}
+
 struct CustomNotification {
      static func show(_ notification: String) {
         var murmur = Murmur(title: notification)
