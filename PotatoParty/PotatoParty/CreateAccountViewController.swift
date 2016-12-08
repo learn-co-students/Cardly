@@ -13,7 +13,7 @@ import FirebaseAuth
 
 
 
-class CreateAccountViewController: UIViewController {
+class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     
     var emailTextField = UITextField()
     var passwordTextField = UITextField()
@@ -35,20 +35,22 @@ class CreateAccountViewController: UIViewController {
     var password: String? = nil
     var isEmailValid: Bool = false
     var isPasswordValid: Bool = false
-
-
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
-
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -56,24 +58,26 @@ class CreateAccountViewController: UIViewController {
         
     }
     
+    // UIText Field Delegate Methods
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == emailTextField {
             emailTextField.becomeFirstResponder()
         }
         if textField == passwordTextField {
-            textField.resignFirstResponder()
+            emailTextField.resignFirstResponder()
         }
         return true
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         switch textField {
-
+            
         case emailTextField:
-        
-           isEmailValid = validateEmail(text: textField.text!)
+            
+            isEmailValid = validateEmail(text: textField.text!)
             break
-
+            
         case passwordTextField:
             if !validatePassword(text: textField.text!){
                 isPasswordValid = false
@@ -82,22 +86,28 @@ class CreateAccountViewController: UIViewController {
                 isPasswordValid = true
             }
             break
-    
+            
         default:
             break
         }
     }
-
-
+    
+    
+    // Keyboard Method
     
     func dismissKeyboard() {
         view.endEditing(true)
     }
     
     
-    // Firebase create account
+    // Button and Firebase methods
     
-    func submitButtonTapped(){
+    func cancelButtonTapped() {
+        dismiss(animated: true, completion: nil)
+        print ("Cancel Button Tapped")
+    }
+    
+    func submitButtonTapped() {
         print("submit button tapped")
         if let unwrappedEmail = emailTextField.text, let unwrappedPassword = passwordTextField.text {
             FIRAuth.auth()!.createUser(withEmail: unwrappedEmail, password: unwrappedPassword, completion: { (user, error) in
@@ -120,7 +130,7 @@ class CreateAccountViewController: UIViewController {
                         default:
                             print("Firebase create user error: \(error.localizedDescription)")
                             DispatchQueue.main.async {
-                                CustomNotification.showError("\(error.localizedDescription)")
+                                CustomNotification.showError(SettingsErrorMessage.changeEmailFieldsNotCorrect)
                             }
                         }
                     }
@@ -129,7 +139,7 @@ class CreateAccountViewController: UIViewController {
         }
     }
     
-
+    
     func firebaseSignIn(user: String, password: String) {
         FIRAuth.auth()!.signIn(withEmail: user, password: password, completion: { (user, error) in
             if error == nil {
@@ -148,7 +158,7 @@ class CreateAccountViewController: UIViewController {
     }
     
     // Layout Views and Constraints
-
+    
     func setUpView() {
         
         view.backgroundColor = UIColor.white
@@ -183,7 +193,7 @@ class CreateAccountViewController: UIViewController {
         
         view.addSubview(submitButton)
         submitButton.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
+            make.centerX.equalToSuperview().offset(50)
             make.topMargin.equalTo(passwordTextField.snp.bottomMargin).offset(submitButtonTopOffset)
             make.width.equalTo(passwordTextField.snp.width).multipliedBy(submitButtonToTextFieldWidthMultipier)
             make.height.equalTo(passwordTextField.snp.height).multipliedBy(submitButtonToTextFieldHeightMultiplier)
@@ -192,10 +202,22 @@ class CreateAccountViewController: UIViewController {
         submitButton.setTitle("Submit", for: .normal)
         submitButton.backgroundColor = UIColor.blue
         submitButton.addTarget(self, action: #selector(self.submitButtonTapped), for: .touchUpInside)
+        
+        view.addSubview(cancelButton)
+        cancelButton.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview().offset(-50)
+            make.topMargin.equalTo(passwordTextField.snp.bottomMargin).offset(submitButtonTopOffset)
+            make.width.equalTo(submitButton)
+            make.height.equalTo(submitButton)
+        }
+        
+        cancelButton.setTitle("Cancel", for: .normal)
+        cancelButton.backgroundColor = UIColor.blue
+        cancelButton.addTarget(self, action: #selector(self.cancelButtonTapped), for: .touchUpInside)
     }
     
     
-    // validating fields 
+    // validating fields
     
     
     func validateEmail(text: String) -> Bool {
@@ -205,13 +227,13 @@ class CreateAccountViewController: UIViewController {
         }
         
         if text.contains("@") && text.contains(".") {
-         return true
+            return true
         } else {
             CustomNotification.showError(SettingsErrorMessage.emailFormat)
             return false
         }
     }
-
+    
     func validatePassword(text: String) -> Bool {
         if !(text.characters.count > 0) {
             CustomNotification.showError("Password cannot be empty")
@@ -219,29 +241,11 @@ class CreateAccountViewController: UIViewController {
         }
         if text.characters.count >= 6 {
             return true
-    }
+        }
         CustomNotification.showError(SettingsErrorMessage.passwordLength)
         return false
     }
-
-    
-//    func checkIfPasswordFieldsValid() -> Bool{
-//        if  isPasswordValid {
-//            return true
-//        }
-//        CustomNotification.showError(SettingsErrorMessage.changePasswordFieldsNotCorrect)
-//        return false
-//    }
-//    
-//    func checkIfEmailFieldsValid() -> Bool {
-//        if isEmailValid {
-//            return true
-//        }
-//        CustomNotification.showError(SettingsErrorMessage.changeEmailFieldsNotCorrect)
-//        return false
-//    }
-
-
+   
 }
 
 extension CreateAccountViewController {
