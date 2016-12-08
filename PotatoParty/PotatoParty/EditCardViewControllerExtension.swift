@@ -116,6 +116,7 @@ extension EditCardViewController {
     
     func startActivityIndicator() {
         DispatchQueue.main.async {
+            UIApplication.shared.beginIgnoringInteractionEvents()
             self.spinnerActivity.show(animated: true)
         }
     }
@@ -123,6 +124,7 @@ extension EditCardViewController {
     func stopActivityIndicator() {
         DispatchQueue.main.async {
             self.spinnerActivity.hide(animated: true)
+            UIApplication.shared.endIgnoringInteractionEvents()
         }
     }
     
