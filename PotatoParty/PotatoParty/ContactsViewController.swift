@@ -118,16 +118,31 @@ extension ContactsViewController {
         let title = prepareNavigationBarMenuTitleView()
         prepareNavigationBarMenu(title)
         
-        let rightBtn = UIBarButtonItem(title: "Select All", style: .plain, target: self, action: #selector(self.selectBtnClicked))
-        self.navigationItem.rightBarButtonItem = rightBtn
-        navSelecAllButton = rightBtn
+        // Select all contacts button (right)
+        let rightBtn = UIButton()
+        rightBtn.setImage(Icons.addContactButton, for: .normal)
+        rightBtn.imageView!.snp.makeConstraints({ (make) in
+            make.width.equalTo(rightBtn.snp.height)
+            make.right.equalToSuperview()
+        })
+        rightBtn.frame = CGRect(x: 0, y: 0, width: 100, height: 30)
+        rightBtn.addTarget(self, action: #selector(selectBtnClicked), for: .touchUpInside)
         
+        let rightBtnItem = UIBarButtonItem()
+        rightBtnItem.customView = rightBtn
+        self.navigationItem.rightBarButtonItem = rightBtnItem
+        navSelecAllButton = rightBtnItem
+
+        // Settings button (left)
         let btnName = UIButton()
-        btnName.setTitle("Settings", for: .normal)
+        btnName.setImage(Icons.settingsButton, for: .normal)
+        btnName.imageView?.snp.makeConstraints({ (make) in
+            make.width.equalTo(btnName.snp.height)
+            make.left.equalToSuperview()
+        })
         btnName.frame = CGRect(x: 0, y: 0, width: 100, height: 30)
         btnName.addTarget(self, action: #selector(self.navToSettingsVC), for: .touchUpInside)
         
-        //.... Set Right/Left Bar Button item
         let leftBarButton = UIBarButtonItem()
         leftBarButton.customView = btnName
         self.navigationItem.leftBarButtonItem = leftBarButton
@@ -141,10 +156,25 @@ extension ContactsViewController {
     
     func prepareNavigationBarMenuTitleView() -> String {
         titleView = DropDownTitleView(frame: CGRect(x: 0, y: 0, width: 150, height: 40))
+
+        // Targets
         titleView.addTarget(self, action: #selector(self.willToggleNavigationBarMenu(_:)), for: .touchUpInside)
         titleView.addTarget(self, action: #selector(self.didToggleNavigationBarMenu(_:)), for: .valueChanged)
-        titleView.titleLabel.textColor = UIColor.black
-        titleView.title = "Lists"
+
+        // Title
+        titleView.titleLabel.textColor = UIColor.blue
+        titleView.titleLabel.font = UIFont(name: Font.regular, size: Font.Size.m)
+        titleView.title = "Groups"
+        
+        // Image 
+        /*
+        let image = UIImageView()
+        image.image = Icons.groupDropDownButton
+        titleView.imageView.addSubview(image)
+        image.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+        */
         
         navigationItem.titleView = titleView
         

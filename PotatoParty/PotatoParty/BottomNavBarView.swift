@@ -133,7 +133,8 @@ class BottomNavBarRightView: UIView {
         sendToContactBtn.isEnabled = true
         sendToContactBtn.addTarget(self, action: #selector(sendToContactButtonTapped(_:)), for: .touchUpInside)
         sendToContactBtn.snp.makeConstraints { (make) in
-            make.center.equalToSuperview()
+            make.right.equalTo(self.snp.right).offset(-20)
+            make.centerY.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(Icons.multiplier)
             make.width.equalTo(sendToContactBtn.snp.height)
         }
