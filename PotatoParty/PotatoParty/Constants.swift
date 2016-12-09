@@ -96,6 +96,7 @@ struct CustomNotification {
     }
 }
 
+
 struct SettingsErrorMessage {
     static var authFailed = "User authentication failed. Please make sure password is correct"
     static var passwordEmpty = "Current password cannot be empty"
