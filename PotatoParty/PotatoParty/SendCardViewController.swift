@@ -53,7 +53,6 @@ class SendCardViewController: UIViewController {
         didSet {
             player.replaceCurrentItem(with: playerItem)
             player.actionAtItemEnd = .none
-            player.play()
         }
     }
     
@@ -65,8 +64,12 @@ class SendCardViewController: UIViewController {
         
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        player.play()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
-        player.replaceCurrentItem(with: nil)
+        player.pause()
     }
     
     override func didReceiveMemoryWarning() {
@@ -107,23 +110,14 @@ class SendCardViewController: UIViewController {
         
         buttonStackView.addArrangedSubview(sendEmail)
         sendEmail.setImage(Icons.sendEmailIcon, for: .normal)
-//        sendEmail.imageView?.contentMode = .scaleAspectFit
-//        sendEmail.contentVerticalAlignment = .fill
-//        sendEmail.contentHorizontalAlignment = .fill
         sendEmail.addTarget(self, action: #selector(sendEmailButtonTapped), for: .touchUpInside)
         
         buttonStackView.addArrangedSubview(sendText)
         sendText.setImage(Icons.sendTextIcon, for: .normal)
-//        sendText.imageView?.contentMode = .scaleAspectFit
-//        sendText.contentVerticalAlignment = .fill
-//        sendText.contentHorizontalAlignment = .fill
         sendText.addTarget(self, action: #selector(sendTextButtonTapped), for: .touchUpInside)
         
         buttonStackView.addArrangedSubview(cancelButton)
         cancelButton.setImage(Icons.cancelIcon, for: .normal)
-//        cancelButton.imageView?.contentMode = .scaleAspectFit
-//        cancelButton.contentVerticalAlignment = .fill
-//        cancelButton.contentHorizontalAlignment = .fill
         cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         
         let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
@@ -184,15 +178,16 @@ class SendCardViewController: UIViewController {
                 emailArray.append(email)
             }
             mail.setBccRecipients(emailArray)
-            //insert user's e-mail in the "TO" field instead of arielaades@gmail.com
-            mail.setToRecipients(["arielaades@gmail.com"])
+            if let currentUserEmail = FIRAuth.auth()?.currentUser?.email {
+                mail.setToRecipients([currentUserEmail])
+            }
             mail.setSubject("Thank You Video")
             guard let fileLocation = fileLocation else {
                 fatalError("File location does not exist!")
             }
             let data = NSData(contentsOf: fileLocation )
             guard let unwrappedData = data else { return }
-            mail.addAttachmentData(unwrappedData as Data, mimeType: "MOV", fileName: "50161176453__6435040D-0DF3-426D-8A73-122E678A3663.MOV")
+            mail.addAttachmentData(unwrappedData as Data, mimeType: "MOV", fileName: "Thank_You_Video.MOV")
             mail.setMessageBody("<p>You're so awesome! <p>", isHTML: true)
             
             DispatchQueue.main.async {
@@ -292,7 +287,6 @@ extension SendCardViewController: MFMailComposeViewControllerDelegate {
             videoWasSent {
                 shared.selectedContacts.removeAll()
             }
-            //do you want controller to dismiss and contacts VC to possibly show before contacts isSent is all finished being set???
             controller.dismiss(animated: true, completion: {
                 self.delegate?.modalViewControllerDidDisappear(completion: {
                     self.clearTmpDirectory()
