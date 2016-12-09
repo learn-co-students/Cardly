@@ -206,7 +206,7 @@ class SettingsViewController: UIViewController {
             make.topMargin.equalTo(logoutButton.snp.bottomMargin).offset(20)
         }
         
-        forgotPasswordButton = CardlyFormFieldButton.initButton(title: "Forgot password?", target: self, selector: #selector(forgotPassword))
+        forgotPasswordButton = CardlyFormFieldButton.initButton(title: "Forgot password?", target: self, selector: #selector(forgotPasswordButtonTapped))
         view.addSubview(forgotPasswordButton)
         forgotPasswordButton.snp.makeConstraints { (make) in
             make.leadingMargin.equalToSuperview()
@@ -241,8 +241,40 @@ class SettingsViewController: UIViewController {
         }
     }
     
-    func forgotPassword() {
+    func forgotPasswordButtonTapped() {
         
+        let alertController = UIAlertController(title: "Enter E-Mail", message: "We'll send you a password reset e-mail", preferredStyle: .alert)
+        
+        let submitAction = UIAlertAction(title: "Send", style: .default) { (action) in
+            let emailField = alertController.textFields![0]
+            if let email = emailField.text {
+                
+                FIRAuth.auth()?.sendPasswordReset(withEmail: email, completion: { (error) in
+                    if let error = error {
+                        let alertController = UIAlertController(title: "Error", message: "\(error.localizedDescription)", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "Ok", style: .default, handler: { (action) in
+                            self.dismiss(animated: true, completion: nil)
+                        })
+                        alertController.addAction(okAction)
+                        self.present(alertController, animated: true, completion: nil)
+                    } else {
+                        CustomNotification.show("Password reset e-mail sent")
+                    }
+                })
+            }
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default) { (action) in
+            self.dismiss(animated: true, completion: nil)
+        }
+        
+        alertController.addAction(submitAction)
+        alertController.addAction(cancelAction)
+        alertController.addTextField { (textfield) in
+            textfield.placeholder = "Enter E-mail"
+        }
+        
+        self.present(alertController, animated: true, completion: nil)
     }
     
     func dismissButtonTapped(_ sender: UIButton) {

@@ -12,21 +12,16 @@ import SnapKit
 import FirebaseAuth
 
 
-
 class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     
-    //UI Elements
-    
-    var emailTextField = CustomTextField.initTextField(placeHolderText: "example@emailprovider.com" , isSecureEntry: false)
-    var passwordTextField = CustomTextField.initTextField(placeHolderText: "password", isSecureEntry: true)
-    var confirmPasswordTextField = CustomTextField.initTextField(placeHolderText: "confirm password", isSecureEntry: true)
-    var submitButton = CardlyFormFieldButton.initButton(title: "Submit", target: self, selector: #selector(submitButtonTapped))
-    var cancelButton = CardlyFormFieldButton.initButton(title: "Cancel", target: self, selector: #selector(cancelButtonTapped))
-    var cardlyTextLabel = UILabel()
-    var cardlyAirplaneImageView = UIImageView()
-    var titleLabel = UILabel()
-    
-    //Constraints Constants
+    var emailTextField: UITextField!
+    var passwordTextField: UITextField!
+    var confirmPasswordTextField: UITextField!
+    var submitButton: UIButton!
+    var cancelButton: UIButton!
+    var cardlyTextLabel: UILabel!
+    var cardlyAirplaneImageView: UIImageView!
+    var titleLabel: UILabel!
     
     let textFieldToSuperviewWidthMultiplier = 0.6
     let textFieldToSuperviewHeightMultiplier = 0.25
@@ -36,105 +31,45 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     let submitButtonToTextFieldHeightMultiplier = 0.5
     let submitButtonTopOffset = 30
     
-    //Validating Email Constants
-    
-    var email: String? = nil
     var password: String? = nil
-    var confirmPassword: String? = nil
     var isEmailValid: Bool = false
     var isPasswordValid: Bool = false
     var isConfirmPasswordValid: Bool = false
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor.init(patternImage: #imageLiteral(resourceName: "loginScreenBackground"))
         setUpView()
         emailTextField.delegate = self
         passwordTextField.delegate = self
         confirmPasswordTextField.delegate = self
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        
     }
+
     
-    // UIText Field Delegate Methods
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if textField == emailTextField {
-            emailTextField.becomeFirstResponder()
-        }
-        if textField == passwordTextField {
-            emailTextField.resignFirstResponder()
-        }
-        return true
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        switch textField {
-            
-        case emailTextField:
-            
-            isEmailValid = validateEmail(text: textField.text!)
-            break
-            
-        case passwordTextField:
-            if !validatePassword(text: textField.text!){
-                isPasswordValid = false
-            }
-            else{
-                isPasswordValid = true
-            }
-            break
-        case confirmPasswordTextField:
-            if !validatePasswordConfirm(text: textField.text!){
-                isConfirmPasswordValid = false
-            }
-            else{
-                isConfirmPasswordValid = true
-            }
-            break
-        default:
-            break
-        }
-    }
-    
-    
-    // Keyboard Method
-    
-    func dismissKeyboard() {
-        view.endEditing(true)
-    }
-    
-    
-    // Button and Firebase methods
+// MARK: - Button methods
     
     func cancelButtonTapped() {
         dismiss(animated: true, completion: nil)
-        print ("Cancel Button Tapped")
     }
     
     func submitButtonTapped() {
-        print("submit button tapped")
-        if checkIfPasswordFieldsValid() && checkIfChangeEmailFieldValid() {
+        if checkIfAllFieldsValid() {
             createUserAccount()
-        } else {
-            DispatchQueue.main.async {
-                CustomNotification.showError(SettingsErrorMessage.changeEmailFieldsNotCorrect)
-            }
-            
         }
     }
+    
+
+// MARK: - Firebase methods
     
     func createUserAccount() {
         if let unwrappedEmail = emailTextField.text, let unwrappedPassword = passwordTextField.text {
@@ -144,22 +79,8 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
                     
                 } else {
                     if let error = error {
-                        switch error {
-                        case FIRAuthErrorCode.errorCodeEmailAlreadyInUse:
-                            print("email already in use")
-                            DispatchQueue.main.async {
-                                CustomNotification.showError(SettingsErrorMessage.emailAlreadyInUse)
-                            }
-                        case FIRAuthErrorCode.errorCodeInvalidEmail:
-                            print("email is invalid")
-                            DispatchQueue.main.async {
-                                CustomNotification.showError(SettingsErrorMessage.invalidEmail)
-                            }
-                        default:
-                            print("Firebase create user error: \(error.localizedDescription)")
-                            DispatchQueue.main.async {
-                                CustomNotification.showError(SettingsErrorMessage.changeEmailFieldsNotCorrect)
-                            }
+                        DispatchQueue.main.async {
+                            CustomNotification.showError(error.localizedDescription)
                         }
                     }
                 }
@@ -170,27 +91,27 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     
     func firebaseSignIn(user: String, password: String) {
         FIRAuth.auth()!.signIn(withEmail: user, password: password, completion: { (user, error) in
-            if error == nil {
-                self.loginSuccessSegue()
-            }
-            else {
-                print("Firebase sign in error: \(error?.localizedDescription)")
-                let alertController = UIAlertController(title: "Error", message: "Email or Password is incorrect", preferredStyle: .alert)
+            var errorMsg = "Firebase sign in error"
+            if let error = error {
+                errorMsg = error.localizedDescription
+                let alertController = UIAlertController(title: "Error", message: errorMsg, preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "Ok", style: .default, handler: { (action) in
                     self.dismiss(animated: true, completion: nil)
                 })
                 alertController.addAction(okAction)
                 self.present(alertController, animated: true, completion: nil)
             }
+            else {
+                self.loginSuccessSegue()
+            }
         })
     }
     
-    // Layout Views and Constraints
+    
+// MARK: - Layout view elements
     
     func setUpView() {
-        
-        view.backgroundColor = UIColor.init(patternImage: #imageLiteral(resourceName: "loginScreenBackground"))
-      
+        emailTextField = CustomTextField.initTextField(placeHolderText: "example@emailprovider.com" , isSecureEntry: false)
         view.addSubview(emailTextField)
         emailTextField.snp.makeConstraints { (make) in
             make.centerX.equalTo(view.snp.centerX)
@@ -199,6 +120,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             make.height.equalTo(50)
         }
        
+        passwordTextField = CustomTextField.initTextField(placeHolderText: "password", isSecureEntry: true)
         view.addSubview(passwordTextField)
         passwordTextField.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
@@ -207,7 +129,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             make.height.equalTo(emailTextField.snp.height)
         }
 
-        
+        confirmPasswordTextField = CustomTextField.initTextField(placeHolderText: "confirm password", isSecureEntry: true)
         view.addSubview(confirmPasswordTextField)
         confirmPasswordTextField.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
@@ -216,6 +138,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             make.height.equalTo(passwordTextField)
         }
    
+        submitButton = CardlyFormFieldButton.initButton(title: "Submit", target: self, selector: #selector(submitButtonTapped))
         view.addSubview(submitButton)
         submitButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview().offset(50)
@@ -224,6 +147,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             make.height.equalTo(confirmPasswordTextField.snp.height).multipliedBy(submitButtonToTextFieldHeightMultiplier)
         }
 
+        cancelButton = CardlyFormFieldButton.initButton(title: "Cancel", target: self, selector: #selector(cancelButtonTapped))
         view.addSubview(cancelButton)
         cancelButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview().offset(-50)
@@ -232,7 +156,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             make.height.equalTo(submitButton)
         }
         
-        let titleLabel = UILabel()
+        titleLabel = UILabel()
         view.addSubview(titleLabel)
         titleLabel.text = "Create Account"
         titleLabel.textColor = UIColor.white
@@ -248,51 +172,46 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             make.centerX.equalToSuperview()
             make.topMargin.equalToSuperview().offset(30)
         }
-        let cardlyDescriptionText = UILabel()
-        view.addSubview(cardlyDescriptionText)
-        cardlyDescriptionText.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.bottomMargin.equalToSuperview().offset(10)
-            make.width.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.1/0.6)
+    }
+}
+
+
+// MARK: - UITextField delegate methods
+
+extension CreateAccountViewController {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == emailTextField {
+            emailTextField.becomeFirstResponder()
         }
-        
-        cardlyDescriptionText.backgroundColor = UIColor.clear
-        cardlyDescriptionText.text = "Send Video Thank You Cards"
-        cardlyDescriptionText.textAlignment = .center
-        cardlyDescriptionText.font = UIFont(name: Font.fancy, size: 50)
-        cardlyDescriptionText.textColor = UIColor.white
-        
-//        view.addSubview(cardlyTextLabel)
-//        cardlyTextLabel.snp.makeConstraints { (make) in
-//            make.centerX.equalTo(view.snp.centerX)
-//            make.topMargin.equalTo(view.snp.topMargin).offset(12)
-//            make.width.equalTo(view.snp.width).multipliedBy(0.5)
-//            make.height.equalTo(view.snp.height).multipliedBy(1.0/5.0)
-//        }
-//
-//        cardlyTextLabel.backgroundColor = UIColor.clear
-//        cardlyTextLabel.text = "Cardly"
-//        cardlyTextLabel.textAlignment = .center
-//        cardlyTextLabel.font = UIFont(name: Font.fancy , size: 110)
-//        cardlyTextLabel.textColor = UIColor.white
-//        
-//        cardlyAirplaneImageView.image = Icons.planeIcon
-//        
-//        view.addSubview(cardlyAirplaneImageView)
-//        
-//        cardlyAirplaneImageView.snp.makeConstraints { (make) in
-//            make.height.equalTo(view.snp.height).multipliedBy(0.06)
-//            make.width.equalTo(view.snp.height).multipliedBy(0.06)
-//            make.topMargin.equalTo(cardlyTextLabel.snp.bottomMargin).offset(-20)
-//            make.trailingMargin.equalToSuperview().offset(-135)
-//        }
+        if textField == passwordTextField {
+            emailTextField.resignFirstResponder()
+        }
+        return true
     }
     
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        switch textField {
+        case emailTextField:
+            isEmailValid = validateEmail(text: textField.text!)
+            break
+        case passwordTextField:
+            isPasswordValid = validatePassword(text: textField.text!)
+            break
+        case confirmPasswordTextField:
+            isConfirmPasswordValid = validatePasswordConfirm(text: textField.text!)
+            break
+        default:
+            break
+        }
+    }
     
-    // validating fields
-    
-    
+}
+
+
+// MARK: - TextField verification methods
+
+extension CreateAccountViewController {
     func validateEmail(text: String) -> Bool {
         if !(text.characters.count > 0) {
             CustomNotification.showError(SettingsErrorMessage.emailEmpty)
@@ -313,6 +232,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             return false
         }
         if text.characters.count >= 6 {
+            password = text
             return true
         }
         CustomNotification.showError(SettingsErrorMessage.passwordLength)
@@ -334,23 +254,25 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
         return false
     }
     
-    func checkIfPasswordFieldsValid() -> Bool{
-        if isPasswordValid && isConfirmPasswordValid {
-            return true
-        }
-        CustomNotification.showError(SettingsErrorMessage.changePasswordFieldsNotCorrect)
-        return false
-    }
-    
-    func checkIfChangeEmailFieldValid() -> Bool {
-        if isEmailValid {
+    func checkIfAllFieldsValid() -> Bool {
+        if isEmailValid && isPasswordValid && isConfirmPasswordValid {
             return true
         }
         CustomNotification.showError(SettingsErrorMessage.changeEmailFieldsNotCorrect)
         return false
     }
-    
 }
+
+// MARK: - Keyboard methods
+
+extension CreateAccountViewController {
+    func dismissKeyboard() {
+        view.endEditing(true)
+    }
+}
+
+
+// MARK: - Navigation methods
 
 extension CreateAccountViewController {
     
@@ -361,8 +283,3 @@ extension CreateAccountViewController {
     }
     
 }
-
-
-
-
-
