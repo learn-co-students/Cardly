@@ -14,6 +14,7 @@ import Photos
 import MBProgressHUD
 import SnapKit
 
+
 class EditCardViewController: UIViewController {
 
     static let assetKeysRequiredToPlay = ["playable", "hasProtectedContent"]
@@ -30,7 +31,7 @@ class EditCardViewController: UIViewController {
 
     let HDVideoSize = CGSize(width: 720.0, height: 1280.0)
 
-    // Player
+    // Video player
     var playerView = PlayerView()
     let player = AVPlayer()
     var asset: AVURLAsset? {
@@ -54,23 +55,21 @@ class EditCardViewController: UIViewController {
     
     var selectedImageIndex = 0
 
-    // Buttons
     var saveButton: UIButton!
     var playPauseButton: UIButton!
     var addTextButton: UIButton!
     lazy var buttons: [UIButton] = [self.saveButton, self.playPauseButton, self.addTextButton]
+    
     var frameScrollview: UIScrollView!
     var frameStackview: UIStackView!
     var frame1View: UIImageView!
     var frame2View: UIImageView!
     var frameImagesList: [UIImageView] = []
     
-    // Custom text fields
     var topTextField: UITextField!
     var bottomTextField: UITextField!
     var activeField: UITextField?
     
-    // MARK: - Init
     override func viewDidLoad() {
         super.viewDidLoad()
         instantiateButtons()
@@ -92,6 +91,140 @@ class EditCardViewController: UIViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+// MARK: - Layout view elements
+    
+    func layoutViewElements() {
+        // Main view setup
+        view.backgroundColor = UIColor.clear
+        
+        populateFramesImageViewList()
+        
+        // Frame scrollview
+        frameScrollview = UIScrollView()
+        frameScrollview.delegate = self
+        view.addSubview(frameScrollview)
+        frameScrollview.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.height.equalToSuperview()
+            make.width.equalToSuperview()
+        }
+        frameScrollview.bounces = false
+        frameScrollview.decelerationRate = UIScrollViewDecelerationRateFast
+        frameScrollview.isPagingEnabled = true
+        
+        //frame stack view
+        frameStackview = UIStackView(arrangedSubviews: frameImagesList)
+        frameStackview.axis = .horizontal
+        frameStackview.distribution = .fillEqually
+        frameStackview.alignment = .fill
+        frameStackview.contentMode = .scaleAspectFit
+        frameScrollview.addSubview(frameStackview)
+        frameStackview.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.height.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(Double(frameImagesList.count))
+        }
+        
+        view.addSubview(playerView)
+        playerView.frame = CGRect(x: self.view.frame.width * 0.12, y: self.view.frame.height * 0.11, width: self.view.frame.width * 0.77, height: self.view.frame.height * 0.77)
+        playerView.playerLayer.frame = playerView.frame
+        
+        playerView.backgroundColor = UIColor.clear
+        view.sendSubview(toBack: playerView)
+        playerView.playerLayer.player = player
+        
+        playPauseButton = UIButton()
+        playPauseButton.setImage(Icons.playButton, for: .normal)
+        playPauseButton.alpha = 0.3
+        playPauseButton.contentMode = .scaleAspectFit
+        playPauseButton.contentVerticalAlignment = .fill
+        playPauseButton.contentHorizontalAlignment = .fill
+        view.addSubview(playPauseButton)
+        playPauseButton.snp.makeConstraints { (make) in
+            make.width.equalTo(view.snp.width).multipliedBy(0.3)
+            make.height.equalTo(view.snp.width).multipliedBy(0.3)
+            make.center.equalToSuperview()
+            print("play button width is currently \(playPauseButton.frame.width)")
+        }
+        playPauseButton.addTarget(self, action: #selector(self.playPauseButtonPressed), for: .touchUpInside)
+        
+        saveButton = UIButton()
+        saveButton.setImage(Icons.saveButton, for: .normal)
+        saveButton.contentMode = .scaleAspectFit
+        saveButton.contentVerticalAlignment = .fill
+        saveButton.contentHorizontalAlignment = .fill
+        view.addSubview(saveButton)
+        saveButton.snp.makeConstraints { (make) in
+            make.width.equalTo(view.snp.width).multipliedBy(0.1)
+            make.height.equalTo(view.snp.width).multipliedBy(0.1)
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
+        saveButton.addTarget(self, action: #selector(self.navToSendCardVC), for: .touchUpInside)
+        
+        
+        initAndLayoutActivityIndicator()
+        
+    }
+    
+    func instantiateButtons() {
+        addTextButton = UIButton()
+        activityIndicator = UIActivityIndicatorView()
+    }
+    
+    func populateFramesImageViewList() {
+        let frameImageList: [UIImage] = [#imageLiteral(resourceName: "frame1"), #imageLiteral(resourceName: "frame2"), #imageLiteral(resourceName: "frame3"), #imageLiteral(resourceName: "frame4"), #imageLiteral(resourceName: "frame5"), #imageLiteral(resourceName: "frame6"), #imageLiteral(resourceName: "frame7"), #imageLiteral(resourceName: "frame8"), #imageLiteral(resourceName: "frame9")]
+        
+        for frameImage in frameImageList {
+            let frameView = UIImageView(image: frameImage)
+            frameView.contentMode = .scaleAspectFit
+            frameImagesList.append(frameView)
+        }
+    }
+    
+    func initAndLayoutActivityIndicator() {
+        spinnerActivity = MBProgressHUD()
+        view.addSubview(spinnerActivity)
+        spinnerActivity.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+        spinnerActivity.mode = .determinateHorizontalBar
+        spinnerActivity.label.text = "Processing video ...";
+        spinnerActivity.isUserInteractionEnabled = false;
+    }
+    
+    func startActivityIndicator() {
+        DispatchQueue.main.async {
+            UIApplication.shared.beginIgnoringInteractionEvents()
+            self.spinnerActivity.show(animated: true)
+        }
+    }
+    
+    func stopActivityIndicator() {
+        DispatchQueue.main.async {
+            self.spinnerActivity.hide(animated: true)
+            UIApplication.shared.endIgnoringInteractionEvents()
+        }
+    }
+    
+    func doWorkWithProgress(progressHUD: MBProgressHUD) {
+        var progress: Float = 0.0
+        while progress < 1.0 {
+            progress += 0.01
+            DispatchQueue.main.async {
+                progressHUD.progress = progress
+            }
+            usleep(50000)
+        }
     }
     
     // MARK: - Main
@@ -118,6 +251,7 @@ class EditCardViewController: UIViewController {
     
     
     // MARK: - Overlay export methods
+    
     func exportWithOverlays(completion: @escaping (Bool) -> Void) {
         // Composition
         let composition = AVMutableComposition()
@@ -148,8 +282,6 @@ class EditCardViewController: UIViewController {
             }
         }
         
-        // Multipliers
-        
         // Layers
         let overlayImage = frameImagesList[selectedImageIndex].image
         let overlayLayer = CALayer()
@@ -177,8 +309,6 @@ class EditCardViewController: UIViewController {
             topTextLayer.alignmentMode = kCAAlignmentLeft
             topTextLayer.backgroundColor = UIColor.clear.cgColor
             topTextLayer.contentsScale = 1
-            // Text drop shadow
-            // TODO: - Fix drop shadow to match TextField perceived Offset
             topTextLayer.shadowColor = UIColor.black.cgColor
             topTextLayer.shadowOffset = CGSize(width: 4, height: 4)
             topTextLayer.shadowRadius = 0
@@ -198,8 +328,6 @@ class EditCardViewController: UIViewController {
             bottomTextLayer.alignmentMode = kCAAlignmentRight
             bottomTextLayer.backgroundColor = UIColor.clear.cgColor
             bottomTextLayer.contentsScale = 1
-            // Text drop shadow
-            // TODO: - Fix drop shadow to match TextField perceived Offset
             bottomTextLayer.shadowColor = UIColor.black.cgColor
             bottomTextLayer.shadowOffset = CGSize(width: 4, height: 4)
             bottomTextLayer.shadowRadius = 0
@@ -347,10 +475,10 @@ class EditCardViewController: UIViewController {
     func updatePlayPauseButtonTitle() {
         if player.rate > 0 {
             player.pause()
-            playPauseButton.setTitle("Play", for: .normal)
+            playPauseButton.setImage(Icons.playButton, for: .normal)
         } else {
             player.play()
-            playPauseButton.setTitle("Pause", for: .normal)
+            playPauseButton.setImage(Icons.pauseButton, for: .normal)
         }
     }
     
@@ -378,7 +506,7 @@ class EditCardViewController: UIViewController {
     // MARK: - Navigation
     
     func navToSendCardVC(sender: UIButton, isExportSuccessful: Bool) {
-        
+        saveButton.isHidden = true
         exportWithOverlays { (success) in
             if success {
                 self.player.pause()
@@ -442,13 +570,11 @@ extension EditCardViewController: ModalViewControllerDelegate {
 extension EditCardViewController {
     
     func registerForKeyboardNotifications(){
-        //Adding notifies on keyboard appearing
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     func deregisterFromKeyboardNotifications(){
-        //Removing notifies on keyboard appearing
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
@@ -471,5 +597,79 @@ extension EditCardViewController {
             }
         }
         saveButton.isEnabled = true
+    }
+}
+
+// MARK: - Text field delegate & methods
+
+extension EditCardViewController: UITextFieldDelegate {
+    func setupText() {
+        let font = UIFont(name: Font.nameForCard, size: Font.Size.cardView)
+        
+        topTextField = UITextField()
+        topTextField.delegate = self
+        view.addSubview(topTextField)
+        topTextField.snp.makeConstraints { (make) in
+            make.left.equalToSuperview().offset(30)
+            make.right.equalToSuperview()
+            make.top.equalToSuperview().offset(-4)
+        }
+        
+        topTextField.text = "Enter some text"
+        topTextField.font = font
+        topTextField.textAlignment = .left
+        topTextField.clearsOnBeginEditing = true
+        topTextField.textColor = UIColor.white
+        topTextField.backgroundColor = UIColor.clear
+        
+        // Drop shadow
+        topTextField.layer.shadowColor = UIColor.black.cgColor
+        topTextField.layer.shadowOffset = CGSize(width: 2, height: 2)
+        topTextField.layer.shadowRadius = 0
+        topTextField.layer.shadowOpacity = 1
+        
+        // Bottom text field
+        bottomTextField = UITextField()
+        bottomTextField.delegate = self
+        
+        view.addSubview(bottomTextField)
+        bottomTextField.snp.makeConstraints { (make) in
+            make.right.equalToSuperview().offset(-30)
+            make.left.equalToSuperview()
+            make.bottom.equalToSuperview().offset(10)
+        }
+        
+        // Text attributes
+        bottomTextField.text = "Enter some text"
+        bottomTextField.font = font
+        bottomTextField.textAlignment = .right
+        bottomTextField.clearsOnBeginEditing = true
+        bottomTextField.textColor = UIColor.white
+        bottomTextField.backgroundColor = UIColor.clear
+        // Text drop shadow
+        bottomTextField.layer.shadowColor = UIColor.black.cgColor
+        bottomTextField.layer.shadowOffset = CGSize(width: 2, height: 2)
+        bottomTextField.layer.shadowRadius = 0
+        bottomTextField.layer.shadowOpacity = 1
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let maxLength = 16
+        let currentStr: NSString = textField.text! as NSString
+        let newStr =
+            currentStr.replacingCharacters(in: range, with: string) as NSString
+        return newStr.length <= maxLength
+    }
+    
+    func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
