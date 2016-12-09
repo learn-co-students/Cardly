@@ -36,7 +36,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        self.navigationController?.isNavigationBarHidden = true
+        navigationController?.isNavigationBarHidden = true
         
         layoutElements()
         
@@ -75,6 +75,10 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     // Accessing and Importing Selected Contact from User's Contact book
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contacts: [CNContact]) {
         
+        var count = contacts.count - 1
+        
+        
+        
         for contact in contacts {
             
             guard let firstAddress = contact.emailAddresses.first else { return }
@@ -91,24 +95,43 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
             
             let appContact = Contact(fullName: fullName, email: emailAddress, phone: phoneNumber, image: nil)
             
+            User.shared.contacts.append(appContact)
+            
             print(appContact.fullName, appContact.email, appContact.phone)
             
             let contactsRef = FIRDatabase.database().reference(withPath: "contacts")
             let userContactsRef = contactsRef.child("\(uid)/all/")
             let contactItemRef = userContactsRef.childByAutoId()
-            contactItemRef.setValue(appContact.toAny())
             
-            let groupsRef = FIRDatabase.database().reference(withPath: "groups")
-            let groupsUserRef = groupsRef.child("\(uid)/all/")
-            let groupItemRef = groupsUserRef.child(contactItemRef.key)
-            groupItemRef.setValue(appContact.toAny())
             
+            contactItemRef.setValue(appContact.toAny(), withCompletionBlock: { error, ref in
+                
+                let groupsRef = FIRDatabase.database().reference(withPath: "groups")
+                let groupsUserRef = groupsRef.child("\(self.uid)/all/")
+                let groupItemRef = groupsUserRef.child(contactItemRef.key)
+                
+                groupItemRef.setValue(appContact.toAny(), withCompletionBlock: { [unowned self] error, ref in
+                    
+                    count -= 1
+                    
+                    if count <= 0 {
+                        
+                        print("\n")
+                        print("This is complete ------- \(#function)--------")
+                        CustomNotification.show("Contacts were imported successfully")
+                        
+                        self.navigationController?.isNavigationBarHidden = false
+                        
+                        _ = self.navigationController?.popViewController(animated: true)
+                        
+                    }
+                    
+                })
+                
+            })
             
         }
-        let destVC = ContactsViewController()
-        navigationController?.pushViewController(destVC, animated: true)
-        
-        CustomNotification.show("Contacts were imported successfully")
+
     }
     
     
@@ -144,7 +167,10 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         let controller = CNContactPickerViewController()
         controller.delegate = self
         controller.predicateForEnablingContact = NSPredicate(format: "(phoneNumbers.@count > 0) && (emailAddresses.@count > 0)", argumentArray: nil)
-        navigationController?.present(controller, animated: true, completion: nil)
+        
+        self.present(controller, animated: true, completion: nil)
+        
+//        navigationController?.pushViewController(controller, animated: true)
     }
     
     

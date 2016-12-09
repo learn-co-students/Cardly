@@ -40,6 +40,10 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     fileprivate let cellSpacing: CGFloat = 20
     fileprivate lazy var presentationAnimator = GuillotineTransitionAnimation()
     
+    
+    let defaultContact = Contact(fullName: "AddContact", email: "", phone: "")
+
+    
     // MARK: - Init
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,9 +66,13 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        
+        navigationController?.navigationBar.isHidden = false
+
         super.viewDidAppear(animated)
         navigationBarMenu.container = view
-
+        
+        contactsCollectionView.reloadData()
     }
     
 }
@@ -309,11 +317,22 @@ extension ContactsViewController {
     }
     
     func selectGroup(_ sender: UITableViewCell) {
+        
+        
+        
         // Retrieve from Firebase
         guard let group = sender.textLabel?.text?.lowercased() else { return }
         self.retrieveContacts(for: group, completion: { contacts in
+            
             User.shared.contacts = contacts
+            
+            User.shared.contacts.insert(self.defaultContact, at: 0)
+            
+            print("Select group called")
+            print("selectGroup contacts count: \(self.shared.contacts.count)")
+            
             self.contactsCollectionView.reloadData()
+        
         })
         // Hide Top Nav Bar after group is selected
         if navigationBarMenu.container != nil {
@@ -385,6 +404,10 @@ extension ContactsViewController: BottomNavBarDelegate {
         deleteContacts {
             retrieveContacts(for: User.shared.groups[0], completion: { contacts in
                 User.shared.contacts = contacts
+
+                
+                User.shared.contacts.insert(self.defaultContact, at: 0)
+
                 self.contactsCollectionView.reloadData()
             })
             enableCell()

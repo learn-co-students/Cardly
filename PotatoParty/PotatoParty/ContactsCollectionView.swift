@@ -14,7 +14,6 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     
     let reuseIdentifier = "cell"
     let layout = UICollectionViewFlowLayout()
-    let defaultContact = Contact(fullName: "AddContact", email: "", phone: "")
     let shared = User.shared
     
     var firstTimeLoaded: Bool = true
@@ -38,10 +37,12 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if firstTimeLoaded {
-            User.shared.contacts.insert(defaultContact, at: 0)
-            firstTimeLoaded = false
-        }
+//        if User.shared.contacts.isEmpty {
+        
+//
+//        }
+        
+     
     
         return User.shared.contacts.count
         
@@ -49,9 +50,17 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
+        print("\n\n")
+        
+        print(#function)
+        
+        print("\n")
+        
         let cell = dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ContactsCollectionViewCell
         
         if indexPath.item == 0 {
+            
+            print("YOU SHOULD BE HERE!!")
             cell.addContactIconImageView.image = Icons.addContactButton
             return cell
         }
