@@ -124,20 +124,15 @@ class SettingsViewController: UIViewController {
             make.topMargin.equalTo(changeEmailPasswordTextField.snp.bottomMargin).offset(30)
         }
         
-        changeEmailButton = UIButton()
+        changeEmailButton = CardlyFormFieldButton.initButton(title: "Submit", target: self, selector: #selector(changeEmailButtonTapped))
         view.addSubview(changeEmailButton)
-        changeEmailButton.setTitle("Submit", for: .normal)
-        changeEmailButton.titleLabel?.font = UIFont(name: Font.regular, size: Font.Size.l)
-        changeEmailButton.titleLabel?.textColor = UIColor.white
-        changeEmailButton.titleLabel?.minimumScaleFactor = 0.5
-        changeEmailButton.addTarget(self, action: #selector(changeEmailButtonTapped), for: .touchUpInside)
-        changeEmailButton.sizeToFit()
         changeEmailButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(newEmailTextField.snp.bottomMargin).offset(20)
         }
         
         let changeEmailDivider = UIImageView(image: Backgrounds.divider)
+
         view.addSubview(changeEmailDivider)
         changeEmailDivider.snp.makeConstraints { (make) in
             make.width.equalToSuperview().offset(-20)
@@ -181,14 +176,8 @@ class SettingsViewController: UIViewController {
             make.topMargin.equalTo(newPasswordTextField.snp.bottomMargin).offset(30)
         }
         
-        changePasswordButton = UIButton()
+        changePasswordButton = CardlyFormFieldButton.initButton(title: "Submit", target: self, selector: #selector(changePasswordButtonTapped))
         view.addSubview(changePasswordButton)
-        changePasswordButton.setTitle("Submit", for: .normal)
-        changePasswordButton.titleLabel?.font = UIFont(name: Font.regular, size: Font.Size.l)
-        changePasswordButton.titleLabel?.textColor = UIColor.white
-        changePasswordButton.titleLabel?.minimumScaleFactor = 0.5
-        changePasswordButton.sizeToFit()
-        changePasswordButton.addTarget(self, action: #selector(changePasswordButtonTapped), for: .touchUpInside)
         changePasswordButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(confirmNewPasswordTextField.snp.bottomMargin).offset(20)
@@ -202,14 +191,8 @@ class SettingsViewController: UIViewController {
             make.topMargin.equalTo(changePasswordButton.snp.bottomMargin).offset(20)
         }
         
-        logoutButton = UIButton()
+        logoutButton = CardlyFormFieldButton.initButton(title: "Log out", target: self, selector: #selector(logout))
         view.addSubview(logoutButton)
-        logoutButton.setTitle("Log out       ", for: .normal)
-        logoutButton.titleLabel?.textAlignment = .left
-        logoutButton.titleLabel?.font = UIFont(name: Font.regular, size: Font.Size.l)
-        logoutButton.titleLabel?.textColor = UIColor.white
-        logoutButton.sizeToFit()
-        logoutButton.addTarget(self, action: #selector(self.logout), for: .touchUpInside)
         logoutButton.snp.makeConstraints { (make) in
             make.leadingMargin.equalToSuperview()
             make.topMargin.equalTo(changePasswordDivider.snp.bottomMargin).offset(20)
@@ -223,14 +206,8 @@ class SettingsViewController: UIViewController {
             make.topMargin.equalTo(logoutButton.snp.bottomMargin).offset(20)
         }
         
-        forgotPasswordButton = UIButton()
+        forgotPasswordButton = CardlyFormFieldButton.initButton(title: "Forgot password?", target: self, selector: #selector(forgotPassword))
         view.addSubview(forgotPasswordButton)
-        forgotPasswordButton.setTitle("Forgot password?", for: .normal)
-        forgotPasswordButton.titleLabel?.textAlignment = .left
-        forgotPasswordButton.titleLabel?.font = UIFont(name: Font.regular, size: Font.Size.l)
-        forgotPasswordButton.titleLabel?.textColor = UIColor.white
-        forgotPasswordButton.sizeToFit()
-        forgotPasswordButton.addTarget(self, action: #selector(self.logout), for: .touchUpInside)
         forgotPasswordButton.snp.makeConstraints { (make) in
             make.leadingMargin.equalToSuperview()
             make.topMargin.equalTo(logoutDivider.snp.bottomMargin).offset(20)
@@ -262,6 +239,10 @@ class SettingsViewController: UIViewController {
         } catch {
             print("Logout error = (error.localizedDescription)")
         }
+    }
+    
+    func forgotPassword() {
+        
     }
     
     func dismissButtonTapped(_ sender: UIButton) {

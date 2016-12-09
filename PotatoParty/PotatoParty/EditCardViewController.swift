@@ -507,6 +507,7 @@ class EditCardViewController: UIViewController {
     
     func navToSendCardVC(sender: UIButton, isExportSuccessful: Bool) {
         saveButton.isHidden = true
+        playPauseButton.isHidden = true
         exportWithOverlays { (success) in
             if success {
                 self.player.pause()
