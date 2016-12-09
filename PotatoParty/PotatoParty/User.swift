@@ -17,6 +17,16 @@ class User {
     var selectedContacts = [Contact]()
     // TODO: - What am I doing with this? (Dave)
     var contacts: [Contact] = []
+        {
+        didSet {
+            if contacts.count == 0 {
+                print("didset called")
+                let defaultContact = Contact(fullName: "AddContact", email: "", phone: "")
+                contacts.insert(defaultContact, at: 0)
+                print("Contacts count: \(contacts.count)")
+            }
+        }
+    }
 
     private init() {
         if let uid = FIRAuth.auth()?.currentUser?.uid {

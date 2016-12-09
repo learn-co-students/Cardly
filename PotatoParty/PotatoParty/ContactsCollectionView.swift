@@ -38,11 +38,14 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if firstTimeLoaded {
-            User.shared.contacts.insert(defaultContact, at: 0)
-            firstTimeLoaded = false
-        }
-    
+//        if firstTimeLoaded {
+//            print("firstTimeLoaded() called")
+//            User.shared.contacts.insert(defaultContact, at: 0)
+//            firstTimeLoaded = false
+//        }
+        
+        print("Contacts count collectionView: \(shared.contacts.count)")
+        
         return User.shared.contacts.count
         
     }
@@ -56,11 +59,9 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
             return cell
         }
         
-        print(collectionView.subviews.count)
+        print("Number of subviews: \(collectionView.subviews.count)")
         
         cell.contact = User.shared.contacts[indexPath.row]
-        
-        cell.index = indexPath.row
         
         if cell.contact.is_sent == true {
             cell.alpha = 0.5

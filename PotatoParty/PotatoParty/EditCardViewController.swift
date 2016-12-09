@@ -626,7 +626,7 @@ extension EditCardViewController: UITextFieldDelegate {
         bottomTextField.snp.makeConstraints { (make) in
             make.right.equalToSuperview().offset(-30)
             make.left.equalToSuperview()
-            make.bottom.equalToSuperview().offset(10)
+            make.bottom.equalToSuperview().offset(-2)
         }
         
         // Text attributes

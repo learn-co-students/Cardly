@@ -45,8 +45,6 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     var isPasswordValid: Bool = false
     var isConfirmPasswordValid: Bool = false
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
@@ -126,14 +124,14 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     
     func submitButtonTapped() {
         print("submit button tapped")
-        if checkIfPasswordFieldsValid() && checkIfChangeEmailFieldValid() {
+//        if checkIfPasswordFieldsValid() && checkIfChangeEmailFieldValid() {
             createUserAccount()
-        } else {
-            DispatchQueue.main.async {
-                CustomNotification.showError(SettingsErrorMessage.changeEmailFieldsNotCorrect)
-            }
-            
-        }
+//        } else {
+//            DispatchQueue.main.async {
+//                CustomNotification.showError(SettingsErrorMessage.changeEmailFieldsNotCorrect)
+//            }
+//            
+//        }
     }
     
     func createUserAccount() {

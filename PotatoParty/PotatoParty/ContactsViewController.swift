@@ -72,7 +72,6 @@ extension ContactsViewController {
     
     // Setup all views
     func setupViews() {
-        
         view.backgroundColor = Colors.cardlyBlue
         
         setupCollectionView()
@@ -309,6 +308,7 @@ extension ContactsViewController {
         // Retrieve from Firebase
         guard let group = sender.textLabel?.text?.lowercased() else { return }
         self.retrieveContacts(for: group, completion: { contacts in
+            print("selectGroup called")
             User.shared.contacts = contacts
             self.contactsCollectionView.reloadData()
         })
@@ -437,6 +437,9 @@ extension ContactsViewController: BottomNavBarDelegate {
 extension ContactsViewController {
     
     func retrieveContacts(for group: String, completion: @escaping (_: [Contact]) -> Void) {
+        
+        print("retrieveContacts firing")
+        
         var contacts: [Contact] = []
         let path = "\(uid)/\(group.lowercased())/"
         let contactBucketRef = ref.child(path)

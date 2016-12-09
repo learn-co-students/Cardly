@@ -21,7 +21,6 @@ class ContactsCollectionViewCell: UICollectionViewCell {
         }
     }
     var addContactIconImageView = UIImageView()
-    var index = -1
     
     var contact: Contact! {
         didSet {
