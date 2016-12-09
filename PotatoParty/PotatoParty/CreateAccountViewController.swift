@@ -20,10 +20,11 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     var emailTextField = CustomTextField.initTextField(placeHolderText: "example@emailprovider.com" , isSecureEntry: false)
     var passwordTextField = CustomTextField.initTextField(placeHolderText: "password", isSecureEntry: true)
     var confirmPasswordTextField = CustomTextField.initTextField(placeHolderText: "confirm password", isSecureEntry: true)
-    var submitButton = UIButton()
-    var cancelButton = UIButton()
+    var submitButton = CardlyFormFieldButton.initButton(title: "Submit", target: self, selector: #selector(submitButtonTapped))
+    var cancelButton = CardlyFormFieldButton.initButton(title: "Cancel", target: self, selector: #selector(cancelButtonTapped))
     var cardlyTextLabel = UILabel()
     var cardlyAirplaneImageView = UIImageView()
+    var titleLabel = UILabel()
     
     //Constraints Constants
     
@@ -222,12 +223,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             make.width.equalTo(confirmPasswordTextField.snp.width).multipliedBy(submitButtonToTextFieldWidthMultipier)
             make.height.equalTo(confirmPasswordTextField.snp.height).multipliedBy(submitButtonToTextFieldHeightMultiplier)
         }
-        
-        submitButton.setTitle("Submit", for: .normal)
-        submitButton.backgroundColor = UIColor.clear
-        submitButton.setTitleColor(UIColor.black, for: .normal)
-        submitButton.addTarget(self, action: #selector(self.submitButtonTapped), for: .touchUpInside)
-        
+
         view.addSubview(cancelButton)
         cancelButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview().offset(-50)
@@ -236,35 +232,61 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             make.height.equalTo(submitButton)
         }
         
-        cancelButton.setTitle("Cancel", for: .normal)
-        cancelButton.backgroundColor = UIColor.clear
-        cancelButton.setTitleColor(UIColor.black, for: .normal)
-        cancelButton.addTarget(self, action: #selector(self.cancelButtonTapped), for: .touchUpInside)
-        
-        view.addSubview(cardlyTextLabel)
-        cardlyTextLabel.snp.makeConstraints { (make) in
-            make.centerX.equalTo(view.snp.centerX)
-            make.topMargin.equalTo(view.snp.topMargin).offset(12)
-            make.width.equalTo(view.snp.width).multipliedBy(0.5)
-            make.height.equalTo(view.snp.height).multipliedBy(1.0/5.0)
+        let titleLabel = UILabel()
+        view.addSubview(titleLabel)
+        titleLabel.text = "Create Account"
+        titleLabel.textColor = UIColor.white
+        titleLabel.textAlignment = .center
+        titleLabel.minimumScaleFactor = 0.5
+        titleLabel.font = UIFont(name: Font.fancy, size: Font.Size.viewTitle/1.2)
+        titleLabel.layer.shadowColor = UIColor.black.cgColor
+        titleLabel.layer.shadowOffset = CGSize(width: 2, height: 2)
+        titleLabel.layer.shadowRadius = 0
+        titleLabel.layer.shadowOpacity = 1
+        titleLabel.sizeToFit()
+        titleLabel.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalToSuperview().offset(30)
         }
-
-        cardlyTextLabel.backgroundColor = UIColor.clear
-        cardlyTextLabel.text = "Cardly"
-        cardlyTextLabel.textAlignment = .center
-        cardlyTextLabel.font = UIFont(name: Font.fancy , size: 110)
-        cardlyTextLabel.textColor = UIColor.white
-        
-        cardlyAirplaneImageView.image = Icons.planeIcon
-        
-        view.addSubview(cardlyAirplaneImageView)
-        
-        cardlyAirplaneImageView.snp.makeConstraints { (make) in
-            make.height.equalTo(view.snp.height).multipliedBy(0.06)
-            make.width.equalTo(view.snp.height).multipliedBy(0.06)
-            make.topMargin.equalTo(cardlyTextLabel.snp.bottomMargin).offset(-20)
-            make.trailingMargin.equalToSuperview().offset(-135)
+        let cardlyDescriptionText = UILabel()
+        view.addSubview(cardlyDescriptionText)
+        cardlyDescriptionText.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.bottomMargin.equalToSuperview().offset(10)
+            make.width.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(0.1/0.6)
         }
+        
+        cardlyDescriptionText.backgroundColor = UIColor.clear
+        cardlyDescriptionText.text = "Send Video Thank You Cards"
+        cardlyDescriptionText.textAlignment = .center
+        cardlyDescriptionText.font = UIFont(name: Font.fancy, size: 50)
+        cardlyDescriptionText.textColor = UIColor.white
+        
+//        view.addSubview(cardlyTextLabel)
+//        cardlyTextLabel.snp.makeConstraints { (make) in
+//            make.centerX.equalTo(view.snp.centerX)
+//            make.topMargin.equalTo(view.snp.topMargin).offset(12)
+//            make.width.equalTo(view.snp.width).multipliedBy(0.5)
+//            make.height.equalTo(view.snp.height).multipliedBy(1.0/5.0)
+//        }
+//
+//        cardlyTextLabel.backgroundColor = UIColor.clear
+//        cardlyTextLabel.text = "Cardly"
+//        cardlyTextLabel.textAlignment = .center
+//        cardlyTextLabel.font = UIFont(name: Font.fancy , size: 110)
+//        cardlyTextLabel.textColor = UIColor.white
+//        
+//        cardlyAirplaneImageView.image = Icons.planeIcon
+//        
+//        view.addSubview(cardlyAirplaneImageView)
+//        
+//        cardlyAirplaneImageView.snp.makeConstraints { (make) in
+//            make.height.equalTo(view.snp.height).multipliedBy(0.06)
+//            make.width.equalTo(view.snp.height).multipliedBy(0.06)
+//            make.topMargin.equalTo(cardlyTextLabel.snp.bottomMargin).offset(-20)
+//            make.trailingMargin.equalToSuperview().offset(-135)
+//        }
     }
     
     
