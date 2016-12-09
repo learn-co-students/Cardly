@@ -18,7 +18,7 @@ struct Font {
     static let regular = "Raleway-Regular"
     static let nameForCard = "Qwigley-Regular"
     static let fancy = "DistantStroke-Medium"
-    
+
     struct Size {
         static let xs: CGFloat = 8
         static let s: CGFloat = 12
@@ -56,6 +56,18 @@ struct Icons {
     static let recordVideoButton = UIImage(named: "recordVideoIcon")
     static let selectAllContactsButton = UIImage(named: "selectAllIcon")
     static let deleteButton = UIImage(named: "trashIcon")
+    
+    static let playButton = UIImage(named: "playButton")
+    static let pauseButton = UIImage(named: "pauseButton")
+    static let saveButton = UIImage(named: "arrowIcon")
+    
+    static let sendEmailIcon = UIImage(named: "emailIcon")
+    static let sendTextIcon = UIImage(named: "textIcon")
+    static let cancelIcon = UIImage(named: "cancelIcon")
+}
+
+struct IconSize {
+   // static let standardIconSize = 
 }
 
 struct CustomNotification {

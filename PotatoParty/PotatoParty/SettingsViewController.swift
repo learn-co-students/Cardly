@@ -82,6 +82,7 @@ class SettingsViewController: UIViewController {
         titleLabel.text = "Settings"
         titleLabel.textColor = UIColor.white
         titleLabel.textAlignment = .center
+        titleLabel.minimumScaleFactor = 0.5
         titleLabel.font = UIFont(name: Font.fancy, size: Font.Size.viewTitle)
         titleLabel.layer.shadowColor = UIColor.black.cgColor
         titleLabel.layer.shadowOffset = CGSize(width: 2, height: 2)
@@ -96,6 +97,7 @@ class SettingsViewController: UIViewController {
         let emailLabel = UILabel()
         view.addSubview(emailLabel)
         emailLabel.text = "Change email"
+        emailLabel.minimumScaleFactor = 0.5
         emailLabel.textColor = Colors.cardlyGrey
         emailLabel.textAlignment = .left
         emailLabel.font = UIFont(name: Font.regular, size: Font.Size.xl)
@@ -105,38 +107,29 @@ class SettingsViewController: UIViewController {
             make.topMargin.equalTo(titleLabel.snp.bottomMargin).offset(20)
         }
         
-        changeEmailPasswordTextField = UITextField()
+        changeEmailPasswordTextField = CustomTextField.initTextField(placeHolderText: "Enter current password", isSecureEntry: true)
         view.addSubview(changeEmailPasswordTextField)
         changeEmailPasswordTextField.snp.makeConstraints { (make) in
-            make.height.equalTo(50)
+            make.height.equalToSuperview().multipliedBy(0.05)
             make.width.equalToSuperview().multipliedBy(0.8)
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(emailLabel.snp.bottomMargin).offset(30)
         }
-        changeEmailPasswordTextField.placeholder = "Enter current password"
-        changeEmailPasswordTextField.textColor = UIColor.black
-        changeEmailPasswordTextField.borderStyle = UITextBorderStyle.roundedRect
-        changeEmailPasswordTextField.textAlignment = .center
-        changeEmailPasswordTextField.isSecureTextEntry = true
         
-        newEmailTextField = UITextField()
+        newEmailTextField = CustomTextField.initTextField(placeHolderText: "Enter new email address", isSecureEntry: false)
         view.addSubview(newEmailTextField)
         newEmailTextField.snp.makeConstraints { (make) in
             make.size.equalTo(changeEmailPasswordTextField.snp.size)
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(changeEmailPasswordTextField.snp.bottomMargin).offset(30)
         }
-        newEmailTextField.autocapitalizationType = .none
-        newEmailTextField.textColor = UIColor.black
-        newEmailTextField.borderStyle = UITextBorderStyle.roundedRect
-        newEmailTextField.placeholder = "Enter new email address"
-        newEmailTextField.textAlignment = .center
         
         changeEmailButton = UIButton()
         view.addSubview(changeEmailButton)
         changeEmailButton.setTitle("Submit", for: .normal)
         changeEmailButton.titleLabel?.font = UIFont(name: Font.regular, size: Font.Size.l)
         changeEmailButton.titleLabel?.textColor = UIColor.white
+        changeEmailButton.titleLabel?.minimumScaleFactor = 0.5
         changeEmailButton.addTarget(self, action: #selector(changeEmailButtonTapped), for: .touchUpInside)
         changeEmailButton.sizeToFit()
         changeEmailButton.snp.makeConstraints { (make) in
@@ -164,50 +157,36 @@ class SettingsViewController: UIViewController {
             make.topMargin.equalTo(changeEmailDivider.snp.bottomMargin).offset(30)
         }
         
-        currentPasswordTextField = UITextField()
+        currentPasswordTextField = CustomTextField.initTextField(placeHolderText: "Enter current password", isSecureEntry: true)
         view.addSubview(currentPasswordTextField)
         currentPasswordTextField.snp.makeConstraints { (make) in
             make.size.equalTo(changeEmailPasswordTextField.snp.size)
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(passwordLabel.snp.bottomMargin).offset(30)
         }
-        currentPasswordTextField.textColor = UIColor.black
-        currentPasswordTextField.borderStyle = UITextBorderStyle.roundedRect
-        currentPasswordTextField.placeholder = "Enter current password"
-        currentPasswordTextField.textAlignment = .center
-        currentPasswordTextField.isSecureTextEntry = true
         
-        newPasswordTextField = UITextField()
+        newPasswordTextField = CustomTextField.initTextField(placeHolderText: "Enter new password", isSecureEntry: true)
         view.addSubview(newPasswordTextField)
         newPasswordTextField.snp.makeConstraints { (make) in
             make.size.equalTo(changeEmailPasswordTextField.snp.size)
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(currentPasswordTextField.snp.bottomMargin).offset(30)
         }
-        newPasswordTextField.textColor = UIColor.black
-        newPasswordTextField.borderStyle = UITextBorderStyle.roundedRect
-        newPasswordTextField.placeholder = "Enter new password"
-        newPasswordTextField.textAlignment = .center
-        newPasswordTextField.isSecureTextEntry = true
         
-        confirmNewPasswordTextField = UITextField()
+        confirmNewPasswordTextField = CustomTextField.initTextField(placeHolderText: "Confirm new password", isSecureEntry: true)
         view.addSubview(confirmNewPasswordTextField)
         confirmNewPasswordTextField.snp.makeConstraints { (make) in
             make.size.equalTo(changeEmailPasswordTextField.snp.size)
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(newPasswordTextField.snp.bottomMargin).offset(30)
         }
-        confirmNewPasswordTextField.textColor = UIColor.black
-        confirmNewPasswordTextField.borderStyle = UITextBorderStyle.roundedRect
-        confirmNewPasswordTextField.placeholder = "Confirm new password"
-        confirmNewPasswordTextField.textAlignment = .center
-        confirmNewPasswordTextField.isSecureTextEntry = true
         
         changePasswordButton = UIButton()
         view.addSubview(changePasswordButton)
         changePasswordButton.setTitle("Submit", for: .normal)
         changePasswordButton.titleLabel?.font = UIFont(name: Font.regular, size: Font.Size.l)
         changePasswordButton.titleLabel?.textColor = UIColor.white
+        changePasswordButton.titleLabel?.minimumScaleFactor = 0.5
         changePasswordButton.sizeToFit()
         changePasswordButton.addTarget(self, action: #selector(changePasswordButtonTapped), for: .touchUpInside)
         changePasswordButton.snp.makeConstraints { (make) in

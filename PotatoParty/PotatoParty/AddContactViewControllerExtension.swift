@@ -18,6 +18,7 @@ extension AddContactViewController {
         
         view.backgroundColor = Colors.cardlyBlue
         
+        
         // Name
         view.addSubview(nameTextField)
         nameTextField.snp.makeConstraints { (make) in
@@ -28,9 +29,9 @@ extension AddContactViewController {
         }
         
         nameTextField.backgroundColor = UIColor.white
+        nameTextField.layer.cornerRadius = 20.0
         nameTextField.layer.borderColor = Colors.cardlyGold.cgColor
-        nameTextField.layer.borderWidth = 1
-        // Add cornerRadius to make edges round
+        nameTextField.layer.borderWidth = 1.0
         nameTextField.placeholder = "Contact Name"
         nameTextField.textAlignment = .center
         nameTextField.autocapitalizationType = UITextAutocapitalizationType.none
@@ -46,10 +47,10 @@ extension AddContactViewController {
         }
         
         emailTextField.backgroundColor = UIColor.white
-        emailTextField.placeholder = "Contact Email"
         emailTextField.layer.borderColor = Colors.cardlyGold.cgColor
+        emailTextField.layer.cornerRadius = 20.0
         emailTextField.layer.borderWidth = 1
-        // Add cornerRadius to make edges round
+        emailTextField.placeholder = "Contact Email"
         emailTextField.textAlignment = .center
         emailTextField.autocapitalizationType = UITextAutocapitalizationType.none
 
@@ -64,10 +65,10 @@ extension AddContactViewController {
         }
         
         phoneTextField.backgroundColor = UIColor.white
-        phoneTextField.placeholder = "Contact Phone Number"
         phoneTextField.layer.borderColor = Colors.cardlyGold.cgColor
+        phoneTextField.layer.cornerRadius = 20.0
         phoneTextField.layer.borderWidth = 1
-        // Add cornerRadius to make edges round
+        phoneTextField.placeholder = "Contact Phone Number"
         phoneTextField.textAlignment = .center
         phoneTextField.autocapitalizationType = UITextAutocapitalizationType.none
 
