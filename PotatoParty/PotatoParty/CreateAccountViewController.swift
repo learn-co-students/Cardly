@@ -49,12 +49,10 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        
     }
 
     
@@ -62,7 +60,6 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     
     func cancelButtonTapped() {
         dismiss(animated: true, completion: nil)
-        print ("Cancel Button Tapped")
     }
     
     func submitButtonTapped() {
@@ -82,22 +79,8 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
                     
                 } else {
                     if let error = error {
-                        switch error {
-                        case FIRAuthErrorCode.errorCodeEmailAlreadyInUse:
-                            print("email already in use")
-                            DispatchQueue.main.async {
-                                CustomNotification.showError(SettingsErrorMessage.emailAlreadyInUse)
-                            }
-                        case FIRAuthErrorCode.errorCodeInvalidEmail:
-                            print("email is invalid")
-                            DispatchQueue.main.async {
-                                CustomNotification.showError(SettingsErrorMessage.invalidEmail)
-                            }
-                        default:
-                            print("Firebase create user error: \(error.localizedDescription)")
-                            DispatchQueue.main.async {
-                                CustomNotification.showError(SettingsErrorMessage.changeEmailFieldsNotCorrect)
-                            }
+                        DispatchQueue.main.async {
+                            CustomNotification.showError(error.localizedDescription)
                         }
                     }
                 }
@@ -108,17 +91,18 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     
     func firebaseSignIn(user: String, password: String) {
         FIRAuth.auth()!.signIn(withEmail: user, password: password, completion: { (user, error) in
-            if error == nil {
-                self.loginSuccessSegue()
-            }
-            else {
-                print("Firebase sign in error: \(error?.localizedDescription)")
-                let alertController = UIAlertController(title: "Error", message: "Email or Password is incorrect", preferredStyle: .alert)
+            var errorMsg = "Firebase sign in error"
+            if let error = error {
+                errorMsg = error.localizedDescription
+                let alertController = UIAlertController(title: "Error", message: errorMsg, preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "Ok", style: .default, handler: { (action) in
                     self.dismiss(animated: true, completion: nil)
                 })
                 alertController.addAction(okAction)
                 self.present(alertController, animated: true, completion: nil)
+            }
+            else {
+                self.loginSuccessSegue()
             }
         })
     }
@@ -248,7 +232,6 @@ extension CreateAccountViewController {
         }
         if text.characters.count >= 6 {
             password = text
-            print("password is \(password)")
             return true
         }
         CustomNotification.showError(SettingsErrorMessage.passwordLength)
@@ -262,13 +245,11 @@ extension CreateAccountViewController {
         }
         if let password = password {
             let isMatch = text == password
-            print("is match is \(isMatch)")
             if !isMatch {
                 CustomNotification.showError(SettingsErrorMessage.confirmPasswordMatch)
             }
             return isMatch
         }
-        print("if let failed!!!")
         return false
     }
     
@@ -301,8 +282,3 @@ extension CreateAccountViewController {
     }
     
 }
-
-
-
-
-
