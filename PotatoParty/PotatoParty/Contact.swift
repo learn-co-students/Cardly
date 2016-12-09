@@ -22,7 +22,6 @@ final class Contact {
     var group_key: String
     let ref: FIRDatabaseReference?
     var isChosen: Bool = false
-    
     var image: UIImage?
     
     init(fullName: String, email: String, phone: String, is_sent: Bool = false, key: String = "", group_key: String = "", photoUrl: String = "") {
@@ -68,7 +67,6 @@ final class Contact {
             "photoUrl": photoUrl,
             "is_sent": is_sent,
             "group_key": group_key,
-            
         ]
     }
 }

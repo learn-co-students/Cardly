@@ -15,7 +15,6 @@ class User {
     let uid: String
     let groups: [String] = ["All", "Family", "Friends", "Coworkers", "Other"]
     var selectedContacts = [Contact]()
-    // TODO: - What am I doing with this? (Dave)
     var contacts: [Contact] = []
 
     private init() {
