@@ -26,37 +26,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.initialVC = LoginViewController()
         }
         else {
-            
             let rootVC = ContactsViewController()
             let navVC = UINavigationController(rootViewController: rootVC)
             self.initialVC = navVC
-            
         }
         
         let frame = UIScreen.main.bounds
         self.window = UIWindow(frame: frame)
         self.window!.rootViewController = self.initialVC
         self.window!.makeKeyAndVisible()
-        printFonts()
         return true
         
     }
     
-    func printFonts() {
-        let fontFamilyNames = UIFont.familyNames
-        for familyName in fontFamilyNames {
-            print("------------------------------")
-            print("Font Family Name = [\(familyName)]")
-            let names = UIFont.fontNames(forFamilyName: familyName)
-            print("Font Names = [\(names)]")
-        }
-    }
-    
     override init() {
-        
         super.init()
         FIRApp.configure()
-        
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
