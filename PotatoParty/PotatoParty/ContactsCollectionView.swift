@@ -22,14 +22,13 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     // Inititalizers
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: self.layout)
-        
-        print("Contacts")
         setupView()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
+
     
     
     // Cell data source
@@ -43,7 +42,7 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
             User.shared.contacts.insert(defaultContact, at: 0)
             firstTimeLoaded = false
         }
-        
+    
         return User.shared.contacts.count
         
     }
@@ -53,11 +52,8 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         let cell = dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ContactsCollectionViewCell
         
         if indexPath.item == 0 {
-            
-            cell.addContactIconImageView.image = UIImage(named: "addContactIcon")
-        
+            cell.addContactIconImageView.image = Icons.addContactButton
             return cell
-            
         }
         
         print(collectionView.subviews.count)
@@ -79,8 +75,21 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         dataSource = self
         
         // Collection View properties
-        backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
         showsVerticalScrollIndicator = false
+        
+        // Background image
+        backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
+        backgroundView = UIView()
+        let backgroundPlaneImage = UIImageView()
+        backgroundPlaneImage.image = Icons.backgroundPlaneImage
+        
+        backgroundView!.addSubview(backgroundPlaneImage)
+        backgroundPlaneImage.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(0.90)
+            make.height.equalTo(backgroundPlaneImage.snp.width).multipliedBy(0.79)
+        }
         
         // Create reuse cell
         register(ContactsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
@@ -92,7 +101,7 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         layout.scrollDirection = .vertical
         layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 0, right: 10)
         
-        // Gradient
+//        Gradient
 //        let gradient = CAGradientLayer()
 //        let whiteNoOpacity = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
 //        let whiteOpacity = UIColor.clear

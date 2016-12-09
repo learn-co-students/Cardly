@@ -62,7 +62,7 @@ class ContactsCollectionViewCell: UICollectionViewCell {
         // Circle drop shadow
         cellCircleImageView.layer.shadowColor = UIColor.black.cgColor
         cellCircleImageView.layer.shadowOpacity = 0.3
-        cellCircleImageView.layer.shadowOffset = CGSize(width: 4, height: 4)
+        cellCircleImageView.layer.shadowOffset = CGSize(width: 2, height: 2)
         cellCircleImageView.layer.shadowRadius = 1
         
         // Add 'Add Contact' image

@@ -120,7 +120,7 @@ extension ContactsViewController {
         
         // Select all contacts button (right)
         let rightBtn = UIButton()
-        rightBtn.setImage(Icons.addContactButton, for: .normal)
+        rightBtn.setImage(Icons.selectAllContactsButton, for: .normal)
         rightBtn.imageView!.snp.makeConstraints({ (make) in
             make.width.equalTo(rightBtn.snp.height)
             make.right.equalToSuperview()
@@ -352,6 +352,7 @@ extension ContactsViewController: BottomNavBarDelegate {
                 }
             }
             // User.shared.contacts.remove(at: 0)
+            
             enableCell()
             contactsCollectionView.reloadData()
             allSelected = true
