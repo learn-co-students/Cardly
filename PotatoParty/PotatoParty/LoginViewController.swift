@@ -28,7 +28,6 @@ class LoginViewController: UIViewController{
     let cardlyTextLabel = UILabel()
     let cardlyAirplaneImageView = UIImageView()
     
-    
     var userTextfield = CustomTextField.initTextField(placeHolderText: "example@emailprovider.com", isSecureEntry: false)
     var passwordTextfield = CustomTextField.initTextField(placeHolderText: "Password", isSecureEntry: true)
     var loginButton = CardlyFormFieldButton.initButton(title: "Login", target: self, selector: #selector(loginButtonTapped))
@@ -37,7 +36,6 @@ class LoginViewController: UIViewController{
     var textfieldStackView = UIStackView()
     var cardlyDescriptionText = UILabel()
     var orTextLabel = UILabel()
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,7 +53,6 @@ class LoginViewController: UIViewController{
         }
         return true
     }
-
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -85,11 +82,8 @@ extension LoginViewController {
                 self.loginSuccessSegue()
             }
             else {
-                print("Firebase sign in error: \(error?.localizedDescription)")
                 let alertController = UIAlertController(title: "Error", message: "Email or Password is incorrect", preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "Ok", style: .default, handler: { (action) in
-                    self.dismiss(animated: true, completion: nil)
-                })
+                let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
                 alertController.addAction(okAction)
                 self.present(alertController, animated: true, completion: nil)
             }
@@ -105,16 +99,13 @@ extension LoginViewController {
             if let email = emailField.text {
                 
                 FIRAuth.auth()?.sendPasswordReset(withEmail: email, completion: { (error) in
-                    // Handle error
                     if let error = error {
-                        
                         let alertController = UIAlertController(title: "Error", message: "\(error.localizedDescription)", preferredStyle: .alert)
                         let okAction = UIAlertAction(title: "Ok", style: .default, handler: { (action) in
                             self.dismiss(animated: true, completion: nil)
                         })
                         alertController.addAction(okAction)
                         self.present(alertController, animated: true, completion: nil)
-                    // Success
                     } else {
                         CustomNotification.show("Password reset e-mail sent")
                     }
@@ -160,25 +151,6 @@ extension LoginViewController{
     func layoutViewAndContraints() {
         
         view.backgroundColor = UIColor.init(patternImage: #imageLiteral(resourceName: "loginScreenBackground"))
-        
-        //        textfieldStackView.distribution = .fillProportionally
-        //        textfieldStackView.alignment = .fill
-        //        textfieldStackView.axis = .vertical
-        //        textfieldStackView.spacing = 8.0
-        //        textfieldStackView.backgroundColor = UIColor.clear
-        //
-        //
-        //        view.addSubview(textfieldStackView)
-        //        textfieldStackView.addArrangedSubview(userTextfield)
-        //        textfieldStackView.addArrangedSubview(passwordTextfield)
-        //        textfieldStackView.addArrangedSubview(forgotPasswordButton)
-        //
-        //        textfieldStackView.snp.makeConstraints { (make) in
-        //            make.centerX.equalToSuperview()
-        //            make.topMargin.equalToSuperview().offset(300)
-        //            make.width.equalToSuperview().multipliedBy(0.75)
-        //            make.height.equalToSuperview().multipliedBy(1/3)
-        //        }
         
         view.addSubview(userTextfield)
         userTextfield.snp.makeConstraints { (make) in
@@ -281,9 +253,6 @@ extension LoginViewController{
         orTextLabel.font = UIFont(name: Font.regular, size: 15)
         orTextLabel.textColor = UIColor.black
     }
-    
-
-    
     
 }
 
