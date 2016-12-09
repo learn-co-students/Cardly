@@ -16,21 +16,22 @@ extension AddContactViewController {
     
     func layoutElements() {
         
+        
         //view background
         view.backgroundColor = Colors.cardlyBlue
         
-        transparentCenterSubview.addSubview(backgroundPlaneImage)
+        view.addSubview(backgroundPlaneImage)
         backgroundPlaneImage.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.5)
-            make.width.equalToSuperview().multipliedBy(0.8)
+            make.height.equalToSuperview().multipliedBy(0.45)
+            make.width.equalToSuperview().multipliedBy(0.7)
         }
         
         view.addSubview(transparentCenterSubview)
         transparentCenterSubview.backgroundColor = UIColor(white: 1, alpha: 0.5)
-     //   transparentCenterSubview.layer.borderColor = Colors.cardlyGold.cgColor
-      //  transparentCenterSubview.layer.borderWidth = 1.0
+        transparentCenterSubview.layer.borderColor = Colors.cardlyGold.cgColor
+        transparentCenterSubview.layer.borderWidth = 1.0
         transparentCenterSubview.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()

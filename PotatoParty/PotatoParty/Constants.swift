@@ -86,8 +86,8 @@ struct CustomNotification {
     static func showError(_ notification: String) {
         var murmur = Murmur(title: notification)
         
-        murmur.titleColor = UIColor.black
-        murmur.backgroundColor = UIColor.red
+        murmur.titleColor = UIColor.white
+        murmur.backgroundColor = UIColor.gray
         
         let whistleAction = WhistleAction.show(2.0)
         
