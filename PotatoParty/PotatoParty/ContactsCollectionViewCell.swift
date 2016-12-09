@@ -30,7 +30,6 @@ class ContactsCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    // Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -41,7 +40,6 @@ class ContactsCollectionViewCell: UICollectionViewCell {
         setupView()
     }
 
-    // Setup view
     override func prepareForReuse() {
         super.prepareForReuse()
         addContactIconImageView.image = nil
@@ -50,7 +48,6 @@ class ContactsCollectionViewCell: UICollectionViewCell {
     }
     
     func setupView() {
-        // Background
         backgroundColor = UIColor.clear
         
         // Add circle image
@@ -60,6 +57,7 @@ class ContactsCollectionViewCell: UICollectionViewCell {
         cellCircleImageView.snp.makeConstraints { (make) in
             make.edges.equalTo(contentView)
         }
+        
         // Circle drop shadow
         cellCircleImageView.layer.shadowColor = UIColor.black.cgColor
         cellCircleImageView.layer.shadowOpacity = 0.3

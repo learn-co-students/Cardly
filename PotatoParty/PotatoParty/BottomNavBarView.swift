@@ -10,14 +10,13 @@ import Foundation
 import UIKit
 import SnapKit
 
+
 // MARK: - Bottom Nav Bar Protocol
 
 protocol BottomNavBarDelegate: class {
     func deleteButtonPressed()
     func sendToButtonPressed()
     func editGroupButtonPressed()
-    
-    
 }
 
 // MARK: - Bottom Nav Bar
@@ -65,12 +64,6 @@ class BottomNavBarLeftView: UIView {
             make.height.equalToSuperview().multipliedBy(Icons.multiplier)
             make.width.equalTo(deleteContactBtn.snp.height)
         }
-
-//        // Change background from color to image
-//        self.backgroundColor = UIColor.clear
-//        let blur = UIBlurEffect(style: .dark)
-//        let blurView = UIVisualEffectView(effect: blur)
-//        self.addSubview(blurView)
     }
 
     func deleteButtonTapped(_ sender: UIButton) {
@@ -152,15 +145,8 @@ class BottomNavBarRightView: UIView {
 extension BottomNavBarView {
     
     func setupView() {
-        // Background
-//        let blur = UIBlurEffect(style: .light)
-//        let blurView = UIVisualEffectView(effect: blur)
-//        blurView.frame = self.bounds
-//        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-//        self.addSubview(blurView)
         backgroundColor = UIColor.clear
-        
-        // Stack view
+
         let stackView = UIStackView()
         self.addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false

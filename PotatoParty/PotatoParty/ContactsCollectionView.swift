@@ -19,7 +19,6 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     
     var firstTimeLoaded: Bool = true
     
-    // Inititalizers
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: self.layout)
         setupView()
@@ -28,10 +27,7 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-
     
-    
-    // Cell data source
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -77,7 +73,6 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         // Collection View properties
         showsVerticalScrollIndicator = false
         
-        // Background image
         backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
         backgroundView = UIView()
         let backgroundPlaneImage = UIImageView()
@@ -100,18 +95,6 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         layout.itemSize = CGSize(width: cellWidth, height: cellHeight)
         layout.scrollDirection = .vertical
         layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 0, right: 10)
-        
-//        Gradient
-//        let gradient = CAGradientLayer()
-//        let whiteNoOpacity = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
-//        let whiteOpacity = UIColor.clear
-//        gradient.frame = self.frame
-//        gradient.colors = [whiteOpacity.cgColor, whiteNoOpacity.cgColor, whiteNoOpacity.cgColor, whiteOpacity.cgColor]
-//        gradient.locations = [0, 0.05, 0.95, 1]
-//        gradient.startPoint = CGPoint(x: 0, y: 0)
-//        gradient.endPoint = CGPoint(x: 0, y: 1)
-//
-//        self.layer.mask = gradient
         
     }
     

@@ -27,8 +27,6 @@ extension AddContactViewController {
             make.leadingMargin.equalToSuperview()
         }
         
-        
-        //view background
         view.backgroundColor = Colors.cardlyBlue
         
         view.addSubview(backgroundPlaneImage)
@@ -67,15 +65,11 @@ extension AddContactViewController {
             make.topMargin.equalTo(backButton).offset(45)
         }
         
-
-        
-        // Name Textfield
         nameTextField = CustomTextField.initTextField(placeHolderText: "Contact Name", isSecureEntry: false)
         view.addSubview(nameTextField)
         nameTextField.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.topMargin.equalToSuperview().offset(275)
-           // make.topMargin.equalToSuperview().offset(view.frame.height/4)
             make.width.equalToSuperview().multipliedBy(0.60)
             make.height.equalTo(nameTextField.snp.width).multipliedBy(0.15)
         }
@@ -115,7 +109,6 @@ extension AddContactViewController {
         }
         
         groupPickerView.backgroundColor = UIColor.white
-        // TO DO: make partially transparent
         
         // Add button
         view.addSubview(addButton)
