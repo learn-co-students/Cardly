@@ -25,6 +25,7 @@ class SendCardViewController: UIViewController {
     var sendEmail = UIButton()
     var sendText = UIButton()
     var cancelButton = UIButton()
+    var buttonStackView: UIStackView!
     var shared = User.shared
     let player = AVPlayer()
     var delegate: EditCardViewController?
@@ -93,38 +94,36 @@ class SendCardViewController: UIViewController {
         
         playerView.playerLayer.player = player
         
-        view.addSubview(sendEmail)
-        sendEmail.snp.makeConstraints { (make) in
-            make.leadingMargin.equalTo(playerView.snp.leadingMargin)
-            make.topMargin.equalTo(playerView.snp.bottomMargin).offset(20)
-            make.width.equalTo(playerView.snp.width).multipliedBy(1.0/3.0).offset(5)
-            make.height.equalTo(40)
+        buttonStackView = UIStackView()
+        view.addSubview(buttonStackView)
+        buttonStackView.backgroundColor = UIColor.red
+        buttonStackView.distribution = .fillEqually
+        buttonStackView.snp.makeConstraints { (make) in
+            make.topMargin.equalTo(playerView.snp.bottomMargin)
+            make.leading.equalTo(playerView.snp.leadingMargin)
+            make.trailing.equalTo(playerView.snp.trailingMargin)
+            make.height.equalTo(playerView.snp.width).dividedBy(3)
         }
-    
-        sendEmail.backgroundColor = UIColor.blue
-        sendEmail.setTitle("E-MAIL", for: .normal)
+        
+        buttonStackView.addArrangedSubview(sendEmail)
+        sendEmail.setImage(Icons.sendEmailIcon, for: .normal)
+//        sendEmail.imageView?.contentMode = .scaleAspectFit
+//        sendEmail.contentVerticalAlignment = .fill
+//        sendEmail.contentHorizontalAlignment = .fill
         sendEmail.addTarget(self, action: #selector(sendEmailButtonTapped), for: .touchUpInside)
         
-        view.addSubview(sendText)
-        sendText.snp.makeConstraints { (make) in
-            make.leadingMargin.equalTo(sendEmail.snp.trailingMargin)
-            make.topMargin.equalTo(playerView.snp.bottomMargin).offset(20)
-            make.width.equalTo(sendEmail)
-            make.height.equalTo(sendEmail)
-        }
-        sendText.backgroundColor = UIColor.blue
-        sendText.setTitle("TEXT", for: .normal)
+        buttonStackView.addArrangedSubview(sendText)
+        sendText.setImage(Icons.sendTextIcon, for: .normal)
+//        sendText.imageView?.contentMode = .scaleAspectFit
+//        sendText.contentVerticalAlignment = .fill
+//        sendText.contentHorizontalAlignment = .fill
         sendText.addTarget(self, action: #selector(sendTextButtonTapped), for: .touchUpInside)
         
-        view.addSubview(cancelButton)
-        cancelButton.snp.makeConstraints { (make) in
-            make.leadingMargin.equalTo(sendText.snp.trailingMargin)
-            make.topMargin.equalTo(playerView.snp.bottomMargin).offset(20)
-            make.width.equalTo(sendEmail)
-            make.height.equalTo(sendEmail)
-        }
-        cancelButton.backgroundColor = UIColor.blue
-        cancelButton.setTitle("CANCEL", for: .normal)
+        buttonStackView.addArrangedSubview(cancelButton)
+        cancelButton.setImage(Icons.cancelIcon, for: .normal)
+//        cancelButton.imageView?.contentMode = .scaleAspectFit
+//        cancelButton.contentVerticalAlignment = .fill
+//        cancelButton.contentHorizontalAlignment = .fill
         cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         
         let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
