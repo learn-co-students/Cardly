@@ -13,7 +13,7 @@ import SnapKit
 class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     let reuseIdentifier = "cell"
-    let layout = UICollectionView   FlowLayout()
+    let layout = UICollectionViewFlowLayout()
     let defaultContact = Contact(fullName: "AddContact", email: "", phone: "")
     let shared = User.shared
     
@@ -40,13 +40,9 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         if firstTimeLoaded {
-            
             User.shared.contacts.insert(defaultContact, at: 0)
             firstTimeLoaded = false
-
         }
-        
-        
         
         return User.shared.contacts.count
         
@@ -59,9 +55,7 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         if indexPath.item == 0 {
             
             cell.addContactIconImageView.image = UIImage(named: "addContactIcon")
-            
-            cell.layer.borderWidth = 0.0
-            
+        
             return cell
             
         }
@@ -85,32 +79,32 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         dataSource = self
         
         // Collection View properties
-        backgroundColor = Colors.cardlyBlue
-        
+        backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
+        showsVerticalScrollIndicator = false
         
         // Create reuse cell
         register(ContactsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         
         // Cells layout
-        let cellWidth = self.frame.width * 0.45
+        let cellWidth = self.bounds.width * 0.40
         let cellHeight = cellWidth
         layout.itemSize = CGSize(width: cellWidth, height: cellHeight)
         layout.scrollDirection = .vertical
-        layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 0, right: 10)
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 0, right: 10)
+        
+        // Gradient
+//        let gradient = CAGradientLayer()
+//        let whiteNoOpacity = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
+//        let whiteOpacity = UIColor.clear
+//        gradient.frame = self.frame
+//        gradient.colors = [whiteOpacity.cgColor, whiteNoOpacity.cgColor, whiteNoOpacity.cgColor, whiteOpacity.cgColor]
+//        gradient.locations = [0, 0.05, 0.95, 1]
+//        gradient.startPoint = CGPoint(x: 0, y: 0)
+//        gradient.endPoint = CGPoint(x: 0, y: 1)
+//
+//        self.layer.mask = gradient
         
     }
-    
-    //default cell
-    func setupDefaultCellView() {
-        let cellWidth = self.frame.width * 0.45
-        let cellHeight = cellWidth
-        layout.itemSize = CGSize(width: cellWidth, height: cellHeight)
-        layout.scrollDirection = .vertical
-        layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 0, right: 10)
-    }
-    
-    
-    
     
 }
 

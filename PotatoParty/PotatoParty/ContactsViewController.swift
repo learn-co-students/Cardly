@@ -73,12 +73,12 @@ extension ContactsViewController {
     // Setup all views
     func setupViews() {
         
-//        backgroundImageView.image = 
-        
+        view.backgroundColor = Colors.cardlyBlue
         
         setupCollectionView()
         setupBottomNavBarView()
         setupTopNavBarView()
+                
     }
     
     // Setup collection view
@@ -86,10 +86,10 @@ extension ContactsViewController {
         contactsCollectionView = ContactsCollectionView(frame: self.view.frame)
         self.view.addSubview(contactsCollectionView)
         contactsCollectionView.snp.makeConstraints { (make) in
-            make.bottom.equalToSuperview()
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
-            make.height.equalToSuperview()
+            make.top.equalToSuperview()
+            make.center.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(0.9)
+            make.height.equalToSuperview().multipliedBy(0.90)
         }
     }
     
@@ -104,7 +104,7 @@ extension ContactsViewController {
             make.left.equalToSuperview()
             make.right.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.125)
+            make.top.equalTo(contactsCollectionView.snp.bottom)
         }
     }
     
