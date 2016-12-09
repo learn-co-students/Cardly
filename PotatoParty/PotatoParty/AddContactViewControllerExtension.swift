@@ -74,7 +74,8 @@ extension AddContactViewController {
         view.addSubview(nameTextField)
         nameTextField.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalToSuperview().offset(view.frame.height/4)
+            make.topMargin.equalToSuperview().offset(275)
+           // make.topMargin.equalToSuperview().offset(view.frame.height/4)
             make.width.equalToSuperview().multipliedBy(0.60)
             make.height.equalTo(nameTextField.snp.width).multipliedBy(0.15)
         }
@@ -85,7 +86,7 @@ extension AddContactViewController {
         view.addSubview(emailTextField)
         emailTextField.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(nameTextField.snp.bottomMargin).offset(40)
+            make.topMargin.equalTo(nameTextField).offset(45)
             make.width.equalTo(nameTextField)
             make.height.equalTo(nameTextField)
         }
@@ -96,7 +97,7 @@ extension AddContactViewController {
         view.addSubview(phoneTextField)
         phoneTextField.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(emailTextField.snp.bottomMargin).offset(40)
+            make.topMargin.equalTo(emailTextField).offset(45)
             make.width.equalTo(nameTextField)
             make.height.equalTo(nameTextField)
         }
@@ -108,22 +109,24 @@ extension AddContactViewController {
         view.addSubview(groupPickerView)
         groupPickerView.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(phoneTextField.snp.bottomMargin).offset(40)
+            make.topMargin.equalTo(phoneTextField).offset(50)
             make.width.equalTo(phoneTextField)
             make.height.equalTo(phoneTextField)
         }
         
         groupPickerView.backgroundColor = UIColor.white
+        // TO DO: make partially transparent
         
         // Add button
         view.addSubview(addButton)
         addButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(groupPickerView.snp.bottomMargin).offset(40)
+            make.topMargin.equalToSuperview().offset(500)
             make.width.equalTo(nameTextField.snp.width).multipliedBy(0.5)
             make.height.equalTo(nameTextField.snp.height).multipliedBy(0.5)
         }
         
+        addButton.setTitleColor(Colors.cardlyGrey, for: UIControlState.normal)
         addButton.backgroundColor = UIColor.clear
         addButton.setTitle("Add", for: .normal)
         addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
@@ -132,27 +135,15 @@ extension AddContactViewController {
         view.addSubview(importContactsButton)
         importContactsButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(addButton).offset(120)
+            make.topMargin.equalToSuperview().offset(200)
             make.width.equalTo(nameTextField.snp.width).multipliedBy(1.5)
             make.height.equalTo(addButton.snp.height)
         }
-        
+        importContactsButton.setTitleColor(Colors.cardlyGrey, for: UIControlState.normal)
         importContactsButton.backgroundColor = UIColor.clear
         importContactsButton.setTitle("Import from Contacts", for: .normal)
         importContactsButton.addTarget(self, action: #selector(self.importContactButtonTapped), for: .touchUpInside)
         
-        // Cancel button
-//        view.addSubview(cancelButton)
-//        cancelButton.snp.makeConstraints { (make) in
-//            make.centerX.equalToSuperview()
-//            make.topMargin.equalTo(importContactsButton).offset(40)
-//            make.width.equalTo(addButton.snp.width)
-//            make.height.equalTo(addButton.snp.height)
-//        }
-        
-//        cancelButton.backgroundColor = UIColor.clear
-//        cancelButton.setTitle("Cancel", for: .normal)
-//        cancelButton.addTarget(self, action: #selector(self.cancelButtonTapped), for: .touchUpInside)
     }
     
 }

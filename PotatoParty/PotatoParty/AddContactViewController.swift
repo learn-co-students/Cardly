@@ -25,7 +25,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     var addButton = UIButton()
     var groupPickerView = UIPickerView()
     var importContactsButton = UIButton()
-   // var cancelButton = UIButton()
+
     var contactStore = CNContactStore()
     var dataDict = [String: String] ()
     var groupSelected: String = "All"
@@ -57,10 +57,6 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-    
-//    func cancelButtonTapped () {
-//        dismiss(animated: true, completion: nil)
-//    }
     
     func importContactButtonTapped () {
         authorizeAddressBook { (accessGranted) in
@@ -172,9 +168,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         nameTextField.text = ""
         emailTextField.text = ""
         phoneTextField.text = ""
-        nameTextField.placeholder = "Name"
-        emailTextField.placeholder = "example@serviceprovider"
-        phoneTextField.placeholder = "2224446666"
+
         
         if groupSelected != "All" {
             let path = "\(uid)/\(groupSelected.lowercased())/\(contactItemRef.key)/"
@@ -258,7 +252,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     }
     func enableAddButton() {
         addButton.isEnabled = true
-        addButton.backgroundColor = UIColor.white 
+        addButton.backgroundColor = UIColor.gray
     }
     
     func shake(textfield: UITextField) {
