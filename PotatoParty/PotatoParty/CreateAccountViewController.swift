@@ -17,11 +17,13 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     
     //UI Elements
     
-    var emailTextField = UITextField()
-    var passwordTextField = UITextField()
-    var confirmPasswordTextField = UITextField()
+    var emailTextField = CustomTextField.initTextField(placeHolderText: "example@emailprovider.com" , isSecureEntry: false)
+    var passwordTextField = CustomTextField.initTextField(placeHolderText: "password", isSecureEntry: true)
+    var confirmPasswordTextField = CustomTextField.initTextField(placeHolderText: "confirm password", isSecureEntry: true)
     var submitButton = UIButton()
     var cancelButton = UIButton()
+    var cardlyTextLabel = UILabel()
+    var cardlyAirplaneImageView = UIImageView()
     
     //Constraints Constants
     
@@ -186,22 +188,16 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     
     func setUpView() {
         
-        view.backgroundColor = UIColor.white
-        
+        view.backgroundColor = UIColor.init(patternImage: #imageLiteral(resourceName: "loginScreenBackground"))
+      
         view.addSubview(emailTextField)
         emailTextField.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.topMargin.equalToSuperview().offset(emailTextFieldTopOffset)
-            make.width.equalToSuperview().multipliedBy(textFieldToSuperviewWidthMultiplier)
-            make.height.equalTo(emailTextField.snp.width).multipliedBy(textFieldToSuperviewHeightMultiplier)
+            make.centerX.equalTo(view.snp.centerX)
+            make.topMargin.equalToSuperview().offset(view.frame.height/4.3)
+            make.width.equalToSuperview().multipliedBy(0.8)
+            make.height.equalTo(50)
         }
-        
-        emailTextField.placeholder = "example@emailprovider.com"
-        emailTextField.backgroundColor = UIColor.cyan
-        emailTextField.textAlignment = .center
-        emailTextField.autocapitalizationType = UITextAutocapitalizationType.none
-        
-        
+       
         view.addSubview(passwordTextField)
         passwordTextField.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
@@ -209,12 +205,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             make.width.equalTo(emailTextField.snp.width)
             make.height.equalTo(emailTextField.snp.height)
         }
-        
-        passwordTextField.placeholder = "password"
-        passwordTextField.backgroundColor = UIColor.cyan
-        passwordTextField.textAlignment = .center
-        passwordTextField.autocapitalizationType = UITextAutocapitalizationType.none
-        passwordTextField.isSecureTextEntry = true
+
         
         view.addSubview(confirmPasswordTextField)
         confirmPasswordTextField.snp.makeConstraints { (make) in
@@ -223,14 +214,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             make.width.equalTo(passwordTextField)
             make.height.equalTo(passwordTextField)
         }
-        
-        confirmPasswordTextField.placeholder = "confirm password"
-        confirmPasswordTextField.backgroundColor = UIColor.cyan
-        confirmPasswordTextField.textAlignment = .center
-        confirmPasswordTextField.autocapitalizationType = UITextAutocapitalizationType.none
-        confirmPasswordTextField.isSecureTextEntry = true
-        
-        
+   
         view.addSubview(submitButton)
         submitButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview().offset(50)
@@ -240,7 +224,8 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
         }
         
         submitButton.setTitle("Submit", for: .normal)
-        submitButton.backgroundColor = UIColor.blue
+        submitButton.backgroundColor = UIColor.clear
+        submitButton.setTitleColor(UIColor.black, for: .normal)
         submitButton.addTarget(self, action: #selector(self.submitButtonTapped), for: .touchUpInside)
         
         view.addSubview(cancelButton)
@@ -252,8 +237,34 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
         }
         
         cancelButton.setTitle("Cancel", for: .normal)
-        cancelButton.backgroundColor = UIColor.blue
+        cancelButton.backgroundColor = UIColor.clear
+        cancelButton.setTitleColor(UIColor.black, for: .normal)
         cancelButton.addTarget(self, action: #selector(self.cancelButtonTapped), for: .touchUpInside)
+        
+        view.addSubview(cardlyTextLabel)
+        cardlyTextLabel.snp.makeConstraints { (make) in
+            make.centerX.equalTo(view.snp.centerX)
+            make.topMargin.equalTo(view.snp.topMargin).offset(12)
+            make.width.equalTo(view.snp.width).multipliedBy(0.5)
+            make.height.equalTo(view.snp.height).multipliedBy(1.0/5.0)
+        }
+
+        cardlyTextLabel.backgroundColor = UIColor.clear
+        cardlyTextLabel.text = "Cardly"
+        cardlyTextLabel.textAlignment = .center
+        cardlyTextLabel.font = UIFont(name: Font.fancy , size: 110)
+        cardlyTextLabel.textColor = UIColor.white
+        
+        cardlyAirplaneImageView.image = Icons.planeIcon
+        
+        view.addSubview(cardlyAirplaneImageView)
+        
+        cardlyAirplaneImageView.snp.makeConstraints { (make) in
+            make.height.equalTo(view.snp.height).multipliedBy(0.06)
+            make.width.equalTo(view.snp.height).multipliedBy(0.06)
+            make.topMargin.equalTo(cardlyTextLabel.snp.bottomMargin).offset(-20)
+            make.trailingMargin.equalToSuperview().offset(-135)
+        }
     }
     
     

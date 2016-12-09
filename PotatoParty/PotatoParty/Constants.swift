@@ -18,7 +18,7 @@ struct Font {
     static let regular = "Raleway-Regular"
     static let nameForCard = "Qwigley-Regular"
     static let fancy = "DistantStroke-Medium"
-    
+
     struct Size {
         static let xs: CGFloat = 8
         static let s: CGFloat = 12

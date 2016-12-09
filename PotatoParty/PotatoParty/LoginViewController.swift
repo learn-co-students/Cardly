@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import FirebaseAuth
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController{
     
     // MARK: - Constraint constants
     
@@ -20,16 +20,21 @@ class LoginViewController: UIViewController {
     let loginButtonToTextFieldWidthMultipier = 1.0/3.0
     let loginButtonToTextFieldHeightMultiplier = 0.5
     let loginButtonTopOffset = 30
-    let createAccountButtonTopOffset = 100
+    let createAccountButtonTopOffset = 50
     let createAccountButtonWidthMultiplier = 0.8
-    let forgotPasswordButtonTopOffset = 30
+    let forgotPasswordButtonTopOffset = 18
     let loginBackgroundImage: UIImage = #imageLiteral(resourceName: "loginScreenBackground")
-
-    var userTextfield = UITextField()
-    var passwordTextfield = UITextField()
+    
+    let cardlyTextLabel = UILabel()
+    let cardlyAirplaneImageView = UIImageView()
+    
+    
+    var userTextfield = CustomTextField.initTextField(placeHolderText: "example@emailprovider.com", isSecureEntry: false)
+    var passwordTextfield = CustomTextField.initTextField(placeHolderText: "Password", isSecureEntry: true)
     var loginButton = UIButton()
     var createAccountButton = UIButton()
     var forgotPasswordButton = UIButton()
+    var textfieldStackView = UIStackView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
