@@ -107,7 +107,7 @@ class SettingsViewController: UIViewController {
             make.topMargin.equalTo(titleLabel.snp.bottomMargin).offset(20)
         }
         
-        changeEmailPasswordTextField = UITextField()
+        changeEmailPasswordTextField = CustomTextField.initTextField(placeHolderText: "Enter current password", isSecureEntry: true)
         view.addSubview(changeEmailPasswordTextField)
         changeEmailPasswordTextField.snp.makeConstraints { (make) in
             make.height.equalToSuperview().multipliedBy(0.05)
@@ -115,24 +115,14 @@ class SettingsViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(emailLabel.snp.bottomMargin).offset(30)
         }
-        changeEmailPasswordTextField.placeholder = "Enter current password"
-        changeEmailPasswordTextField.textColor = UIColor.black
-        changeEmailPasswordTextField.borderStyle = UITextBorderStyle.roundedRect
-        changeEmailPasswordTextField.textAlignment = .center
-        changeEmailPasswordTextField.isSecureTextEntry = true
         
-        newEmailTextField = UITextField()
+        newEmailTextField = CustomTextField.initTextField(placeHolderText: "Enter new email address", isSecureEntry: false)
         view.addSubview(newEmailTextField)
         newEmailTextField.snp.makeConstraints { (make) in
             make.size.equalTo(changeEmailPasswordTextField.snp.size)
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(changeEmailPasswordTextField.snp.bottomMargin).offset(30)
         }
-        newEmailTextField.autocapitalizationType = .none
-        newEmailTextField.textColor = UIColor.black
-        newEmailTextField.borderStyle = UITextBorderStyle.roundedRect
-        newEmailTextField.placeholder = "Enter new email address"
-        newEmailTextField.textAlignment = .center
         
         changeEmailButton = UIButton()
         view.addSubview(changeEmailButton)
@@ -167,44 +157,29 @@ class SettingsViewController: UIViewController {
             make.topMargin.equalTo(changeEmailDivider.snp.bottomMargin).offset(30)
         }
         
-        currentPasswordTextField = UITextField()
+        currentPasswordTextField = CustomTextField.initTextField(placeHolderText: "Enter current password", isSecureEntry: true)
         view.addSubview(currentPasswordTextField)
         currentPasswordTextField.snp.makeConstraints { (make) in
             make.size.equalTo(changeEmailPasswordTextField.snp.size)
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(passwordLabel.snp.bottomMargin).offset(30)
         }
-        currentPasswordTextField.textColor = UIColor.black
-        currentPasswordTextField.borderStyle = UITextBorderStyle.roundedRect
-        currentPasswordTextField.placeholder = "Enter current password"
-        currentPasswordTextField.textAlignment = .center
-        currentPasswordTextField.isSecureTextEntry = true
         
-        newPasswordTextField = UITextField()
+        newPasswordTextField = CustomTextField.initTextField(placeHolderText: "Enter new password", isSecureEntry: true)
         view.addSubview(newPasswordTextField)
         newPasswordTextField.snp.makeConstraints { (make) in
             make.size.equalTo(changeEmailPasswordTextField.snp.size)
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(currentPasswordTextField.snp.bottomMargin).offset(30)
         }
-        newPasswordTextField.textColor = UIColor.black
-        newPasswordTextField.borderStyle = UITextBorderStyle.roundedRect
-        newPasswordTextField.placeholder = "Enter new password"
-        newPasswordTextField.textAlignment = .center
-        newPasswordTextField.isSecureTextEntry = true
         
-        confirmNewPasswordTextField = UITextField()
+        confirmNewPasswordTextField = CustomTextField.initTextField(placeHolderText: "Confirm new password", isSecureEntry: true)
         view.addSubview(confirmNewPasswordTextField)
         confirmNewPasswordTextField.snp.makeConstraints { (make) in
             make.size.equalTo(changeEmailPasswordTextField.snp.size)
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(newPasswordTextField.snp.bottomMargin).offset(30)
         }
-        confirmNewPasswordTextField.textColor = UIColor.black
-        confirmNewPasswordTextField.borderStyle = UITextBorderStyle.roundedRect
-        confirmNewPasswordTextField.placeholder = "Confirm new password"
-        confirmNewPasswordTextField.textAlignment = .center
-        confirmNewPasswordTextField.isSecureTextEntry = true
         
         changePasswordButton = UIButton()
         view.addSubview(changePasswordButton)
