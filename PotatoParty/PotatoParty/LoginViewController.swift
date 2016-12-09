@@ -161,24 +161,6 @@ extension LoginViewController{
         
         view.backgroundColor = UIColor.init(patternImage: #imageLiteral(resourceName: "loginScreenBackground"))
         
-        //        textfieldStackView.distribution = .fillProportionally
-        //        textfieldStackView.alignment = .fill
-        //        textfieldStackView.axis = .vertical
-        //        textfieldStackView.spacing = 8.0
-        //        textfieldStackView.backgroundColor = UIColor.clear
-        //
-        //
-        //        view.addSubview(textfieldStackView)
-        //        textfieldStackView.addArrangedSubview(userTextfield)
-        //        textfieldStackView.addArrangedSubview(passwordTextfield)
-        //        textfieldStackView.addArrangedSubview(forgotPasswordButton)
-        //
-        //        textfieldStackView.snp.makeConstraints { (make) in
-        //            make.centerX.equalToSuperview()
-        //            make.topMargin.equalToSuperview().offset(300)
-        //            make.width.equalToSuperview().multipliedBy(0.75)
-        //            make.height.equalToSuperview().multipliedBy(1/3)
-        //        }
         
         view.addSubview(userTextfield)
         userTextfield.snp.makeConstraints { (make) in
@@ -203,10 +185,12 @@ extension LoginViewController{
             make.width.equalTo(passwordTextfield.snp.width).multipliedBy(0.85)
             make.height.equalTo(passwordTextfield.snp.height).multipliedBy(0.85)
         }
-        
-        forgotPasswordButton.setTitle("Forgot password?", for: .normal)
-        forgotPasswordButton.backgroundColor = UIColor.clear
+
+        forgotPasswordButton.titleLabel!.font = UIFont(name: Font.regular, size: Font.Size.m)
         forgotPasswordButton.setTitleColor(UIColor.white, for: .normal)
+        forgotPasswordButton.titleLabel!.minimumScaleFactor = 0.5
+        forgotPasswordButton.sizeToFit()
+        forgotPasswordButton.setTitle("Forgot password?", for: .normal)
         forgotPasswordButton.addTarget(self, action: #selector(self.forgotPasswordButtonTapped), for: .touchUpInside)
         
         view.addSubview(loginButton)
