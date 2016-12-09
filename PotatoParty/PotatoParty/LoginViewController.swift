@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import FirebaseAuth
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController{
     
     // MARK: - Constraint constants
     
@@ -29,8 +29,8 @@ class LoginViewController: UIViewController {
     let cardlyAirplaneImageView = UIImageView()
     
     
-    var userTextfield = UITextField()
-    var passwordTextfield = UITextField()
+    var userTextfield = CustomTextField.initTextField(placeHolderText: "example@emailprovider.com", isSecureEntry: false)
+    var passwordTextfield = CustomTextField.initTextField(placeHolderText: "Password", isSecureEntry: true)
     var loginButton = UIButton()
     var createAccountButton = UIButton()
     var forgotPasswordButton = UIButton()

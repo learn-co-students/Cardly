@@ -8,7 +8,7 @@
 import UIKit
 
 
-extension LoginViewController {
+extension LoginViewController{
     
     
     
@@ -43,11 +43,6 @@ extension LoginViewController {
             make.height.equalTo(50)
         }
         
-        userTextfield.placeholder = "example@emailprovider.com"
-        userTextfield.backgroundColor = UIColor.white
-        userTextfield.textAlignment = .center
-        userTextfield.autocapitalizationType = UITextAutocapitalizationType.none
-        
         view.addSubview(passwordTextfield)
         passwordTextfield.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
@@ -55,12 +50,6 @@ extension LoginViewController {
             make.width.equalTo(userTextfield.snp.width)
             make.height.equalTo(userTextfield.snp.height)
         }
-
-        passwordTextfield.placeholder = "Password"
-        passwordTextfield.isSecureTextEntry = true
-        passwordTextfield.backgroundColor = UIColor.white
-        passwordTextfield.textAlignment = .center
-        passwordTextfield.autocapitalizationType = UITextAutocapitalizationType.none
         
         view.addSubview(forgotPasswordButton)
         forgotPasswordButton.snp.makeConstraints { (make) in
@@ -102,16 +91,10 @@ extension LoginViewController {
         createAccountButton.setTitleColor(UIColor.black, for: .normal)
         
         view.addSubview(cardlyTextLabel)
-//        cardlyTextLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-//        cardlyTextLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5).isActive = true
-//        cardlyTextLabel.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/5).isActive = true
-//        cardlyTextLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 20).isActive = true
-//
-//        cardlyTextLabel.translatesAutoresizingMaskIntoConstraints = false
         
         cardlyTextLabel.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalToSuperview().multipliedBy(0.09)
+            make.topMargin.equalToSuperview().offset(12)
             make.width.equalToSuperview().multipliedBy(0.5)
             make.height.equalToSuperview().multipliedBy(1.0/5.0)
         }
@@ -122,16 +105,7 @@ extension LoginViewController {
         cardlyTextLabel.font = UIFont(name: Font.fancy , size: 110)
         cardlyTextLabel.textColor = UIColor.white
         
-        
-//        cardlyAirplaneImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -130).isActive = true
-//        cardlyAirplaneImageView.widthAnchor.constraint(equalTo: loginButton.widthAnchor).isActive = true
-//        cardlyAirplaneImageView.heightAnchor.constraint(equalTo: cardlyTextLabel.heightAnchor).isActive = true
-//        cardlyAirplaneImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-//
-//        cardlyAirplaneImageView.translatesAutoresizingMaskIntoConstraints = false
-//        
-//        cardlyAirplaneImageView.backgroundColor = UIColor.init(patternImage: Icons.planeIcon!)
-        
+  
         cardlyAirplaneImageView.image = Icons.planeIcon
         view.addSubview(cardlyAirplaneImageView)
 

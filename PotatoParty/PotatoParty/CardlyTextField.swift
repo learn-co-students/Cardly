@@ -19,6 +19,7 @@ struct CustomTextField {
         textField.layer.cornerRadius = Styles.cornerRadius
         textField.layer.borderWidth = 1
         textField.placeholder = placeHolderText
+        textField.autocapitalizationType = UITextAutocapitalizationType.none
         textField.textAlignment = .center
         textField.alpha = 0.6
         if isSecureEntry {
