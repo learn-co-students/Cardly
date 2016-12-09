@@ -22,6 +22,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     let ref = FIRDatabase.database().reference(withPath: "contacts")
     
     // UI
+    let backgroundImageView = UIImageView()
     var contactsCollectionView: ContactsCollectionView!
     var bottomNavBar: BottomNavBarView!
     var navSelecAllButton: UIBarButtonItem!
@@ -49,22 +50,18 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = false
-        retrieveContacts(for: User.shared.groups[0], completion: { contacts in
-            User.shared.contacts = contacts
-            self.contactsCollectionView.reloadData()
-        })
-        shared.selectedContacts.removeAll()
-        enableCell()
+//        navigationController?.navigationBar.isHidden = false
+//        retrieveContacts(for: User.shared.groups[0], completion: { contacts in
+//            User.shared.contacts = contacts
+//            self.contactsCollectionView.reloadData()
+//        })
+//        shared.selectedContacts.removeAll()
+//        enableCell()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationBarMenu.container = view
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
     
 }
@@ -75,9 +72,13 @@ extension ContactsViewController {
     
     // Setup all views
     func setupViews() {
+        
+        view.backgroundColor = Colors.cardlyBlue
+        
         setupCollectionView()
         setupBottomNavBarView()
         setupTopNavBarView()
+                
     }
     
     // Setup collection view
@@ -85,10 +86,10 @@ extension ContactsViewController {
         contactsCollectionView = ContactsCollectionView(frame: self.view.frame)
         self.view.addSubview(contactsCollectionView)
         contactsCollectionView.snp.makeConstraints { (make) in
-            make.bottom.equalToSuperview()
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
-            make.height.equalToSuperview()
+            make.top.equalToSuperview()
+            make.center.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(0.9)
+            make.height.equalToSuperview().multipliedBy(0.90)
         }
     }
     
@@ -103,7 +104,7 @@ extension ContactsViewController {
             make.left.equalToSuperview()
             make.right.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.125)
+            make.top.equalTo(contactsCollectionView.snp.bottom)
         }
     }
     
@@ -117,16 +118,31 @@ extension ContactsViewController {
         let title = prepareNavigationBarMenuTitleView()
         prepareNavigationBarMenu(title)
         
-        let rightBtn = UIBarButtonItem(title: "Select All", style: .plain, target: self, action: #selector(self.selectBtnClicked))
-        self.navigationItem.rightBarButtonItem = rightBtn
-        navSelecAllButton = rightBtn
+        // Select all contacts button (right)
+        let rightBtn = UIButton()
+        rightBtn.setImage(Icons.selectAllContactsButton, for: .normal)
+        rightBtn.imageView!.snp.makeConstraints({ (make) in
+            make.width.equalTo(rightBtn.snp.height)
+            make.right.equalToSuperview()
+        })
+        rightBtn.frame = CGRect(x: 0, y: 0, width: 100, height: 30)
+        rightBtn.addTarget(self, action: #selector(selectBtnClicked), for: .touchUpInside)
         
+        let rightBtnItem = UIBarButtonItem()
+        rightBtnItem.customView = rightBtn
+        self.navigationItem.rightBarButtonItem = rightBtnItem
+        navSelecAllButton = rightBtnItem
+
+        // Settings button (left)
         let btnName = UIButton()
-        btnName.setTitle("Settings", for: .normal)
+        btnName.setImage(Icons.settingsButton, for: .normal)
+        btnName.imageView?.snp.makeConstraints({ (make) in
+            make.width.equalTo(btnName.snp.height)
+            make.left.equalToSuperview()
+        })
         btnName.frame = CGRect(x: 0, y: 0, width: 100, height: 30)
         btnName.addTarget(self, action: #selector(self.navToSettingsVC), for: .touchUpInside)
         
-        //.... Set Right/Left Bar Button item
         let leftBarButton = UIBarButtonItem()
         leftBarButton.customView = btnName
         self.navigationItem.leftBarButtonItem = leftBarButton
@@ -140,10 +156,25 @@ extension ContactsViewController {
     
     func prepareNavigationBarMenuTitleView() -> String {
         titleView = DropDownTitleView(frame: CGRect(x: 0, y: 0, width: 150, height: 40))
+
+        // Targets
         titleView.addTarget(self, action: #selector(self.willToggleNavigationBarMenu(_:)), for: .touchUpInside)
         titleView.addTarget(self, action: #selector(self.didToggleNavigationBarMenu(_:)), for: .valueChanged)
-        titleView.titleLabel.textColor = UIColor.black
-        titleView.title = "Lists"
+
+        // Title
+        titleView.titleLabel.textColor = UIColor.blue
+        titleView.titleLabel.font = UIFont(name: Font.regular, size: Font.Size.m)
+        titleView.title = "Groups"
+        
+        // Image 
+        /*
+        let image = UIImageView()
+        image.image = Icons.groupDropDownButton
+        titleView.imageView.addSubview(image)
+        image.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+        */
         
         navigationItem.titleView = titleView
         
@@ -312,6 +343,7 @@ extension ContactsViewController: BottomNavBarDelegate {
     }
     
     func selectBtnClicked() {
+        print(User.shared.contacts[0].fullName)
         if allSelected == false {
             for (index, contact) in User.shared.contacts.enumerated() {
                 if index > 0 {
@@ -319,7 +351,8 @@ extension ContactsViewController: BottomNavBarDelegate {
                     User.shared.selectedContacts.append(contact)
                 }
             }
-            User.shared.contacts.remove(at: 0)
+            // User.shared.contacts.remove(at: 0)
+            
             enableCell()
             contactsCollectionView.reloadData()
             allSelected = true
@@ -331,7 +364,7 @@ extension ContactsViewController: BottomNavBarDelegate {
                 }
             }
             User.shared.selectedContacts.removeAll()
-            User.shared.contacts.remove(at: 0)
+          //  User.shared.contacts.remove(at: 0)
             enableCell()
             contactsCollectionView.reloadData()
             allSelected = false
@@ -341,7 +374,7 @@ extension ContactsViewController: BottomNavBarDelegate {
     
     func goToAddContact(){
         let destVC = AddContactViewController()
-        navigationController?.pushViewController(destVC, animated: false)
+        navigationController?.pushViewController(destVC, animated: true)
         shared.selectedContacts.removeAll()
     }
     

@@ -65,10 +65,9 @@ struct Icons {
     static let sendEmailIcon = UIImage(named: "emailIcon")
     static let sendTextIcon = UIImage(named: "textIcon")
     static let cancelIcon = UIImage(named: "cancelIcon")
-}
-
-struct IconSize {
-   // static let standardIconSize = 
+    
+    static let multiplier: Double = 0.7
+    
 }
 
 struct CustomNotification {

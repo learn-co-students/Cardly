@@ -23,6 +23,8 @@ final class Contact {
     let ref: FIRDatabaseReference?
     var isChosen: Bool = false
     
+    var image: UIImage?
+    
     init(fullName: String, email: String, phone: String, is_sent: Bool = false, key: String = "", group_key: String = "", photoUrl: String = "") {
         self.key = key
         self.group_key = group_key
@@ -32,6 +34,18 @@ final class Contact {
         self.is_sent = is_sent
         self.ref = nil
         self.photoUrl = photoUrl
+    }
+    
+    init(fullName: String, email: String, phone: String, is_sent: Bool = false, key: String = "", group_key: String = "", photoUrl: String = "", image: UIImage?) {
+        self.key = key
+        self.group_key = group_key
+        self.fullName = fullName
+        self.email = email
+        self.phone = phone
+        self.is_sent = is_sent
+        self.ref = nil
+        self.photoUrl = photoUrl
+        self.image = image
     }
     
     init(snapshot: FIRDataSnapshot) {
