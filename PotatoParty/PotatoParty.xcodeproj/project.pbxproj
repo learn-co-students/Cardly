@@ -36,7 +36,6 @@
 		3F196C521DDE30CA00497BDD /* ThankYou.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F196C511DDE30CA00497BDD /* ThankYou.swift */; };
 		3F196C541DDE3AFE00497BDD /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F196C531DDE3AFE00497BDD /* Group.swift */; };
 		3F37150B1DE49D1B006B3EAD /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F37150A1DE49D1B006B3EAD /* PlayerView.swift */; };
-		3F37150D1DE4A21B006B3EAD /* EditCardViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F37150C1DE4A21B006B3EAD /* EditCardViewControllerExtension.swift */; };
 		3FD6DB2D1DDCEA5F0078CA45 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3FD6DB2C1DDCEA5F0078CA45 /* GoogleService-Info.plist */; };
 		3FD6DB301DDCFD7A0078CA45 /* LoginViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD6DB2F1DDCFD7A0078CA45 /* LoginViewControllerExtension.swift */; };
 		920F301338A9FC2B9FE55804 /* Pods_PotatoParty.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9928D9D1244326D898295D /* Pods_PotatoParty.framework */; };
@@ -81,7 +80,6 @@
 		3F196C511DDE30CA00497BDD /* ThankYou.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThankYou.swift; sourceTree = "<group>"; };
 		3F196C531DDE3AFE00497BDD /* Group.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		3F37150A1DE49D1B006B3EAD /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
-		3F37150C1DE4A21B006B3EAD /* EditCardViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditCardViewControllerExtension.swift; sourceTree = "<group>"; };
 		3FD6DB2C1DDCEA5F0078CA45 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3FD6DB2E1DDCEB760078CA45 /* PotatoParty.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PotatoParty.entitlements; sourceTree = "<group>"; };
 		3FD6DB2F1DDCFD7A0078CA45 /* LoginViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewControllerExtension.swift; sourceTree = "<group>"; wrapsLines = 0; };
@@ -173,7 +171,6 @@
 				F30919EB1DDE147800479633 /* AddContactViewControllerExtension.swift */,
 				E49BA3A61DE3443A0010A7A4 /* Constants.swift */,
 				3F37150A1DE49D1B006B3EAD /* PlayerView.swift */,
-				3F37150C1DE4A21B006B3EAD /* EditCardViewControllerExtension.swift */,
 				3173A1C31DECC36F003385B6 /* AnimatedSettingsViewController.swift */,
 			);
 			name = Views;
@@ -386,7 +383,6 @@
 				3F37150B1DE49D1B006B3EAD /* PlayerView.swift in Sources */,
 				31D78BA71DDE77BD00FA855B /* DropDownTitleView.swift in Sources */,
 				3182D51D1DEF706B0090AB2E /* SendCardViewController.swift in Sources */,
-				3F37150D1DE4A21B006B3EAD /* EditCardViewControllerExtension.swift in Sources */,
 				31D78BA41DDE77BD00FA855B /* DropDownMenu.swift in Sources */,
 				31D78BA51DDE77BD00FA855B /* DropDownMenuCell.swift in Sources */,
 				3182D51A1DEF706B0090AB2E /* EditCardViewController.swift in Sources */,

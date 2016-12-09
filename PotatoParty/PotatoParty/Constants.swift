@@ -56,6 +56,10 @@ struct Icons {
     static let recordVideoButton = UIImage(named: "recordVideoIcon")
     static let selectAllContactsButton = UIImage(named: "selectAllIcon")
     static let deleteButton = UIImage(named: "trashIcon")
+    
+    static let playButton = UIImage(named: "playButton")
+    static let pauseButton = UIImage(named: "pauseButton")
+    static let saveButton = UIImage(named: "arrowIcon")
 }
 
 struct IconSize {
