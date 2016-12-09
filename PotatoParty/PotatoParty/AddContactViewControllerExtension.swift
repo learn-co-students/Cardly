@@ -16,6 +16,17 @@ extension AddContactViewController {
     
     func layoutElements() {
         
+        backButton = UIButton()
+        view.addSubview(backButton)
+        backButton.setImage(Icons.backButton, for: .normal)
+        backButton.addTarget(self, action: #selector(dismissButtonTapped(_:)), for: .touchUpInside)
+        backButton.snp.makeConstraints { (make) in
+            make.height.equalTo(30)
+            make.width.equalTo(30)
+            make.topMargin.equalToSuperview().offset(40)
+            make.leadingMargin.equalToSuperview()
+        }
+        
         
         //view background
         view.backgroundColor = Colors.cardlyBlue
@@ -38,6 +49,25 @@ extension AddContactViewController {
             make.width.equalToSuperview().multipliedBy(0.8)
             make.height.equalToSuperview().multipliedBy(0.8)
         }
+        
+        let titleLabel = UILabel()
+        view.addSubview(titleLabel)
+        titleLabel.text = "Add Contacts"
+        titleLabel.textColor = UIColor.white
+        titleLabel.textAlignment = .center
+        titleLabel.minimumScaleFactor = 0.5
+        titleLabel.font = UIFont(name: Font.fancy, size: Font.Size.viewTitle)
+        titleLabel.layer.shadowColor = UIColor.gray.cgColor
+        titleLabel.layer.shadowOffset = CGSize(width: 0, height: 0)
+        titleLabel.layer.shadowRadius = 3
+        titleLabel.layer.shadowOpacity = 1
+        titleLabel.sizeToFit()
+        titleLabel.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(backButton).offset(45)
+        }
+        
+
         
         // Name Textfield
         nameTextField = CustomTextField.initTextField(placeHolderText: "Contact Name", isSecureEntry: false)

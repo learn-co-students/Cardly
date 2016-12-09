@@ -43,6 +43,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     // MARK: - Init
     override func viewDidLoad() {
         super.viewDidLoad()
+
         setupViews()
         contactsCollectionView.delegate = self
         self.restorationIdentifier = "contactsVC"
@@ -50,6 +51,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
 //        navigationController?.navigationBar.isHidden = false
 //        retrieveContacts(for: User.shared.groups[0], completion: { contacts in
 //            User.shared.contacts = contacts
@@ -62,6 +64,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationBarMenu.container = view
+
     }
     
 }

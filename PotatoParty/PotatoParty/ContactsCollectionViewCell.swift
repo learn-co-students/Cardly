@@ -97,9 +97,9 @@ extension ContactsCollectionViewCell {
     
     func reflectSelectedState() {
         contentView.layer.shadowRadius = 6.0
-        contentView.layer.shadowColor = UIColor.yellow.cgColor
+        contentView.layer.shadowColor = Colors.cardlyGrey.cgColor
         contentView.layer.shadowOffset = CGSize(width: 0, height: 0)
-        contentView.layer.shadowOpacity = 0.75
+        contentView.layer.shadowOpacity = 1.0
     }
     
     func reflectUnsellectedState() {

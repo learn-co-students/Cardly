@@ -16,7 +16,8 @@ import Whisper
 class AddContactViewController: UIViewController, CNContactViewControllerDelegate, CNContactPickerDelegate, UITextFieldDelegate, UICollectionViewDelegate  {
     let uid = User.shared.uid
     let groups = User.shared.groups
-    
+    var backButton: UIButton!
+    var dismissButton: UIButton?
     
     var nameTextField = UITextField()
     var emailTextField = UITextField()
@@ -35,6 +36,8 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        self.navigationController?.isNavigationBarHidden = true
+        
         layoutElements()
         
         emailTextField.delegate = self
@@ -65,6 +68,12 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         }
         self.pickAContact()
         print ("import Contact Button Tapped")
+    }
+    
+    
+    func dismissButtonTapped(_ sender: UIButton) {
+        navigationController?.popViewController(animated: true)
+        self.navigationController?.isNavigationBarHidden = false
     }
     
     // Accessing and Importing Selected Contact from User's Contact book
