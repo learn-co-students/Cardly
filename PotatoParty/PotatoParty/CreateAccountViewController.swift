@@ -14,14 +14,14 @@ import FirebaseAuth
 
 class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     
-    var emailTextField = CustomTextField.initTextField(placeHolderText: "example@emailprovider.com" , isSecureEntry: false)
-    var passwordTextField = CustomTextField.initTextField(placeHolderText: "password", isSecureEntry: true)
-    var confirmPasswordTextField = CustomTextField.initTextField(placeHolderText: "confirm password", isSecureEntry: true)
-    var submitButton = CardlyFormFieldButton.initButton(title: "Submit", target: self, selector: #selector(submitButtonTapped))
-    var cancelButton = CardlyFormFieldButton.initButton(title: "Cancel", target: self, selector: #selector(cancelButtonTapped))
-    var cardlyTextLabel = UILabel()
-    var cardlyAirplaneImageView = UIImageView()
-    var titleLabel = UILabel()
+    var emailTextField: UITextField!
+    var passwordTextField: UITextField!
+    var confirmPasswordTextField: UITextField!
+    var submitButton: UIButton!
+    var cancelButton: UIButton!
+    var cardlyTextLabel: UILabel!
+    var cardlyAirplaneImageView: UIImageView!
+    var titleLabel: UILabel!
     
     let textFieldToSuperviewWidthMultiplier = 0.6
     let textFieldToSuperviewHeightMultiplier = 0.25
@@ -38,13 +38,13 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor.init(patternImage: #imageLiteral(resourceName: "loginScreenBackground"))
         setUpView()
         emailTextField.delegate = self
         passwordTextField.delegate = self
         confirmPasswordTextField.delegate = self
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -111,9 +111,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
 // MARK: - Layout view elements
     
     func setUpView() {
-        
-        view.backgroundColor = UIColor.init(patternImage: #imageLiteral(resourceName: "loginScreenBackground"))
-      
+        emailTextField = CustomTextField.initTextField(placeHolderText: "example@emailprovider.com" , isSecureEntry: false)
         view.addSubview(emailTextField)
         emailTextField.snp.makeConstraints { (make) in
             make.centerX.equalTo(view.snp.centerX)
@@ -122,6 +120,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             make.height.equalTo(50)
         }
        
+        passwordTextField = CustomTextField.initTextField(placeHolderText: "password", isSecureEntry: true)
         view.addSubview(passwordTextField)
         passwordTextField.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
@@ -130,7 +129,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             make.height.equalTo(emailTextField.snp.height)
         }
 
-        
+        confirmPasswordTextField = CustomTextField.initTextField(placeHolderText: "confirm password", isSecureEntry: true)
         view.addSubview(confirmPasswordTextField)
         confirmPasswordTextField.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
@@ -139,6 +138,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             make.height.equalTo(passwordTextField)
         }
    
+        submitButton = CardlyFormFieldButton.initButton(title: "Submit", target: self, selector: #selector(submitButtonTapped))
         view.addSubview(submitButton)
         submitButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview().offset(50)
@@ -147,6 +147,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             make.height.equalTo(confirmPasswordTextField.snp.height).multipliedBy(submitButtonToTextFieldHeightMultiplier)
         }
 
+        cancelButton = CardlyFormFieldButton.initButton(title: "Cancel", target: self, selector: #selector(cancelButtonTapped))
         view.addSubview(cancelButton)
         cancelButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview().offset(-50)
@@ -155,7 +156,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             make.height.equalTo(submitButton)
         }
         
-        let titleLabel = UILabel()
+        titleLabel = UILabel()
         view.addSubview(titleLabel)
         titleLabel.text = "Create Account"
         titleLabel.textColor = UIColor.white
