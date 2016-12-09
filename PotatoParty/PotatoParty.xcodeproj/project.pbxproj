@@ -39,7 +39,6 @@
 		3F3EB1D01DFA40CC00CB9DA5 /* CardlyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3EB1CF1DFA40CC00CB9DA5 /* CardlyTextField.swift */; };
 		3F3EB1D21DFA4AAF00CB9DA5 /* CardlyFormFieldButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3EB1D11DFA4AAF00CB9DA5 /* CardlyFormFieldButton.swift */; };
 		3FD6DB2D1DDCEA5F0078CA45 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3FD6DB2C1DDCEA5F0078CA45 /* GoogleService-Info.plist */; };
-		3FD6DB301DDCFD7A0078CA45 /* LoginViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD6DB2F1DDCFD7A0078CA45 /* LoginViewControllerExtension.swift */; };
 		920F301338A9FC2B9FE55804 /* Pods_PotatoParty.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9928D9D1244326D898295D /* Pods_PotatoParty.framework */; };
 		E44E5A161DF1BAB900273456 /* Qwigley-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E44E5A151DF1BAB900273456 /* Qwigley-Regular.ttf */; };
 		E4974AEE1DDE0FE100698B81 /* ContactsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4974AED1DDE0FE100698B81 /* ContactsCollectionView.swift */; };
@@ -86,7 +85,6 @@
 		3F3EB1D11DFA4AAF00CB9DA5 /* CardlyFormFieldButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardlyFormFieldButton.swift; sourceTree = "<group>"; };
 		3FD6DB2C1DDCEA5F0078CA45 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3FD6DB2E1DDCEB760078CA45 /* PotatoParty.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PotatoParty.entitlements; sourceTree = "<group>"; };
-		3FD6DB2F1DDCFD7A0078CA45 /* LoginViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewControllerExtension.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		5E9928D9D1244326D898295D /* Pods_PotatoParty.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PotatoParty.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D97A54290B19A4EFAF3ACD4 /* Pods-PotatoParty.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PotatoParty.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PotatoParty/Pods-PotatoParty.debug.xcconfig"; sourceTree = "<group>"; };
 		7E3660AC3B4B277712493117 /* Pods-PotatoParty.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PotatoParty.release.xcconfig"; path = "Pods/Target Support Files/Pods-PotatoParty/Pods-PotatoParty.release.xcconfig"; sourceTree = "<group>"; };
@@ -172,7 +170,6 @@
 				E4ED56161DDD3C6700EB97D4 /* BottomNavBarView.swift */,
 				E4974AED1DDE0FE100698B81 /* ContactsCollectionView.swift */,
 				E4974AEF1DDE1C3700698B81 /* ContactsCollectionViewCell.swift */,
-				3FD6DB2F1DDCFD7A0078CA45 /* LoginViewControllerExtension.swift */,
 				F30919EB1DDE147800479633 /* AddContactViewControllerExtension.swift */,
 				3F37150A1DE49D1B006B3EAD /* PlayerView.swift */,
 				3173A1C31DECC36F003385B6 /* AnimatedSettingsViewController.swift */,
@@ -411,7 +408,6 @@
 				E49BA3A71DE3443B0010A7A4 /* Constants.swift in Sources */,
 				3F196C541DDE3AFE00497BDD /* Group.swift in Sources */,
 				E4974AEE1DDE0FE100698B81 /* ContactsCollectionView.swift in Sources */,
-				3FD6DB301DDCFD7A0078CA45 /* LoginViewControllerExtension.swift in Sources */,
 				F30919EC1DDE147800479633 /* AddContactViewControllerExtension.swift in Sources */,
 				3F196C4E1DDE147100497BDD /* Contact.swift in Sources */,
 				3182D51E1DEF706B0090AB2E /* SettingsViewController.swift in Sources */,
