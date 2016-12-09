@@ -26,8 +26,7 @@ class BottomNavBarView: UIView {
     var leftIconView = BottomNavBarLeftView()
     var middleIconView = BottomNavBarMiddleView()
     var rightIconView = BottomNavBarRightView()
-  //  var addContactBtnImage: UIImage = #imageLiteral(resourceName: "addContactImage")
-        
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -56,28 +55,26 @@ class BottomNavBarLeftView: UIView {
     
     func setupView() {
         // Delete Button
-        deleteContactBtn.setTitle("🗑", for: .normal)
-        deleteContactBtn.setTitleColor(UIColor.black, for: .normal)
-        deleteContactBtn.titleLabel?.font = UIFont(name: "Helvetica", size: 32)
-        deleteContactBtn.frame = CGRect()
+        deleteContactBtn.setImage(Icons.deleteButton, for: .normal)
         deleteContactBtn.isEnabled = false
         deleteContactBtn.isHidden = true
         deleteContactBtn.addTarget(self, action: #selector(deleteButtonTapped(_:)), for: .touchUpInside)
         addSubview(deleteContactBtn)
         deleteContactBtn.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(Icons.multiplier)
+            make.width.equalTo(deleteContactBtn.snp.height)
         }
 
-        // Change background from color to image
-        self.backgroundColor = UIColor.green
-      //  self.backgroundColor = UIColor.init(patternImage: #imageLiteral(resourceName: "addContactImage"))
+//        // Change background from color to image
+//        self.backgroundColor = UIColor.clear
+//        let blur = UIBlurEffect(style: .dark)
+//        let blurView = UIVisualEffectView(effect: blur)
+//        self.addSubview(blurView)
     }
 
     func deleteButtonTapped(_ sender: UIButton) {
-        
-        print("\n\nadd contact button pressed\n\n")
         delegate?.deleteButtonPressed()
-        
     }
     
 }
@@ -97,18 +94,16 @@ class BottomNavBarMiddleView: UIView{
     }
     
     func setupView() {
-        editGroupButton.setTitle("Edit Group", for: .normal)
-        editGroupButton.setTitleColor(UIColor.black, for: .normal)
-        editGroupButton.titleLabel?.font = UIFont(name: "Helvecta", size: 32)
-        editGroupButton.frame = CGRect()
+        editGroupButton.setImage(Icons.editGroupsButton, for: .normal)
         editGroupButton.isEnabled = false
         editGroupButton.isHidden = true
         editGroupButton.addTarget(self, action: #selector(editGroupButtonTapped(_sender:)), for: .touchUpInside)
         addSubview(editGroupButton)
         editGroupButton.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(Icons.multiplier)
+            make.width.equalTo(editGroupButton.snp.height)
         }
-        self.backgroundColor = UIColor.orange
     }
     
     func editGroupButtonTapped(_sender: UIButton) {
@@ -132,28 +127,21 @@ class BottomNavBarRightView: UIView {
     }
     
     func setupView() {
-        // send button
-        
-        sendToContactBtn.setTitle("Send", for: .normal)
-        sendToContactBtn.setTitleColor(UIColor.black, for: .normal)
-        sendToContactBtn.titleLabel?.font = UIFont(name: "Helvecta", size: 32)
-        sendToContactBtn.frame = CGRect()
+        // Button setup
+        addSubview(sendToContactBtn)
+        sendToContactBtn.setImage(Icons.recordVideoButton, for: .normal)
         sendToContactBtn.isEnabled = true
         sendToContactBtn.addTarget(self, action: #selector(sendToContactButtonTapped(_:)), for: .touchUpInside)
-        addSubview(sendToContactBtn)
         sendToContactBtn.snp.makeConstraints { (make) in
-            make.center.equalToSuperview()
-            
+            make.right.equalTo(self.snp.right).offset(-20)
+            make.centerY.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(Icons.multiplier)
+            make.width.equalTo(sendToContactBtn.snp.height)
         }
-        
-        self.backgroundColor = UIColor.red
     }
     
     func sendToContactButtonTapped(_ sender: UIButton) {
-        
-        print("\n\nsend to contact button pressed\n\n")
         delegate?.sendToButtonPressed()
-        
     }
     
 }
@@ -164,7 +152,15 @@ class BottomNavBarRightView: UIView {
 extension BottomNavBarView {
     
     func setupView() {
-        // Create stack view
+        // Background
+//        let blur = UIBlurEffect(style: .light)
+//        let blurView = UIVisualEffectView(effect: blur)
+//        blurView.frame = self.bounds
+//        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//        self.addSubview(blurView)
+        backgroundColor = UIColor.clear
+        
+        // Stack view
         let stackView = UIStackView()
         self.addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -176,9 +172,8 @@ extension BottomNavBarView {
         stackView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
-        
-        // Create background
-        self.backgroundColor = UIColor.black
+
     }
     
 }
+

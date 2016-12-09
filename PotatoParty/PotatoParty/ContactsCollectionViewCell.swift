@@ -12,56 +12,71 @@ import SnapKit
 
 class ContactsCollectionViewCell: UICollectionViewCell {
     
+    var cellCircleImageView = UIImageView()
     var label = UILabel()
     var highlightedTextColor: UIColor?
     var isChosen: Bool = false {
         didSet {
-            
-            print("iS ChoSEN SET!")
-            
             isChosen ? reflectSelectedState() : reflectUnsellectedState()
-            
         }
     }
+    var addContactIconImageView = UIImageView()
+    var index = -1
     
     var contact: Contact! {
         didSet {
-            
-            print("\n")
-            
-            print("Getting called first?")
-            
             label.text = "\(contact.fullName)\n\(contact.email)"
-            
-            print("Contacts is chosen: \(contact.isChosen ? "YES" : "NO")")
-            
             isChosen = contact.isChosen
-    
         }
     }
     
     // Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        commonInit()
+        setupView()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        commonInit()
-    }
-    
-    func commonInit() {
         setupView()
-        print(#function)
+    }
+
+    // Setup view
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        addContactIconImageView.image = nil
+        label.text = nil
+        isChosen = false
     }
     
-    // Setup view
     func setupView() {
-        backgroundColor = UIColor.cyan
+        // Background
+        backgroundColor = UIColor.clear
         
+        // Add circle image
+        cellCircleImageView.image = UIImage(named: "contactsCellIcon")
+        cellCircleImageView.alpha = 0.90
+        contentView.addSubview(cellCircleImageView)
+        cellCircleImageView.snp.makeConstraints { (make) in
+            make.edges.equalTo(contentView)
+        }
+        // Circle drop shadow
+        cellCircleImageView.layer.shadowColor = UIColor.black.cgColor
+        cellCircleImageView.layer.shadowOpacity = 0.3
+        cellCircleImageView.layer.shadowOffset = CGSize(width: 2, height: 2)
+        cellCircleImageView.layer.shadowRadius = 1
+        
+        // Add 'Add Contact' image
+        contentView.addSubview(addContactIconImageView)
+        addContactIconImageView.snp.makeConstraints { (make) in
+            make.height.equalTo(contentView).multipliedBy(0.50)
+            make.width.equalTo(addContactIconImageView.snp.height).multipliedBy(0.72)
+            make.center.equalTo(contentView.snp.center)
+        }
+        
+        // Add label
         label.frame = CGRect(x: 0, y: 0, width: contentView.frame.width, height: contentView.frame.height)
-        label.font = UIFont(name: "Helvetica", size: 20)
+        label.font = UIFont(name: Font.regular, size: Font.Size.m)
         contentView.addSubview(label)
         label.isUserInteractionEnabled = true
         
@@ -72,12 +87,8 @@ class ContactsCollectionViewCell: UICollectionViewCell {
     }
     
     func handleTap() {
-        
-        print(#function)
         isChosen = !isChosen
-
     }
-    
     
 }
 
@@ -85,21 +96,14 @@ class ContactsCollectionViewCell: UICollectionViewCell {
 extension ContactsCollectionViewCell {
     
     func reflectSelectedState() {
-        print("CHANGE STATE OF CELL!!")
-        
-        contentView.layer.borderColor = UIColor.red.cgColor
-        contentView.layer.borderWidth = 4.0
-        
+        contentView.layer.shadowRadius = 6.0
+        contentView.layer.shadowColor = UIColor.yellow.cgColor
+        contentView.layer.shadowOffset = CGSize(width: 0, height: 0)
+        contentView.layer.shadowOpacity = 0.75
     }
-    
     
     func reflectUnsellectedState() {
-        
-        contentView.layer.borderWidth = 0.0
-        contentView.layer.borderColor = UIColor.clear.cgColor
-        
+        contentView.layer.shadowOpacity = 0
     }
-    
-    
     
 }
