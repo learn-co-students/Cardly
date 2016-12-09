@@ -16,44 +16,45 @@ extension LoginViewController {
         
        view.backgroundColor = UIColor.init(patternImage: #imageLiteral(resourceName: "loginScreenBackground"))
         
-        textfieldStackView.distribution = .fillProportionally
-        textfieldStackView.alignment = .fill
-        textfieldStackView.axis = .vertical
-        textfieldStackView.spacing = 8.0
-        
-        
-        view.addSubview(textfieldStackView)
-        textfieldStackView.addArrangedSubview(userTextfield)
-        textfieldStackView.addArrangedSubview(passwordTextfield)
-        textfieldStackView.addArrangedSubview(forgotPasswordButton)
-        
-        textfieldStackView.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.topMargin.equalToSuperview().offset(300)
-            make.width.equalToSuperview().multipliedBy(0.75)
-            make.height.equalToSuperview().multipliedBy(1/3)
-        }
-
-//        view.addSubview(userTextfield)
-//        userTextfield.snp.makeConstraints { (make) in
-//            make.centerX.equalTo(textfieldStackView.snp.centerX)
-//            make.topMargin.equalToSuperview().offset(view.frame.height/4.3)
-//            make.width.equalToSuperview().multipliedBy(0.8)
-//            make.height.equalTo(50)
+//        textfieldStackView.distribution = .fillProportionally
+//        textfieldStackView.alignment = .fill
+//        textfieldStackView.axis = .vertical
+//        textfieldStackView.spacing = 8.0
+//        textfieldStackView.backgroundColor = UIColor.clear
+//        
+//        
+//        view.addSubview(textfieldStackView)
+//        textfieldStackView.addArrangedSubview(userTextfield)
+//        textfieldStackView.addArrangedSubview(passwordTextfield)
+//        textfieldStackView.addArrangedSubview(forgotPasswordButton)
+//        
+//        textfieldStackView.snp.makeConstraints { (make) in
+//            make.centerX.equalToSuperview()
+//            make.topMargin.equalToSuperview().offset(300)
+//            make.width.equalToSuperview().multipliedBy(0.75)
+//            make.height.equalToSuperview().multipliedBy(1/3)
 //        }
+
+        view.addSubview(userTextfield)
+        userTextfield.snp.makeConstraints { (make) in
+            make.centerX.equalTo(view.snp.centerX)
+            make.topMargin.equalToSuperview().offset(view.frame.height/4.3)
+            make.width.equalToSuperview().multipliedBy(0.8)
+            make.height.equalTo(50)
+        }
         
         userTextfield.placeholder = "example@emailprovider.com"
         userTextfield.backgroundColor = UIColor.white
         userTextfield.textAlignment = .center
         userTextfield.autocapitalizationType = UITextAutocapitalizationType.none
         
-//        view.addSubview(passwordTextfield)
-//        passwordTextfield.snp.makeConstraints { (make) in
-//            make.centerX.equalToSuperview()
-//            make.topMargin.equalTo(userTextfield.snp.bottomMargin).offset(passwordTextFieldTopOffset)
-//            make.width.equalTo(userTextfield.snp.width)
-//            make.height.equalTo(userTextfield.snp.height)
-//        }
+        view.addSubview(passwordTextfield)
+        passwordTextfield.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(userTextfield.snp.bottomMargin).offset(passwordTextFieldTopOffset)
+            make.width.equalTo(userTextfield.snp.width)
+            make.height.equalTo(userTextfield.snp.height)
+        }
 
         passwordTextfield.placeholder = "Password"
         passwordTextfield.isSecureTextEntry = true
@@ -61,13 +62,13 @@ extension LoginViewController {
         passwordTextfield.textAlignment = .center
         passwordTextfield.autocapitalizationType = UITextAutocapitalizationType.none
         
-//        view.addSubview(forgotPasswordButton)
-//        forgotPasswordButton.snp.makeConstraints { (make) in
-//            make.centerX.equalToSuperview()
-//            make.topMargin.equalTo(passwordTextfield.snp.bottomMargin).offset(forgotPasswordButtonTopOffset)
-//            make.width.equalTo(passwordTextfield.snp.width).multipliedBy(0.85)
-//            make.height.equalTo(passwordTextfield.snp.height).multipliedBy(0.85)
-//        }
+        view.addSubview(forgotPasswordButton)
+        forgotPasswordButton.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(passwordTextfield.snp.bottomMargin).offset(forgotPasswordButtonTopOffset)
+            make.width.equalTo(passwordTextfield.snp.width).multipliedBy(0.85)
+            make.height.equalTo(passwordTextfield.snp.height).multipliedBy(0.85)
+        }
         
         forgotPasswordButton.setTitle("Forgot password?", for: .normal)
         forgotPasswordButton.backgroundColor = UIColor.clear
@@ -84,14 +85,14 @@ extension LoginViewController {
         }
         loginButton.setTitle("Login", for: .normal)
         loginButton.backgroundColor = UIColor.clear
-        loginButton.setTitleColor(UIColor.white, for: .normal)
+        loginButton.setTitleColor(UIColor.black, for: .normal)
         loginButton.addTarget(self, action: #selector(self.loginButtonTapped), for: .touchUpInside)
         
         view.addSubview(createAccountButton)
         createAccountButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(loginButton.snp.bottomMargin).offset(createAccountButtonTopOffset)
-            make.width.equalTo(loginButton.snp.width)
+            make.width.equalTo(forgotPasswordButton.snp.width)
             make.height.equalTo(loginButton.snp.height)
         }
         
@@ -110,7 +111,7 @@ extension LoginViewController {
         
         cardlyTextLabel.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalToSuperview().offset(view.frame.height/5.0)
+            make.topMargin.equalToSuperview().multipliedBy(0.09)
             make.width.equalToSuperview().multipliedBy(0.5)
             make.height.equalToSuperview().multipliedBy(1.0/5.0)
         }
