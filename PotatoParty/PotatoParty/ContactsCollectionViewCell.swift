@@ -55,6 +55,7 @@ class ContactsCollectionViewCell: UICollectionViewCell {
         
         // Add circle image
         cellCircleImageView.image = UIImage(named: "contactsCellIcon")
+        cellCircleImageView.alpha = 0.90
         contentView.addSubview(cellCircleImageView)
         cellCircleImageView.snp.makeConstraints { (make) in
             make.edges.equalTo(contentView)
@@ -96,9 +97,9 @@ extension ContactsCollectionViewCell {
     
     func reflectSelectedState() {
         contentView.layer.shadowRadius = 6.0
-        contentView.layer.shadowColor = UIColor.white.cgColor
+        contentView.layer.shadowColor = UIColor.yellow.cgColor
         contentView.layer.shadowOffset = CGSize(width: 0, height: 0)
-        contentView.layer.shadowOpacity = 1
+        contentView.layer.shadowOpacity = 0.75
     }
     
     func reflectUnsellectedState() {
