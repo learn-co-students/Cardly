@@ -16,28 +16,42 @@ extension AddContactViewController {
     
     func layoutElements() {
         
+        
+        //view background
         view.backgroundColor = Colors.cardlyBlue
         
+        view.addSubview(backgroundPlaneImage)
+        backgroundPlaneImage.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(0.45)
+            make.width.equalToSuperview().multipliedBy(0.7)
+        }
         
-        // Name
+        view.addSubview(transparentCenterSubview)
+        transparentCenterSubview.backgroundColor = UIColor(white: 1, alpha: 0.5)
+        transparentCenterSubview.layer.borderColor = Colors.cardlyGold.cgColor
+        transparentCenterSubview.layer.borderWidth = 1.0
+        transparentCenterSubview.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(0.8)
+            make.height.equalToSuperview().multipliedBy(0.8)
+        }
+        
+        // Name Textfield
+        nameTextField = CustomTextField.initTextField(placeHolderText: "Contact Name", isSecureEntry: false)
         view.addSubview(nameTextField)
         nameTextField.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.topMargin.equalToSuperview().offset(view.frame.height/4)
             make.width.equalToSuperview().multipliedBy(0.60)
-            make.height.equalTo(nameTextField.snp.width).multipliedBy(0.25)
+            make.height.equalTo(nameTextField.snp.width).multipliedBy(0.15)
         }
         
-        nameTextField.backgroundColor = UIColor.white
-        nameTextField.layer.cornerRadius = 20.0
-        nameTextField.layer.borderColor = Colors.cardlyGold.cgColor
-        nameTextField.layer.borderWidth = 1.0
-        nameTextField.placeholder = "Contact Name"
-        nameTextField.textAlignment = .center
-        nameTextField.autocapitalizationType = UITextAutocapitalizationType.none
         
-        
-        // E-Mail
+        // E-Mail Textfield
+        emailTextField = CustomTextField.initTextField(placeHolderText: "Contact Email", isSecureEntry: false)
         view.addSubview(emailTextField)
         emailTextField.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
@@ -46,16 +60,9 @@ extension AddContactViewController {
             make.height.equalTo(nameTextField)
         }
         
-        emailTextField.backgroundColor = UIColor.white
-        emailTextField.layer.borderColor = Colors.cardlyGold.cgColor
-        emailTextField.layer.cornerRadius = 20.0
-        emailTextField.layer.borderWidth = 1
-        emailTextField.placeholder = "Contact Email"
-        emailTextField.textAlignment = .center
-        emailTextField.autocapitalizationType = UITextAutocapitalizationType.none
-
         
-        // Add Phone Number
+        // Add Phone Number Textfield
+        phoneTextField = CustomTextField.initTextField(placeHolderText: "Contact Phone Number", isSecureEntry: false)
         view.addSubview(phoneTextField)
         phoneTextField.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
@@ -64,16 +71,8 @@ extension AddContactViewController {
             make.height.equalTo(nameTextField)
         }
         
-        phoneTextField.backgroundColor = UIColor.white
-        phoneTextField.layer.borderColor = Colors.cardlyGold.cgColor
-        phoneTextField.layer.cornerRadius = 20.0
-        phoneTextField.layer.borderWidth = 1
-        phoneTextField.placeholder = "Contact Phone Number"
-        phoneTextField.textAlignment = .center
-        phoneTextField.autocapitalizationType = UITextAutocapitalizationType.none
-
         
-        // Group
+        // Group Pickerview
         groupPickerView.dataSource = self
         groupPickerView.delegate = self
         view.addSubview(groupPickerView)
@@ -99,12 +98,12 @@ extension AddContactViewController {
         addButton.setTitle("Add", for: .normal)
         addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         
-        // Import contacts
+        // Import contacts button
         view.addSubview(importContactsButton)
         importContactsButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(addButton).offset(120)
-            make.width.equalTo(nameTextField.snp.width).multipliedBy(0.75)
+            make.width.equalTo(nameTextField.snp.width).multipliedBy(1.5)
             make.height.equalTo(addButton.snp.height)
         }
         
@@ -112,7 +111,7 @@ extension AddContactViewController {
         importContactsButton.setTitle("Import from Contacts", for: .normal)
         importContactsButton.addTarget(self, action: #selector(self.importContactButtonTapped), for: .touchUpInside)
         
-        // Cancel
+        // Cancel button
         view.addSubview(cancelButton)
         cancelButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()

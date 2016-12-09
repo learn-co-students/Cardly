@@ -56,6 +56,7 @@ struct Icons {
     static let recordVideoButton = UIImage(named: "recordVideoIcon")
     static let selectAllContactsButton = UIImage(named: "selectAllIcon")
     static let deleteButton = UIImage(named: "trashIcon")
+    static let backgroundPlaneImage = UIImage(named: "backgroundPaperAirplane")
     
     static let playButton = UIImage(named: "playButton")
     static let pauseButton = UIImage(named: "pauseButton")
@@ -84,8 +85,8 @@ struct CustomNotification {
     static func showError(_ notification: String) {
         var murmur = Murmur(title: notification)
         
-        murmur.titleColor = UIColor.black
-        murmur.backgroundColor = UIColor.red
+        murmur.titleColor = UIColor.white
+        murmur.backgroundColor = UIColor.gray
         
         let whistleAction = WhistleAction.show(2.0)
         

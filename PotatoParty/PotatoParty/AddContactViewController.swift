@@ -28,6 +28,9 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     var contactStore = CNContactStore()
     var dataDict = [String: String] ()
     var groupSelected: String = "All"
+    let transparentCenterSubview = UIView()
+    let backgroundPlaneImage = UIImageView(image: #imageLiteral(resourceName: "backgroundPaperAirplane"))
+
     
     override func viewDidLoad() {
         
