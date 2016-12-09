@@ -32,9 +32,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     let transparentCenterSubview = UIView()
     let backgroundPlaneImage = UIImageView(image: #imageLiteral(resourceName: "backgroundPaperAirplane"))
 
-    
     override func viewDidLoad() {
-        
         super.viewDidLoad()
         self.navigationController?.isNavigationBarHidden = true
         
@@ -45,32 +43,17 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         nameTextField.delegate = self
         addButton.isEnabled = false
         print("Group selected: \(groupSelected)")
-        
-        
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-    
-    func importContactButtonTapped () {
-        authorizeAddressBook { (accessGranted) in
-            print(accessGranted)
-        }
-        self.pickAContact()
-        print ("import Contact Button Tapped")
-    }
-    
-    
-    func dismissButtonTapped(_ sender: UIButton) {
-        navigationController?.popViewController(animated: true)
-        self.navigationController?.isNavigationBarHidden = false
-    }
+
+// MARK: - Firebase methods
     
     // Accessing and Importing Selected Contact from User's Contact book
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contacts: [CNContact]) {
@@ -102,24 +85,19 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
             let groupsUserRef = groupsRef.child("\(uid)/all/")
             let groupItemRef = groupsUserRef.child(contactItemRef.key)
             groupItemRef.setValue(appContact.toAny())
-            
-            
         }
+        
         let destVC = ContactsViewController()
         navigationController?.pushViewController(destVC, animated: true)
         
         CustomNotification.show("Contacts were imported successfully")
     }
     
-    
     func contactPickerDidCancel(_ picker: CNContactPickerViewController) {
         print("Cancel Contact Picker")
     }
     
-    
-    
     // import from address book - helper methods
-    
     func authorizeAddressBook(completion: @escaping (_ accessGranted: Bool) -> Void) {
         let authorizationStatus = CNContactStore.authorizationStatus(for: CNEntityType.contacts)
         
@@ -140,23 +118,11 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         }
     }
     
-    func pickAContact(){
-        let controller = CNContactPickerViewController()
-        controller.delegate = self
-        controller.predicateForEnablingContact = NSPredicate(format: "(phoneNumbers.@count > 0) && (emailAddresses.@count > 0)", argumentArray: nil)
-        navigationController?.present(controller, animated: true, completion: nil)
-    }
-    
+// MARK: - Button methods
     
     func addButtonTapped() {
-        
-        //        let validPhone = validate(phoneTextField: phoneTextField)
-        //        let validName = validate(nameTextField: nameTextField)
-        //        let validEmail = validate(emailTextField: emailTextField)
         guard validCheck() else { return }
-        
         guard let email = emailTextField.text, let name = nameTextField.text, let phone = phoneTextField.text else { return }
-        //        let contact = Contact(fullName: name, email: email, phone: phone)
         let contact = Contact(fullName: name, email: email, phone: phone, group_key: groupSelected)
         
         // Add to contacts bucket
@@ -169,7 +135,6 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         emailTextField.text = ""
         phoneTextField.text = ""
 
-        
         if groupSelected != "All" {
             let path = "\(uid)/\(groupSelected.lowercased())/\(contactItemRef.key)/"
             let groupContactsRef = contactsRef.child(path)
@@ -191,7 +156,21 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         CustomNotification.show("Added successfully")
     }
     
-    //Validating Fields
+    func importContactButtonTapped () {
+        authorizeAddressBook { (accessGranted) in
+            print(accessGranted)
+        }
+        self.pickAContact()
+        print ("import Contact Button Tapped")
+    }
+    
+    
+    func dismissButtonTapped(_ sender: UIButton) {
+        let _ = navigationController?.popViewController(animated: true)
+        self.navigationController?.isNavigationBarHidden = false
+    }
+    
+// MARK: - Form field validation methods
     
     func validateEmail(email: String) -> Bool {
         let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}"
@@ -248,8 +227,8 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     
     func validCheck() -> Bool {
         return validateName(name: nameTextField.text!) && validatePhone(phone: phoneTextField.text!) && validateEmail(email: emailTextField.text!)
-        
     }
+    
     func enableAddButton() {
         addButton.isEnabled = true
         addButton.backgroundColor = UIColor.gray
@@ -261,7 +240,169 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         animation.duration = 0.6
         animation.values = [-20.0, 20.0, -20.0, 20.0, -10.0, 10.0, -5.0, 5.0, 0.0 ]
         textfield.layer.add(animation, forKey: "shake")
-        
     }
 
 }
+
+extension AddContactViewController {
+    
+    func layoutElements() {
+        
+        backButton = UIButton()
+        view.addSubview(backButton)
+        backButton.setImage(Icons.backButton, for: .normal)
+        backButton.addTarget(self, action: #selector(dismissButtonTapped(_:)), for: .touchUpInside)
+        backButton.snp.makeConstraints { (make) in
+            make.height.equalTo(30)
+            make.width.equalTo(30)
+            make.topMargin.equalToSuperview().offset(40)
+            make.leadingMargin.equalToSuperview()
+        }
+        
+        view.backgroundColor = Colors.cardlyBlue
+        
+        view.addSubview(backgroundPlaneImage)
+        backgroundPlaneImage.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(0.45)
+            make.width.equalToSuperview().multipliedBy(0.7)
+        }
+        
+        view.addSubview(transparentCenterSubview)
+        transparentCenterSubview.backgroundColor = UIColor(white: 1, alpha: 0.5)
+        transparentCenterSubview.layer.borderColor = Colors.cardlyGold.cgColor
+        transparentCenterSubview.layer.borderWidth = 1.0
+        transparentCenterSubview.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(0.8)
+            make.height.equalToSuperview().multipliedBy(0.8)
+        }
+        
+        let titleLabel = UILabel()
+        view.addSubview(titleLabel)
+        titleLabel.text = "Add Contacts"
+        titleLabel.textColor = UIColor.white
+        titleLabel.textAlignment = .center
+        titleLabel.minimumScaleFactor = 0.5
+        titleLabel.font = UIFont(name: Font.fancy, size: Font.Size.viewTitle)
+        titleLabel.layer.shadowColor = UIColor.gray.cgColor
+        titleLabel.layer.shadowOffset = CGSize(width: 0, height: 0)
+        titleLabel.layer.shadowRadius = 3
+        titleLabel.layer.shadowOpacity = 1
+        titleLabel.sizeToFit()
+        titleLabel.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(backButton).offset(45)
+        }
+        
+        nameTextField = CustomTextField.initTextField(placeHolderText: "Contact Name", isSecureEntry: false)
+        view.addSubview(nameTextField)
+        nameTextField.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalToSuperview().offset(275)
+            make.width.equalToSuperview().multipliedBy(0.60)
+            make.height.equalTo(nameTextField.snp.width).multipliedBy(0.15)
+        }
+        
+        
+        // E-Mail Textfield
+        emailTextField = CustomTextField.initTextField(placeHolderText: "Contact Email", isSecureEntry: false)
+        view.addSubview(emailTextField)
+        emailTextField.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(nameTextField).offset(45)
+            make.width.equalTo(nameTextField)
+            make.height.equalTo(nameTextField)
+        }
+        
+        
+        // Add Phone Number Textfield
+        phoneTextField = CustomTextField.initTextField(placeHolderText: "Contact Phone Number", isSecureEntry: false)
+        view.addSubview(phoneTextField)
+        phoneTextField.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(emailTextField).offset(45)
+            make.width.equalTo(nameTextField)
+            make.height.equalTo(nameTextField)
+        }
+        
+        
+        // Group Pickerview
+        groupPickerView.dataSource = self
+        groupPickerView.delegate = self
+        view.addSubview(groupPickerView)
+        groupPickerView.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(phoneTextField).offset(50)
+            make.width.equalTo(phoneTextField)
+            make.height.equalTo(phoneTextField)
+        }
+        
+        groupPickerView.backgroundColor = UIColor.white
+        
+        // Add button
+        view.addSubview(addButton)
+        addButton.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalToSuperview().offset(500)
+            make.width.equalTo(nameTextField.snp.width).multipliedBy(0.5)
+            make.height.equalTo(nameTextField.snp.height).multipliedBy(0.5)
+        }
+        
+        addButton.setTitleColor(Colors.cardlyGrey, for: UIControlState.normal)
+        addButton.backgroundColor = UIColor.clear
+        addButton.setTitle("Add", for: .normal)
+        addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
+        
+        // Import contacts button
+        view.addSubview(importContactsButton)
+        importContactsButton.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalToSuperview().offset(200)
+            make.width.equalTo(nameTextField.snp.width).multipliedBy(1.5)
+            make.height.equalTo(addButton.snp.height)
+        }
+        importContactsButton.setTitleColor(Colors.cardlyGrey, for: UIControlState.normal)
+        importContactsButton.backgroundColor = UIColor.clear
+        importContactsButton.setTitle("Import from Contacts", for: .normal)
+        importContactsButton.addTarget(self, action: #selector(self.importContactButtonTapped), for: .touchUpInside)
+        
+    }
+    
+}
+
+// MARK: - UIPickerView data source / delegate
+
+extension AddContactViewController: UIPickerViewDataSource {
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return groups.count
+    }
+    
+    func pickAContact(){
+        let controller = CNContactPickerViewController()
+        controller.delegate = self
+        controller.predicateForEnablingContact = NSPredicate(format: "(phoneNumbers.@count > 0) && (emailAddresses.@count > 0)", argumentArray: nil)
+        navigationController?.present(controller, animated: true, completion: nil)
+    }
+    
+}
+
+extension AddContactViewController: UIPickerViewDelegate {
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return groups[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        self.groupSelected = groups[row]
+        print(groupSelected)
+    }
+}
+
