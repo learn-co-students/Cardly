@@ -34,6 +34,7 @@ class LoginViewController: UIViewController {
     var loginButton = UIButton()
     var createAccountButton = UIButton()
     var forgotPasswordButton = UIButton()
+    var textfieldStackView = UIStackView()
     
     override func viewDidLoad() {
         super.viewDidLoad()

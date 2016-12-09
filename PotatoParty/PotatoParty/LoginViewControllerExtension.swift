@@ -16,28 +16,44 @@ extension LoginViewController {
         
        view.backgroundColor = UIColor.init(patternImage: #imageLiteral(resourceName: "loginScreenBackground"))
         
+        textfieldStackView.distribution = .fillProportionally
+        textfieldStackView.alignment = .fill
+        textfieldStackView.axis = .vertical
+        textfieldStackView.spacing = 8.0
         
         
-        view.addSubview(userTextfield)
-        userTextfield.snp.makeConstraints { (make) in
+        view.addSubview(textfieldStackView)
+        textfieldStackView.addArrangedSubview(userTextfield)
+        textfieldStackView.addArrangedSubview(passwordTextfield)
+        textfieldStackView.addArrangedSubview(forgotPasswordButton)
+        
+        textfieldStackView.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalToSuperview().offset(view.frame.height/4.3)
-            make.width.equalToSuperview().multipliedBy(0.8)
-            make.height.equalTo(50)
+            make.topMargin.equalToSuperview().offset(300)
+            make.width.equalToSuperview().multipliedBy(0.75)
+            make.height.equalToSuperview().multipliedBy(1/3)
         }
+
+//        view.addSubview(userTextfield)
+//        userTextfield.snp.makeConstraints { (make) in
+//            make.centerX.equalTo(textfieldStackView.snp.centerX)
+//            make.topMargin.equalToSuperview().offset(view.frame.height/4.3)
+//            make.width.equalToSuperview().multipliedBy(0.8)
+//            make.height.equalTo(50)
+//        }
         
         userTextfield.placeholder = "example@emailprovider.com"
         userTextfield.backgroundColor = UIColor.white
         userTextfield.textAlignment = .center
         userTextfield.autocapitalizationType = UITextAutocapitalizationType.none
         
-        view.addSubview(passwordTextfield)
-        passwordTextfield.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.topMargin.equalTo(userTextfield.snp.bottomMargin).offset(passwordTextFieldTopOffset)
-            make.width.equalTo(userTextfield.snp.width)
-            make.height.equalTo(userTextfield.snp.height)
-        }
+//        view.addSubview(passwordTextfield)
+//        passwordTextfield.snp.makeConstraints { (make) in
+//            make.centerX.equalToSuperview()
+//            make.topMargin.equalTo(userTextfield.snp.bottomMargin).offset(passwordTextFieldTopOffset)
+//            make.width.equalTo(userTextfield.snp.width)
+//            make.height.equalTo(userTextfield.snp.height)
+//        }
 
         passwordTextfield.placeholder = "Password"
         passwordTextfield.isSecureTextEntry = true
@@ -45,13 +61,14 @@ extension LoginViewController {
         passwordTextfield.textAlignment = .center
         passwordTextfield.autocapitalizationType = UITextAutocapitalizationType.none
         
-        view.addSubview(forgotPasswordButton)
-        forgotPasswordButton.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.topMargin.equalTo(passwordTextfield.snp.bottomMargin).offset(forgotPasswordButtonTopOffset)
-            make.width.equalTo(passwordTextfield.snp.width).multipliedBy(0.85)
-            make.height.equalTo(passwordTextfield.snp.height).multipliedBy(0.85)
-        }
+//        view.addSubview(forgotPasswordButton)
+//        forgotPasswordButton.snp.makeConstraints { (make) in
+//            make.centerX.equalToSuperview()
+//            make.topMargin.equalTo(passwordTextfield.snp.bottomMargin).offset(forgotPasswordButtonTopOffset)
+//            make.width.equalTo(passwordTextfield.snp.width).multipliedBy(0.85)
+//            make.height.equalTo(passwordTextfield.snp.height).multipliedBy(0.85)
+//        }
+        
         forgotPasswordButton.setTitle("Forgot password?", for: .normal)
         forgotPasswordButton.backgroundColor = UIColor.clear
         forgotPasswordButton.setTitleColor(UIColor.white, for: .normal)
@@ -84,19 +101,19 @@ extension LoginViewController {
         createAccountButton.setTitleColor(UIColor.black, for: .normal)
         
         view.addSubview(cardlyTextLabel)
-        cardlyTextLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        cardlyTextLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5).isActive = true
-        cardlyTextLabel.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/5).isActive = true
-        cardlyTextLabel.bottomAnchor.constraint(equalTo: userTextfield.topAnchor, constant: -18).isActive = true
-
-        cardlyTextLabel.translatesAutoresizingMaskIntoConstraints = false
+//        cardlyTextLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+//        cardlyTextLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5).isActive = true
+//        cardlyTextLabel.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/5).isActive = true
+//        cardlyTextLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 20).isActive = true
+//
+//        cardlyTextLabel.translatesAutoresizingMaskIntoConstraints = false
         
-//        cardlyTextLabel.snp.makeConstraints { (make) in
-//            make.centerX.equalToSuperview()
-//            make.topMargin.equalToSuperview().offset(view.frame.height/5)
-//            make.width.equalToSuperview().multipliedBy(0.5)
-//            make.height.equalToSuperview().multipliedBy(1/5)
-//        }
+        cardlyTextLabel.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalToSuperview().offset(view.frame.height/5.0)
+            make.width.equalToSuperview().multipliedBy(0.5)
+            make.height.equalToSuperview().multipliedBy(1.0/5.0)
+        }
         
         cardlyTextLabel.backgroundColor = UIColor.clear
         cardlyTextLabel.text = "Cardly"
