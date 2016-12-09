@@ -248,20 +248,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             make.centerX.equalToSuperview()
             make.topMargin.equalToSuperview().offset(30)
         }
-        let cardlyDescriptionText = UILabel()
-        view.addSubview(cardlyDescriptionText)
-        cardlyDescriptionText.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.bottomMargin.equalToSuperview().offset(10)
-            make.width.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.1/0.6)
-        }
         
-        cardlyDescriptionText.backgroundColor = UIColor.clear
-        cardlyDescriptionText.text = "Send Video Thank You Cards"
-        cardlyDescriptionText.textAlignment = .center
-        cardlyDescriptionText.font = UIFont(name: Font.fancy, size: 50)
-        cardlyDescriptionText.textColor = UIColor.white
         
 //        view.addSubview(cardlyTextLabel)
 //        cardlyTextLabel.snp.makeConstraints { (make) in

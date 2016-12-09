@@ -149,7 +149,6 @@ extension LoginViewController {
 extension LoginViewController{
 
     func layoutViewAndContraints() {
-        
         view.backgroundColor = UIColor.init(patternImage: #imageLiteral(resourceName: "loginScreenBackground"))
         
         view.addSubview(userTextfield)
@@ -175,10 +174,12 @@ extension LoginViewController{
             make.width.equalTo(passwordTextfield.snp.width).multipliedBy(0.85)
             make.height.equalTo(passwordTextfield.snp.height).multipliedBy(0.85)
         }
-        
-        forgotPasswordButton.setTitle("Forgot password?", for: .normal)
-        forgotPasswordButton.backgroundColor = UIColor.clear
+
+        forgotPasswordButton.titleLabel!.font = UIFont(name: Font.regular, size: Font.Size.m)
         forgotPasswordButton.setTitleColor(UIColor.white, for: .normal)
+        forgotPasswordButton.titleLabel!.minimumScaleFactor = 0.5
+        forgotPasswordButton.sizeToFit()
+        forgotPasswordButton.setTitle("Forgot password?", for: .normal)
         forgotPasswordButton.addTarget(self, action: #selector(self.forgotPasswordButtonTapped), for: .touchUpInside)
         
         view.addSubview(loginButton)
