@@ -25,7 +25,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     var addButton = UIButton()
     var groupPickerView = UIPickerView()
     var importContactsButton = UIButton()
-    var cancelButton = UIButton()
+   // var cancelButton = UIButton()
     var contactStore = CNContactStore()
     var dataDict = [String: String] ()
     var groupSelected: String = "All"
@@ -58,9 +58,9 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         self.view.endEditing(true)
     }
     
-    func cancelButtonTapped () {
-        dismiss(animated: true, completion: nil)
-    }
+//    func cancelButtonTapped () {
+//        dismiss(animated: true, completion: nil)
+//    }
     
     func importContactButtonTapped () {
         authorizeAddressBook { (accessGranted) in

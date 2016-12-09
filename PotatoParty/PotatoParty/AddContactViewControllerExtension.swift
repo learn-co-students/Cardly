@@ -142,17 +142,17 @@ extension AddContactViewController {
         importContactsButton.addTarget(self, action: #selector(self.importContactButtonTapped), for: .touchUpInside)
         
         // Cancel button
-        view.addSubview(cancelButton)
-        cancelButton.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.topMargin.equalTo(importContactsButton).offset(40)
-            make.width.equalTo(addButton.snp.width)
-            make.height.equalTo(addButton.snp.height)
-        }
+//        view.addSubview(cancelButton)
+//        cancelButton.snp.makeConstraints { (make) in
+//            make.centerX.equalToSuperview()
+//            make.topMargin.equalTo(importContactsButton).offset(40)
+//            make.width.equalTo(addButton.snp.width)
+//            make.height.equalTo(addButton.snp.height)
+//        }
         
-        cancelButton.backgroundColor = UIColor.clear
-        cancelButton.setTitle("Cancel", for: .normal)
-        cancelButton.addTarget(self, action: #selector(self.cancelButtonTapped), for: .touchUpInside)
+//        cancelButton.backgroundColor = UIColor.clear
+//        cancelButton.setTitle("Cancel", for: .normal)
+//        cancelButton.addTarget(self, action: #selector(self.cancelButtonTapped), for: .touchUpInside)
     }
     
 }
