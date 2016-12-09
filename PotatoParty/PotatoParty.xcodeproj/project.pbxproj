@@ -133,6 +133,7 @@
 		3F0BE6851DDCB1F5007E4FD0 /* PotatoParty */ = {
 			isa = PBXGroup;
 			children = (
+				3F3EB1D51DFA5B2700CB9DA5 /* Constants */,
 				31D78BA01DDE77BD00FA855B /* DropDownMenu.swift */,
 				31D78BA11DDE77BD00FA855B /* DropDownMenuCell.swift */,
 				31D78BA21DDE77BD00FA855B /* DropDownMenuKit.xcassets */,
@@ -173,7 +174,6 @@
 				E4974AEF1DDE1C3700698B81 /* ContactsCollectionViewCell.swift */,
 				3FD6DB2F1DDCFD7A0078CA45 /* LoginViewControllerExtension.swift */,
 				F30919EB1DDE147800479633 /* AddContactViewControllerExtension.swift */,
-				E49BA3A61DE3443A0010A7A4 /* Constants.swift */,
 				3F37150A1DE49D1B006B3EAD /* PlayerView.swift */,
 				3173A1C31DECC36F003385B6 /* AnimatedSettingsViewController.swift */,
 				3F3EB1CF1DFA40CC00CB9DA5 /* CardlyTextField.swift */,
@@ -208,6 +208,14 @@
 				3F0BE68F1DDCB1F5007E4FD0 /* LaunchScreen.storyboard */,
 			);
 			name = Storyboard;
+			sourceTree = "<group>";
+		};
+		3F3EB1D51DFA5B2700CB9DA5 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				E49BA3A61DE3443A0010A7A4 /* Constants.swift */,
+			);
+			name = Constants;
 			sourceTree = "<group>";
 		};
 		56E8ECD7B8E59573CE52C295 /* Pods */ = {
