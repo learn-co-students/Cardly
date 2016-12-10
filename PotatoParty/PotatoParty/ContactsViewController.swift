@@ -74,13 +74,10 @@ extension ContactsViewController {
     
     // Setup all views
     func setupViews() {
-        
         view.backgroundColor = Colors.cardlyBlue
-        
         setupCollectionView()
         setupBottomNavBarView()
         setupTopNavBarView()
-                
     }
     
     // Setup collection view
@@ -426,12 +423,6 @@ extension ContactsViewController {
     
     func retrieveContacts(for group: String, completion: @escaping (_: [Contact]) -> Void) {
         var contacts: [Contact] = []
-        print("***************")
-        print("Current user is \(FIRAuth.auth()?.currentUser?.uid)")
-        print("***************")
-        print("***************")
-        print("Retrieving contacts for uid \(uid)")
-        print("***************")
         let path = "\(uid)/\(group.lowercased())/"
         let contactBucketRef = ref.child(path)
         contactBucketRef.observeSingleEvent(of: .value, with: { snapshot in

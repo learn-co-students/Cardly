@@ -11,7 +11,7 @@ import SnapKit
 import FirebaseAuth
 
 class SettingsViewController: UIViewController {
-    
+    let shared = User.shared
     // Buttons
     var changeEmailButton: UIButton!
     var changePasswordButton: UIButton!
@@ -234,6 +234,8 @@ class SettingsViewController: UIViewController {
         do {
             try FIRAuth.auth()?.signOut()
             present(LoginViewController(), animated: true, completion: {
+                self.shared.contacts = []
+                self.shared.selectedContacts = []
                 self.navigationController?.viewControllers.removeAll()
             })
         } catch {
