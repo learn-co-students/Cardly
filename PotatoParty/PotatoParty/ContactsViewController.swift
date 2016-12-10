@@ -43,6 +43,10 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     fileprivate let cellSpacing: CGFloat = 20
     fileprivate lazy var presentationAnimator = GuillotineTransitionAnimation()
     
+    // Default contact enables the first cell in the CollectvionView to be the 'Add Contact' button
+    let defaultContact = Contact(fullName: "AddContact", email: "", phone: "")
+
+    
     // MARK: - Init
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,9 +61,10 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        navigationController?.navigationBar.isHidden = false
         super.viewDidAppear(animated)
         navigationBarMenu.container = view
-
+        contactsCollectionView.reloadData()
     }
     
 }
@@ -163,7 +168,6 @@ extension ContactsViewController {
         titleView.titleLabel.textColor = UIColor.blue
         titleView.titleLabel.font = UIFont(name: Font.regular, size: Font.Size.m)
         titleView.title = "Groups"
-    
         navigationItem.titleView = titleView
         
         return titleView.title!
@@ -260,7 +264,6 @@ extension ContactsViewController {
     }
     
     func showPickerInAlert() {
-        print("show alert")
         let alert = UIAlertController(title: "Choose Group", message: "\n\n\n\n", preferredStyle: UIAlertControllerStyle.actionSheet)
         
         alert.view.addSubview(pickGroup)
@@ -273,7 +276,6 @@ extension ContactsViewController {
 // MARK: - Layout view elements
 
 extension ContactsViewController {
-    
     
     func didToggleNavigationBarMenu(_ sender: DropDownTitleView) {
         
@@ -291,8 +293,13 @@ extension ContactsViewController {
         // Retrieve from Firebase
         guard let group = sender.textLabel?.text?.lowercased() else { return }
         self.retrieveContacts(for: group, completion: { contacts in
+            
             User.shared.contacts = contacts
+            
+            User.shared.contacts.insert(self.defaultContact, at: 0)
+            
             self.contactsCollectionView.reloadData()
+        
         })
         // Hide Top Nav Bar after group is selected
         if navigationBarMenu.container != nil {
@@ -330,7 +337,6 @@ extension ContactsViewController: BottomNavBarDelegate {
             enableCell()
             contactsCollectionView.reloadData()
             allSelected = true
-            
         } else {
             for (index, contact) in User.shared.contacts.enumerated() {
                 if index > 0 {
@@ -342,10 +348,10 @@ extension ContactsViewController: BottomNavBarDelegate {
             contactsCollectionView.reloadData()
             allSelected = false
         }
-        
     }
     
     func goToAddContact(){
+        // TODO: - New AddContact VC is being instantiated
         let destVC = AddContactViewController()
         navigationController?.pushViewController(destVC, animated: true)
         shared.selectedContacts.removeAll()
@@ -355,6 +361,10 @@ extension ContactsViewController: BottomNavBarDelegate {
         deleteContacts {
             retrieveContacts(for: User.shared.groups[0], completion: { contacts in
                 User.shared.contacts = contacts
+
+                
+                User.shared.contacts.insert(self.defaultContact, at: 0)
+
                 self.contactsCollectionView.reloadData()
             })
             enableCell()
@@ -365,7 +375,6 @@ extension ContactsViewController: BottomNavBarDelegate {
     
     func editGroupButtonPressed(){
         showPickerInAlert()
-        print("edit group button pressed")
     }
     
     // Updates Contact Group property and reloaded Collection View
@@ -377,14 +386,13 @@ extension ContactsViewController: BottomNavBarDelegate {
             
             shared.selectedContacts[index].group_key = chosenGroup
             
-            //update group bucket
+            // Update group bucket
             let groupsRef = FIRDatabase.database().reference(withPath: "groups")
             let allGroupPath = groupsRef.child("\(uid)/\(chosenGroup)")
             let groupItemRef = allGroupPath.child(contact.key)
             groupItemRef.setValue(contact.toAny())
             
-            
-            //update contact group bucket
+            // Update contact group bucket
             let contactsPath = ref.child("\(uid)/\(chosenGroup)")
             let contactItemRef = contactsPath.child(contact.key)
             contactItemRef.setValue(contact.toAny())
@@ -545,7 +553,6 @@ extension ContactsViewController {
 extension ContactsViewController: UIImagePickerControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        print("In did finish picking media")
         let mediaType = info[UIImagePickerControllerMediaType] as! NSString
         dismiss(animated: true, completion: nil)
         
@@ -608,9 +615,7 @@ extension ContactsViewController: UICollectionViewDelegate {
                 User.shared.contacts[indexPath.row].isChosen = true
                 enableCell()
             }
-            
         }
-        
     }
     
     func enableCell(){

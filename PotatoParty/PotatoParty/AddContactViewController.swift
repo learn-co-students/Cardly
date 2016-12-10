@@ -12,7 +12,6 @@ import Contacts
 import ContactsUI
 import Whisper
 
-
 class AddContactViewController: UIViewController, CNContactViewControllerDelegate, CNContactPickerDelegate, UITextFieldDelegate, UICollectionViewDelegate  {
     let uid = User.shared.uid
     let groups = User.shared.groups
@@ -31,10 +30,10 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     var groupSelected: String = "All"
     let transparentCenterSubview = UIView()
     let backgroundPlaneImage = UIImageView(image: #imageLiteral(resourceName: "backgroundPaperAirplane"))
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.isNavigationBarHidden = true
+        navigationController?.isNavigationBarHidden = true
         
         layoutElements()
         
@@ -42,7 +41,6 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         phoneTextField.delegate = self
         nameTextField.delegate = self
         addButton.isEnabled = false
-        print("Group selected: \(groupSelected)")
     }
     
     override func didReceiveMemoryWarning() {
@@ -52,52 +50,74 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-
-// MARK: - Firebase methods
     
-    // Accessing and Importing Selected Contact from User's Contact book
+    func importContactButtonTapped () {
+        authorizeAddressBook { (accessGranted) in
+            print(accessGranted)
+        }
+        self.pickAContact()
+    }
+    
+    func dismissButtonTapped(_ sender: UIButton) {
+        _ = navigationController?.popViewController(animated: true)
+        self.navigationController?.isNavigationBarHidden = false
+    }
+    
+    // Accessing and Importing Selected Contact from user's Contact Book
+    
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contacts: [CNContact]) {
+        // Count accounts for the default contact ('Add Contact' button) which is always the first item in contacts array
+        var count = contacts.count - 1
         
         for contact in contacts {
-            
+            // Firebase URL
+            let contactsRef = FIRDatabase.database().reference(withPath: "contacts")
+            let userContactsRef = contactsRef.child("\(uid)/all/")
+            let contactItemRef = userContactsRef.childByAutoId()
+
+            // Dissemble Apple CNContact class and convert to custom Contact class
             guard let firstAddress = contact.emailAddresses.first else { return }
             let emailAddress = String(firstAddress.value)
-            print("emailAddress: \(emailAddress)")
             
             guard let firstPhoneNumber = contact.phoneNumbers.first else { return }
             let phoneNumber = String(describing: firstPhoneNumber.value.stringValue)
-            print("phoneNumber: \(phoneNumber)")
             
             let firstName = contact.givenName
             let lastName = contact.familyName
             let fullName = ("\(firstName) \(lastName)")
             
-            let appContact = Contact(fullName: fullName, email: emailAddress, phone: phoneNumber, image: nil)
+            // Instantiate custom Contact class
+            let appContact = Contact(fullName: fullName, email: emailAddress, phone: phoneNumber)
             
-            print(appContact.fullName, appContact.email, appContact.phone)
+            // Add key to custom Contact and append to contacts
+            appContact.key = contactItemRef.key
+            User.shared.contacts.append(appContact)
             
-            let contactsRef = FIRDatabase.database().reference(withPath: "contacts")
-            let userContactsRef = contactsRef.child("\(uid)/all/")
-            let contactItemRef = userContactsRef.childByAutoId()
-            contactItemRef.setValue(appContact.toAny())
-            
-            let groupsRef = FIRDatabase.database().reference(withPath: "groups")
-            let groupsUserRef = groupsRef.child("\(uid)/all/")
-            let groupItemRef = groupsUserRef.child(contactItemRef.key)
-            groupItemRef.setValue(appContact.toAny())
+            // Firebase methods
+            contactItemRef.setValue(appContact.toAny(), withCompletionBlock: { error, ref in
+                
+                let groupsRef = FIRDatabase.database().reference(withPath: "groups")
+                let groupsUserRef = groupsRef.child("\(self.uid)/all/")
+                let groupItemRef = groupsUserRef.child(contactItemRef.key)
+                
+                groupItemRef.setValue(appContact.toAny(), withCompletionBlock: { [unowned self] error, ref in
+                    
+                    count -= 1
+                    if count <= 0 {
+                        CustomNotification.show("Contacts were imported successfully")
+                        self.navigationController?.isNavigationBarHidden = false
+                        _ = self.navigationController?.popViewController(animated: true)
+                    }
+                })
+            })
         }
-        
-        let destVC = ContactsViewController()
-        navigationController?.pushViewController(destVC, animated: true)
-        
-        CustomNotification.show("Contacts were imported successfully")
     }
     
     func contactPickerDidCancel(_ picker: CNContactPickerViewController) {
-        print("Cancel Contact Picker")
     }
     
-    // import from address book - helper methods
+    // Import from address book - helper methods
+    
     func authorizeAddressBook(completion: @escaping (_ accessGranted: Bool) -> Void) {
         let authorizationStatus = CNContactStore.authorizationStatus(for: CNEntityType.contacts)
         
@@ -154,20 +174,6 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
             
         }
         CustomNotification.show("Added successfully")
-    }
-    
-    func importContactButtonTapped () {
-        authorizeAddressBook { (accessGranted) in
-            print(accessGranted)
-        }
-        self.pickAContact()
-        print ("import Contact Button Tapped")
-    }
-    
-    
-    func dismissButtonTapped(_ sender: UIButton) {
-        let _ = navigationController?.popViewController(animated: true)
-        self.navigationController?.isNavigationBarHidden = false
     }
     
 // MARK: - Form field validation methods
@@ -389,7 +395,8 @@ extension AddContactViewController: UIPickerViewDataSource {
         let controller = CNContactPickerViewController()
         controller.delegate = self
         controller.predicateForEnablingContact = NSPredicate(format: "(phoneNumbers.@count > 0) && (emailAddresses.@count > 0)", argumentArray: nil)
-        navigationController?.present(controller, animated: true, completion: nil)
+        
+        self.present(controller, animated: true, completion: nil)
     }
     
 }

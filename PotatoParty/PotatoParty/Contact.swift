@@ -13,7 +13,7 @@ import FirebaseDatabase
 final class Contact {
     
     
-    let key: String
+    var key: String
     let fullName: String
     let email: String
     let phone: String
@@ -60,6 +60,8 @@ final class Contact {
     }
     
     func toAny() -> Any {
+        
+        
         return [
             "fullName": fullName,
             "email" : email,
