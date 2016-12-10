@@ -12,16 +12,19 @@ import FirebaseAuth
 class User {
     static let shared = User()
     
-    let uid: String
+//    let uid: String = ""
     let groups: [String] = ["All", "Family", "Friends", "Coworkers", "Other"]
     var selectedContacts = [Contact]()
     var contacts: [Contact] = []
 
     private init() {
-        if let uid = FIRAuth.auth()?.currentUser?.uid {
-            self.uid = uid
-        } else {
-            fatalError("Couldn't unwrap user ID in User.swift singleton")
-        }
+//        if let uid = FIRAuth.auth()?.currentUser?.uid {
+//            print("********************")
+//            print("Singleton uid = \(uid)")
+//            print("********************")
+//            self.uid = uid
+//        } else {
+//            fatalError("Couldn't unwrap user ID in User.swift singleton")
+//        }
     }
 }

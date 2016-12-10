@@ -20,8 +20,8 @@ protocol AddContactsDelegate: class {
 class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContactsDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
     // Current user
-    var shared = User.shared
-    let uid = User.shared.uid
+    let shared = User.shared
+    let uid = FIRAuth.auth()?.currentUser?.uid
     let ref = FIRDatabase.database().reference(withPath: "contacts")
     
     // UI
@@ -50,7 +50,6 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     // MARK: - Init
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupViews()
         contactsCollectionView.delegate = self
         self.restorationIdentifier = "contactsVC"
@@ -427,6 +426,12 @@ extension ContactsViewController {
     
     func retrieveContacts(for group: String, completion: @escaping (_: [Contact]) -> Void) {
         var contacts: [Contact] = []
+        print("***************")
+        print("Current user is \(FIRAuth.auth()?.currentUser?.uid)")
+        print("***************")
+        print("***************")
+        print("Retrieving contacts for uid \(uid)")
+        print("***************")
         let path = "\(uid)/\(group.lowercased())/"
         let contactBucketRef = ref.child(path)
         contactBucketRef.observeSingleEvent(of: .value, with: { snapshot in

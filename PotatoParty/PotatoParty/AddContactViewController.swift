@@ -8,12 +8,13 @@
 
 import UIKit
 import FirebaseDatabase
+import FirebaseAuth
 import Contacts
 import ContactsUI
 import Whisper
 
 class AddContactViewController: UIViewController, CNContactViewControllerDelegate, CNContactPickerDelegate, UITextFieldDelegate, UICollectionViewDelegate  {
-    let uid = User.shared.uid
+    let uid = FIRAuth.auth()?.currentUser?.uid
     let groups = User.shared.groups
     var backButton: UIButton!
     var dismissButton: UIButton?

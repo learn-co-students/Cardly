@@ -27,6 +27,7 @@ class SendCardViewController: UIViewController {
     var cancelButton = UIButton()
     var buttonStackView: UIStackView!
     var shared = User.shared
+    var uid = FIRAuth.auth()?.currentUser?.uid
     let player = AVPlayer()
     var delegate: EditCardViewController?
     
@@ -210,7 +211,7 @@ class SendCardViewController: UIViewController {
             shared.selectedContacts[contactIndex].is_sent = true
             print("was video sent: \(shared.selectedContacts[contactIndex].is_sent)")
             let contactsRef = FIRDatabase.database().reference(withPath: "contacts")
-            let userContactsRef = contactsRef.child("\(User.shared.uid)/all/\(shared.selectedContacts[contactIndex].key)/is_sent")
+            let userContactsRef = contactsRef.child("\(uid)/all/\(shared.selectedContacts[contactIndex].key)/is_sent")
             userContactsRef.setValue(true)
         }
         completion()
