@@ -16,6 +16,7 @@ struct CardlyFormFieldButton {
         button.setTitle(title, for: .normal)
         button.titleLabel!.font = UIFont(name: Font.regular, size: Font.Size.l)
         button.setTitleColor(UIColor.gray, for: .normal)
+        button.setTitleColor(Colors.cardlyGold, for: .highlighted)
         button.titleLabel!.minimumScaleFactor = 0.5
         button.addTarget(target, action: selector, for: .touchUpInside)
         button.sizeToFit()
