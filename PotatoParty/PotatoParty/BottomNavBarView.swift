@@ -152,12 +152,6 @@ class BottomNavBarRightView: UIView {
 extension BottomNavBarView {
     
     func setupView() {
-        // Background
-//        let blur = UIBlurEffect(style: .light)
-//        let blurView = UIVisualEffectView(effect: blur)
-//        blurView.frame = self.bounds
-//        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-//        self.addSubview(blurView)
         backgroundColor = UIColor.clear
         
         // Stack view

@@ -224,6 +224,9 @@ extension ContactsViewController {
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        print("pickerView called")
+        
         switch row {
         case 0:
             chosenGroup = "all"
@@ -293,20 +296,26 @@ extension ContactsViewController {
     }
     
     func selectGroup(_ sender: UITableViewCell) {
+        
         // Retrieve from Firebase
         guard let group = sender.textLabel?.text?.lowercased() else { return }
         self.retrieveContacts(for: group, completion: { contacts in
             
             User.shared.contacts = contacts
-            
             User.shared.contacts.insert(self.defaultContact, at: 0)
+            
+            // Empty selected contacts and hide edit+delete functionality
+            self.shared.selectedContacts = []
+            self.bottomNavBar.middleIconView.editGroupButton.isHidden = true
+            self.bottomNavBar.leftIconView.deleteContactBtn.isHidden = true
             
             self.contactsCollectionView.reloadData()
         
         })
+        
         // Hide Top Nav Bar after group is selected
-        if navigationBarMenu.container != nil {
-            titleView.toggleMenu()
+        if self.navigationBarMenu.container != nil {
+            self.titleView.toggleMenu()
         }
     }
 }
@@ -329,7 +338,6 @@ extension ContactsViewController: BottomNavBarDelegate {
     }
     
     func selectBtnClicked() {
-        print(User.shared.contacts[0].fullName)
         if allSelected == false {
             for (index, contact) in User.shared.contacts.enumerated() {
                 if index > 0 {
@@ -380,9 +388,11 @@ extension ContactsViewController: BottomNavBarDelegate {
         showPickerInAlert()
     }
     
+    
     // Updates Contact Group property and reloaded Collection View
     
-    func updateGroup(completion: () -> ()){
+    func updateGroup(completion: () -> ()) {
+        
         for (index, contact) in shared.selectedContacts.enumerated() {
             
             removeFromSomeGroupsinFB(contact: contact)

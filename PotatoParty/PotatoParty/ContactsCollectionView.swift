@@ -36,13 +36,6 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-//        if User.shared.contacts.isEmpty {
-        
-//
-//        }
-        
-     
     
         return User.shared.contacts.count
         
@@ -50,22 +43,12 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        print("\n\n")
-        
-        print(#function)
-        
-        print("\n")
-        
         let cell = dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ContactsCollectionViewCell
         
         if indexPath.item == 0 {
-            
-            print("YOU SHOULD BE HERE!!")
             cell.addContactIconImageView.image = Icons.addContactButton
             return cell
         }
-        
-        print(collectionView.subviews.count)
         
         cell.contact = User.shared.contacts[indexPath.row]
         
