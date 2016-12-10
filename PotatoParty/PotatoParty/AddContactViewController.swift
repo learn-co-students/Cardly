@@ -12,7 +12,6 @@ import Contacts
 import ContactsUI
 import Whisper
 
-
 class AddContactViewController: UIViewController, CNContactViewControllerDelegate, CNContactPickerDelegate, UITextFieldDelegate, UICollectionViewDelegate  {
     let uid = User.shared.uid
     let groups = User.shared.groups
@@ -31,10 +30,8 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     var groupSelected: String = "All"
     let transparentCenterSubview = UIView()
     let backgroundPlaneImage = UIImageView(image: #imageLiteral(resourceName: "backgroundPaperAirplane"))
-
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
         navigationController?.isNavigationBarHidden = true
         
@@ -44,14 +41,10 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         phoneTextField.delegate = self
         nameTextField.delegate = self
         addButton.isEnabled = false
-        print("Group selected: \(groupSelected)")
-        
-        
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -63,47 +56,45 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
             print(accessGranted)
         }
         self.pickAContact()
-        print ("import Contact Button Tapped")
     }
     
     
     func dismissButtonTapped(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
-        self.navigationController?.isNavigationBarHidden = false
+        _ = self.navigationController?.isNavigationBarHidden = false
     }
     
-    // Accessing and Importing Selected Contact from User's Contact book
+    // Accessing and Importing Selected Contact from user's Contact Book
+    
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contacts: [CNContact]) {
-        
+        // Count accounts for the default contact ('Add Contact' button) which is always the first item in contacts array
         var count = contacts.count - 1
         
-        
-        
         for contact in contacts {
-            
+            // Firebase URL
+            let contactsRef = FIRDatabase.database().reference(withPath: "contacts")
+            let userContactsRef = contactsRef.child("\(uid)/all/")
+            let contactItemRef = userContactsRef.childByAutoId()
+
+            // Dissemble Apple CNContact class and convert to custom Contact class
             guard let firstAddress = contact.emailAddresses.first else { return }
             let emailAddress = String(firstAddress.value)
-            print("emailAddress: \(emailAddress)")
             
             guard let firstPhoneNumber = contact.phoneNumbers.first else { return }
             let phoneNumber = String(describing: firstPhoneNumber.value.stringValue)
-            print("phoneNumber: \(phoneNumber)")
             
             let firstName = contact.givenName
             let lastName = contact.familyName
             let fullName = ("\(firstName) \(lastName)")
             
-            let appContact = Contact(fullName: fullName, email: emailAddress, phone: phoneNumber, image: nil)
+            // Instantiate custom Contact class
+            let appContact = Contact(fullName: fullName, email: emailAddress, phone: phoneNumber)
             
+            // Add key to custom Contact and append to contacts
+            appContact.key = contactItemRef.key
             User.shared.contacts.append(appContact)
             
-            print(appContact.fullName, appContact.email, appContact.phone)
-            
-            let contactsRef = FIRDatabase.database().reference(withPath: "contacts")
-            let userContactsRef = contactsRef.child("\(uid)/all/")
-            let contactItemRef = userContactsRef.childByAutoId()
-            
-            
+            // Firebase methods
             contactItemRef.setValue(appContact.toAny(), withCompletionBlock: { error, ref in
                 
                 let groupsRef = FIRDatabase.database().reference(withPath: "groups")
@@ -113,35 +104,20 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
                 groupItemRef.setValue(appContact.toAny(), withCompletionBlock: { [unowned self] error, ref in
                     
                     count -= 1
-                    
                     if count <= 0 {
-                        
-                        print("\n")
-                        print("This is complete ------- \(#function)--------")
                         CustomNotification.show("Contacts were imported successfully")
-                        
                         self.navigationController?.isNavigationBarHidden = false
-                        
                         _ = self.navigationController?.popViewController(animated: true)
-                        
                     }
-                    
                 })
-                
             })
-            
         }
-
     }
-    
     
     func contactPickerDidCancel(_ picker: CNContactPickerViewController) {
-        print("Cancel Contact Picker")
     }
     
-    
-    
-    // import from address book - helper methods
+    // Import from address book - helper methods
     
     func authorizeAddressBook(completion: @escaping (_ accessGranted: Bool) -> Void) {
         let authorizationStatus = CNContactStore.authorizationStatus(for: CNEntityType.contacts)
@@ -169,20 +145,13 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         controller.predicateForEnablingContact = NSPredicate(format: "(phoneNumbers.@count > 0) && (emailAddresses.@count > 0)", argumentArray: nil)
         
         self.present(controller, animated: true, completion: nil)
-        
-//        navigationController?.pushViewController(controller, animated: true)
     }
     
     
     func addButtonTapped() {
-        
-        //        let validPhone = validate(phoneTextField: phoneTextField)
-        //        let validName = validate(nameTextField: nameTextField)
-        //        let validEmail = validate(emailTextField: emailTextField)
         guard validCheck() else { return }
         
         guard let email = emailTextField.text, let name = nameTextField.text, let phone = phoneTextField.text else { return }
-        //        let contact = Contact(fullName: name, email: email, phone: phone)
         let contact = Contact(fullName: name, email: email, phone: phone, group_key: groupSelected)
         
         // Add to contacts bucket
@@ -195,7 +164,6 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         emailTextField.text = ""
         phoneTextField.text = ""
 
-        
         if groupSelected != "All" {
             let path = "\(uid)/\(groupSelected.lowercased())/\(contactItemRef.key)/"
             let groupContactsRef = contactsRef.child(path)
@@ -217,7 +185,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         CustomNotification.show("Added successfully")
     }
     
-    //Validating Fields
+    // Validating Fields
     
     func validateEmail(email: String) -> Bool {
         let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}"
