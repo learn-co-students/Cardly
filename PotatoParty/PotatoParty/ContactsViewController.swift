@@ -21,7 +21,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     
     // Current user
     let shared = User.shared
-    let uid = FIRAuth.auth()?.currentUser?.uid
+    let uid = FIRAuth.auth()!.currentUser!.uid
     let ref = FIRDatabase.database().reference(withPath: "contacts")
     
     // UI

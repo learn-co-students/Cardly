@@ -111,9 +111,7 @@ extension LoginViewController {
             }
         }
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .default) { (action) in
-            self.dismiss(animated: true, completion: nil)
-        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
         
         alertController.addAction(submitAction)
         alertController.addAction(cancelAction)
