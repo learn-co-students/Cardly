@@ -21,7 +21,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
         if FIRAuth.auth()?.currentUser == nil {
             self.initialVC = LoginViewController()
         }
@@ -42,6 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     override init() {
         super.init()
         FIRApp.configure()
+        FIRDatabase.database().persistenceEnabled = true
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
