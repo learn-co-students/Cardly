@@ -20,7 +20,7 @@ struct CardlyFormFieldButton {
         context?.fill(rect)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        button.setTitle(" \(title) ", for: .normal)
+        button.setTitle("  \(title)  ", for: .normal)
         button.titleLabel!.font = UIFont(name: Font.regular, size: Font.Size.m)
         button.setTitleColor(UIColor.gray, for: .normal)
         button.setTitleColor(Colors.cardlyGold, for: .highlighted)
