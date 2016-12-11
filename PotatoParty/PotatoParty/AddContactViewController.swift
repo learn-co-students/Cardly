@@ -15,7 +15,7 @@ import Whisper
 
 
 class AddContactViewController: UIViewController, CNContactViewControllerDelegate, CNContactPickerDelegate, UITextFieldDelegate, UICollectionViewDelegate  {
-    let uid = FIRAuth.auth()?.currentUser?.uid
+    let currentUserUid = FIRAuth.auth()?.currentUser?.uid
     let groups = User.shared.groups
     var backButton: UIButton!
     var dismissButton: UIButton?
@@ -72,7 +72,10 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contacts: [CNContact]) {
         // Count accounts for the default contact ('Add Contact' button) which is always the first item in contacts array
         var count = contacts.count - 1
-        
+        guard let uid = currentUserUid else {
+            print(UserError.NoCurrentUser)
+            return
+        }
         for contact in contacts {
             // Firebase URL
             let contactsRef = FIRDatabase.database().reference(withPath: "contacts")
@@ -101,7 +104,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
             contactItemRef.setValue(appContact.toAny(), withCompletionBlock: { error, ref in
                 
                 let groupsRef = FIRDatabase.database().reference(withPath: "groups")
-                let groupsUserRef = groupsRef.child("\(self.uid)/all/")
+                let groupsUserRef = groupsRef.child("\(uid)/all/")
                 let groupItemRef = groupsUserRef.child(contactItemRef.key)
                 
                 groupItemRef.setValue(appContact.toAny(), withCompletionBlock: { [unowned self] error, ref in
@@ -148,7 +151,10 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
         guard validCheck() else { return }
         guard let email = emailTextField.text, let name = nameTextField.text, let phone = phoneTextField.text else { return }
         let contact = Contact(fullName: name, email: email, phone: phone, group_key: groupSelected)
-        
+        guard let uid = currentUserUid else {
+            print(UserError.NoCurrentUser)
+            return
+        }
         // Add to contacts bucket
         let contactsRef = FIRDatabase.database().reference(withPath: "contacts")
         let userContactsRef = contactsRef.child("\(uid)/all/")

@@ -38,6 +38,7 @@
 		3F37150B1DE49D1B006B3EAD /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F37150A1DE49D1B006B3EAD /* PlayerView.swift */; };
 		3F3EB1D01DFA40CC00CB9DA5 /* CardlyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3EB1CF1DFA40CC00CB9DA5 /* CardlyTextField.swift */; };
 		3F3EB1D21DFA4AAF00CB9DA5 /* CardlyFormFieldButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3EB1D11DFA4AAF00CB9DA5 /* CardlyFormFieldButton.swift */; };
+		3FB4D5671DFDC16100FEA421 /* ErrorEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB4D5661DFDC16100FEA421 /* ErrorEnum.swift */; };
 		3FD6DB2D1DDCEA5F0078CA45 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3FD6DB2C1DDCEA5F0078CA45 /* GoogleService-Info.plist */; };
 		920F301338A9FC2B9FE55804 /* Pods_PotatoParty.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9928D9D1244326D898295D /* Pods_PotatoParty.framework */; };
 		E44E5A161DF1BAB900273456 /* Qwigley-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E44E5A151DF1BAB900273456 /* Qwigley-Regular.ttf */; };
@@ -82,6 +83,7 @@
 		3F37150A1DE49D1B006B3EAD /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		3F3EB1CF1DFA40CC00CB9DA5 /* CardlyTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardlyTextField.swift; sourceTree = "<group>"; };
 		3F3EB1D11DFA4AAF00CB9DA5 /* CardlyFormFieldButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardlyFormFieldButton.swift; sourceTree = "<group>"; };
+		3FB4D5661DFDC16100FEA421 /* ErrorEnum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorEnum.swift; sourceTree = "<group>"; };
 		3FD6DB2C1DDCEA5F0078CA45 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3FD6DB2E1DDCEB760078CA45 /* PotatoParty.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PotatoParty.entitlements; sourceTree = "<group>"; };
 		5E9928D9D1244326D898295D /* Pods_PotatoParty.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PotatoParty.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -208,6 +210,7 @@
 			isa = PBXGroup;
 			children = (
 				E49BA3A61DE3443A0010A7A4 /* Constants.swift */,
+				3FB4D5661DFDC16100FEA421 /* ErrorEnum.swift */,
 			);
 			name = Constants;
 			sourceTree = "<group>";
@@ -390,6 +393,7 @@
 				3F196C521DDE30CA00497BDD /* ThankYou.swift in Sources */,
 				3F37150B1DE49D1B006B3EAD /* PlayerView.swift in Sources */,
 				31D78BA71DDE77BD00FA855B /* DropDownTitleView.swift in Sources */,
+				3FB4D5671DFDC16100FEA421 /* ErrorEnum.swift in Sources */,
 				3F3EB1D01DFA40CC00CB9DA5 /* CardlyTextField.swift in Sources */,
 				3182D51D1DEF706B0090AB2E /* SendCardViewController.swift in Sources */,
 				31D78BA41DDE77BD00FA855B /* DropDownMenu.swift in Sources */,
