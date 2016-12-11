@@ -187,18 +187,18 @@ extension LoginViewController{
         }
 
         cardlyTextLabel = UILabel()
-        view.addSubview(cardlyTextLabel)
-        cardlyTextLabel.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.topMargin.equalToSuperview().offset(12)
-            make.width.equalToSuperview().multipliedBy(0.5)
-            make.height.equalToSuperview().multipliedBy(1.0/5.0)
-        }
         cardlyTextLabel.backgroundColor = UIColor.clear
         cardlyTextLabel.text = "Cardly"
         cardlyTextLabel.textAlignment = .center
         cardlyTextLabel.font = UIFont(name: Font.fancy , size: 110)
         cardlyTextLabel.textColor = UIColor.white
+        cardlyTextLabel.minimumScaleFactor = 0.5
+        cardlyTextLabel.sizeToFit()
+        view.addSubview(cardlyTextLabel)
+        cardlyTextLabel.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalToSuperview().offset(12)
+        }
         
         cardlyAirplaneImageView = UIImageView()
         cardlyAirplaneImageView.image = Icons.planeIcon
@@ -208,22 +208,22 @@ extension LoginViewController{
             make.height.equalToSuperview().multipliedBy(0.06)
             make.width.equalTo(view.snp.height).multipliedBy(0.06)
             make.leadingMargin.equalTo(cardlyTextLabel.snp.trailingMargin)
-            make.topMargin.equalTo(cardlyTextLabel.snp.topMargin).offset(30)
+            make.topMargin.equalTo(cardlyTextLabel.snp.topMargin)
         }
         
         cardlyDescriptionText = UILabel()
         view.addSubview(cardlyDescriptionText)
-        cardlyDescriptionText.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.bottomMargin.equalToSuperview().offset(10)
-            make.width.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.1/0.6)
-        }
         cardlyDescriptionText.backgroundColor = UIColor.clear
         cardlyDescriptionText.text = "Send Video Thank You Cards"
         cardlyDescriptionText.textAlignment = .center
-        cardlyDescriptionText.font = UIFont(name: Font.fancy, size: 50)
+        cardlyDescriptionText.font = UIFont(name: Font.fancy, size: Font.Size.xxl)
         cardlyDescriptionText.textColor = UIColor.white
+        cardlyDescriptionText.minimumScaleFactor = 0.5
+        cardlyDescriptionText.sizeToFit()
+        cardlyDescriptionText.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.bottomMargin.equalToSuperview().offset(-20)
+        }
         
         orTextLabel = UILabel()
         view.addSubview(orTextLabel)
