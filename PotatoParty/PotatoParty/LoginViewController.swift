@@ -204,12 +204,13 @@ extension LoginViewController{
         
         cardlyAirplaneImageView = UIImageView()
         cardlyAirplaneImageView.image = Icons.planeIcon
+        cardlyAirplaneImageView.contentMode = .scaleAspectFit
         view.addSubview(cardlyAirplaneImageView)
         cardlyAirplaneImageView.snp.makeConstraints { (make) in
             make.height.equalToSuperview().multipliedBy(0.06)
             make.width.equalTo(view.snp.height).multipliedBy(0.06)
-            make.topMargin.equalTo(cardlyTextLabel.snp.bottomMargin).offset(-20)
-            make.trailingMargin.equalToSuperview().offset(-135)
+            make.leadingMargin.equalTo(cardlyTextLabel.snp.trailingMargin)
+            make.topMargin.equalTo(cardlyTextLabel.snp.topMargin).offset(30)
         }
         
         cardlyDescriptionText = UILabel()
