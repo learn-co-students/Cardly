@@ -99,9 +99,7 @@ extension LoginViewController {
                 FIRAuth.auth()?.sendPasswordReset(withEmail: email, completion: { (error) in
                     if let error = error {
                         let alertController = UIAlertController(title: "Error", message: "\(error.localizedDescription)", preferredStyle: .alert)
-                        let okAction = UIAlertAction(title: "Ok", style: .default, handler: { (action) in
-                            self.dismiss(animated: true, completion: nil)
-                        })
+                        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
                         alertController.addAction(okAction)
                         self.present(alertController, animated: true, completion: nil)
                     } else {
