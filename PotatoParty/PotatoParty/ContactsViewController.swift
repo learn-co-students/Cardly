@@ -21,7 +21,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     
     // Current user
     let shared = User.shared
-    let uid = FIRAuth.auth()!.currentUser!.uid
+    let currentUserUid = FIRAuth.auth()?.currentUser?.uid
     let ref = FIRDatabase.database().reference(withPath: "contacts")
     
     // UI
@@ -385,7 +385,10 @@ extension ContactsViewController: BottomNavBarDelegate {
     // Updates Contact Group property and reloaded Collection View
     
     func updateGroup(completion: () -> ()) {
-        
+        guard let uid = currentUserUid else {
+            print(UserError.NoCurrentUser)
+            return
+        }
         for (index, contact) in shared.selectedContacts.enumerated() {
             
             removeFromSomeGroupsinFB(contact: contact)
@@ -423,6 +426,10 @@ extension ContactsViewController {
     
     func retrieveContacts(for group: String, completion: @escaping (_: [Contact]) -> Void) {
         var contacts: [Contact] = []
+        guard let uid = currentUserUid else {
+            print(UserError.NoCurrentUser)
+            return
+        }
         let path = "\(uid)/\(group.lowercased())/"
         let contactBucketRef = ref.child(path)
         contactBucketRef.observeSingleEvent(of: .value, with: { snapshot in
@@ -445,7 +452,10 @@ extension ContactsViewController {
     }
     
     func removeFromSomeGroupsinFB(contact: Contact){
-        
+        guard let uid = currentUserUid else {
+            print(UserError.NoCurrentUser)
+            return
+        }
         let familyPath = "\(uid)/family/\(contact.key)"
         let friendsPath = "\(uid)/friends/\(contact.key)"
         let coworkersPath = "\(uid)/coworkers/\(contact.key)"
@@ -469,6 +479,10 @@ extension ContactsViewController {
     }
     
     func removeFromAllGroupsinFB(contact: Contact) {
+        guard let uid = currentUserUid else {
+            print(UserError.NoCurrentUser)
+            return
+        }
         let allPath = "\(uid)/all/\(contact.key)"
         let familyPath = "\(uid)/family/\(contact.key)"
         let friendsPath = "\(uid)/friends/\(contact.key)"
