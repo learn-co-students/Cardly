@@ -45,7 +45,6 @@
 		E4974AF01DDE1C3700698B81 /* ContactsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4974AEF1DDE1C3700698B81 /* ContactsCollectionViewCell.swift */; };
 		E49BA3A71DE3443B0010A7A4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49BA3A61DE3443A0010A7A4 /* Constants.swift */; };
 		E4ED56171DDD3C6700EB97D4 /* BottomNavBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4ED56161DDD3C6700EB97D4 /* BottomNavBarView.swift */; };
-		F30919EC1DDE147800479633 /* AddContactViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30919EB1DDE147800479633 /* AddContactViewControllerExtension.swift */; };
 		F31EDE481DF898E80054CAD6 /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31EDE471DF898E80054CAD6 /* CreateAccountViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -93,7 +92,6 @@
 		E4974AEF1DDE1C3700698B81 /* ContactsCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsCollectionViewCell.swift; sourceTree = "<group>"; };
 		E49BA3A61DE3443A0010A7A4 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		E4ED56161DDD3C6700EB97D4 /* BottomNavBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomNavBarView.swift; sourceTree = "<group>"; };
-		F30919EB1DDE147800479633 /* AddContactViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddContactViewControllerExtension.swift; sourceTree = "<group>"; };
 		F31EDE471DF898E80054CAD6 /* CreateAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -170,7 +168,6 @@
 				E4ED56161DDD3C6700EB97D4 /* BottomNavBarView.swift */,
 				E4974AED1DDE0FE100698B81 /* ContactsCollectionView.swift */,
 				E4974AEF1DDE1C3700698B81 /* ContactsCollectionViewCell.swift */,
-				F30919EB1DDE147800479633 /* AddContactViewControllerExtension.swift */,
 				3F37150A1DE49D1B006B3EAD /* PlayerView.swift */,
 				3173A1C31DECC36F003385B6 /* AnimatedSettingsViewController.swift */,
 				3F3EB1CF1DFA40CC00CB9DA5 /* CardlyTextField.swift */,
@@ -408,7 +405,6 @@
 				E49BA3A71DE3443B0010A7A4 /* Constants.swift in Sources */,
 				3F196C541DDE3AFE00497BDD /* Group.swift in Sources */,
 				E4974AEE1DDE0FE100698B81 /* ContactsCollectionView.swift in Sources */,
-				F30919EC1DDE147800479633 /* AddContactViewControllerExtension.swift in Sources */,
 				3F196C4E1DDE147100497BDD /* Contact.swift in Sources */,
 				3182D51E1DEF706B0090AB2E /* SettingsViewController.swift in Sources */,
 				316A6DB41DEE290900BF9B9A /* GuillotineMenuTransitionAnimation.swift in Sources */,
