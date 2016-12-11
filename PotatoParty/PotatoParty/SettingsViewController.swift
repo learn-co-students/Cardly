@@ -85,8 +85,8 @@ class SettingsViewController: UIViewController {
         titleLabel.minimumScaleFactor = 0.5
         titleLabel.font = UIFont(name: Font.fancy, size: Font.Size.viewTitle)
         titleLabel.layer.shadowColor = UIColor.black.cgColor
-        titleLabel.layer.shadowOffset = CGSize(width: 2, height: 2)
-        titleLabel.layer.shadowRadius = 0
+        titleLabel.layer.shadowOffset = CGSize(width: 0, height: 0)
+        titleLabel.layer.shadowRadius = 3
         titleLabel.layer.shadowOpacity = 1
         titleLabel.sizeToFit()
         titleLabel.snp.makeConstraints { (make) in

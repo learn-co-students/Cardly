@@ -19,12 +19,14 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     var backButton: UIButton!
     var dismissButton: UIButton?
     
+    var titleLabel: UILabel!
+    var orLabel: UILabel!
     var nameTextField = UITextField()
     var emailTextField = UITextField()
     var phoneTextField = UITextField()
-    var addButton = UIButton()
+    var addButton: UIButton!
     var groupPickerView = UIPickerView()
-    var importContactsButton = UIButton()
+    var importContactsButton: UIButton!
 
     var contactStore = CNContactStore()
     var dataDict = [String: String] ()
@@ -287,14 +289,14 @@ extension AddContactViewController {
             make.height.equalToSuperview().multipliedBy(0.8)
         }
         
-        let titleLabel = UILabel()
+        titleLabel = UILabel()
         view.addSubview(titleLabel)
         titleLabel.text = "Add Contacts"
         titleLabel.textColor = UIColor.white
         titleLabel.textAlignment = .center
         titleLabel.minimumScaleFactor = 0.5
         titleLabel.font = UIFont(name: Font.fancy, size: Font.Size.viewTitle)
-        titleLabel.layer.shadowColor = UIColor.gray.cgColor
+        titleLabel.layer.shadowColor = UIColor.black.cgColor
         titleLabel.layer.shadowOffset = CGSize(width: 0, height: 0)
         titleLabel.layer.shadowRadius = 3
         titleLabel.layer.shadowOpacity = 1
@@ -308,76 +310,69 @@ extension AddContactViewController {
         view.addSubview(nameTextField)
         nameTextField.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalToSuperview().offset(275)
+            make.topMargin.equalTo(titleLabel.snp.bottomMargin).offset(50)
             make.width.equalToSuperview().multipliedBy(0.60)
             make.height.equalTo(nameTextField.snp.width).multipliedBy(0.15)
         }
         
-        
-        // E-Mail Textfield
         emailTextField = CustomTextField.initTextField(placeHolderText: "Contact Email", isSecureEntry: false)
         view.addSubview(emailTextField)
         emailTextField.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(nameTextField).offset(45)
-            make.width.equalTo(nameTextField)
-            make.height.equalTo(nameTextField)
+            make.size.equalTo(nameTextField.snp.size)
         }
         
-        
-        // Add Phone Number Textfield
         phoneTextField = CustomTextField.initTextField(placeHolderText: "Contact Phone Number", isSecureEntry: false)
         view.addSubview(phoneTextField)
         phoneTextField.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(emailTextField).offset(45)
-            make.width.equalTo(nameTextField)
-            make.height.equalTo(nameTextField)
+            make.size.equalTo(nameTextField.snp.size)
         }
         
-        
-        // Group Pickerview
         groupPickerView.dataSource = self
         groupPickerView.delegate = self
         view.addSubview(groupPickerView)
         groupPickerView.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(phoneTextField).offset(50)
-            make.width.equalTo(phoneTextField)
-            make.height.equalTo(phoneTextField)
+            make.size.equalTo(nameTextField.snp.size)
         }
         
         groupPickerView.backgroundColor = UIColor.white
         
-        // Add button
+        addButton = CardlyFormFieldButton.initButton(title: "Add", target: self, selector: #selector(addButtonTapped))
         view.addSubview(addButton)
         addButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalToSuperview().offset(500)
-            make.width.equalTo(nameTextField.snp.width).multipliedBy(0.5)
-            make.height.equalTo(nameTextField.snp.height).multipliedBy(0.5)
+            make.topMargin.equalTo(groupPickerView.snp.bottomMargin).offset(25)
         }
         
-        addButton.setTitleColor(Colors.cardlyGrey, for: UIControlState.normal)
-        addButton.backgroundColor = UIColor.clear
-        addButton.setTitle("Add", for: .normal)
-        addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
+        orLabel = UILabel()
+        view.addSubview(orLabel)
+        orLabel.text = "Or"
+        orLabel.textColor = UIColor.white
+        orLabel.textAlignment = .center
+        orLabel.minimumScaleFactor = 0.5
+        orLabel.font = UIFont(name: Font.fancy, size: Font.Size.viewTitle)
+        orLabel.layer.shadowColor = UIColor.black.cgColor
+        orLabel.layer.shadowOffset = CGSize(width: 0, height: 0)
+        orLabel.layer.shadowRadius = 3
+        orLabel.layer.shadowOpacity = 1
+        orLabel.sizeToFit()
+        orLabel.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(addButton.snp.bottomMargin).offset(50)
+        }
         
-        // Import contacts button
+        importContactsButton = CardlyFormFieldButton.initButton(title: "Import from Contacts", target: self, selector: #selector(importContactButtonTapped))
         view.addSubview(importContactsButton)
         importContactsButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalToSuperview().offset(200)
-            make.width.equalTo(nameTextField.snp.width).multipliedBy(1.5)
-            make.height.equalTo(addButton.snp.height)
+            make.topMargin.equalTo(orLabel.snp.bottomMargin).offset(50)
         }
-        importContactsButton.setTitleColor(Colors.cardlyGrey, for: UIControlState.normal)
-        importContactsButton.backgroundColor = UIColor.clear
-        importContactsButton.setTitle("Import from Contacts", for: .normal)
-        importContactsButton.addTarget(self, action: #selector(self.importContactButtonTapped), for: .touchUpInside)
-        
     }
-    
 }
 
 // MARK: - UIPickerView data source / delegate
