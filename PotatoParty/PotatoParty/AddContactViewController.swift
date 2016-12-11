@@ -13,6 +13,7 @@ import Contacts
 import ContactsUI
 import Whisper
 
+
 class AddContactViewController: UIViewController, CNContactViewControllerDelegate, CNContactPickerDelegate, UITextFieldDelegate, UICollectionViewDelegate  {
     let uid = FIRAuth.auth()?.currentUser?.uid
     let groups = User.shared.groups
@@ -196,42 +197,34 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        
         switch textField {
         case phoneTextField:
-            if validatePhone(phone: phoneTextField.text!){
+            if validatePhone(phone: textField.text!){
                 if validCheck() {
                     enableAddButton()
                 }
-                print("valid phone")
             } else {
-                print("not valid phone")
-                shake(textfield: phoneTextField)
+                CustomTextField.shake(textfield: textField)
             }
         case emailTextField:
-            if validateEmail(email: emailTextField.text!) {
-                print("Valid Email")
+            if validateEmail(email: textField.text!) {
                 if validCheck() {
                     enableAddButton()
                 }
             } else {
-                shake(textfield: emailTextField)
-                print ("non valid email")
+                CustomTextField.shake(textfield: textField)
             }
         case nameTextField:
-            if validateName(name: nameTextField.text!){
+            if validateName(name: textField.text!){
                 if validCheck() {
                     enableAddButton()
                 }
-                print("valid name")
             } else {
-                shake(textfield: nameTextField)
-                print("enter your name")
+                CustomTextField.shake(textfield: textField)
             }
         default:
             return
         }
-        
     }
     
     func validCheck() -> Bool {
@@ -240,15 +233,6 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     
     func enableAddButton() {
         addButton.isEnabled = true
-        addButton.backgroundColor = UIColor.gray
-    }
-    
-    func shake(textfield: UITextField) {
-        let animation = CAKeyframeAnimation(keyPath: "transform.translation.x")
-        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
-        animation.duration = 0.6
-        animation.values = [-20.0, 20.0, -20.0, 20.0, -10.0, 10.0, -5.0, 5.0, 0.0 ]
-        textfield.layer.add(animation, forKey: "shake")
     }
 
 }

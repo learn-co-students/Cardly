@@ -28,4 +28,12 @@ struct CustomTextField {
         return textField
     }
     
+    static func shake(textfield: UITextField) {
+        let animation = CAKeyframeAnimation(keyPath: "transform.translation.x")
+        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+        animation.duration = 0.6
+        animation.values = [-20.0, 20.0, -20.0, 20.0, -10.0, 10.0, -5.0, 5.0, 0.0 ]
+        textfield.layer.add(animation, forKey: "shake")
+    }
+    
 }
