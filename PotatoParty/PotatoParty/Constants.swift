@@ -74,8 +74,8 @@ struct CustomNotification {
      static func show(_ notification: String) {
         var murmur = Murmur(title: notification)
         
-        murmur.titleColor = UIColor.black
-        murmur.backgroundColor = UIColor.cyan
+        murmur.titleColor = UIColor.white
+        murmur.backgroundColor = Colors.cardlyGold
         
         let whistleAction = WhistleAction.show(2.0)
         
