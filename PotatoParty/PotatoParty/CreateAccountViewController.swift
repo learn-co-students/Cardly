@@ -14,6 +14,14 @@ import FirebaseAuth
 
 class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     
+    let textFieldToSuperviewWidthMultiplier = 0.6
+    let textFieldToSuperviewHeightMultiplier = 0.25
+    let emailTextFieldTopOffset = 250
+    let passwordTextFieldTopOffset = 40
+    let submitButtonToTextFieldWidthMultipier = 1.0/3.0
+    let submitButtonToTextFieldHeightMultiplier = 0.5
+    let submitButtonTopOffset = 30
+    
     var emailTextField: UITextField!
     var passwordTextField: UITextField!
     var confirmPasswordTextField: UITextField!
@@ -22,14 +30,6 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     var cardlyTextLabel: UILabel!
     var cardlyAirplaneImageView: UIImageView!
     var titleLabel: UILabel!
-    
-    let textFieldToSuperviewWidthMultiplier = 0.6
-    let textFieldToSuperviewHeightMultiplier = 0.25
-    let emailTextFieldTopOffset = 250
-    let passwordTextFieldTopOffset = 40
-    let submitButtonToTextFieldWidthMultipier = 1.0/3.0
-    let submitButtonToTextFieldHeightMultiplier = 0.5
-    let submitButtonTopOffset = 30
     
     var password: String? = nil
     var isEmailValid: Bool = false
@@ -143,8 +143,6 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
         submitButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview().offset(50)
             make.topMargin.equalTo(confirmPasswordTextField.snp.bottomMargin).offset(submitButtonTopOffset)
-            make.width.equalTo(confirmPasswordTextField.snp.width).multipliedBy(submitButtonToTextFieldWidthMultipier)
-            make.height.equalTo(confirmPasswordTextField.snp.height).multipliedBy(submitButtonToTextFieldHeightMultiplier)
         }
 
         cancelButton = CardlyFormFieldButton.initButton(title: "Cancel", target: self, selector: #selector(cancelButtonTapped))
@@ -152,8 +150,6 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
         cancelButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview().offset(-50)
             make.topMargin.equalTo(confirmPasswordTextField.snp.bottomMargin).offset(submitButtonTopOffset)
-            make.width.equalTo(submitButton)
-            make.height.equalTo(submitButton)
         }
         
         titleLabel = UILabel()
