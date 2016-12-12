@@ -87,7 +87,7 @@ extension LoginViewController {
             }
         })
     }
-    
+
     func forgotPasswordButtonTapped() {
         
         let alertController = UIAlertController(title: "Enter E-Mail", message: "We'll send you a password reset e-mail", preferredStyle: .alert)
@@ -136,6 +136,7 @@ extension LoginViewController {
         let initialVC = ContactsViewController()
         let navigationController = UINavigationController(rootViewController: initialVC)
         present(navigationController, animated: true, completion: nil)
+        
     }
 
 }
