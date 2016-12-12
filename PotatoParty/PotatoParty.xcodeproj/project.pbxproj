@@ -543,7 +543,7 @@
 				INFOPLIST_FILE = PotatoParty/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.flatironschool.michelle;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.flatironschool.team-potato-party";
 				PRODUCT_NAME = Cardly;
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -562,7 +562,7 @@
 				INFOPLIST_FILE = PotatoParty/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.flatironschool.michelle;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.flatironschool.team-potato-party";
 				PRODUCT_NAME = Cardly;
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
