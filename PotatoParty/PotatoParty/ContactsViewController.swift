@@ -37,6 +37,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     var pickGroup = UIPickerView()
     var pickerData = ["All", "Family", "Friends", "Coworkers", "Other"]
     var chosenGroup = ""
+    var currentGroup = ""
     var allSelected: Bool = false
     
     fileprivate let cellHeight: CGFloat = 210
@@ -51,6 +52,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        checkFirebaseConnection()
         contactsCollectionView.delegate = self
         self.restorationIdentifier = "contactsVC"
     }
@@ -289,6 +291,8 @@ extension ContactsViewController {
     }
     
     func selectGroup(_ sender: UITableViewCell) {
+        guard let group = sender.textLabel?.text?.lowercased() else { return }
+        currentGroup = group
         
         //setting up activity indicator
         var container: UIView = UIView()
@@ -316,7 +320,6 @@ extension ContactsViewController {
         actInd.startAnimating()
         
         // Retrieve from Firebase
-        guard let group = sender.textLabel?.text?.lowercased() else { return }
         self.retrieveContacts(for: group, completion: { contacts in
             
             User.shared.contacts = contacts
@@ -396,18 +399,16 @@ extension ContactsViewController: BottomNavBarDelegate {
     
     func deleteButtonPressed() {
         deleteContacts {
-            retrieveContacts(for: User.shared.groups[0], completion: { contacts in
+            retrieveContacts(for: currentGroup, completion: { contacts in
                 User.shared.contacts = contacts
 
-                
                 User.shared.contacts.insert(self.defaultContact, at: 0)
 
                 self.contactsCollectionView.reloadData()
+                
             })
             enableCell()
-           contactsCollectionView.reloadData()
         }
-        
     }
     
     func editGroupButtonPressed(){
@@ -539,6 +540,18 @@ extension ContactsViewController {
         groupsRef.child(coworkersGroupPath).removeValue()
         groupsRef.child(otherGroupPath).removeValue()
         
+    }
+    
+    func checkFirebaseConnection() {
+        let connectedRef = FIRDatabase.database().reference(withPath: ".info/connected")
+        connectedRef.observe(.value, with: { snapshot in
+            if let connected = snapshot.value as? Bool, !connected {
+                let alertVC = UIAlertController(title: "No internet connection", message: "Updates will reflect when you reconnect", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+                alertVC.addAction(okAction)
+                self.present(alertVC, animated: true, completion: nil)
+            }
+        })
     }
     
 }

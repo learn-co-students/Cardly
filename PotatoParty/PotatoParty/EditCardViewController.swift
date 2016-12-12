@@ -14,7 +14,6 @@ import Photos
 import MBProgressHUD
 import SnapKit
 
-
 class EditCardViewController: UIViewController {
 
     static let assetKeysRequiredToPlay = ["playable", "hasProtectedContent"]
@@ -68,7 +67,9 @@ class EditCardViewController: UIViewController {
     
     var topTextField: UITextField!
     var bottomTextField: UITextField!
-    var activeField: UITextField?
+    
+    var userDidEditTopText = false
+    var userDidEditBottomText = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -152,7 +153,6 @@ class EditCardViewController: UIViewController {
             make.width.equalTo(view.snp.width).multipliedBy(0.3)
             make.height.equalTo(view.snp.width).multipliedBy(0.3)
             make.center.equalToSuperview()
-            print("play button width is currently \(playPauseButton.frame.width)")
         }
         playPauseButton.addTarget(self, action: #selector(self.playPauseButtonPressed), for: .touchUpInside)
         
@@ -297,7 +297,7 @@ class EditCardViewController: UIViewController {
         parentLayer.addSublayer(videoLayer)
         parentLayer.addSublayer(overlayLayer)
         
-        if let text = topTextField.text, !topTextField.text!.isEmpty {
+        if let text = topTextField.text, !topTextField.text!.isEmpty, userDidEditTopText {
             // Text layer
             let topTextLayer = CATextLayer()
             topTextLayer.frame = CGRect(x: 40, y: 20, width: HDVideoSize.width - 40, height: HDVideoSize.height - 20)
@@ -316,7 +316,7 @@ class EditCardViewController: UIViewController {
             parentLayer.addSublayer(topTextLayer)
         }
         
-        if let text = bottomTextField.text, !bottomTextField.text!.isEmpty {
+        if let text = bottomTextField.text, !bottomTextField.text!.isEmpty, userDidEditBottomText {
             // Text layer
             let bottomTextLayer = CATextLayer()
             bottomTextLayer.frame = CGRect(x: -20, y: -1145, width: HDVideoSize.width - 20, height: HDVideoSize.height)
@@ -361,7 +361,6 @@ class EditCardViewController: UIViewController {
         assetExport.exportAsynchronously {
             switch assetExport.status {
             case .completed:
-                print("Success")
                 self.doWorkWithProgress(progressHUD: self.spinnerActivity)
                 self.fileLocation = movieUrl
                 self.stopActivityIndicator()
@@ -517,10 +516,8 @@ class EditCardViewController: UIViewController {
             if authorizationStatus == .authorized {
                 PHPhotoLibrary.shared().performChanges({
                     PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoUrl)}) { completed, error in
-                        if completed {
-                            print("Video asset created")
-                        } else {
-                            if let error = error { print(error) }
+                        if let error = error, !completed {
+                            print(error.localizedDescription)
                         }
                 }
             }
@@ -657,6 +654,17 @@ extension EditCardViewController: UITextFieldDelegate {
         let newStr =
             currentStr.replacingCharacters(in: range, with: string) as NSString
         return newStr.length <= maxLength
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        switch textField {
+        case topTextField:
+            userDidEditTopText = true
+        case bottomTextField:
+            userDidEditBottomText = true
+        default:
+            break
+        }
     }
     
     func dismissKeyboard() {
