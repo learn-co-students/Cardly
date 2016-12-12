@@ -57,10 +57,10 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        navigationController?.navigationBar.isHidden = false
         super.viewDidAppear(animated)
         navigationBarMenu.container = view
         contactsCollectionView.reloadData()
