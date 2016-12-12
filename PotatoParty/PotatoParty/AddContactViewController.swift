@@ -38,9 +38,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.isNavigationBarHidden = true
-        
         layoutElements()
-        
         emailTextField.delegate = self
         phoneTextField.delegate = self
         nameTextField.delegate = self
@@ -65,6 +63,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     func dismissButtonTapped(_ sender: UIButton) {
         _ = navigationController?.popViewController(animated: true)
         self.navigationController?.isNavigationBarHidden = false
+        
     }
     
     // Accessing and Importing Selected Contact from user's Contact Book
@@ -150,17 +149,20 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     func addButtonTapped() {
         guard validCheck() else { return }
         guard let email = emailTextField.text, let name = nameTextField.text, let phone = phoneTextField.text else { return }
+        
         let contact = Contact(fullName: name, email: email, phone: phone, group_key: groupSelected)
+        
         guard let uid = currentUserUid else {
             print(UserError.NoCurrentUser)
             return
         }
+        
         // Add to contacts bucket
         let contactsRef = FIRDatabase.database().reference(withPath: "contacts")
         let userContactsRef = contactsRef.child("\(uid)/all/")
         let contactItemRef = userContactsRef.childByAutoId()
         contactItemRef.setValue(contact.toAny())
-        
+                
         nameTextField.text = ""
         emailTextField.text = ""
         phoneTextField.text = ""
@@ -183,7 +185,10 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
             groupContactsRef.setValue(contact.toAny())
             
         }
-        CustomNotification.show("Added successfully")
+        
+        User.shared.contacts.append(contact)
+        
+        CustomNotification.show("Contact added successfully")
     }
     
 // MARK: - Form field validation methods
@@ -254,7 +259,7 @@ extension AddContactViewController {
         backButton.snp.makeConstraints { (make) in
             make.height.equalTo(30)
             make.width.equalTo(30)
-            make.topMargin.equalToSuperview().offset(40)
+            make.topMargin.equalToSuperview().offset(30)
             make.leadingMargin.equalToSuperview()
         }
         
@@ -285,22 +290,24 @@ extension AddContactViewController {
         titleLabel.textColor = UIColor.white
         titleLabel.textAlignment = .center
         titleLabel.minimumScaleFactor = 0.5
+        titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.font = UIFont(name: Font.fancy, size: Font.Size.viewTitle)
         titleLabel.layer.shadowColor = UIColor.black.cgColor
         titleLabel.layer.shadowOffset = CGSize(width: 0, height: 0)
         titleLabel.layer.shadowRadius = 3
         titleLabel.layer.shadowOpacity = 1
-        titleLabel.sizeToFit()
         titleLabel.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(backButton).offset(45)
+            make.topMargin.equalTo(transparentCenterSubview.snp.topMargin)
+            make.width.equalToSuperview().multipliedBy(0.7)
+            make.height.equalToSuperview().dividedBy(6)
         }
         
         nameTextField = CustomTextField.initTextField(placeHolderText: "Contact Name", isSecureEntry: false)
         view.addSubview(nameTextField)
         nameTextField.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(titleLabel.snp.bottomMargin).offset(50)
+            make.topMargin.equalTo(titleLabel.snp.bottomMargin).offset(25)
             make.width.equalToSuperview().multipliedBy(0.60)
             make.height.equalTo(nameTextField.snp.width).multipliedBy(0.15)
         }
@@ -345,22 +352,22 @@ extension AddContactViewController {
         orLabel.textColor = UIColor.white
         orLabel.textAlignment = .center
         orLabel.minimumScaleFactor = 0.5
-        orLabel.font = UIFont(name: Font.fancy, size: Font.Size.viewTitle)
+        orLabel.font = UIFont(name: Font.fancy, size: Font.Size.xxl)
         orLabel.layer.shadowColor = UIColor.black.cgColor
         orLabel.layer.shadowOffset = CGSize(width: 0, height: 0)
         orLabel.layer.shadowRadius = 3
         orLabel.layer.shadowOpacity = 1
-        orLabel.sizeToFit()
         orLabel.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(addButton.snp.bottomMargin).offset(50)
+            make.topMargin.equalTo(addButton.snp.bottomMargin).offset(25)
+            make.size.equalTo(addButton.snp.size)
         }
         
         importContactsButton = CardlyFormFieldButton.initButton(title: "Import from Contacts", target: self, selector: #selector(importContactButtonTapped))
         view.addSubview(importContactsButton)
         importContactsButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(orLabel.snp.bottomMargin).offset(50)
+            make.topMargin.equalTo(orLabel.snp.bottomMargin).offset(25)
         }
     }
 }

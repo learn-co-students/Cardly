@@ -38,7 +38,6 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.init(patternImage: #imageLiteral(resourceName: "loginScreenBackground"))
         setUpView()
         emailTextField.delegate = self
         passwordTextField.delegate = self
@@ -111,6 +110,31 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
 // MARK: - Layout view elements
     
     func setUpView() {
+        UIGraphicsBeginImageContext(view.frame.size)
+        UIImage(named: "loginScreenBackground")?.draw(in: view.bounds)
+        let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        view.backgroundColor = UIColor(patternImage: image)
+
+        titleLabel = UILabel()
+        view.addSubview(titleLabel)
+        titleLabel.text = "Create Account"
+        titleLabel.textColor = UIColor.white
+        titleLabel.textAlignment = .center
+        titleLabel.minimumScaleFactor = 0.5
+        titleLabel.font = UIFont(name: Font.fancy, size: Font.Size.viewTitle/1.2)
+        titleLabel.layer.shadowColor = UIColor.black.cgColor
+        titleLabel.layer.shadowOffset = CGSize(width: 2, height: 2)
+        titleLabel.layer.shadowRadius = 0
+        titleLabel.layer.shadowOpacity = 1
+        titleLabel.adjustsFontSizeToFitWidth = true
+        titleLabel.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(0.8)
+            make.height.equalToSuperview().dividedBy(5)
+        }
+        
         emailTextField = CustomTextField.initTextField(placeHolderText: "example@emailprovider.com" , isSecureEntry: false)
         view.addSubview(emailTextField)
         emailTextField.snp.makeConstraints { (make) in
@@ -151,23 +175,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             make.centerX.equalToSuperview().offset(-50)
             make.topMargin.equalTo(confirmPasswordTextField.snp.bottomMargin).offset(submitButtonTopOffset)
         }
-        
-        titleLabel = UILabel()
-        view.addSubview(titleLabel)
-        titleLabel.text = "Create Account"
-        titleLabel.textColor = UIColor.white
-        titleLabel.textAlignment = .center
-        titleLabel.minimumScaleFactor = 0.5
-        titleLabel.font = UIFont(name: Font.fancy, size: Font.Size.viewTitle/1.2)
-        titleLabel.layer.shadowColor = UIColor.black.cgColor
-        titleLabel.layer.shadowOffset = CGSize(width: 2, height: 2)
-        titleLabel.layer.shadowRadius = 0
-        titleLabel.layer.shadowOpacity = 1
-        titleLabel.sizeToFit()
-        titleLabel.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.topMargin.equalToSuperview().offset(30)
-        }
+    
     }
 }
 

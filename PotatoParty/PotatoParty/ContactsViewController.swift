@@ -47,6 +47,8 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     // Default contact enables the first cell in the CollectvionView to be the 'Add Contact' button
     let defaultContact = Contact(fullName: "AddContact", email: "", phone: "")
 
+    //make sure no internet alert does not always show up when app is started
+    var firebaseStateChangeCounter = 0
     
     // MARK: - Init
     override func viewDidLoad() {
@@ -59,13 +61,13 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        contactsCollectionView.reloadData()
         navigationController?.navigationBar.isHidden = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationBarMenu.container = view
-        contactsCollectionView.reloadData()
     }
     
 }
@@ -262,6 +264,14 @@ extension ContactsViewController {
         default:
             break
         }
+        
+        // Refresh currently selected group's collection view
+        self.retrieveContacts(for: currentGroup, completion: { contacts in
+            User.shared.contacts = contacts
+            User.shared.contacts.insert(self.defaultContact, at: 0)
+            self.contactsCollectionView.reloadData()
+        })
+        
     }
     
     func showPickerInAlert() {
@@ -321,10 +331,10 @@ extension ContactsViewController {
         
         // Retrieve from Firebase
         self.retrieveContacts(for: group, completion: { contacts in
-            
+
             User.shared.contacts = contacts
             User.shared.contacts.insert(self.defaultContact, at: 0)
-            
+
             // Empty selected contacts and hide edit+delete functionality
             self.shared.selectedContacts = []
             self.bottomNavBar.middleIconView.editGroupButton.isHidden = true
@@ -545,12 +555,13 @@ extension ContactsViewController {
     func checkFirebaseConnection() {
         let connectedRef = FIRDatabase.database().reference(withPath: ".info/connected")
         connectedRef.observe(.value, with: { snapshot in
-            if let connected = snapshot.value as? Bool, !connected {
+            if let connected = snapshot.value as? Bool, !connected, self.firebaseStateChangeCounter > 0 {
                 let alertVC = UIAlertController(title: "No internet connection", message: "Updates will reflect when you reconnect", preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
                 alertVC.addAction(okAction)
                 self.present(alertVC, animated: true, completion: nil)
             }
+            self.firebaseStateChangeCounter += 1
         })
     }
     

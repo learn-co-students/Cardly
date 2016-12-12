@@ -150,11 +150,38 @@ extension LoginViewController{
         UIGraphicsEndImageContext()
         view.backgroundColor = UIColor(patternImage: image)
         
+        cardlyTextLabel = UILabel()
+        cardlyTextLabel.backgroundColor = UIColor.clear
+        cardlyTextLabel.text = "Cardly"
+        cardlyTextLabel.textAlignment = .center
+        cardlyTextLabel.font = UIFont(name: Font.fancy , size: 110)
+        cardlyTextLabel.textColor = UIColor.white
+        cardlyTextLabel.minimumScaleFactor = 0.5
+        cardlyTextLabel.adjustsFontSizeToFitWidth = true
+        view.addSubview(cardlyTextLabel)
+        cardlyTextLabel.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalToSuperview().offset(12)
+            make.width.equalToSuperview().multipliedBy(0.8)
+            make.height.equalToSuperview().dividedBy(4)
+        }
+        
+        cardlyAirplaneImageView = UIImageView()
+        cardlyAirplaneImageView.image = Icons.planeIcon
+        cardlyAirplaneImageView.contentMode = .scaleAspectFit
+        view.addSubview(cardlyAirplaneImageView)
+        cardlyAirplaneImageView.snp.makeConstraints { (make) in
+            make.height.equalToSuperview().multipliedBy(0.06)
+            make.width.equalTo(view.snp.height).multipliedBy(0.06)
+            make.top.equalToSuperview().offset(view.frame.height/5.5)
+            make.centerX.equalToSuperview().offset(20)
+        }
+        
         userTextfield = CustomTextField.initTextField(placeHolderText: "example@emailprovider.com", isSecureEntry: false)
         view.addSubview(userTextfield)
         userTextfield.snp.makeConstraints { (make) in
             make.centerX.equalTo(view.snp.centerX)
-            make.topMargin.equalToSuperview().offset(view.frame.height/4.3)
+            make.topMargin.equalTo(cardlyTextLabel.snp.bottomMargin).offset(25)
             make.width.equalToSuperview().multipliedBy(0.8)
             make.height.equalTo(50)
         }
@@ -188,31 +215,6 @@ extension LoginViewController{
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(loginButton.snp.bottomMargin).offset(createAccountButtonTopOffset)
         }
-
-        cardlyTextLabel = UILabel()
-        cardlyTextLabel.backgroundColor = UIColor.clear
-        cardlyTextLabel.text = "Cardly"
-        cardlyTextLabel.textAlignment = .center
-        cardlyTextLabel.font = UIFont(name: Font.fancy , size: 110)
-        cardlyTextLabel.textColor = UIColor.white
-        cardlyTextLabel.minimumScaleFactor = 0.5
-        cardlyTextLabel.sizeToFit()
-        view.addSubview(cardlyTextLabel)
-        cardlyTextLabel.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.topMargin.equalToSuperview().offset(12)
-        }
-        
-        cardlyAirplaneImageView = UIImageView()
-        cardlyAirplaneImageView.image = Icons.planeIcon
-        cardlyAirplaneImageView.contentMode = .scaleAspectFit
-        view.addSubview(cardlyAirplaneImageView)
-        cardlyAirplaneImageView.snp.makeConstraints { (make) in
-            make.height.equalToSuperview().multipliedBy(0.06)
-            make.width.equalTo(view.snp.height).multipliedBy(0.06)
-            make.leadingMargin.equalTo(cardlyTextLabel.snp.trailingMargin)
-            make.topMargin.equalTo(cardlyTextLabel.snp.topMargin)
-        }
         
         cardlyDescriptionText = UILabel()
         view.addSubview(cardlyDescriptionText)
@@ -222,10 +224,12 @@ extension LoginViewController{
         cardlyDescriptionText.font = UIFont(name: Font.fancy, size: Font.Size.xxl)
         cardlyDescriptionText.textColor = UIColor.white
         cardlyDescriptionText.minimumScaleFactor = 0.5
-        cardlyDescriptionText.sizeToFit()
+        cardlyDescriptionText.adjustsFontSizeToFitWidth = true
         cardlyDescriptionText.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.bottomMargin.equalToSuperview().offset(-20)
+            make.width.equalToSuperview().multipliedBy(0.8)
+            make.height.equalToSuperview().dividedBy(10)
         }
         
         orTextLabel = UILabel()
