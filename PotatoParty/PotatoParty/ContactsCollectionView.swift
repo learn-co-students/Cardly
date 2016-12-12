@@ -52,6 +52,7 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         
         if cell.contact.is_sent == true {
             cell.alpha = 0.5
+            cell.tintColor = Colors.cardlyGrey
         }
         
         return cell
