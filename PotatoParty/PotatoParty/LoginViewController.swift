@@ -157,7 +157,7 @@ extension LoginViewController{
         cardlyTextLabel.font = UIFont(name: Font.fancy , size: 110)
         cardlyTextLabel.textColor = UIColor.white
         cardlyTextLabel.minimumScaleFactor = 0.5
-        cardlyTextLabel.lineBreakMode = .byWordWrapping
+        cardlyTextLabel.adjustsFontSizeToFitWidth = true
         view.addSubview(cardlyTextLabel)
         cardlyTextLabel.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
@@ -224,10 +224,12 @@ extension LoginViewController{
         cardlyDescriptionText.font = UIFont(name: Font.fancy, size: Font.Size.xxl)
         cardlyDescriptionText.textColor = UIColor.white
         cardlyDescriptionText.minimumScaleFactor = 0.5
-        cardlyDescriptionText.sizeToFit()
+        cardlyDescriptionText.adjustsFontSizeToFitWidth = true
         cardlyDescriptionText.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.bottomMargin.equalToSuperview().offset(-20)
+            make.width.equalToSuperview().multipliedBy(0.8)
+            make.height.equalToSuperview().dividedBy(10)
         }
         
         orTextLabel = UILabel()
