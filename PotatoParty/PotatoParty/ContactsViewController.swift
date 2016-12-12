@@ -264,6 +264,14 @@ extension ContactsViewController {
         default:
             break
         }
+        
+        // Refresh currently selected group's collection view
+        self.retrieveContacts(for: currentGroup, completion: { contacts in
+            User.shared.contacts = contacts
+            User.shared.contacts.insert(self.defaultContact, at: 0)
+            self.contactsCollectionView.reloadData()
+        })
+        
     }
     
     func showPickerInAlert() {
@@ -323,10 +331,10 @@ extension ContactsViewController {
         
         // Retrieve from Firebase
         self.retrieveContacts(for: group, completion: { contacts in
-            
+
             User.shared.contacts = contacts
             User.shared.contacts.insert(self.defaultContact, at: 0)
-            
+
             // Empty selected contacts and hide edit+delete functionality
             self.shared.selectedContacts = []
             self.bottomNavBar.middleIconView.editGroupButton.isHidden = true
