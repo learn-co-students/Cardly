@@ -34,6 +34,10 @@ class LoginViewController: UIViewController{
     var forgotPasswordButton: UIButton!
     var cardlyDescriptionText: UILabel!
     var orTextLabel: UILabel!
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -219,7 +223,7 @@ extension LoginViewController{
         cardlyDescriptionText = UILabel()
         view.addSubview(cardlyDescriptionText)
         cardlyDescriptionText.backgroundColor = UIColor.clear
-        cardlyDescriptionText.text = "Send Video Thank You Cards"
+        cardlyDescriptionText.text = "Send Video Greeting Cards"
         cardlyDescriptionText.textAlignment = .center
         cardlyDescriptionText.font = UIFont(name: Font.fancy, size: Font.Size.xxl)
         cardlyDescriptionText.textColor = UIColor.white

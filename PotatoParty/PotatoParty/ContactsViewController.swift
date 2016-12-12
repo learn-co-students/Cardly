@@ -305,19 +305,19 @@ extension ContactsViewController {
         currentGroup = group
         
         //setting up activity indicator
-        var container: UIView = UIView()
+        let container: UIView = UIView()
         container.frame = self.view.frame
         container.center = self.view.center
         container.backgroundColor = UIColor.clear
         
-        var loadingView: UIView = UIView()
+        let loadingView: UIView = UIView()
         loadingView.frame = CGRect(x: 0, y: 0, width: 80, height: 80)
         loadingView.center = self.view.center
         loadingView.backgroundColor = UIColor.init(white: 0.5, alpha: 0.5)
         loadingView.clipsToBounds = true
         loadingView.layer.cornerRadius = 10
         
-        var actInd: UIActivityIndicatorView = UIActivityIndicatorView()
+        let actInd: UIActivityIndicatorView = UIActivityIndicatorView()
         actInd.frame = CGRect(x: 0.0, y: 0.0, width: 40.0, height: 40.0)
         actInd.activityIndicatorViewStyle =
             UIActivityIndicatorViewStyle.whiteLarge
