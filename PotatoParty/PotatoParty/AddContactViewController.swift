@@ -65,6 +65,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     func dismissButtonTapped(_ sender: UIButton) {
         _ = navigationController?.popViewController(animated: true)
         self.navigationController?.isNavigationBarHidden = false
+        
     }
     
     // Accessing and Importing Selected Contact from user's Contact Book
@@ -150,17 +151,20 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     func addButtonTapped() {
         guard validCheck() else { return }
         guard let email = emailTextField.text, let name = nameTextField.text, let phone = phoneTextField.text else { return }
+        
         let contact = Contact(fullName: name, email: email, phone: phone, group_key: groupSelected)
+        
         guard let uid = currentUserUid else {
             print(UserError.NoCurrentUser)
             return
         }
+        
         // Add to contacts bucket
         let contactsRef = FIRDatabase.database().reference(withPath: "contacts")
         let userContactsRef = contactsRef.child("\(uid)/all/")
         let contactItemRef = userContactsRef.childByAutoId()
         contactItemRef.setValue(contact.toAny())
-        
+                
         nameTextField.text = ""
         emailTextField.text = ""
         phoneTextField.text = ""
@@ -183,7 +187,10 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
             groupContactsRef.setValue(contact.toAny())
             
         }
-        CustomNotification.show("Added successfully")
+        
+        User.shared.contacts.append(contact)
+        
+        CustomNotification.show("Contact added successfully")
     }
     
 // MARK: - Form field validation methods
