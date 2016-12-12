@@ -38,9 +38,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.isNavigationBarHidden = true
-        
         layoutElements()
-        
         emailTextField.delegate = self
         phoneTextField.delegate = self
         nameTextField.delegate = self
@@ -292,22 +290,24 @@ extension AddContactViewController {
         titleLabel.textColor = UIColor.white
         titleLabel.textAlignment = .center
         titleLabel.minimumScaleFactor = 0.5
+        titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.font = UIFont(name: Font.fancy, size: Font.Size.viewTitle)
         titleLabel.layer.shadowColor = UIColor.black.cgColor
         titleLabel.layer.shadowOffset = CGSize(width: 0, height: 0)
         titleLabel.layer.shadowRadius = 3
         titleLabel.layer.shadowOpacity = 1
-        titleLabel.sizeToFit()
         titleLabel.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(backButton).offset(45)
+            make.topMargin.equalTo(transparentCenterSubview.snp.topMargin)
+            make.width.equalToSuperview().multipliedBy(0.7)
+            make.height.equalToSuperview().dividedBy(6)
         }
         
         nameTextField = CustomTextField.initTextField(placeHolderText: "Contact Name", isSecureEntry: false)
         view.addSubview(nameTextField)
         nameTextField.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(titleLabel.snp.bottomMargin).offset(50)
+            make.topMargin.equalTo(titleLabel.snp.bottomMargin).offset(25)
             make.width.equalToSuperview().multipliedBy(0.60)
             make.height.equalTo(nameTextField.snp.width).multipliedBy(0.15)
         }
@@ -352,22 +352,22 @@ extension AddContactViewController {
         orLabel.textColor = UIColor.white
         orLabel.textAlignment = .center
         orLabel.minimumScaleFactor = 0.5
-        orLabel.font = UIFont(name: Font.fancy, size: Font.Size.viewTitle)
+        orLabel.font = UIFont(name: Font.fancy, size: Font.Size.xxl)
         orLabel.layer.shadowColor = UIColor.black.cgColor
         orLabel.layer.shadowOffset = CGSize(width: 0, height: 0)
         orLabel.layer.shadowRadius = 3
         orLabel.layer.shadowOpacity = 1
-        orLabel.sizeToFit()
         orLabel.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(addButton.snp.bottomMargin).offset(50)
+            make.topMargin.equalTo(addButton.snp.bottomMargin).offset(25)
+            make.size.equalTo(addButton.snp.size)
         }
         
         importContactsButton = CardlyFormFieldButton.initButton(title: "Import from Contacts", target: self, selector: #selector(importContactButtonTapped))
         view.addSubview(importContactsButton)
         importContactsButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(orLabel.snp.bottomMargin).offset(50)
+            make.topMargin.equalTo(orLabel.snp.bottomMargin).offset(25)
         }
     }
 }
