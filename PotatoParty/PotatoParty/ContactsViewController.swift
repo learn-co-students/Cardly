@@ -47,6 +47,8 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     // Default contact enables the first cell in the CollectvionView to be the 'Add Contact' button
     let defaultContact = Contact(fullName: "AddContact", email: "", phone: "")
 
+    //make sure no internet alert does not always show up when app is started
+    var firebaseStateChangeCounter = 0
     
     // MARK: - Init
     override func viewDidLoad() {
@@ -294,6 +296,31 @@ extension ContactsViewController {
         guard let group = sender.textLabel?.text?.lowercased() else { return }
         currentGroup = group
         
+        //setting up activity indicator
+        var container: UIView = UIView()
+        container.frame = self.view.frame
+        container.center = self.view.center
+        container.backgroundColor = UIColor.clear
+        
+        var loadingView: UIView = UIView()
+        loadingView.frame = CGRect(x: 0, y: 0, width: 80, height: 80)
+        loadingView.center = self.view.center
+        loadingView.backgroundColor = UIColor.init(white: 0.5, alpha: 0.5)
+        loadingView.clipsToBounds = true
+        loadingView.layer.cornerRadius = 10
+        
+        var actInd: UIActivityIndicatorView = UIActivityIndicatorView()
+        actInd.frame = CGRect(x: 0.0, y: 0.0, width: 40.0, height: 40.0)
+        actInd.activityIndicatorViewStyle =
+            UIActivityIndicatorViewStyle.whiteLarge
+        actInd.center = CGPoint(x: loadingView.frame.size.width / 2,
+                                 y: loadingView.frame.size.height / 2)
+        loadingView.addSubview(actInd)
+        container.addSubview(loadingView)
+        self.view.addSubview(container)
+
+        actInd.startAnimating()
+        
         // Retrieve from Firebase
         self.retrieveContacts(for: group, completion: { contacts in
             
@@ -306,13 +333,21 @@ extension ContactsViewController {
             self.bottomNavBar.leftIconView.deleteContactBtn.isHidden = true
             
             self.contactsCollectionView.reloadData()
-        
+      
+            DispatchQueue.main.async {
+                actInd.stopAnimating()
+                container.removeFromSuperview()
+                
+            }
+            
         })
         
         // Hide Top Nav Bar after group is selected
         if self.navigationBarMenu.container != nil {
             self.titleView.toggleMenu()
         }
+        
+        
     }
 }
 
@@ -512,12 +547,13 @@ extension ContactsViewController {
     func checkFirebaseConnection() {
         let connectedRef = FIRDatabase.database().reference(withPath: ".info/connected")
         connectedRef.observe(.value, with: { snapshot in
-            if let connected = snapshot.value as? Bool, !connected {
+            if let connected = snapshot.value as? Bool, !connected, self.firebaseStateChangeCounter > 0 {
                 let alertVC = UIAlertController(title: "No internet connection", message: "Updates will reflect when you reconnect", preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
                 alertVC.addAction(okAction)
                 self.present(alertVC, animated: true, completion: nil)
             }
+            self.firebaseStateChangeCounter += 1
         })
     }
     
