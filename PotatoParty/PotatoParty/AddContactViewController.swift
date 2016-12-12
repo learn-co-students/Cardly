@@ -259,7 +259,7 @@ extension AddContactViewController {
         backButton.snp.makeConstraints { (make) in
             make.height.equalTo(30)
             make.width.equalTo(30)
-            make.topMargin.equalToSuperview().offset(40)
+            make.topMargin.equalToSuperview().offset(30)
             make.leadingMargin.equalToSuperview()
         }
         
