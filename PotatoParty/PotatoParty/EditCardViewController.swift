@@ -14,7 +14,6 @@ import Photos
 import MBProgressHUD
 import SnapKit
 
-
 class EditCardViewController: UIViewController {
 
     static let assetKeysRequiredToPlay = ["playable", "hasProtectedContent"]
