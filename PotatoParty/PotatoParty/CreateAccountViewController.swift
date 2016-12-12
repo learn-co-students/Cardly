@@ -38,7 +38,6 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.init(patternImage: #imageLiteral(resourceName: "loginScreenBackground"))
         setUpView()
         emailTextField.delegate = self
         passwordTextField.delegate = self
@@ -111,7 +110,12 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
 // MARK: - Layout view elements
     
     func setUpView() {
-        
+        UIGraphicsBeginImageContext(view.frame.size)
+        UIImage(named: "loginScreenBackground")?.draw(in: view.bounds)
+        let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        view.backgroundColor = UIColor(patternImage: image)
+
         titleLabel = UILabel()
         view.addSubview(titleLabel)
         titleLabel.text = "Create Account"
