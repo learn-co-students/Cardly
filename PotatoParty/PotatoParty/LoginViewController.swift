@@ -87,7 +87,7 @@ extension LoginViewController {
             }
         })
     }
-    
+
     func forgotPasswordButtonTapped() {
         
         let alertController = UIAlertController(title: "Enter E-Mail", message: "We'll send you a password reset e-mail", preferredStyle: .alert)
@@ -136,6 +136,7 @@ extension LoginViewController {
         let initialVC = ContactsViewController()
         let navigationController = UINavigationController(rootViewController: initialVC)
         present(navigationController, animated: true, completion: nil)
+        
     }
 
 }
@@ -143,7 +144,11 @@ extension LoginViewController {
 extension LoginViewController{
 
     func layoutViewAndContraints() {
-        view.backgroundColor = UIColor.init(patternImage: #imageLiteral(resourceName: "loginScreenBackground"))
+        UIGraphicsBeginImageContext(view.frame.size)
+        UIImage(named: "loginScreenBackground")?.draw(in: view.bounds)
+        let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        view.backgroundColor = UIColor(patternImage: image)
         
         userTextfield = CustomTextField.initTextField(placeHolderText: "example@emailprovider.com", isSecureEntry: false)
         view.addSubview(userTextfield)

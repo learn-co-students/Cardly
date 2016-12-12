@@ -37,6 +37,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     var pickGroup = UIPickerView()
     var pickerData = ["All", "Family", "Friends", "Coworkers", "Other"]
     var chosenGroup = ""
+    var currentGroup = ""
     var allSelected: Bool = false
     
     fileprivate let cellHeight: CGFloat = 210
@@ -290,9 +291,35 @@ extension ContactsViewController {
     }
     
     func selectGroup(_ sender: UITableViewCell) {
+        guard let group = sender.textLabel?.text?.lowercased() else { return }
+        currentGroup = group
+        
+        //setting up activity indicator
+        var container: UIView = UIView()
+        container.frame = self.view.frame
+        container.center = self.view.center
+        container.backgroundColor = UIColor.clear
+        
+        var loadingView: UIView = UIView()
+        loadingView.frame = CGRect(x: 0, y: 0, width: 80, height: 80)
+        loadingView.center = self.view.center
+        loadingView.backgroundColor = UIColor.init(white: 0.5, alpha: 0.5)
+        loadingView.clipsToBounds = true
+        loadingView.layer.cornerRadius = 10
+        
+        var actInd: UIActivityIndicatorView = UIActivityIndicatorView()
+        actInd.frame = CGRect(x: 0.0, y: 0.0, width: 40.0, height: 40.0)
+        actInd.activityIndicatorViewStyle =
+            UIActivityIndicatorViewStyle.whiteLarge
+        actInd.center = CGPoint(x: loadingView.frame.size.width / 2,
+                                 y: loadingView.frame.size.height / 2)
+        loadingView.addSubview(actInd)
+        container.addSubview(loadingView)
+        self.view.addSubview(container)
+
+        actInd.startAnimating()
         
         // Retrieve from Firebase
-        guard let group = sender.textLabel?.text?.lowercased() else { return }
         self.retrieveContacts(for: group, completion: { contacts in
             
             User.shared.contacts = contacts
@@ -304,13 +331,21 @@ extension ContactsViewController {
             self.bottomNavBar.leftIconView.deleteContactBtn.isHidden = true
             
             self.contactsCollectionView.reloadData()
-        
+      
+            DispatchQueue.main.async {
+                actInd.stopAnimating()
+                container.removeFromSuperview()
+                
+            }
+            
         })
         
         // Hide Top Nav Bar after group is selected
         if self.navigationBarMenu.container != nil {
             self.titleView.toggleMenu()
         }
+        
+        
     }
 }
 
@@ -364,18 +399,16 @@ extension ContactsViewController: BottomNavBarDelegate {
     
     func deleteButtonPressed() {
         deleteContacts {
-            retrieveContacts(for: User.shared.groups[0], completion: { contacts in
+            retrieveContacts(for: currentGroup, completion: { contacts in
                 User.shared.contacts = contacts
 
-                
                 User.shared.contacts.insert(self.defaultContact, at: 0)
 
                 self.contactsCollectionView.reloadData()
+                
             })
             enableCell()
-           contactsCollectionView.reloadData()
         }
-        
     }
     
     func editGroupButtonPressed(){
