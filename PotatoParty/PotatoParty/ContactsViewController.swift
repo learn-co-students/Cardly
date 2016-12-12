@@ -37,6 +37,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     var pickGroup = UIPickerView()
     var pickerData = ["All", "Family", "Friends", "Coworkers", "Other"]
     var chosenGroup = ""
+    var currentGroup = ""
     var allSelected: Bool = false
     
     fileprivate let cellHeight: CGFloat = 210
@@ -289,9 +290,10 @@ extension ContactsViewController {
     }
     
     func selectGroup(_ sender: UITableViewCell) {
+        guard let group = sender.textLabel?.text?.lowercased() else { return }
+        currentGroup = group
         
         // Retrieve from Firebase
-        guard let group = sender.textLabel?.text?.lowercased() else { return }
         self.retrieveContacts(for: group, completion: { contacts in
             
             User.shared.contacts = contacts
@@ -363,18 +365,16 @@ extension ContactsViewController: BottomNavBarDelegate {
     
     func deleteButtonPressed() {
         deleteContacts {
-            retrieveContacts(for: User.shared.groups[0], completion: { contacts in
+            retrieveContacts(for: currentGroup, completion: { contacts in
                 User.shared.contacts = contacts
 
-                
                 User.shared.contacts.insert(self.defaultContact, at: 0)
 
                 self.contactsCollectionView.reloadData()
+                
             })
             enableCell()
-           contactsCollectionView.reloadData()
         }
-        
     }
     
     func editGroupButtonPressed(){
