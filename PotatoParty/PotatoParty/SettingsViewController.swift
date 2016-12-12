@@ -84,14 +84,16 @@ class SettingsViewController: UIViewController {
         titleLabel.textAlignment = .center
         titleLabel.minimumScaleFactor = 0.5
         titleLabel.font = UIFont(name: Font.fancy, size: Font.Size.viewTitle)
+        titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.layer.shadowColor = UIColor.black.cgColor
         titleLabel.layer.shadowOffset = CGSize(width: 0, height: 0)
         titleLabel.layer.shadowRadius = 3
         titleLabel.layer.shadowOpacity = 1
-        titleLabel.sizeToFit()
         titleLabel.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(closeButton).offset(-10)
+            make.topMargin.equalToSuperview()
+            make.width.equalToSuperview().dividedBy(2)
+            make.height.equalToSuperview().dividedBy(5)
         }
         
         let emailLabel = UILabel()
