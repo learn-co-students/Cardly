@@ -51,6 +51,7 @@ class ContactsViewController: UIViewController, DropDownMenuDelegate, AddContact
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        checkFirebaseConnection()
         contactsCollectionView.delegate = self
         self.restorationIdentifier = "contactsVC"
     }
@@ -506,6 +507,18 @@ extension ContactsViewController {
         groupsRef.child(coworkersGroupPath).removeValue()
         groupsRef.child(otherGroupPath).removeValue()
         
+    }
+    
+    func checkFirebaseConnection() {
+        let connectedRef = FIRDatabase.database().reference(withPath: ".info/connected")
+        connectedRef.observe(.value, with: { snapshot in
+            if let connected = snapshot.value as? Bool, !connected {
+                let alertVC = UIAlertController(title: "No internet connection", message: "Updates will reflect when you reconnect", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+                alertVC.addAction(okAction)
+                self.present(alertVC, animated: true, completion: nil)
+            }
+        })
     }
     
 }
