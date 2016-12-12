@@ -239,7 +239,7 @@ class AddContactViewController: UIViewController, CNContactViewControllerDelegat
     }
     
     func validCheck() -> Bool {
-        return validateName(name: nameTextField.text!) && validatePhone(phone: phoneTextField.text!) && validateEmail(email: emailTextField.text!)
+        return validateName(name: nameTextField.text!) && (validatePhone(phone: phoneTextField.text!) || validateEmail(email: emailTextField.text!))
     }
     
     func enableAddButton() {
