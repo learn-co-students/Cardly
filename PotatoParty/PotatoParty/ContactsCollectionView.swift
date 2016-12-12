@@ -51,7 +51,7 @@ class ContactsCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         cell.index = indexPath.row
         
         if cell.contact.is_sent == true {
-            cell.alpha = 0.5
+            cell.alpha = 0.2
         }
         
         return cell
