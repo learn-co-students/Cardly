@@ -66,6 +66,19 @@ class SettingsViewController: UIViewController {
     
     // MARK: - Layout view elements
     func layoutElements() {
+        let scrollView = UIScrollView()
+        view.addSubview(scrollView)
+        scrollView.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.height.equalToSuperview()
+            make.width.equalToSuperview()
+        }
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = true
+        scrollView.delegate = self
+        scrollView.contentSize = CGSize(width: view.frame.width
+            , height: view.frame.height * 1.3)
         closeButton = UIButton()
         view.addSubview(closeButton)
         closeButton.setImage(Icons.backButton, for: .normal)
@@ -73,12 +86,12 @@ class SettingsViewController: UIViewController {
         closeButton.snp.makeConstraints { (make) in
             make.height.equalTo(30)
             make.width.equalTo(30)
-            make.topMargin.equalToSuperview().offset(40)
+            make.topMargin.equalToSuperview().offset(self.view.frame.height*0.06)
             make.leadingMargin.equalToSuperview()
         }
         
         let titleLabel = UILabel()
-        view.addSubview(titleLabel)
+        scrollView.addSubview(titleLabel)
         titleLabel.text = "Settings"
         titleLabel.textColor = UIColor.white
         titleLabel.textAlignment = .center
@@ -91,13 +104,13 @@ class SettingsViewController: UIViewController {
         titleLabel.layer.shadowOpacity = 1
         titleLabel.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalToSuperview()
+            make.topMargin.equalToSuperview().offset(20)
             make.width.equalToSuperview().dividedBy(2)
             make.height.equalToSuperview().dividedBy(5)
         }
         
         let emailLabel = UILabel()
-        view.addSubview(emailLabel)
+        scrollView.addSubview(emailLabel)
         emailLabel.text = "Change email"
         emailLabel.minimumScaleFactor = 0.5
         emailLabel.textColor = Colors.cardlyGrey
@@ -105,12 +118,12 @@ class SettingsViewController: UIViewController {
         emailLabel.font = UIFont(name: Font.regular, size: Font.Size.xl)
         emailLabel.sizeToFit()
         emailLabel.snp.makeConstraints { (make) in
-            make.leadingMargin.equalToSuperview()
             make.topMargin.equalTo(titleLabel.snp.bottomMargin).offset(20)
+            make.centerX.equalToSuperview()
         }
         
         changeEmailPasswordTextField = CustomTextField.initTextField(placeHolderText: "Enter current password", isSecureEntry: true)
-        view.addSubview(changeEmailPasswordTextField)
+        scrollView.addSubview(changeEmailPasswordTextField)
         changeEmailPasswordTextField.snp.makeConstraints { (make) in
             make.height.equalToSuperview().multipliedBy(0.05)
             make.width.equalToSuperview().multipliedBy(0.8)
@@ -119,7 +132,7 @@ class SettingsViewController: UIViewController {
         }
         
         newEmailTextField = CustomTextField.initTextField(placeHolderText: "Enter new email address", isSecureEntry: false)
-        view.addSubview(newEmailTextField)
+        scrollView.addSubview(newEmailTextField)
         newEmailTextField.snp.makeConstraints { (make) in
             make.size.equalTo(changeEmailPasswordTextField.snp.size)
             make.centerX.equalToSuperview()
@@ -127,35 +140,34 @@ class SettingsViewController: UIViewController {
         }
         
         changeEmailButton = CardlyFormFieldButton.initButton(title: "Submit", target: self, selector: #selector(changeEmailButtonTapped))
-        view.addSubview(changeEmailButton)
+        scrollView.addSubview(changeEmailButton)
         changeEmailButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(newEmailTextField.snp.bottomMargin).offset(20)
+            make.topMargin.equalTo(newEmailTextField.snp.bottomMargin).offset(30)
         }
         
         let changeEmailDivider = UIImageView(image: Backgrounds.divider)
-
-        view.addSubview(changeEmailDivider)
+        scrollView.addSubview(changeEmailDivider)
         changeEmailDivider.snp.makeConstraints { (make) in
             make.width.equalToSuperview().offset(-20)
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(changeEmailButton.snp.bottomMargin).offset(20)
+            make.topMargin.equalTo(changeEmailButton.snp.bottomMargin).offset(30)
         }
         
         let passwordLabel = UILabel()
-        view.addSubview(passwordLabel)
+        scrollView.addSubview(passwordLabel)
         passwordLabel.text = "Change password"
         passwordLabel.textColor = Colors.cardlyGrey
         passwordLabel.textAlignment = .left
         passwordLabel.font = UIFont(name: Font.regular, size: Font.Size.xl)
         passwordLabel.sizeToFit()
         passwordLabel.snp.makeConstraints { (make) in
-            make.leadingMargin.equalToSuperview()
-            make.topMargin.equalTo(changeEmailDivider.snp.bottomMargin).offset(30)
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(changeEmailDivider.snp.bottomMargin).offset(20)
         }
         
         currentPasswordTextField = CustomTextField.initTextField(placeHolderText: "Enter current password", isSecureEntry: true)
-        view.addSubview(currentPasswordTextField)
+        scrollView.addSubview(currentPasswordTextField)
         currentPasswordTextField.snp.makeConstraints { (make) in
             make.size.equalTo(changeEmailPasswordTextField.snp.size)
             make.centerX.equalToSuperview()
@@ -163,7 +175,7 @@ class SettingsViewController: UIViewController {
         }
         
         newPasswordTextField = CustomTextField.initTextField(placeHolderText: "Enter new password", isSecureEntry: true)
-        view.addSubview(newPasswordTextField)
+        scrollView.addSubview(newPasswordTextField)
         newPasswordTextField.snp.makeConstraints { (make) in
             make.size.equalTo(changeEmailPasswordTextField.snp.size)
             make.centerX.equalToSuperview()
@@ -171,7 +183,7 @@ class SettingsViewController: UIViewController {
         }
         
         confirmNewPasswordTextField = CustomTextField.initTextField(placeHolderText: "Confirm new password", isSecureEntry: true)
-        view.addSubview(confirmNewPasswordTextField)
+        scrollView.addSubview(confirmNewPasswordTextField)
         confirmNewPasswordTextField.snp.makeConstraints { (make) in
             make.size.equalTo(changeEmailPasswordTextField.snp.size)
             make.centerX.equalToSuperview()
@@ -179,40 +191,40 @@ class SettingsViewController: UIViewController {
         }
         
         changePasswordButton = CardlyFormFieldButton.initButton(title: "Submit", target: self, selector: #selector(changePasswordButtonTapped))
-        view.addSubview(changePasswordButton)
+        scrollView.addSubview(changePasswordButton)
         changePasswordButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(confirmNewPasswordTextField.snp.bottomMargin).offset(20)
+            make.topMargin.equalTo(confirmNewPasswordTextField.snp.bottomMargin).offset(30)
         }
         
         let changePasswordDivider = UIImageView(image: Backgrounds.divider)
-        view.addSubview(changePasswordDivider)
+        scrollView.addSubview(changePasswordDivider)
         changePasswordDivider.snp.makeConstraints { (make) in
             make.width.equalToSuperview().offset(-20)
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(changePasswordButton.snp.bottomMargin).offset(20)
+            make.topMargin.equalTo(changePasswordButton.snp.bottomMargin).offset(30)
         }
         
         logoutButton = CardlyFormFieldButton.initButton(title: "Log out", target: self, selector: #selector(logout))
-        view.addSubview(logoutButton)
+        scrollView.addSubview(logoutButton)
         logoutButton.snp.makeConstraints { (make) in
-            make.leadingMargin.equalToSuperview()
-            make.topMargin.equalTo(changePasswordDivider.snp.bottomMargin).offset(20)
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(changePasswordDivider.snp.bottomMargin).offset(30)
         }
         
         let logoutDivider = UIImageView(image: Backgrounds.divider)
-        view.addSubview(logoutDivider)
+        scrollView.addSubview(logoutDivider)
         logoutDivider.snp.makeConstraints { (make) in
             make.width.equalToSuperview().offset(-20)
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(logoutButton.snp.bottomMargin).offset(20)
+            make.topMargin.equalTo(logoutButton.snp.bottomMargin).offset(30)
         }
         
         forgotPasswordButton = CardlyFormFieldButton.initButton(title: "Forgot password?", target: self, selector: #selector(forgotPasswordButtonTapped))
-        view.addSubview(forgotPasswordButton)
+        scrollView.addSubview(forgotPasswordButton)
         forgotPasswordButton.snp.makeConstraints { (make) in
-            make.leadingMargin.equalToSuperview()
-            make.topMargin.equalTo(logoutDivider.snp.bottomMargin).offset(20)
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(logoutDivider.snp.bottomMargin).offset(30)
         }
         
         for textField in textFields {
@@ -241,7 +253,7 @@ class SettingsViewController: UIViewController {
                 self.navigationController?.viewControllers.removeAll()
             })
         } catch {
-            print("Logout error = (error.localizedDescription)")
+            print("Logout error \(error.localizedDescription)")
         }
     }
     
@@ -524,5 +536,11 @@ extension SettingsViewController {
     func dismissKeyboard() {
         view.endEditing(true)
     }
+    
+}
+
+// MARK: - ScrollView delegate methods
+
+extension SettingsViewController: UIScrollViewDelegate {
     
 }
