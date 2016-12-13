@@ -213,11 +213,25 @@ extension LoginViewController{
             make.topMargin.equalTo(forgotPasswordButton.snp.bottomMargin).offset(loginButtonTopOffset)
         }
         
+        orTextLabel = UILabel()
+        view.addSubview(orTextLabel)
+        orTextLabel.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.topMargin.equalTo(loginButton.snp.bottomMargin).offset(20)
+            make.width.equalTo(loginButton.snp.width).multipliedBy(0.5)
+            make.height.equalTo(loginButton.snp.height)
+        }
+        orTextLabel.backgroundColor = UIColor.clear
+        orTextLabel.text = "Or"
+        orTextLabel.textAlignment = .center
+        orTextLabel.font = UIFont(name: Font.regular, size: Font.Size.l)
+        orTextLabel.textColor = UIColor.black
+        
         createAccountButton = CardlyFormFieldButton.initButton(title: "Create Account", target: self, selector: #selector(createAccountButtonTapped))
         view.addSubview(createAccountButton)
         createAccountButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.topMargin.equalTo(loginButton.snp.bottomMargin).offset(createAccountButtonTopOffset)
+            make.topMargin.equalTo(orTextLabel.snp.bottomMargin).offset(20)
         }
         
         cardlyDescriptionText = UILabel()
@@ -235,19 +249,5 @@ extension LoginViewController{
             make.width.equalToSuperview().multipliedBy(0.8)
             make.height.equalToSuperview().dividedBy(10)
         }
-        
-        orTextLabel = UILabel()
-        view.addSubview(orTextLabel)
-        orTextLabel.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.topMargin.equalTo(loginButton.snp.bottomMargin).offset(20)
-            make.width.equalTo(loginButton.snp.width).multipliedBy(0.5)
-            make.height.equalTo(loginButton.snp.height)
-        }
-        orTextLabel.backgroundColor = UIColor.clear
-        orTextLabel.text = "or"
-        orTextLabel.textAlignment = .center
-        orTextLabel.font = UIFont(name: Font.regular, size: 15)
-        orTextLabel.textColor = UIColor.black
     }
 }
