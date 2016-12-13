@@ -349,14 +349,10 @@ extension AddContactViewController {
         orLabel = UILabel()
         view.addSubview(orLabel)
         orLabel.text = "Or"
-        orLabel.textColor = UIColor.white
+        orLabel.textColor = UIColor.black
         orLabel.textAlignment = .center
         orLabel.minimumScaleFactor = 0.5
-        orLabel.font = UIFont(name: Font.fancy, size: Font.Size.xxl)
-        orLabel.layer.shadowColor = UIColor.black.cgColor
-        orLabel.layer.shadowOffset = CGSize(width: 0, height: 0)
-        orLabel.layer.shadowRadius = 3
-        orLabel.layer.shadowOpacity = 1
+        orLabel.font = UIFont(name: Font.regular, size: Font.Size.l)
         orLabel.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.topMargin.equalTo(addButton.snp.bottomMargin).offset(25)
