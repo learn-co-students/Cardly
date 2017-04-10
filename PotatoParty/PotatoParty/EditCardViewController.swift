@@ -48,6 +48,10 @@ class EditCardViewController: UIViewController {
             player.actionAtItemEnd = .none
         }
     }
+    var exportSession: AVAssetExportSession!
+    
+    var progressTimer = Timer()
+    
     var activityIndicator: UIActivityIndicatorView!
     var spinnerActivity: MBProgressHUD!
     var progressObj: Progress!
@@ -216,14 +220,14 @@ class EditCardViewController: UIViewController {
         }
     }
     
-    func doWorkWithProgress(progressHUD: MBProgressHUD) {
-        var progress: Float = 0.0
-        while progress < 1.0 {
-            progress += 0.01
-            DispatchQueue.main.async {
-                progressHUD.progress = progress
-            }
-            usleep(50000)
+    func startProgressTimer() {
+        progressTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(doWorkWithProgress), userInfo: nil, repeats: true)
+    }
+    
+    func doWorkWithProgress() {
+        self.spinnerActivity.progress = exportSession.progress
+        if exportSession.progress > 0.99 {
+            self.progressTimer.invalidate()
         }
     }
     
@@ -352,16 +356,17 @@ class EditCardViewController: UIViewController {
         let filePath = NSTemporaryDirectory() + fileName()
         let movieUrl = URL(fileURLWithPath: filePath)
     
-        guard let assetExport = AVAssetExportSession(asset: composition, presetName: AVAssetExportPreset1280x720) else { return }
-        assetExport.videoComposition = layercomposition
-        assetExport.outputFileType = AVFileTypeQuickTimeMovie
-        assetExport.outputURL = movieUrl
+        guard let assetExport = AVAssetExportSession(asset: composition, presetName: AVAssetExportPreset1280x720) else { fatalError("Export session creation failed!") }
+        exportSession = assetExport
+        exportSession.videoComposition = layercomposition
+        exportSession.outputFileType = AVFileTypeQuickTimeMovie
+        exportSession.outputURL = movieUrl
         startActivityIndicator()
-
-        assetExport.exportAsynchronously {
+        self.startProgressTimer()
+        exportSession.exportAsynchronously {
             switch assetExport.status {
             case .completed:
-                self.doWorkWithProgress(progressHUD: self.spinnerActivity)
+                self.doWorkWithProgress()
                 self.fileLocation = movieUrl
                 self.stopActivityIndicator()
                 completion(true)
