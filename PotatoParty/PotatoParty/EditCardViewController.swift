@@ -366,7 +366,6 @@ class EditCardViewController: UIViewController {
         exportSession.exportAsynchronously {
             switch assetExport.status {
             case .completed:
-                self.doWorkWithProgress()
                 self.fileLocation = movieUrl
                 self.stopActivityIndicator()
                 completion(true)
