@@ -552,7 +552,7 @@ extension ContactsViewController {
         
     }
     
-    func checkFirebaseConnection() {
+ /*   func checkFirebaseConnection() {
         let connectedRef = FIRDatabase.database().reference(withPath: ".info/connected")
         connectedRef.observe(.value, with: { snapshot in
             if let connected = snapshot.value as? Bool, !connected, self.firebaseStateChangeCounter > 0 {
@@ -564,7 +564,8 @@ extension ContactsViewController {
             self.firebaseStateChangeCounter += 1
         })
     }
-    
+ */
+
 }
 
 
